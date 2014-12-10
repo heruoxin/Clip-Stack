@@ -20,6 +20,7 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
+        Log.v(tag, "Start Service");
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
