@@ -56,18 +56,14 @@ public class CBWatcherService extends Service {
     }
 
     public List<String> getClips () {
-        if (clips.size() < 3) {
-            clips.add("");
-            clips.add("");
-        }
         return clips;
     }
     public void addClip(String s) {
         if (s == null) return;
-        clips.add(s);
+        clips.add(0, s);
     }
 
-    public void setClipboardto(String s) {
+    public void setClipboardTo(String s) {
 
         String toast_message = s + getString(R.string.toast_message);
     }
@@ -75,31 +71,54 @@ public class CBWatcherService extends Service {
     public void showNotification() {
 
         List<String> thisClips = getClips();
-        int length = thisClips.size() - 1;
+        int length = thisClips.size();
+        if (length <= 1) {
+            return;
+        }
+        length = (length > 4) ? 4 : length;
 
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        Notification n  = new Notification.Builder(this)
+        Notification.Builder preBuildNotification  = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title)) //title
-                .setContentText(thisClips.get(length))
+                .setContentText(thisClips.get(0))
                 .setSmallIcon(R.drawable.ic_drawer)
-                .setStyle(new Notification.InboxStyle()
-                        .addLine("1. "+thisClips.get(length - 0))
-                        .addLine("2. "+thisClips.get(length - 1))
-                        .addLine("3. "+thisClips.get(length - 2))
-                        //.setSummaryText("more")
-                        )
-                .setContentIntent(pIntent)
+
+               // .setStyle(new Notification.InboxStyle()
+               //         .addLine("1. "+thisClips.get(length - 0))
+               //         .addLine("2. "+thisClips.get(length - 1))
+               //         .addLine("3. "+thisClips.get(length - 2))
+               //         //.setSummaryText("more")
+               //         )
                 .setPriority(Notification.PRIORITY_MIN)
-                .setAutoCancel(true)
-                .addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_one), pIntent)
-                .addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_two), pIntent)
-                .addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_three), pIntent)
+                .setAutoCancel(true);
+                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_one), pIntent)
+                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_two), pIntent)
+                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_three), pIntent)
+
+        Notification.InboxStyle notificationStyle = new Notification.InboxStyle()
+                .setBigContentTitle(getString(R.string.clip_notification_big_title))
+                .setSummaryText("current Clips is: " + thisClips.get(0).trim());
+
+        Intent openMainIntent = new Intent(this, MainActivity.class);
+        PendingIntent pOpenMainIntent = PendingIntent.getActivity(this, 0, openMainIntent, 0);
+
+        for (int i=1; i<length; i++) {
+            notificationStyle.addLine(i+". "+thisClips.get(i).trim());
+
+            Intent openCopyIntent = new Intent(this, MainActivity.class);
+            PendingIntent pOpenCopyIntent = PendingIntent.getActivity(this, 0, openCopyIntent, 0);
+
+            preBuildNotification.addAction(
+                    R.drawable.ic_drawer,
+                    getString(R.string.clip_notification_button) + i,
+                    pOpenCopyIntent);
+        }
+
+        Notification n = preBuildNotification
+                .setContentIntent(pOpenMainIntent)
+                .setStyle(notificationStyle)
                 .build();
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         notificationManager.cancelAll();
         notificationManager.notify(0, n);
