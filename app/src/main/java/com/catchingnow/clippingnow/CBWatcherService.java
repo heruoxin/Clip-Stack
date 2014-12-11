@@ -79,8 +79,7 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
-                .setSmallIcon(R.drawable.ic_drawer)
-
+                .setSmallIcon(R.drawable.ic_action_copy_black)
                // .setStyle(new Notification.InboxStyle()
                //         .addLine("1. "+thisClips.get(length - 0))
                //         .addLine("2. "+thisClips.get(length - 1))
@@ -97,8 +96,8 @@ public class CBWatcherService extends Service {
                 .setBigContentTitle(getString(R.string.clip_notification_big_title))
                 .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
 
-        Intent openMainIntent = new Intent(this, MainActivity.class);
-        PendingIntent pOpenMainIntent = PendingIntent.getActivity(this, 0, openMainIntent, 0);
+        //Intent openMainIntent = new Intent(this, MainActivity.class);
+        //PendingIntent pOpenMainIntent = PendingIntent.getActivity(this, 0, openMainIntent, 0);
 
         for (int i=1; i<length; i++) {
             notificationStyle.addLine(i+". "+thisClips.get(i).trim());
@@ -108,13 +107,13 @@ public class CBWatcherService extends Service {
             PendingIntent pOpenCopyIntent = PendingIntent.getService(this, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             preBuildNotification.addAction(
-                    R.drawable.ic_drawer,
-                    getString(R.string.clip_notification_button) + i,
+                    R.drawable.ic_action_copy,
+                    getString(R.string.clip_notification_button) + " " + i,
                     pOpenCopyIntent);
         }
 
         Notification n = preBuildNotification
-                .setContentIntent(pOpenMainIntent)
+        //        .setContentIntent(pOpenMainIntent)
                 .setStyle(notificationStyle)
                 .build();
 
