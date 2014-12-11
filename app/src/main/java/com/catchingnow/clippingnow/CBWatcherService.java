@@ -10,7 +10,6 @@ import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -18,7 +17,9 @@ import java.util.List;
 
 public class CBWatcherService extends Service {
 
-    private List<String> clips = new ArrayList<String>();;
+    public final static String CLIPBOARD_STRING = "com.catchingnow.clippingnow.clipboardString";
+    private int buttonNumber = 0;
+    private List<String> clips = new ArrayList<String>();
     private final String tag = "[[ClipboardWatcherService]] ";
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
@@ -28,7 +29,6 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
-        Log.v(tag, "Start Service");
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
@@ -47,9 +47,8 @@ public class CBWatcherService extends Service {
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                String clip = cd.getItemAt(0).getText().toString();
-                Log.v(tag, clip);
-                addClip(clip);
+                String thisClip = cd.getItemAt(0).getText().toString();
+                addClip(thisClip);
                 showNotification();
             }
         }
@@ -60,12 +59,12 @@ public class CBWatcherService extends Service {
     }
     public void addClip(String s) {
         if (s == null) return;
+        for (int i=0; i<clips.size(); i++) {
+            if (s.equals(clips.get(i))) {
+                clips.remove(i);
+            }
+        }
         clips.add(0, s);
-    }
-
-    public void setClipboardTo(String s) {
-
-        String toast_message = s + getString(R.string.toast_message);
     }
 
     public void showNotification() {
@@ -78,8 +77,8 @@ public class CBWatcherService extends Service {
         length = (length > 4) ? 4 : length;
 
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title)) //title
-                .setContentText(thisClips.get(0))
+                .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title
+                .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_drawer)
 
                // .setStyle(new Notification.InboxStyle()
@@ -96,7 +95,7 @@ public class CBWatcherService extends Service {
 
         Notification.InboxStyle notificationStyle = new Notification.InboxStyle()
                 .setBigContentTitle(getString(R.string.clip_notification_big_title))
-                .setSummaryText("current Clips is: " + thisClips.get(0).trim());
+                .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
 
         Intent openMainIntent = new Intent(this, MainActivity.class);
         PendingIntent pOpenMainIntent = PendingIntent.getActivity(this, 0, openMainIntent, 0);
@@ -104,8 +103,9 @@ public class CBWatcherService extends Service {
         for (int i=1; i<length; i++) {
             notificationStyle.addLine(i+". "+thisClips.get(i).trim());
 
-            Intent openCopyIntent = new Intent(this, MainActivity.class);
-            PendingIntent pOpenCopyIntent = PendingIntent.getActivity(this, 0, openCopyIntent, 0);
+            Intent openCopyIntent = new Intent(this, copyToClipboardIntentService.class);
+            openCopyIntent.putExtra(CLIPBOARD_STRING, thisClips.get(i));
+            PendingIntent pOpenCopyIntent = PendingIntent.getService(this, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             preBuildNotification.addAction(
                     R.drawable.ic_drawer,

@@ -9,9 +9,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="toast_message">" has copied to clipboard"</string>
-    <string name="clip_notification_title">Current Clipboards</string>
+    <string name="clip_notification_title">Current clipboard: </string>
     <string name="clip_notification_button">Copy </string>
-    <string name="clip_notification_big_title">Recent Clipboards</string>
+    <string name="clip_notification_big_title">Recent clipboards</string>
+    <string name="clip_notification_big_summary_text">"Current clipboard: "</string>
+    <string name="toast_front_string">""</string>
+    <string name="toast_end_string">\n has copied to clipboard</string>
+    <string name="clip_notification_text">Expand to show more.</string>
 
 </resources>

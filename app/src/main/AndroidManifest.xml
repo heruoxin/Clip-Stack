@@ -24,15 +24,15 @@
         </service>
 
         <receiver
-            android:name=".ClipboardReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        <receiver
             android:name=".LaunchServiceAtStartup"
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <service
+            android:name=".copyToClipboardIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
