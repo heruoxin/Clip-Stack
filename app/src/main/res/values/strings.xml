@@ -9,5 +9,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+    <string name="toast_message">" has copied to clipboard"</string>
+    <string name="clip_notification_title">Recent Clipboards</string>
+    <string name="clip_notification_button_one">Copy 1</string>
+    <string name="clip_notification_button_two">Copy 2</string>
+    <string name="clip_notification_button_three">Copy 3</string>
 
 </resources>
