@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

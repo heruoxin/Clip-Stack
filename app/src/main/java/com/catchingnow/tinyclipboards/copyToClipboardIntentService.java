@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.app.IntentService;
 import android.content.ClipData;

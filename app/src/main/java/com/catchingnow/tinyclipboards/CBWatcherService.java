@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CBWatcherService extends Service {
 
-    public final static String CLIPBOARD_STRING = "com.catchingnow.clippingnow.clipboardString";
+    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     private int buttonNumber = 0;
     private List<String> clips = new ArrayList<String>();
     private final String tag = "[[ClipboardWatcherService]] ";
@@ -27,18 +27,22 @@ public class CBWatcherService extends Service {
         }
     };
 
+
     @Override
     public void onCreate() {
+        Log.v(CLIPBOARD_STRING, "onCreate");
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(CLIPBOARD_STRING, "onStartCommand");
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.v(CLIPBOARD_STRING, "onBind");
         return null;
     }
 

@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,8 +11,7 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            ComponentName service = context.startService(new Intent(context, CBWatcherService.class));
-        }
+        Intent i = new Intent(context, CBWatcherService.class);
+        context.startService(i);
     }
 }
