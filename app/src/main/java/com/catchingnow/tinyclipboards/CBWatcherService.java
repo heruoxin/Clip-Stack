@@ -91,6 +91,7 @@ public class CBWatcherService extends Service {
                 .setBigContentTitle(getString(R.string.clip_notification_big_title))
                 .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
 
+        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), "hhh");
 
         for (int i=1; i<length; i++) {
             notificationStyle.addLine(i+". "+thisClips.get(i).trim());
@@ -103,13 +104,15 @@ public class CBWatcherService extends Service {
                     R.drawable.ic_action_copy,
                     getString(R.string.clip_notification_button) + " " + i,
                     pOpenCopyIntent);
+
+            //
+            bigView.addClips(thisClips.get(i));
         }
 
         Notification n = preBuildNotification
         //        .setStyle(notificationStyle)
                 .build();
 
-        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), "hhh");
         n.bigContentView = bigView.build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

@@ -1,0 +1,7 @@
+<TextView
+    android:id="@+id/clip_text"
+    android:text=""
+    android:layout_weight="1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
