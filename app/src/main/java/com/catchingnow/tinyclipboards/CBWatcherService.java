@@ -84,24 +84,13 @@ public class CBWatcherService extends Service {
                 .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
-               // .setStyle(new Notification.InboxStyle()
-               //         .addLine("1. "+thisClips.get(length - 0))
-               //         .addLine("2. "+thisClips.get(length - 1))
-               //         .addLine("3. "+thisClips.get(length - 2))
-               //         //.setSummaryText("more")
-               //         )
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(true);
-                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_one), pIntent)
-                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_two), pIntent)
-                //.addAction(R.drawable.ic_drawer, getString(R.string.clip_notification_button_three), pIntent)
 
         Notification.InboxStyle notificationStyle = new Notification.InboxStyle()
                 .setBigContentTitle(getString(R.string.clip_notification_big_title))
                 .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
 
-        //Intent openMainIntent = new Intent(this, MainActivity.class);
-        //PendingIntent pOpenMainIntent = PendingIntent.getActivity(this, 0, openMainIntent, 0);
 
         for (int i=1; i<length; i++) {
             notificationStyle.addLine(i+". "+thisClips.get(i).trim());
@@ -117,9 +106,11 @@ public class CBWatcherService extends Service {
         }
 
         Notification n = preBuildNotification
-        //        .setContentIntent(pOpenMainIntent)
-                .setStyle(notificationStyle)
+        //        .setStyle(notificationStyle)
                 .build();
+
+        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), "hhh");
+        n.bigContentView = bigView.build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
