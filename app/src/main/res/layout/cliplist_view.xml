@@ -3,8 +3,6 @@
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="150dp"
-    android:background="#FA5750"
     android:orientation="vertical" >
 
     </LinearLayout>

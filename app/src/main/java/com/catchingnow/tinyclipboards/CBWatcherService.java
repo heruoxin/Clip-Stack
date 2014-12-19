@@ -17,6 +17,7 @@ import java.util.List;
 
 public class CBWatcherService extends Service {
 
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     private int buttonNumber = 0;
     private List<String> clips = new ArrayList<String>();
@@ -30,19 +31,19 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
-        Log.v(CLIPBOARD_STRING, "onCreate");
+        Log.v(PACKAGE_NAME, "onCreate");
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(CLIPBOARD_STRING, "onStartCommand");
+        Log.v(PACKAGE_NAME, "onStartCommand");
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.v(CLIPBOARD_STRING, "onBind");
+        Log.v(PACKAGE_NAME, "onBind");
         return null;
     }
 
@@ -78,7 +79,7 @@ public class CBWatcherService extends Service {
         if (length <= 1) {
             return;
         }
-        length = (length > 4) ? 4 : length;
+        length = (length > 6) ? 6 : length;
 
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title
