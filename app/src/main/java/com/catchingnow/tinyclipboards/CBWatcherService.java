@@ -88,31 +88,13 @@ public class CBWatcherService extends Service {
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(true);
 
-        Notification.InboxStyle notificationStyle = new Notification.InboxStyle()
-                .setBigContentTitle(getString(R.string.clip_notification_big_title))
-                .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
-
         ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), thisClips.get(0));
 
         for (int i=1; i<length; i++) {
-            notificationStyle.addLine(i+". "+thisClips.get(i).trim());
-
-            Intent openCopyIntent = new Intent(this, copyToClipboardIntentService.class);
-            openCopyIntent.putExtra(CLIPBOARD_STRING, thisClips.get(i));
-            PendingIntent pOpenCopyIntent = PendingIntent.getService(this, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            preBuildNotification.addAction(
-                    R.drawable.ic_action_copy,
-                    getString(R.string.clip_notification_button) + " " + i,
-                    pOpenCopyIntent);
-
-            //
             bigView.addClips(thisClips.get(i));
         }
 
-        Notification n = preBuildNotification
-        //        .setStyle(notificationStyle)
-                .build();
+        Notification n = preBuildNotification.build();
 
         n.bigContentView = bigView.build();
 
