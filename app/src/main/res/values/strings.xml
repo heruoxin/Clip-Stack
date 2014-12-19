@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TinyClipboards</string>
+    <string name="app_name">Tiny Clipboard Manager</string>
     <string name="clip_notification_title">"Current clipboard: "</string>
     <string name="clip_notification_button">Copy </string>
     <string name="clip_notification_big_title">Recent clipboards</string>

@@ -6,10 +6,10 @@
     android:orientation="vertical" >
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_action_copy_black"
-        android:background="#9E9E9E"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_launcher"
         />
 
     <LinearLayout
@@ -21,12 +21,14 @@
         <TextView
             android:id="@+id/current_clip"
             android:layout_marginStart="8dp"
-            android:textSize="@dimen/abc_text_size_small_material"
+            android:layout_marginBottom="0dp"
+            android:textSize="@dimen/abc_text_size_body_1_material"
+            android:layout_margin="10dp"
             android:textColor="@color/primary_text_default_material_light"
             android:layout_gravity="center"
             android:lines="1"
             android:ellipsize="end"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
