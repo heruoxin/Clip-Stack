@@ -41,7 +41,7 @@ public class ClipListViewCreator {
         openCopyIntent.putExtra(CLIPBOARD_STRING, s);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        theClipView.setOnClickPendingIntent(R.id.clip_line, pOpenCopyIntent);
+        theClipView.setOnClickPendingIntent(R.id.clip_button, pOpenCopyIntent);
         expandedView.addView(R.id.main_view, theClipView);
         return this;
     }
