@@ -92,7 +92,7 @@ public class CBWatcherService extends Service {
                 .setBigContentTitle(getString(R.string.clip_notification_big_title))
                 .setSummaryText(getString(R.string.clip_notification_big_summary_text) + thisClips.get(0).trim());
 
-        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), "hhh");
+        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), thisClips.get(0));
 
         for (int i=1; i<length; i++) {
             notificationStyle.addLine(i+". "+thisClips.get(i).trim());

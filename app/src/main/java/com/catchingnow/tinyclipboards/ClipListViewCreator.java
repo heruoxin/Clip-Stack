@@ -22,10 +22,13 @@ public class ClipListViewCreator {
     int id=0;
     public ClipListViewCreator (Context context, String currentClip) {
         c = context;
+        currentClip = currentClip.trim();
         expandedView = new RemoteViews(c.getPackageName(), R.layout.cliplist_view);
+        expandedView.setTextViewText(R.id.current_clip, c.getString(R.string.clip_notification_title)+currentClip);
     }
     public ClipListViewCreator addClips (String s) {
         id += 1;
+        s = s.trim();
         Log.v(PACKAGE_NAME,"ID "+id);
         Log.v(PACKAGE_NAME,s);
         //add view

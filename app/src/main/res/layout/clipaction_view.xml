@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:gravity="center"
+    android:layout_height="44dp"
     android:layout_weight="1">
 
     <TextView
         android:id="@+id/clip_text"
-        android:text="23333 233333333 233333333333 23333"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="-4dp"
+        android:gravity="center_vertical|start"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
-        android:lines="1"
-        android:textSize="22sp"
+        android:lines="2"
+        android:textSize="@dimen/abc_text_size_small_material"
+        android:textColor="@color/secondary_text_default_material_light"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="40dp" />
     <ImageButton
         android:id="@+id/copy_button"
+        android:background="#00000000"
         android:src="@drawable/ic_action_copy"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
-        android:contentDescription="Copy" />
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:scaleType="centerInside"
+        android:contentDescription="Copy"
+        />
 
 </LinearLayout>
