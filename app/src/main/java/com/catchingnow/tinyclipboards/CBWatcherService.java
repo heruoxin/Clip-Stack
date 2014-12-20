@@ -2,7 +2,6 @@ package com.catchingnow.tinyclipboards;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -18,7 +17,8 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
-    private List<String> clips = new ArrayList<String>();
+    public int NUMBER_OF_CLIPS = 5;
+    private Storage db;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -29,6 +29,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
+        db = new Storage(this.getBaseContext());
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
     }
 
@@ -50,23 +51,19 @@ public class CBWatcherService extends Service {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 String thisClip = cd.getItemAt(0).getText().toString();
-                addClip(thisClip);
-                showNotification();
+                if (addClip(thisClip)) {
+                    showNotification();
+                }
             }
         }
     }
 
     public List<String> getClips () {
-        return clips;
+        return db.getClipHistory(NUMBER_OF_CLIPS);
     }
-    public void addClip(String s) {
-        if (s == null) return;
-        for (int i=0; i<clips.size(); i++) {
-            if (s.equals(clips.get(i))) {
-                clips.remove(i);
-            }
-        }
-        clips.add(0, s);
+    public boolean addClip(String s) {
+        if (s == null) return false;
+        return db.addClipHistory(s);
     }
 
     public void showNotification() {
@@ -76,7 +73,7 @@ public class CBWatcherService extends Service {
         if (length <= 1) {
             return;
         }
-        length = (length > 6) ? 6 : length;
+        length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title

@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,7 +20,7 @@ public class Storage {
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
     private List<String> clipsInMemory;
-    private boolean isClipsInMemorChanged = true;
+    private boolean isClipsInMemoryChanged = true;
 
     public Storage(Context context) {
         dbHelper = new StorageHelper(context);
@@ -28,7 +28,7 @@ public class Storage {
     }
 
     public List<String> getAllClipHistory() {
-        if (isClipsInMemorChanged) {
+        if (isClipsInMemoryChanged) {
             String sortOrder = CLIP_DATE + " DESC";
             String[] COLUMNS = {CLIP_STRING};
             Cursor c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
@@ -37,16 +37,27 @@ public class Storage {
                 clipsInMemory.add(c.getString(0));
             }
             c.close();
-            isClipsInMemorChanged = false;
+            isClipsInMemoryChanged = false;
         }
         return clipsInMemory;
     }
-    public String getClipHistory(int n) {
+    public List<String> getClipHistory(int n) {
         //get the `n`th String of ClipHistory
         List<String> ClipHistory = getAllClipHistory();
-        return ClipHistory.get(n);
+        List<String> thisClips = new ArrayList<String>();
+        n = (n > ClipHistory.size() ? ClipHistory.size() : n);
+        for (int i=0; i < n; i++) {
+            thisClips.add(ClipHistory.get(i));
+        }
+        return thisClips;
     }
-    public void addClipHistory(String currentString) {
+    public boolean addClipHistory(String currentString) {
+        List<String> tmpClips = getAllClipHistory();
+        for (String str: tmpClips) {
+            if (str.contains(currentString)) {
+                return false;
+            }
+        }
         Date date = new Date();
         long timestamp = date.getTime();
         ContentValues values = new ContentValues();
@@ -55,9 +66,10 @@ public class Storage {
         long rowid = db.insert(TABLE_NAME, null, values);
         if (rowid == -1) {
             Log.e("Storage", "write db error: " + currentString);
-            return;
+            return false;
         }
-        isClipsInMemorChanged = true;
+        isClipsInMemoryChanged = true;
+        return true;
     }
 
 //    public void printClips(int n) {

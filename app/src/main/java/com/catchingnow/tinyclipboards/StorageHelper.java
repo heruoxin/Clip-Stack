@@ -1,4 +1,4 @@
-package com.catchingnow.clippingnow;
+package com.catchingnow.tinyclipboards;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +10,7 @@ import android.util.Log;
  */
 
 public class StorageHelper extends SQLiteOpenHelper {
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "clippingnow.db";
     private static final String TABLE_NAME = "cliphistory";
@@ -29,7 +30,7 @@ public class StorageHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v("StorageHelper", "SQL updated from" + oldVersion + "to" + newVersion);
+        Log.v(PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
     }
 }
 
