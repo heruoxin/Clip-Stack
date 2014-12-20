@@ -51,9 +51,8 @@ public class CBWatcherService extends Service {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 String thisClip = cd.getItemAt(0).getText().toString();
-                if (addClip(thisClip)) {
-                    showNotification();
-                }
+                addClip(thisClip);
+                showNotification();
             }
         }
     }

@@ -19,24 +19,42 @@ public class Storage {
     private static final String CLIP_DATE = "date";
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
+    private Context c;
     private List<String> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
 
     public Storage(Context context) {
-        dbHelper = new StorageHelper(context);
+        c = context;
+        dbHelper = new StorageHelper(c);
+    }
+
+    public void open() {
         db = dbHelper.getWritableDatabase();
+    }
+    public void close() {
+        db.close();
     }
 
     public List<String> getAllClipHistory() {
+        return getAllClipHistory(null);
+    }
+    public List<String> getAllClipHistory(String queryString) {
         if (isClipsInMemoryChanged) {
+            open();
             String sortOrder = CLIP_DATE + " DESC";
             String[] COLUMNS = {CLIP_STRING};
-            Cursor c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+            Cursor c;
+            if (queryString.equals(null)) {
+                c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+            } else {
+                c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING+" LIKE '%"+queryString+"%'", null, null, null, sortOrder);
+            }
             clipsInMemory = new ArrayList<String>();
             while(c.moveToNext()) {
                 clipsInMemory.add(c.getString(0));
             }
             c.close();
+            close();
             isClipsInMemoryChanged = false;
         }
         return clipsInMemory;
@@ -57,12 +75,14 @@ public class Storage {
                 return false;
             }
         }
+        open();
         Date date = new Date();
         long timestamp = date.getTime();
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timestamp);
         values.put(CLIP_STRING, currentString);
         long rowid = db.insert(TABLE_NAME, null, values);
+        close();
         if (rowid == -1) {
             Log.e("Storage", "write db error: " + currentString);
             return false;
