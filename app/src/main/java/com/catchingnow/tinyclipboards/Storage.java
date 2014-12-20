@@ -42,7 +42,6 @@ public class Storage {
         return clipsInMemory;
     }
     public List<String> getClipHistory(int n) {
-        //get the `n`th String of ClipHistory
         List<String> ClipHistory = getAllClipHistory();
         List<String> thisClips = new ArrayList<String>();
         n = (n > ClipHistory.size() ? ClipHistory.size() : n);
