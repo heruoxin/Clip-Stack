@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">Tiny Clipboard Manager</string>
     <string name="clip_notification_title">"Current clipboard: "</string>
-    <string name="clip_notification_button">Copy </string>
+    <string name="clip_notification_copy_button">Copy </string>
+    <string name="clip_notification_share_button">Share </string>
     <string name="clip_notification_big_title">Recent clipboards</string>
     <string name="clip_notification_big_summary_text">"Current clipboard: "</string>
     <string name="toast_front_string">""</string>
     <string name="toast_end_string">\n has copied to clipboard</string>
     <string name="clip_notification_text">Expand to show more.</string>
+    <string name="share_clipboard_to">Share the clipboard to..</string>
 </resources>

@@ -18,10 +18,7 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
-    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
-    private int buttonNumber = 0;
     private List<String> clips = new ArrayList<String>();
-    private final String tag = "[[ClipboardWatcherService]] ";
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();

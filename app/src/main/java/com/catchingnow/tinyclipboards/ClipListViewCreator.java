@@ -15,6 +15,10 @@ import android.widget.TextView;
 public class ClipListViewCreator {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
+    public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
+    public final static int ACTION_COPY = 1;
+    public final static int ACTION_SHARE = 2;
+
     private int buttonNumber = 0;
 
     private RemoteViews expandedView;
@@ -35,13 +39,23 @@ public class ClipListViewCreator {
         RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.clipaction_view);
         theClipView.setTextViewText(R.id.clip_text, s);
 
-        //add pIntent
+        //add pIntent for copy
 
         Intent openCopyIntent = new Intent(c, copyToClipboardIntentService.class);
         openCopyIntent.putExtra(CLIPBOARD_STRING, s);
+        openCopyIntent.putExtra(CLIPBOARD_ACTION, ACTION_COPY);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        theClipView.setOnClickPendingIntent(R.id.clip_button, pOpenCopyIntent);
+        //add pIntent for share
+
+        Intent openShareIntent = new Intent(c, copyToClipboardIntentService.class);
+        openShareIntent.putExtra(CLIPBOARD_STRING, s);
+        openShareIntent.putExtra(CLIPBOARD_ACTION, ACTION_SHARE);
+        PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
+        theClipView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
         expandedView.addView(R.id.main_view, theClipView);
         return this;
     }

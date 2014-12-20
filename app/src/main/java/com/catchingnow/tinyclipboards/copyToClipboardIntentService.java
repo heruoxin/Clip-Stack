@@ -16,7 +16,6 @@ import android.widget.Toast;
  */
 public class copyToClipboardIntentService extends IntentService {
     public Handler mHandler;
-    private String clips;
 
     public copyToClipboardIntentService() {
         super("copyToClipboardIntentService");
@@ -31,23 +30,47 @@ public class copyToClipboardIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            clips = intent.getStringExtra(CBWatcherService.CLIPBOARD_STRING);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    //make toast
-                    Toast.makeText(copyToClipboardIntentService.this,
-                            getString(R.string.toast_front_string)+clips+getString(R.string.toast_end_string),
-                            Toast.LENGTH_LONG
-                    ).show();
-
-                    //copy clips to clipboard
-                    ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    cb.setText(clips);
-                }
-            });
-
+            String clips = intent.getStringExtra(ClipListViewCreator.CLIPBOARD_STRING);
+            int actionCode = intent.getIntExtra(ClipListViewCreator.CLIPBOARD_ACTION, 0);
+            switch (actionCode) {
+                case 0:
+                    break;
+                case 1:
+                    copyText(clips);
+                    break;
+                case 2:
+                    shareText(clips);
+            }
         }
     }
+
+    private void shareText(final String clips) {
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_SEND);
+        i.putExtra(Intent.EXTRA_TEXT, clips);
+        i.setType("text/plain");
+        Intent sendIntent = Intent.createChooser(i, getString(R.string.share_clipboard_to));
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(sendIntent);
+    }
+
+    protected void copyText(final String clips) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //make toast
+                Toast.makeText(copyToClipboardIntentService.this,
+                        getString(R.string.toast_front_string)+clips+getString(R.string.toast_end_string),
+                        Toast.LENGTH_LONG
+                ).show();
+
+                //copy clips to clipboard
+                ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                cb.setText(clips);
+            }
+        });
+
+    }
+
 
 }
