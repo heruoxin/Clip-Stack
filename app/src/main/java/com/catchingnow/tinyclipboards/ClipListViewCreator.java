@@ -41,14 +41,14 @@ public class ClipListViewCreator {
 
         //add pIntent for copy
 
-        Intent openCopyIntent = new Intent(c, copyToClipboardIntentService.class);
+        Intent openCopyIntent = new Intent(c, stringActionIntentService.class);
         openCopyIntent.putExtra(CLIPBOARD_STRING, s);
         openCopyIntent.putExtra(CLIPBOARD_ACTION, ACTION_COPY);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //add pIntent for share
 
-        Intent openShareIntent = new Intent(c, copyToClipboardIntentService.class);
+        Intent openShareIntent = new Intent(c, stringActionIntentService.class);
         openShareIntent.putExtra(CLIPBOARD_STRING, s);
         openShareIntent.putExtra(CLIPBOARD_ACTION, ACTION_SHARE);
         PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);

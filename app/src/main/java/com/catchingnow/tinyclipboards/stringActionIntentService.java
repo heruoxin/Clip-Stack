@@ -1,24 +1,20 @@
 package com.catchingnow.tinyclipboards;
 
 import android.app.IntentService;
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  */
-public class copyToClipboardIntentService extends IntentService {
+public class stringActionIntentService extends IntentService {
     public Handler mHandler;
 
-    public copyToClipboardIntentService() {
-        super("copyToClipboardIntentService");
+    public stringActionIntentService() {
+        super("stringActionIntentService");
     }
 
     @Override
@@ -59,7 +55,7 @@ public class copyToClipboardIntentService extends IntentService {
             @Override
             public void run() {
                 //make toast
-                Toast.makeText(copyToClipboardIntentService.this,
+                Toast.makeText(stringActionIntentService.this,
                         getString(R.string.toast_front_string)+clips+getString(R.string.toast_end_string),
                         Toast.LENGTH_LONG
                 ).show();

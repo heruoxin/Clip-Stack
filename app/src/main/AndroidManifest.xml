@@ -25,7 +25,7 @@
         </receiver>
 
         <service
-            android:name=".copyToClipboardIntentService"
+            android:name=".stringActionIntentService"
             android:exported="false" >
         </service>
     </application>
