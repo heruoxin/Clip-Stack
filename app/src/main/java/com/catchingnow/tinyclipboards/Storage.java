@@ -44,7 +44,7 @@ public class Storage {
             String sortOrder = CLIP_DATE + " DESC";
             String[] COLUMNS = {CLIP_STRING};
             Cursor c;
-            if (queryString.equals(null)) {
+            if (queryString == null) {
                 c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             } else {
                 c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING+" LIKE '%"+queryString+"%'", null, null, null, sortOrder);

@@ -6,8 +6,8 @@
     android:orientation="vertical" >
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_margin="10dp"
         android:src="@drawable/ic_launcher"
         />
