@@ -32,13 +32,13 @@ public class Storage {
         db = dbHelper.getWritableDatabase();
     }
     public void close() {
-        db.close();
+            db.close();
     }
 
-    public List<String> getAllClipHistory() {
-        return getAllClipHistory(null);
+    public List<String> getClipHistory() {
+        return getClipHistory("");
     }
-    public List<String> getAllClipHistory(String queryString) {
+    public List<String> getClipHistory(String queryString) {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
@@ -60,7 +60,7 @@ public class Storage {
         return clipsInMemory;
     }
     public List<String> getClipHistory(int n) {
-        List<String> ClipHistory = getAllClipHistory();
+        List<String> ClipHistory = getClipHistory();
         List<String> thisClips = new ArrayList<String>();
         n = (n > ClipHistory.size() ? ClipHistory.size() : n);
         for (int i=0; i < n; i++) {
@@ -68,11 +68,21 @@ public class Storage {
         }
         return thisClips;
     }
+    public boolean deleteClipHistory(String s) {
+        open();
+        int rowid = db.delete(TABLE_NAME, CLIP_STRING+"='"+s+"'", null);
+        close();
+        if (rowid == -1) {
+            Log.e("Storage", "write db error: deleteClipHistory " + s);
+            return false;
+        }
+        return true;
+    }
     public boolean addClipHistory(String currentString) {
-        List<String> tmpClips = getAllClipHistory();
+        List<String> tmpClips = getClipHistory();
         for (String str: tmpClips) {
             if (str.contains(currentString)) {
-                return false;
+                deleteClipHistory(str);
             }
         }
         open();
@@ -84,7 +94,7 @@ public class Storage {
         long rowid = db.insert(TABLE_NAME, null, values);
         close();
         if (rowid == -1) {
-            Log.e("Storage", "write db error: " + currentString);
+            Log.e("Storage", "write db error: addClipHistory " + currentString);
             return false;
         }
         isClipsInMemoryChanged = true;
