@@ -38,6 +38,8 @@ public class stringActionIntentService extends IntentService {
                     shareText(clips);
             }
         }
+        Intent i = new Intent(this, CBWatcherService.class);
+        this.startService(i);
     }
 
     private void shareText(final String clips) {
