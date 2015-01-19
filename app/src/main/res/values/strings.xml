@@ -11,7 +11,7 @@
     <string name="toast_end_string">\n has copied to clipboard</string>
     <string name="clip_notification_text">Expand to show more.</string>
     <string name="share_clipboard_to">Share the clipboard to..</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Tiny Clipboard Manage</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

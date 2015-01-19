@@ -70,9 +70,9 @@ public class Storage {
     }
     public boolean deleteClipHistory(String s) {
         open();
-        int rowid = db.delete(TABLE_NAME, CLIP_STRING+"='"+s+"'", null);
+        int row_id = db.delete(TABLE_NAME, CLIP_STRING+"='"+s+"'", null);
         close();
-        if (rowid == -1) {
+        if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistory " + s);
             return false;
         }
@@ -91,9 +91,9 @@ public class Storage {
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timestamp);
         values.put(CLIP_STRING, currentString);
-        long rowid = db.insert(TABLE_NAME, null, values);
+        long row_id = db.insert(TABLE_NAME, null, values);
         close();
-        if (rowid == -1) {
+        if (row_id == -1) {
             Log.e("Storage", "write db error: addClipHistory " + currentString);
             return false;
         }
