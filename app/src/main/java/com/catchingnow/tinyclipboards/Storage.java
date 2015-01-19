@@ -78,6 +78,18 @@ public class Storage {
         }
         return true;
     }
+    public boolean deleteClipHistoryBefore( float days) {
+        Date date = new Date();
+        long timestamp = (long) (date.getTime() - days*86400);
+        open();
+        int row_id = db.delete(TABLE_NAME, CLIP_DATE+"<'"+timestamp+"'", null);
+        close();
+        if (row_id == -1) {
+            Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
+            return false;
+        }
+        return true;
+    }
     public boolean addClipHistory(String currentString) {
         List<String> tmpClips = getClipHistory();
         for (String str: tmpClips) {
