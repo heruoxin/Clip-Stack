@@ -3,10 +3,15 @@ package com.catchingnow.tinyclipboards;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,6 +22,7 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5;
     private Storage db;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
@@ -31,6 +37,7 @@ public class CBWatcherService extends Service {
         Log.v(PACKAGE_NAME, "onCreate");
         db = new Storage(this.getBaseContext());
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
+        bindJobScheduler();
     }
 
     @Override
@@ -43,6 +50,17 @@ public class CBWatcherService extends Service {
     public IBinder onBind(Intent intent) {
         Log.v(PACKAGE_NAME, "onBind");
         return null;
+    }
+
+    public void bindJobScheduler() {
+        // JobScheduler for auto clean sqlite
+        JobInfo job = new JobInfo.Builder(JOB_ID, new ComponentName(this, SyncJobService.class))
+                .setRequiresCharging(true)
+                .setPeriodic(480)
+                .setPersisted(true)
+                .build();
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(job);
     }
 
     private void performClipboardCheck() {
