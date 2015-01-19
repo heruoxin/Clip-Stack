@@ -13,6 +13,9 @@
             android:name=".CBWatcherService"
             android:enabled="true"
             android:exported="true" >
+            <intent-filter>
+                <action android:name="com.catchingnow.tinyclipboards.CBWatcherService" />
+            </intent-filter>
         </service>
 
         <receiver
