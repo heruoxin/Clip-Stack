@@ -56,7 +56,7 @@ public class CBWatcherService extends Service {
         // JobScheduler for auto clean sqlite
         JobInfo job = new JobInfo.Builder(JOB_ID, new ComponentName(this, SyncJobService.class))
                 .setRequiresCharging(true)
-                .setPeriodic(480)
+                .setPeriodic(480000)
                 .setPersisted(true)
                 .build();
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
