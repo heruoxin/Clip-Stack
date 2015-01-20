@@ -80,7 +80,7 @@ public class Storage {
     }
     public boolean deleteClipHistoryBefore( float days) {
         Date date = new Date();
-        long timestamp = (long) (date.getTime() - days*86400);
+        long timestamp = (long) (date.getTime() - days*86400000);
         open();
         int row_id = db.delete(TABLE_NAME, CLIP_DATE+"<'"+timestamp+"'", null);
         close();
