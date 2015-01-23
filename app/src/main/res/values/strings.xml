@@ -14,5 +14,6 @@
     <string name="title_activity_main">Tiny Clipboard Manage</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
 
 </resources>
