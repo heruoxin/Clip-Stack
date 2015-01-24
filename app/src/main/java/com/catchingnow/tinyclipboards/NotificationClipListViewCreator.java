@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
 /**
  * Created by heruoxin on 14/12/18.
  */
-public class ClipListViewCreator {
+public class NotificationClipListViewCreator {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
@@ -22,19 +22,19 @@ public class ClipListViewCreator {
     private RemoteViews expandedView;
     private Context c;
     int id=0;
-    public ClipListViewCreator (Context context, String currentClip) {
+    public NotificationClipListViewCreator(Context context, String currentClip) {
         c = context;
         currentClip = currentClip.trim();
-        expandedView = new RemoteViews(c.getPackageName(), R.layout.cliplist_view);
+        expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
         expandedView.setTextViewText(R.id.current_clip, c.getString(R.string.clip_notification_title)+currentClip);
     }
-    public ClipListViewCreator addClips (String s) {
+    public NotificationClipListViewCreator addClips (String s) {
         id += 1;
         s = s.trim();
         Log.v(PACKAGE_NAME,"ID "+id);
         Log.v(PACKAGE_NAME,s);
         //add view
-        RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.clipaction_view);
+        RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_card);
         theClipView.setTextViewText(R.id.clip_text, s);
 
         //add pIntent for copy

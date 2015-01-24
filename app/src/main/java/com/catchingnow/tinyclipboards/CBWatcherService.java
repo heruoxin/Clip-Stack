@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.app.job.JobInfo;
-import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -103,7 +102,7 @@ public class CBWatcherService extends Service {
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(true);
 
-        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), thisCliptext.get(0));
+        NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisCliptext.get(0));
 
         for (int i=1; i<length; i++) {
             bigView.addClips(thisCliptext.get(i));

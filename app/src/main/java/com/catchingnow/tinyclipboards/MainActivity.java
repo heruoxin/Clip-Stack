@@ -6,15 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 public class MainActivity extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private Storage db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +77,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void setView(String query) {
+//    TextView textView = new TextView(this);
+//    textView.setTextSize(40);
+//    textView.setText("your query is: " + query);
+//    setContentView(textView);
+
+        //get clips
+        db = new Storage(this);
+        List<ClipObject> clips = db.getClipHistory(query);
+
         setContentView(R.layout.activity_main);
-        if (query != null) {
-            TextView textView = new TextView(this);
-            textView.setTextSize(40);
-            textView.setText("your query is: " + query);
-            setContentView(textView);
-        }
+        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+        ClipCardAdapter ca = new ClipCardAdapter(clips);
+        recList.setAdapter(ca);
     }
 
 }
