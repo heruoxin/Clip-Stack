@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboards;
 
 import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -36,12 +37,10 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-//        SearchManager searchManager =
-//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView =
-//                (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchableInfo searchInfo = searchManager.getSearchableInfo(getComponentName());
+        //searchView.setSearchableInfo(searchInfo);
 
         return true;
     }
