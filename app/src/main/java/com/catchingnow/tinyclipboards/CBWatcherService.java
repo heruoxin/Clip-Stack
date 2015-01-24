@@ -75,7 +75,7 @@ public class CBWatcherService extends Service {
         }
     }
 
-    public List<String> getClips () {
+    public List<ClipObject> getClips () {
         return db.getClipHistory(NUMBER_OF_CLIPS);
     }
     public boolean addClip(String s) {
@@ -85,24 +85,28 @@ public class CBWatcherService extends Service {
 
     public void showNotification() {
 
-        List<String> thisClips = getClips();
-        int length = thisClips.size();
+        List<String> thisCliptext = new ArrayList<String>();
+        List<ClipObject> thisClips = getClips();
+        for (ClipObject thisClip: thisClips) {
+            thisCliptext.add(thisClip.text);
+        }
+        int length = thisCliptext.size();
         if (length <= 1) {
             return;
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title)+thisClips.get(0)) //title
+                .setContentTitle(getString(R.string.clip_notification_title)+thisCliptext.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setAutoCancel(true);
 
-        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), thisClips.get(0));
+        ClipListViewCreator bigView = new ClipListViewCreator(this.getBaseContext(), thisCliptext.get(0));
 
         for (int i=1; i<length; i++) {
-            bigView.addClips(thisClips.get(i));
+            bigView.addClips(thisCliptext.get(i));
         }
 
         Notification n = preBuildNotification.build();

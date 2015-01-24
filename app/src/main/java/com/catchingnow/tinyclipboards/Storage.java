@@ -20,7 +20,7 @@ public class Storage {
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
     private Context c;
-    private List<String> clipsInMemory;
+    private List<ClipObject> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
 
     public Storage(Context context) {
@@ -35,23 +35,24 @@ public class Storage {
             db.close();
     }
 
-    public List<String> getClipHistory() {
+    public List<ClipObject> getClipHistory() {
         return getClipHistory("");
     }
-    public List<String> getClipHistory(String queryString) {
+    public List<ClipObject> getClipHistory(String queryString) {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
-            String[] COLUMNS = {CLIP_STRING};
+            String[] COLUMNS = {CLIP_STRING, CLIP_DATE};
             Cursor c;
             if (queryString == null) {
                 c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             } else {
                 c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING+" LIKE '%"+queryString+"%'", null, null, null, sortOrder);
             }
-            clipsInMemory = new ArrayList<String>();
+            clipsInMemory = new ArrayList<ClipObject>();
             while(c.moveToNext()) {
-                clipsInMemory.add(c.getString(0));
+                //clipsInMemory.add(c.getString(0));
+                clipsInMemory.add(new ClipObject(c.getString(0),new Date(c.getLong(1))));
             }
             c.close();
             close();
@@ -59,9 +60,9 @@ public class Storage {
         }
         return clipsInMemory;
     }
-    public List<String> getClipHistory(int n) {
-        List<String> ClipHistory = getClipHistory();
-        List<String> thisClips = new ArrayList<String>();
+    public List<ClipObject> getClipHistory(int n) {
+        List<ClipObject> ClipHistory = getClipHistory();
+        List<ClipObject> thisClips = new ArrayList<ClipObject>();
         n = (n > ClipHistory.size() ? ClipHistory.size() : n);
         for (int i=0; i < n; i++) {
             thisClips.add(ClipHistory.get(i));
@@ -91,8 +92,9 @@ public class Storage {
         return true;
     }
     public boolean addClipHistory(String currentString) {
-        List<String> tmpClips = getClipHistory();
-        for (String str: tmpClips) {
+        List<ClipObject> tmpClips = getClipHistory();
+        for (ClipObject thisClip: tmpClips) {
+            String str = thisClip.text;
             if (str.contains(currentString)) {
                 deleteClipHistory(str);
             }
