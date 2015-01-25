@@ -45,6 +45,18 @@ public class MainActivity extends ActionBarActivity {
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         SearchableInfo searchInfo = searchManager.getSearchableInfo(getComponentName());
         //searchView.setSearchableInfo(searchInfo);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setView(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return true;
     }
