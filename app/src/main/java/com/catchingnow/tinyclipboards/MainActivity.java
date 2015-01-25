@@ -92,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        ClipCardAdapter ca = new ClipCardAdapter(clips);
+        ClipCardAdapter ca = new ClipCardAdapter(clips,this);
         recList.setAdapter(ca);
     }
 
