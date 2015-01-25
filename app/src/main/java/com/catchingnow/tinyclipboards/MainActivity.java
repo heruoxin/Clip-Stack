@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class MainActivity extends ActionBarActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        ClipCardAdapter ca = new ClipCardAdapter(clips,this);
+        ClipCardAdapter ca = new ClipCardAdapter(clips, this);
         recList.setAdapter(ca);
     }
 

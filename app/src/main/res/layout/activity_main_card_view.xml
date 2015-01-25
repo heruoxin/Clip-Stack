@@ -3,7 +3,6 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp">
 
     <RelativeLayout
@@ -15,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:background="@color/primary"
-            android:text="contact det"
+            android:text="Sun Jan 22 00:00:00 GMT+8:00 2000"
             android:gravity="center_vertical"
             android:textColor="@android:color/black"
             android:textSize="14dp" />
@@ -30,6 +29,7 @@
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
                 android:lines="1"
+                android:text="hello, this is a text test"
                 android:textSize="@dimen/abc_text_size_body_1_material"
                 android:textColor="@color/secondary_text_default_material_light"
                 android:layout_weight="1"
