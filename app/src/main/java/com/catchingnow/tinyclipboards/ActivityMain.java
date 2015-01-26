@@ -59,6 +59,7 @@ public class ActivityMain extends ActionBarActivity {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 setView(null);
+                searchView.clearFocus();
                 return true;
             }
         });
@@ -132,7 +133,6 @@ public class ActivityMain extends ActionBarActivity {
         recList.setLayoutManager(llm);
         final ClipCardAdapter ca = new ClipCardAdapter(clips, this);
         recList.setAdapter(ca);
-
 
         SwipeDismissRecyclerViewTouchListener touchListener =
                 new SwipeDismissRecyclerViewTouchListener(
