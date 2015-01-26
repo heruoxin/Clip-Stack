@@ -50,7 +50,6 @@ public class MainActivity extends ActionBarActivity {
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                //searchView.setIconifiedByDefault(true);
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 return true;

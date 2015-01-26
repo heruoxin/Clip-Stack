@@ -31,8 +31,8 @@ public class NotificationClipListViewCreator {
     public NotificationClipListViewCreator addClips (String s) {
         id += 1;
         s = s.trim();
-        Log.v(PACKAGE_NAME,"ID "+id);
-        Log.v(PACKAGE_NAME,s);
+        //Log.v(PACKAGE_NAME,"ID "+id);
+        //Log.v(PACKAGE_NAME,s);
         //add view
         RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_card);
         theClipView.setTextViewText(R.id.clip_text, s);

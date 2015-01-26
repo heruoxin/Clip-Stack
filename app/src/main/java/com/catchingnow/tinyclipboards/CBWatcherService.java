@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboards;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -84,28 +85,38 @@ public class CBWatcherService extends Service {
 
     public void showNotification() {
 
-        List<String> thisCliptext = new ArrayList<String>();
+        List<String> thisClipText = new ArrayList<String>();
         List<ClipObject> thisClips = getClips();
         for (ClipObject thisClip: thisClips) {
-            thisCliptext.add(thisClip.text);
+            thisClipText.add(thisClip.text);
         }
-        int length = thisCliptext.size();
+        int length = thisClipText.size();
         if (length <= 1) {
             return;
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
         Notification.Builder preBuildNotification  = new Notification.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title)+thisCliptext.get(0)) //title
+                .setContentTitle(getString(R.string.clip_notification_title)+thisClipText.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
                 .setPriority(Notification.PRIORITY_MIN)
+                .setContentIntent(resultPendingIntent)
                 .setAutoCancel(true);
 
-        NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisCliptext.get(0));
+        NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisClipText.get(0));
 
         for (int i=1; i<length; i++) {
-            bigView.addClips(thisCliptext.get(i));
+            bigView.addClips(thisClipText.get(i));
         }
 
         Notification n = preBuildNotification.build();
