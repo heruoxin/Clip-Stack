@@ -96,7 +96,7 @@ public class CBWatcherService extends Service {
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
-        Intent resultIntent = new Intent(this, MainActivity.class);
+        Intent resultIntent = new Intent(this, ActivityMain.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,

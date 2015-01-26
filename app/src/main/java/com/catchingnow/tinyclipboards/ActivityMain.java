@@ -18,7 +18,7 @@ import android.widget.SearchView;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     private Storage db;
 
@@ -95,6 +95,9 @@ public class MainActivity extends ActionBarActivity {
 
         switch (id) {
             case R.id.action_search:
+                return super.onOptionsItemSelected(item);
+            case R.id.action_settings:
+                startActivity(new Intent(this, ActivitySetting.class));
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
