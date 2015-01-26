@@ -146,6 +146,7 @@ public class ActivityMain extends ActionBarActivity {
                             @Override
                             public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
+
                                     db.deleteClipHistory(clips.get(position).text);
                                     clips.remove(position);
                                 }

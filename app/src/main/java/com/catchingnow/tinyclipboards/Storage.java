@@ -34,15 +34,17 @@ public class Storage {
         if ("".equals(keyWord) || keyWord == null) {
             return keyWord;
         }
-        return keyWord.replace("/", "//")
+        return keyWord
                 .replace("'", "''")
-                .replace("[", "/[")
-                .replace("]", "/]")
-                .replace("%", "/%")
-                .replace("&", "/&")
-                .replace("_", "/_")
-                .replace("(", "/(")
-                .replace(")", "/)");
+//                .replace("/", "//")
+//                .replace("[", "/[")
+//                .replace("]", "/]")
+//                .replace("%", "/%")
+//                .replace("&", "/&")
+//                .replace("_", "/_")
+//                .replace("(", "/(")
+//                .replace(")", "/)")
+                ;
     }
 
     public void open() {
