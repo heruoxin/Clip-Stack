@@ -3,6 +3,7 @@ package com.catchingnow.tinyclipboards;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -14,7 +15,8 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    private static final String TABLE_NAME = "cliphistory";
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
     private StorageHelper dbHelper;
@@ -28,16 +30,33 @@ public class Storage {
         dbHelper = new StorageHelper(c);
     }
 
+    public String sqliteEscape(String keyWord) {
+        if ("".equals(keyWord) || keyWord == null) {
+            return keyWord;
+        }
+        return keyWord.replace("/", "//")
+                .replace("'", "''")
+                .replace("[", "/[")
+                .replace("]", "/]")
+                .replace("%", "/%")
+                .replace("&", "/&")
+                .replace("_", "/_")
+                .replace("(", "/(")
+                .replace(")", "/)");
+    }
+
     public void open() {
         db = dbHelper.getWritableDatabase();
     }
+
     public void close() {
-            db.close();
+        db.close();
     }
 
     public List<ClipObject> getClipHistory() {
         return getClipHistory("");
     }
+
     public List<ClipObject> getClipHistory(String queryString) {
         if (isClipsInMemoryChanged) {
             open();
@@ -47,12 +66,12 @@ public class Storage {
             if (queryString == null) {
                 c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             } else {
-                c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING+" LIKE '%"+queryString+"%'", null, null, null, sortOrder);
+                c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             }
             clipsInMemory = new ArrayList<ClipObject>();
-            while(c.moveToNext()) {
+            while (c.moveToNext()) {
                 //clipsInMemory.add(c.getString(0));
-                clipsInMemory.add(new ClipObject(c.getString(0),new Date(c.getLong(1))));
+                clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
             }
             c.close();
             close();
@@ -60,30 +79,33 @@ public class Storage {
         }
         return clipsInMemory;
     }
+
     public List<ClipObject> getClipHistory(int n) {
         List<ClipObject> ClipHistory = getClipHistory();
         List<ClipObject> thisClips = new ArrayList<ClipObject>();
         n = (n > ClipHistory.size() ? ClipHistory.size() : n);
-        for (int i=0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             thisClips.add(ClipHistory.get(i));
         }
         return thisClips;
     }
-    public boolean deleteClipHistory(String s) {
+
+    public boolean deleteClipHistory(String query) {
         open();
-        int row_id = db.delete(TABLE_NAME, CLIP_STRING+"='"+s+"'", null);
+        int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
         close();
         if (row_id == -1) {
-            Log.e("Storage", "write db error: deleteClipHistory " + s);
+            Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
         return true;
     }
-    public boolean deleteClipHistoryBefore( float days) {
+
+    public boolean deleteClipHistoryBefore(float days) {
         Date date = new Date();
-        long timestamp = (long) (date.getTime() - days*86400000);
+        long timestamp = (long) (date.getTime() - days * 86400000);
         open();
-        int row_id = db.delete(TABLE_NAME, CLIP_DATE+"<'"+timestamp+"'", null);
+        int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timestamp + "'", null);
         close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
@@ -91,9 +113,10 @@ public class Storage {
         }
         return true;
     }
+
     public boolean addClipHistory(String currentString) {
         List<ClipObject> tmpClips = getClipHistory();
-        for (ClipObject thisClip: tmpClips) {
+        for (ClipObject thisClip : tmpClips) {
             String str = thisClip.text;
             if (str.contains(currentString)) {
                 deleteClipHistory(str);

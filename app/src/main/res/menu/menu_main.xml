@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"
         app:showAsAction="collapseActionView|ifRoom"
-        android:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="android.widget.SearchView"
         />
     <!--
     <item android:id="@+id/action_settings"

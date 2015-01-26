@@ -1,13 +1,16 @@
-<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/activity_main_card_time"
@@ -20,21 +23,23 @@
             android:textSize="14dp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_below="@id/activity_main_card_time"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/activity_main_card_text"
                 android:gravity="center_vertical|start"
                 android:layout_marginStart="10dp"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="5"
+                android:minLines="2"
                 android:text="hello, this is a text test"
                 android:textSize="@dimen/abc_text_size_body_1_material"
                 android:textColor="@color/secondary_text_default_material_light"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="32dp" />
+                android:layout_height="wrap_content" />
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
