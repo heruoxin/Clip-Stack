@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
@@ -20,12 +21,12 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private  RecyclerView recList;
     private Storage db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(PACKAGE_NAME, "onCreate!");
         String query = handleIntent(getIntent());
         setView(query);
         Intent i = new Intent(this, CBWatcherService.class);
@@ -121,16 +122,41 @@ public class ActivityMain extends ActionBarActivity {
 
         //get clips
         db = new Storage(this);
-        List<ClipObject> clips = db.getClipHistory(query);
+        final List<ClipObject> clips = db.getClipHistory(query);
 
         setContentView(R.layout.activity_main);
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        ClipCardAdapter ca = new ClipCardAdapter(clips, this);
+        final ClipCardAdapter ca = new ClipCardAdapter(clips, this);
         recList.setAdapter(ca);
+
+
+        SwipeDismissRecyclerViewTouchListener touchListener =
+                new SwipeDismissRecyclerViewTouchListener(
+                        recList,
+                        new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    db.deleteClipHistory(clips.get(position).text);
+                                    clips.remove(position);
+                                }
+                                // do not call notifyItemRemoved for every item, it will cause gaps on deleting items
+                                ca.notifyDataSetChanged();
+                            }
+                        });
+        recList.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        recList.setOnScrollListener(touchListener.makeScrollListener());
     }
 
 }

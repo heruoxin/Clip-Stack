@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.widget.Toast;
 
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -36,6 +37,7 @@ public class stringActionIntentService extends IntentService {
                     break;
                 case 2:
                     shareText(clips);
+                    break;
             }
         }
         Intent i = new Intent(this, CBWatcherService.class);
