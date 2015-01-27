@@ -58,15 +58,20 @@ public class stringActionIntentService extends IntentService {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                //make toast
-                Toast.makeText(stringActionIntentService.this,
-                        getString(R.string.toast_front_string)+clips+getString(R.string.toast_end_string),
-                        Toast.LENGTH_LONG
-                ).show();
-
                 //copy clips to clipboard
                 ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 cb.setText(clips);
+
+                //make toast
+                String toastClips =clips;
+                if ( clips.length() > 30) {
+                    toastClips = clips.substring(0, 30) + "…";
+                }
+                Toast.makeText(stringActionIntentService.this,
+                        getString(R.string.toast_front_string)+toastClips+"\n"+getString(R.string.toast_end_string),
+                        Toast.LENGTH_LONG
+                ).show();
+
             }
         });
 

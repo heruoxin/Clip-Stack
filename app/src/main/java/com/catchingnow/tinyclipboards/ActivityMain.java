@@ -21,22 +21,23 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private String queryText;
     private  RecyclerView recList;
     private Storage db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String query = handleIntent(getIntent());
-        setView(query);
+        queryText = handleIntent(getIntent());
+        setView(queryText);
         Intent i = new Intent(this, CBWatcherService.class);
         this.startService(i);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        String query = handleIntent(getIntent());
-        setView(query);
+        queryText = handleIntent(getIntent());
+        setView(queryText);
         super.onNewIntent(intent);
     }
 
@@ -58,6 +59,7 @@ public class ActivityMain extends ActionBarActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                queryText = null;
                 setView(null);
                 searchView.clearFocus();
                 return true;
@@ -67,20 +69,22 @@ public class ActivityMain extends ActionBarActivity {
             @Override
             public boolean onClose() {
                 searchItem.collapseActionView();
+                queryText = null;
+                setView(queryText);
                 return false;
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                setView(query);
                 searchView.clearFocus();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                setView(newText);
+                queryText = newText;
+                setView(queryText);
                 return true;
             }
         });
@@ -109,8 +113,9 @@ public class ActivityMain extends ActionBarActivity {
 
     private String handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            return query;
+            queryText = intent.getStringExtra(SearchManager.QUERY);
+            setView(queryText);
+            return queryText;
         }
         return null;
     }
