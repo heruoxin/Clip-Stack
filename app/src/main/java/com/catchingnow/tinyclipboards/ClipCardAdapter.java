@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
 
     private Context context;
     private List<ClipObject> clipObjectList;
+    public final SimpleDateFormat sdf = new SimpleDateFormat(context.getString(R.string.date_formart));
 
     public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
         this.clipObjectList = clipObjectList;
@@ -37,8 +39,9 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
     @Override
     public void onBindViewHolder(ClipCardViewHolder clipCardViewHolder, int i) {
         ClipObject clipObject = clipObjectList.get(i);
+        String dateText = sdf.format(clipObject.date);
+        clipCardViewHolder.vTime.setText(dateText);
         clipCardViewHolder.vText.setText(clipObject.text);
-        clipCardViewHolder.vTime.setText(clipObject.date.toString());
         addStringAction(context, clipObject.text, ACTION_COPY, clipCardViewHolder.vCopy);
         addStringAction(context, clipObject.text, ACTION_SHARE, clipCardViewHolder.vShare);
     }
