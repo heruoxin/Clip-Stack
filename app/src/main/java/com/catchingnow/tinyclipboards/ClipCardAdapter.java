@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,11 +25,14 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
 
     private Context context;
     private List<ClipObject> clipObjectList;
-    public final SimpleDateFormat sdf = new SimpleDateFormat(context.getString(R.string.date_formart));
+    public SimpleDateFormat sdfDate;
+    public SimpleDateFormat sdfTime;
 
     public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
         this.clipObjectList = clipObjectList;
         this.context = context;
+        sdfDate = new SimpleDateFormat(context.getString(R.string.date_formart));
+        sdfTime = new SimpleDateFormat(context.getString(R.string.time_formart));
     }
 
     @Override
@@ -39,10 +43,10 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
     @Override
     public void onBindViewHolder(ClipCardViewHolder clipCardViewHolder, int i) {
         ClipObject clipObject = clipObjectList.get(i);
-        String dateText = sdf.format(clipObject.date);
-        clipCardViewHolder.vTime.setText(dateText);
-        clipCardViewHolder.vText.setText(clipObject.text);
-        addStringAction(context, clipObject.text, ACTION_COPY, clipCardViewHolder.vCopy);
+        clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.date));
+        clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.date));
+        clipCardViewHolder.vText.setText(clipObject.text.trim());
+        addStringAction(context, clipObject.text, ACTION_COPY, clipCardViewHolder.vText);
         addStringAction(context, clipObject.text, ACTION_SHARE, clipCardViewHolder.vShare);
     }
 
@@ -55,7 +59,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         return new ClipCardViewHolder(itemView);
     }
 
-    public void addStringAction(final Context context, final String string, final int actionCode, ImageButton button) {
+    public void addStringAction(final Context context, final String string, final int actionCode, View button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,16 +73,16 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
 
     public static class ClipCardViewHolder extends RecyclerView.ViewHolder{
         protected TextView vTime;
+        protected TextView vDate;
         protected TextView vText;
-        protected ImageButton vShare;
-        protected ImageButton vCopy;
+        protected View vShare;
 
         public ClipCardViewHolder(View v) {
             super(v);
             vTime = (TextView) v.findViewById(R.id.activity_main_card_time);
+            vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
             vText = (TextView) v.findViewById(R.id.activity_main_card_text);
-            vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
-            vCopy = (ImageButton) v.findViewById(R.id.activity_main_card_copy_button);
+            vShare = (View) v.findViewById(R.id.activity_main_card_share_button);
         }
     }
 
