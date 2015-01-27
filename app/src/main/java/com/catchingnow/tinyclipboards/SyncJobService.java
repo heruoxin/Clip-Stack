@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class SyncJobService extends JobService {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
-    private final static String STORAGE_DATE = "com.catchingnow.tinyclipboards.storageDate";
+    private final static String STORAGE_DATE = "pref_save_dates";
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
     private Storage db;
@@ -19,7 +19,7 @@ public class SyncJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         preference = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
-        float days = preference.getFloat(STORAGE_DATE, 15);
+        float days = preference.getFloat(STORAGE_DATE, 7);
         db = new Storage(this.getBaseContext());
         db.deleteClipHistoryBefore(days);
         Log.v(PACKAGE_NAME,"Start JobScheduler, the days is"+days);
