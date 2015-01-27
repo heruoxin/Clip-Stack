@@ -1,50 +1,42 @@
 package com.catchingnow.tinyclipboards;
 
-import android.preference.PreferenceFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.preference.PreferenceActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+public class ActivitySetting extends PreferenceActivity {
 
-public class ActivitySetting extends ActionBarActivity {
+    private Toolbar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_setting);
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+
+        addPreferencesFromResource(R.xml.preference);
+
+        mActionBar.setTitle(getTitle());
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_setting, menu);
-        return true;
+    public void setContentView(int layoutResID) {
+        ViewGroup contentView = (ViewGroup) LayoutInflater.from(this).inflate(
+                R.layout.activity_setting, new LinearLayout(this), false);
+
+        mActionBar = (Toolbar) contentView.findViewById(R.id.action_bar);
+        mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        ViewGroup contentWrapper = (ViewGroup) contentView.findViewById(R.id.content_wrapper);
+        LayoutInflater.from(this).inflate(layoutResID, contentWrapper, true);
+
+        getWindow().setContentView(contentView);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public static class SettingsFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preference);
-        }
-    }
-
 }

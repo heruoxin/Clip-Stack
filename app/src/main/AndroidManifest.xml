@@ -33,7 +33,7 @@
 
         <service
             android:name=".stringActionIntentService"
-            android:exported="false"></service>
+            android:exported="false"/>
 
         <activity
             android:name=".ActivityMain"
@@ -52,6 +52,7 @@
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
+            android:theme="@style/Theme.Settings"
             android:parentActivityName=".ActivityMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
