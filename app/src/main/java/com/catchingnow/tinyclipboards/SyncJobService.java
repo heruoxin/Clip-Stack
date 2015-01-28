@@ -4,6 +4,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -18,8 +19,8 @@ public class SyncJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        preference = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
-        float days = preference.getFloat(STORAGE_DATE, 7);
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
         db = new Storage(this.getBaseContext());
         db.deleteClipHistoryBefore(days);
         Log.v(PACKAGE_NAME,"Start JobScheduler, the days is"+days);

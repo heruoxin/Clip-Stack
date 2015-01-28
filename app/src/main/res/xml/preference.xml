@@ -4,7 +4,7 @@
         <SwitchPreference
             android:title="Service"
             android:summary="Listen system clipboard in background"
-            android:key="pref_show_icon"
+            android:key="pref_start_service"
             android:defaultValue="true" />
         <!-- <SwitchPreference
             android:title="Display"
