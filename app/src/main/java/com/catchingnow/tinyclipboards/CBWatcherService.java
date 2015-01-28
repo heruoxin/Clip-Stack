@@ -13,7 +13,9 @@ import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class CBWatcherService extends Service {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5;
+    private NotificationManager notificationManager;
+    private SharedPreferences preference;
     private Storage db;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
@@ -35,6 +39,11 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
+            Log.v(PACKAGE_NAME, "pref said cannot start service!");
+            return;
+        }
         db = new Storage(this.getBaseContext());
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
         bindJobScheduler();
@@ -50,6 +59,12 @@ public class CBWatcherService extends Service {
     public IBinder onBind(Intent intent) {
         Log.v(PACKAGE_NAME, "onBind");
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
     }
 
     public void bindJobScheduler() {
@@ -75,9 +90,10 @@ public class CBWatcherService extends Service {
         }
     }
 
-    public List<ClipObject> getClips () {
+    public List<ClipObject> getClips() {
         return db.getClipHistory(NUMBER_OF_CLIPS);
     }
+
     public boolean addClip(String s) {
         if (s == null) return false;
         return db.addClipHistory(s);
@@ -87,7 +103,7 @@ public class CBWatcherService extends Service {
 
         List<String> thisClipText = new ArrayList<String>();
         List<ClipObject> thisClips = getClips();
-        for (ClipObject thisClip: thisClips) {
+        for (ClipObject thisClip : thisClips) {
             thisClipText.add(thisClip.text);
         }
         int length = thisClipText.size();
@@ -105,8 +121,8 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        Notification.Builder preBuildNotification  = new Notification.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title)+thisClipText.get(0)) //title
+        Notification.Builder preBuildNotification = new Notification.Builder(this)
+                .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
                 .setPriority(Notification.PRIORITY_MIN)
@@ -115,7 +131,7 @@ public class CBWatcherService extends Service {
 
         NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisClipText.get(0));
 
-        for (int i=1; i<length; i++) {
+        for (int i = 1; i < length; i++) {
             bigView.addClips(thisClipText.get(i));
         }
 
@@ -123,10 +139,18 @@ public class CBWatcherService extends Service {
 
         n.bigContentView = bigView.build();
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        notificationManager.cancelAll();
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
         notificationManager.notify(0, n);
+    }
+
+
+    public static void toggleService(Context c, boolean startOrStop) {
+        if (startOrStop) {
+            c.startService(new Intent(c, CBWatcherService.class));
+        } else {
+            c.stopService(new Intent(c, CBWatcherService.class));
+        }
     }
 
 }
