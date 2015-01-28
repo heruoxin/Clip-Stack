@@ -5,16 +5,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.Date;
+
 public class ActivitySetting extends PreferenceActivity {
 
     public final static String NOTIFICATION_ALWAYS_SHOW = "pref_notification_always_show";
     public final static String SERVICE_STATUS = "pref_start_service";
+    public final static String LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefListener;
     private Context c;
@@ -44,6 +48,8 @@ public class ActivitySetting extends PreferenceActivity {
 
     public void initSharedPrefListener(){
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListener);
+//        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+//        preference.edit().putLong(LAST_ACTIVE_THIS, new Date().getTime()).commit();
     }
 
     @Override

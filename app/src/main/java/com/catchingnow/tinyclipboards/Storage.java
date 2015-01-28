@@ -105,9 +105,9 @@ public class Storage {
 
     public boolean deleteClipHistoryBefore(float days) {
         Date date = new Date();
-        long timestamp = (long) (date.getTime() - days * 86400000);
+        long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
-        int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timestamp + "'", null);
+        int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
         close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
@@ -126,9 +126,9 @@ public class Storage {
         }
         open();
         Date date = new Date();
-        long timestamp = date.getTime();
+        long timeStamp = date.getTime();
         ContentValues values = new ContentValues();
-        values.put(CLIP_DATE, timestamp);
+        values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, currentString);
         long row_id = db.insert(TABLE_NAME, null, values);
         close();
