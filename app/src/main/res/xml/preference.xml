@@ -2,20 +2,22 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="App setting">
         <SwitchPreference
+            android:title="Service"
+            android:summary="Listen system clipboard in background"
+            android:key="pref_show_icon"
+            android:defaultValue="true" />
+        <!-- <SwitchPreference
             android:title="Display"
             android:summary="Show icon in launcher"
             android:key="pref_show_icon"
-            android:defaultValue="true" />
-        <!--
+            android:defaultValue="true" /> -->
         <ListPreference
             android:title="Storage"
             android:summary="Days of clipboard to save"
             android:key="pref_save_dates"
             android:dialogTitle="Save clipboard for"
-            android:entries=""
-            android:entryValues=""
-            android:defaultValue="7 days"/>
-            -->
+            android:entries="@array/pref_save_dates_descriptions"
+            android:entryValues="@array/pref_save_dates_values" />
     </PreferenceCategory>
     <PreferenceCategory android:title="About">
         <Preference
