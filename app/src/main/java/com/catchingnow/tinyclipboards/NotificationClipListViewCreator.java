@@ -26,7 +26,14 @@ public class NotificationClipListViewCreator {
         c = context;
         currentClip = currentClip.trim();
         expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
-        expandedView.setTextViewText(R.id.current_clip, c.getString(R.string.clip_notification_title)+currentClip);
+        expandedView.setTextViewText(R.id.current_clip, currentClip);
+        //add pIntent for share
+        Intent openShareIntent = new Intent(c, stringActionIntentService.class);
+        openShareIntent.putExtra(CLIPBOARD_STRING, currentClip);
+        openShareIntent.putExtra(CLIPBOARD_ACTION, ACTION_SHARE);
+        PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
     }
     public NotificationClipListViewCreator addClips (String s) {
         id += 1;
@@ -44,16 +51,10 @@ public class NotificationClipListViewCreator {
         openCopyIntent.putExtra(CLIPBOARD_ACTION, ACTION_COPY);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //add pIntent for share
 
-        Intent openShareIntent = new Intent(c, stringActionIntentService.class);
-        openShareIntent.putExtra(CLIPBOARD_STRING, s);
-        openShareIntent.putExtra(CLIPBOARD_ACTION, ACTION_SHARE);
-        PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
-        theClipView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
         expandedView.addView(R.id.main_view, theClipView);
         return this;
     }

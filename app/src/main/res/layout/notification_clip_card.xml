@@ -13,20 +13,12 @@
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
-        android:textSize="@dimen/abc_text_size_body_1_material"
+        android:textSize="17sp"
         android:textColor="@color/secondary_text_default_material_light"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="32dp" />
-    <ImageButton
-        android:id="@+id/clip_share_button"
-        android:background="#00000000"
-        android:src="@drawable/ic_action_share"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:scaleType="centerInside"
-        android:contentDescription="@string/clip_notification_share_button"
-        />
+
     <ImageButton
         android:id="@+id/clip_copy_button"
         android:background="#00000000"
@@ -34,7 +26,6 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:scaleType="centerInside"
-        android:contentDescription="@string/clip_notification_copy_button"
-        />
+        android:contentDescription="@string/clip_notification_copy_button" />
 
 </LinearLayout>

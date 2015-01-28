@@ -26,7 +26,7 @@ public class CBWatcherService extends Service {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboards.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static int JOB_ID = 1;
-    public int NUMBER_OF_CLIPS = 5;
+    public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;
     private Storage db;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
