@@ -24,10 +24,10 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboards.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5;
     private NotificationManager notificationManager;
-    private SharedPreferences preference;
     private Storage db;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
@@ -39,7 +39,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
-        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
             Log.v(PACKAGE_NAME, "pref said cannot start service!");
             return;
@@ -52,6 +52,11 @@ public class CBWatcherService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
+        if (intent != null) {
+            if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
+                showNotification();
+            }
+        }
         return START_STICKY;
     }
 
@@ -121,13 +126,17 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0)) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
-                .setAutoCancel(true);
+                .setOngoing(pinOnTop)
+                .setAutoCancel(!pinOnTop);
 
         NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisClipText.get(0));
 

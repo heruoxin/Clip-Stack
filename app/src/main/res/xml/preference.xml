@@ -6,6 +6,11 @@
             android:summary="Listen system clipboard in background"
             android:key="pref_start_service"
             android:defaultValue="true" />
+        <SwitchPreference
+            android:title="Notification"
+            android:key="pref_notification_always_show"
+            android:defaultValue="false"
+            android:dependency="pref_start_service" />
         <!-- <SwitchPreference
             android:title="Display"
             android:summary="Show icon in launcher"
@@ -22,7 +27,7 @@
     <PreferenceCategory android:title="About">
         <Preference
             android:title="Open Source"
-            android:summary="View on Github">
+            android:summary="View source code on Github">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/heruoxin/TinyClipboards" />

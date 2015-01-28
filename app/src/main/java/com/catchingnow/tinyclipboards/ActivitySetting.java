@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 public class ActivitySetting extends PreferenceActivity {
 
+    public final static String NOTIFICATION_ALWAYS_SHOW = "pref_notification_always_show";
     public final static String SERVICE_STATUS = "pref_start_service";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefListner;
@@ -24,8 +25,20 @@ public class ActivitySetting extends PreferenceActivity {
         myPrefListner = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                   String key) {
-                if (key.equals(SERVICE_STATUS)) {
-                    CBWatcherService.toggleService(c, sharedPreferences.getBoolean(SERVICE_STATUS, true));
+                switch (key) {
+                    case SERVICE_STATUS:
+                        CBWatcherService.toggleService(c, sharedPreferences.getBoolean(key, true));
+                        break;
+                    case NOTIFICATION_ALWAYS_SHOW:
+                        if (sharedPreferences.getBoolean(key, false)) {
+                            findPreference(key).setSummary("Always show.");
+                        } else {
+                            findPreference(key).setSummary("When clipboard changed.");
+                        }
+                        Intent intent = new Intent(c, CBWatcherService.class);
+                        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
+                        startService(intent);
+                        break;
                 }
             }
         };
