@@ -18,8 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/icon"
         android:layout_marginStart="-4dp"
-        android:divider="@drawable/divider"
-        android:showDividers="middle"
         android:orientation="vertical">
 
         <LinearLayout
@@ -31,10 +29,9 @@
 
             <TextView
                 android:id="@+id/current_clip"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginStart="10dp"
                 android:textSize="18sp"
-                android:layout_margin="10dp"
+                android:text="Title test test"
                 android:textColor="@color/primary_text_default_material_light"
                 android:layout_gravity="center"
                 android:lines="1"
@@ -47,12 +44,17 @@
                 android:id="@+id/clip_share_button"
                 android:background="#00000000"
                 android:src="@drawable/ic_action_share"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="38dp"
+                android:layout_height="36dp"
                 android:layout_gravity="end"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:contentDescription="@string/clip_notification_share_button" />
 
         </LinearLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#B6B6B6"/>
+
     </LinearLayout>
 </RelativeLayout>

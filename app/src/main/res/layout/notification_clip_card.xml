@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/clip_line"
-    android:layout_marginTop="-8dp"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:layout_height="38dp"
+    android:layout_height="wrap_content"
     android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/clip_text"
-        android:gravity="center_vertical|start"
-        android:layout_marginStart="10dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textSize="17sp"
-        android:textColor="@color/secondary_text_default_material_light"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="32dp" />
+    <LinearLayout
+        android:id="@+id/each_item"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/clip_copy_button"
-        android:background="#00000000"
-        android:src="@drawable/ic_action_copy"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:scaleType="centerInside"
-        android:contentDescription="@string/clip_notification_copy_button" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/clip_text"
+            android:gravity="center_vertical|start"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="text test test"
+            android:textSize="17sp"
+            android:textColor="@color/secondary_text_default_material_light"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/clip_copy_button"
+            android:background="#00000000"
+            android:src="@drawable/ic_action_copy"
+            android:layout_gravity="center"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/clip_notification_copy_button" />
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/each_item"
+        android:background="#B6B6B6"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/each_item"
+        android:background="#B6B6B6"/>
+
+</RelativeLayout>
+
+
