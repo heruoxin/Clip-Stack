@@ -81,9 +81,9 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1px"
         android:layout_below="@id/main_view"
-        android:background="@android:color/darker_gray"/>
+        android:background="#B6B6B6"/>
 
 </RelativeLayout>
 

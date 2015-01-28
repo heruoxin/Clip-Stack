@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -18,11 +16,11 @@ public class ActivitySetting extends PreferenceActivity {
     public final static String NOTIFICATION_ALWAYS_SHOW = "pref_notification_always_show";
     public final static String SERVICE_STATUS = "pref_start_service";
     private Toolbar mActionBar;
-    private SharedPreferences.OnSharedPreferenceChangeListener myPrefListner;
+    private SharedPreferences.OnSharedPreferenceChangeListener myPrefListener;
     private Context c;
 
     public ActivitySetting() {
-        myPrefListner = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        myPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                   String key) {
                 switch (key) {
@@ -33,7 +31,7 @@ public class ActivitySetting extends PreferenceActivity {
                         if (sharedPreferences.getBoolean(key, false)) {
                             findPreference(key).setSummary("Always show.");
                         } else {
-                            findPreference(key).setSummary("When clipboard changed.");
+                            findPreference(key).setSummary("Only show when clipboard changed.");
                         }
                         Intent intent = new Intent(c, CBWatcherService.class);
                         intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
@@ -44,6 +42,9 @@ public class ActivitySetting extends PreferenceActivity {
         };
     }
 
+    public void initSharedPrefListener(){
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +53,12 @@ public class ActivitySetting extends PreferenceActivity {
         c = this.getBaseContext();
         addPreferencesFromResource(R.xml.preference);
         mActionBar.setTitle(getTitle());
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListner);
+        initSharedPrefListener();
     }
     @Override
     protected void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListner);
+        initSharedPrefListener();
     }
 
 
@@ -65,7 +66,7 @@ public class ActivitySetting extends PreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(myPrefListner);
+        initSharedPrefListener();
 
     }
 
