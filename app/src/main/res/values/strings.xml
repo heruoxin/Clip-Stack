@@ -18,6 +18,6 @@
     <string name="search_hint">Search</string>
     <string name="title_activity_activity_setting">Settings</string>
     <string name="date_formart">EEE, MMM d</string>
-    <string name="time_formart">hh:mm a</string>
+    <string name="time_formart">HH:mm</string>
 
 </resources>

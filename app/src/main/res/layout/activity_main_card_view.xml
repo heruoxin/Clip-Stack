@@ -27,7 +27,7 @@
                 android:text="Sun Jan 22"
                 android:textColor="@color/accent"
                 android:gravity="center_vertical"
-                android:textSize="10dp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/activity_main_card_text"
@@ -61,7 +61,7 @@
                 android:text="13:23"
                 android:textColor="@color/accent"
                 android:gravity="center_vertical"
-                android:textSize="10dp" />
+                android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
