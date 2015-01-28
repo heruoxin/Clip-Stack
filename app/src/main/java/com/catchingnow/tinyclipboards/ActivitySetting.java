@@ -18,6 +18,7 @@ public class ActivitySetting extends PreferenceActivity {
 
     public final static String NOTIFICATION_ALWAYS_SHOW = "pref_notification_always_show";
     public final static String SERVICE_STATUS = "pref_start_service";
+    public final static String SAVE_DATES = "pref_save_dates";
     public final static String LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefListener;
@@ -30,6 +31,12 @@ public class ActivitySetting extends PreferenceActivity {
                 switch (key) {
                     case SERVICE_STATUS:
                         CBWatcherService.toggleService(c, sharedPreferences.getBoolean(key, true));
+                        break;
+                    case SAVE_DATES:
+                        findPreference(key).setSummary(String.format(
+                                "Keep clips for %d days.",
+                                Integer.parseInt(sharedPreferences.getString(key, "7"))
+                        ));
                         break;
                     case NOTIFICATION_ALWAYS_SHOW:
                         if (sharedPreferences.getBoolean(key, false)) {
