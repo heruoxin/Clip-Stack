@@ -65,7 +65,7 @@
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
-                android:background="#00000000"
+                android:background="@android:color/transparent"
                 android:layout_margin="6dp"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_action_share"

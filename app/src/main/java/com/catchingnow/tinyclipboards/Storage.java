@@ -121,7 +121,7 @@ public class Storage {
         List<ClipObject> tmpClips = getClipHistory();
         for (ClipObject thisClip : tmpClips) {
             String str = thisClip.text;
-            if (str.contains(currentString)) {
+            if (str.equals(currentString)) {
                 deleteClipHistory(str);
             }
         }
