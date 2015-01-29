@@ -11,11 +11,14 @@ import android.widget.Toast;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  */
-public class stringActionIntentService extends IntentService {
-    public Handler mHandler;
+public class StringActionIntentService extends IntentService {
+    public final static int ACTION_COPY = 1;
+    public final static int ACTION_SHARE = 2;
+    public final static int ACTION_EDIT = 3;
 
-    public stringActionIntentService() {
-        super("stringActionIntentService");
+    public Handler mHandler;
+    public StringActionIntentService() {
+        super("StringActionIntentService");
     }
 
     @Override
@@ -32,11 +35,14 @@ public class stringActionIntentService extends IntentService {
             switch (actionCode) {
                 case 0:
                     break;
-                case 1:
+                case ACTION_COPY:
                     copyText(clips);
                     break;
-                case 2:
+                case ACTION_SHARE:
                     shareText(clips);
+                    break;
+                case ACTION_EDIT:
+                    editText(clips);
                     break;
             }
         }
@@ -67,7 +73,7 @@ public class stringActionIntentService extends IntentService {
                 if ( clips.length() > 30) {
                     toastClips = clips.substring(0, 30) + "…";
                 }
-                Toast.makeText(stringActionIntentService.this,
+                Toast.makeText(StringActionIntentService.this,
                         getString(R.string.toast_front_string)+toastClips+"\n"+getString(R.string.toast_end_string),
                         Toast.LENGTH_LONG
                 ).show();
@@ -77,5 +83,9 @@ public class stringActionIntentService extends IntentService {
 
     }
 
+    public void editText(final String clips) {
+        Intent i = new Intent(this, ActivityEditor.class).putExtra(Intent.EXTRA_TEXT, clips);
+        startActivity(i);
+    }
 
 }

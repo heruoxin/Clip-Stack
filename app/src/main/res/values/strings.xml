@@ -19,5 +19,6 @@
     <string name="title_activity_activity_setting">Settings</string>
     <string name="date_formart">EEE, MMM d</string>
     <string name="time_formart">HH:mm</string>
+    <string name="title_activity_activity_editor">ActivityEditor</string>
 
 </resources>

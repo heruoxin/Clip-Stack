@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +18,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
-    public final static int ACTION_COPY = 1;
-    public final static int ACTION_SHARE = 2;
+
 
     private Context context;
     private List<ClipObject> clipObjectList;
@@ -46,8 +43,8 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.date));
         clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.date));
         clipCardViewHolder.vText.setText(clipObject.text.trim());
-        addStringAction(context, clipObject.text, ACTION_COPY, clipCardViewHolder.vText);
-        addStringAction(context, clipObject.text, ACTION_SHARE, clipCardViewHolder.vShare);
+        addStringAction(context, clipObject.text, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
+        addStringAction(context, clipObject.text, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openIntent = new Intent(context, stringActionIntentService.class);
+                Intent openIntent = new Intent(context, StringActionIntentService.class);
                 openIntent.putExtra(CLIPBOARD_STRING, string);
                 openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);

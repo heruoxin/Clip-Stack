@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.catchingnow.tinyclipboards">
+    package="com.catchingnow.tinyclipboards" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -9,11 +9,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:maxRecents="5"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <service
             android:name=".CBWatcherService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="com.catchingnow.tinyclipboards.CBWatcherService" />
             </intent-filter>
@@ -26,23 +26,24 @@
         <receiver
             android:name=".LaunchServiceAtStartup"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".stringActionIntentService"
-            android:exported="false"/>
+            android:name=".StringActionIntentService"
+            android:exported="false" />
 
         <activity
             android:name=".ActivityMain"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -53,17 +54,23 @@
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
-            android:theme="@style/Theme.Settings">
+            android:theme="@style/Theme.Settings" >
+
             <!-- android:documentLaunchMode="intoExisting" -->
             <!-- android:parentActivityName=".ActivityMain" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ActivityMain" />
+        </activity>
+        <activity
+            android:name=".ActivityEditor"
+            android:label="@string/title_activity_activity_editor" >
         </activity>
     </application>
 

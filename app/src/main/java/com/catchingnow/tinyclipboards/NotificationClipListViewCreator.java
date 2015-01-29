@@ -3,7 +3,6 @@ package com.catchingnow.tinyclipboards;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 
@@ -14,8 +13,6 @@ public class NotificationClipListViewCreator {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
-    public final static int ACTION_COPY = 1;
-    public final static int ACTION_SHARE = 2;
 
     private int buttonNumber = 0;
 
@@ -28,9 +25,9 @@ public class NotificationClipListViewCreator {
         expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
         expandedView.setTextViewText(R.id.current_clip, currentClip);
         //add pIntent for share
-        Intent openShareIntent = new Intent(c, stringActionIntentService.class);
+        Intent openShareIntent = new Intent(c, StringActionIntentService.class);
         openShareIntent.putExtra(CLIPBOARD_STRING, currentClip);
-        openShareIntent.putExtra(CLIPBOARD_ACTION, ACTION_SHARE);
+        openShareIntent.putExtra(CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
         PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
@@ -46,9 +43,9 @@ public class NotificationClipListViewCreator {
 
         //add pIntent for copy
 
-        Intent openCopyIntent = new Intent(c, stringActionIntentService.class);
+        Intent openCopyIntent = new Intent(c, StringActionIntentService.class);
         openCopyIntent.putExtra(CLIPBOARD_STRING, s);
-        openCopyIntent.putExtra(CLIPBOARD_ACTION, ACTION_COPY);
+        openCopyIntent.putExtra(CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
