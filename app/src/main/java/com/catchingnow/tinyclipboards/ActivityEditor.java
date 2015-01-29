@@ -57,7 +57,7 @@ public class ActivityEditor extends ActionBarActivity {
                 break;
             case (R.id.action_cancel):
             case (android.R.id.home):
-                finishWithToast();
+                finishAndRemoveTaskWithToast();
                 break;
             default:
                 break;
@@ -65,10 +65,6 @@ public class ActivityEditor extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void finish(){
-        super.finish();
-    }
 
     private void shareText() {
         String text = editText.getText().toString();
@@ -81,7 +77,7 @@ public class ActivityEditor extends ActionBarActivity {
     private void saveText() {
         String newText = editText.getText().toString();
         if (oldText.equals(newText)) {
-            finishWithToast();
+            finishAndRemoveTaskWithToast();
             return;
         }
         Storage db = new Storage(this);
@@ -95,14 +91,14 @@ public class ActivityEditor extends ActionBarActivity {
                     getString(R.string.toast_deleted),
                     Toast.LENGTH_SHORT).show();
         }
-        finish();
+        finishAndRemoveTask();
     }
 
-    private void finishWithToast() {
+    private void finishAndRemoveTaskWithToast() {
         Toast.makeText(this,
                 "Not saved.",
                 Toast.LENGTH_SHORT).show();
-        finish();
+        finishAndRemoveTask();
     }
 
 }
