@@ -11,7 +11,17 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
+        android:text="Test text text \nTest text text."
         android:id="@+id/edit_text"
         android:layout_alignParentTop="true"
+        android:background="@null"
         android:layout_centerHorizontal="true" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="6dp"
+        android:layout_below="@id/edit_text"
+        android:background="@color/accent"/>
+
 </RelativeLayout>
