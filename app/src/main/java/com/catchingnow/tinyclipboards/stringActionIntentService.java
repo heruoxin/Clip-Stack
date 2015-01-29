@@ -70,12 +70,12 @@ public class StringActionIntentService extends IntentService {
 
                 //make toast
                 String toastClips =clips;
-                if ( clips.length() > 30) {
-                    toastClips = clips.substring(0, 30) + "…";
+                if ( clips.length() > 15) {
+                    toastClips = clips.substring(0, 15) + "…";
                 }
                 Toast.makeText(StringActionIntentService.this,
                         getString(R.string.toast_front_string)+toastClips+"\n"+getString(R.string.toast_end_string),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                 ).show();
 
             }
