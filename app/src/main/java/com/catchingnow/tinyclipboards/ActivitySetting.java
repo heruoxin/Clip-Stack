@@ -31,6 +31,7 @@ public class ActivitySetting extends PreferenceActivity {
                 switch (key) {
                     case SERVICE_STATUS:
                         CBWatcherService.toggleService(c, sharedPreferences.getBoolean(key, true));
+                        CBWatcherService.forceShowNotification(c);
                         break;
                     case SAVE_DATES:
                         findPreference(key).setSummary(String.format(
@@ -39,14 +40,7 @@ public class ActivitySetting extends PreferenceActivity {
                         ));
                         break;
                     case NOTIFICATION_ALWAYS_SHOW:
-                        if (sharedPreferences.getBoolean(key, false)) {
-                            findPreference(key).setSummary("Always show.");
-                        } else {
-                            findPreference(key).setSummary("Only show when clipboard changed.");
-                        }
-                        Intent intent = new Intent(c, CBWatcherService.class);
-                        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
-                        startService(intent);
+                        CBWatcherService.forceShowNotification(c);
                         break;
                 }
             }

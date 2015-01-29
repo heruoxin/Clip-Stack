@@ -162,4 +162,10 @@ public class CBWatcherService extends Service {
         }
     }
 
+    public static void forceShowNotification(Context context) {
+        Intent intent = new Intent(context, CBWatcherService.class);
+        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
+        context.startService(intent);
+    }
+
 }

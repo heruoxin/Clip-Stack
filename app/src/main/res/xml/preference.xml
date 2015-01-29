@@ -9,6 +9,8 @@
         <SwitchPreference
             android:title="Notification"
             android:key="pref_notification_always_show"
+            android:summaryOn="Always show."
+            android:summaryOff="Only show when clipboard changed."
             android:defaultValue="false"
             android:dependency="pref_start_service" />
         <!-- <SwitchPreference
