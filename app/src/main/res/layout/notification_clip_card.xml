@@ -21,7 +21,7 @@
             android:ellipsize="end"
             android:lines="1"
             android:text="text test test"
-            android:textSize="17sp"
+            android:textSize="14sp"
             android:textColor="@color/secondary_text_default_material_light"
             android:layout_gravity="center"
             android:layout_weight="1"

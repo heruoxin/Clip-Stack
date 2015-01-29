@@ -30,7 +30,7 @@
             <TextView
                 android:id="@+id/current_clip"
                 android:layout_marginStart="10dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="Title test test"
                 android:textColor="@color/primary_text_default_material_light"
                 android:layout_gravity="center"

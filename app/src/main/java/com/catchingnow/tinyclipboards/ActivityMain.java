@@ -25,9 +25,14 @@ public class ActivityMain extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         queryText = handleIntent(getIntent());
-        setView(queryText);
         Intent i = new Intent(this, CBWatcherService.class);
         this.startService(i);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setView(queryText);
     }
 
     @Override
