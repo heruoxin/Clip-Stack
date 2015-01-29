@@ -53,6 +53,7 @@ public class ActivityEditor extends ActionBarActivity {
 
     @Override
     protected void onPause() {
+        super.onPause();
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
