@@ -36,8 +36,8 @@ public class ActivityEditor extends ActionBarActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             }
         });
@@ -49,6 +49,12 @@ public class ActivityEditor extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         editText.requestFocus();
+    }
+
+    @Override
+    protected void onPause() {
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
 
