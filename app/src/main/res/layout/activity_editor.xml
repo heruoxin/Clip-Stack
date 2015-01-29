@@ -12,6 +12,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:text="Test text text \nTest text text."
+        android:maxLines="12"
         android:id="@+id/edit_text"
         android:layout_alignParentTop="true"
         android:background="@null"
