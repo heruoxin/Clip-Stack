@@ -138,7 +138,7 @@ public class CBWatcherService extends Service {
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
 
-        NotificationClipListViewCreator bigView = new NotificationClipListViewCreator(this.getBaseContext(), thisClipText.get(0));
+        NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
 
         for (int i = 1; i < length; i++) {
             bigView.addClips(thisClipText.get(i));

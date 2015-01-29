@@ -30,8 +30,8 @@ public class StringActionIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            String clips = intent.getStringExtra(NotificationClipListViewCreator.CLIPBOARD_STRING);
-            int actionCode = intent.getIntExtra(NotificationClipListViewCreator.CLIPBOARD_ACTION, 0);
+            String clips = intent.getStringExtra(NotificationClipListAdapter.CLIPBOARD_STRING);
+            int actionCode = intent.getIntExtra(NotificationClipListAdapter.CLIPBOARD_ACTION, 0);
             switch (actionCode) {
                 case 0:
                     break;
