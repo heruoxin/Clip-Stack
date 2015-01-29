@@ -84,7 +84,9 @@ public class StringActionIntentService extends IntentService {
     }
 
     public void editText(final String clips) {
-        Intent i = new Intent(this, ActivityEditor.class).putExtra(Intent.EXTRA_TEXT, clips);
+        Intent i = new Intent(this, ActivityEditor.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(Intent.EXTRA_TEXT, clips);
         startActivity(i);
     }
 

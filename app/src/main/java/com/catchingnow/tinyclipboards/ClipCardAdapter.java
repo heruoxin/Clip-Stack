@@ -43,8 +43,9 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.date));
         clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.date));
         clipCardViewHolder.vText.setText(clipObject.text.trim());
-        addStringAction(context, clipObject.text, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
-        addStringAction(context, clipObject.text, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
+        addClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
+        addLongClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
+        addClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         return new ClipCardViewHolder(itemView);
     }
 
-    public void addStringAction(final Context context, final String string, final int actionCode, View button) {
+    public void addClickStringAction(final Context context, final String string, final int actionCode, View button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +65,19 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
                 openIntent.putExtra(CLIPBOARD_STRING, string);
                 openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);
+            }
+        });
+    }
+
+    public void addLongClickStringAction(final Context context, final String string, final int actionCode, View button) {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent openIntent = new Intent(context, StringActionIntentService.class);
+                openIntent.putExtra(CLIPBOARD_STRING, string);
+                openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
+                context.startService(openIntent);
+                return true;
             }
         });
     }

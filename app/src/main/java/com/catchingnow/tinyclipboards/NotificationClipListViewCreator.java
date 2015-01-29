@@ -47,11 +47,17 @@ public class NotificationClipListViewCreator {
         openCopyIntent.putExtra(CLIPBOARD_STRING, s);
         openCopyIntent.putExtra(CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
         PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-
-
         theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
+
+        //add pIntent for edit
+
+        Intent openEditIntent = new Intent(c, StringActionIntentService.class);
+        openEditIntent.putExtra(CLIPBOARD_STRING, s);
+        openEditIntent.putExtra(CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
+        PendingIntent pOpenEditIntent = PendingIntent.getService(c, buttonNumber++, openEditIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        theClipView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
+
+
         expandedView.addView(R.id.main_view, theClipView);
         return this;
     }
