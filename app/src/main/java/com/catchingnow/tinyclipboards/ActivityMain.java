@@ -17,6 +17,7 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     private String queryText;
     private  RecyclerView recList;
     private Storage db;
@@ -37,7 +38,10 @@ public class ActivityMain extends ActionBarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        queryText = handleIntent(getIntent());
+        String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
+        if (s != null) {
+            queryText = s;
+        }
         setView(queryText);
         super.onNewIntent(intent);
     }

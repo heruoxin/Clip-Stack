@@ -65,6 +65,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
                 openIntent.putExtra(CLIPBOARD_STRING, string);
                 openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);
+                refreshMainView();
             }
         });
     }
@@ -77,9 +78,15 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
                 openIntent.putExtra(CLIPBOARD_STRING, string);
                 openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);
+                refreshMainView();
                 return true;
             }
         });
+    }
+
+    private void refreshMainView() {
+        Intent i = new Intent(context, ActivityMain.class);
+        context.startActivity(i);
     }
 
     public static class ClipCardViewHolder extends RecyclerView.ViewHolder{
