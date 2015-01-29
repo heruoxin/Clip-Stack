@@ -27,6 +27,7 @@
         android:stateListAnimator="@animator/anim"
         android:src="@drawable/ic_action_add"
         android:elevation="4dp"
+        android:onClick="actionAdd"
         />
 
 </RelativeLayout>

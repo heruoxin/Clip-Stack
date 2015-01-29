@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by heruoxin on 15/1/24.
  */
-public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder>{
+public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
@@ -61,9 +61,9 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openIntent = new Intent(context, StringActionIntentService.class);
-                openIntent.putExtra(CLIPBOARD_STRING, string);
-                openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
+                Intent openIntent = new Intent(context, StringActionIntentService.class)
+                        .putExtra(CLIPBOARD_STRING, string)
+                        .putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);
                 refreshMainView();
             }
@@ -74,9 +74,9 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent openIntent = new Intent(context, StringActionIntentService.class);
-                openIntent.putExtra(CLIPBOARD_STRING, string);
-                openIntent.putExtra(CLIPBOARD_ACTION, actionCode);
+                Intent openIntent = new Intent(context, StringActionIntentService.class)
+                        .putExtra(CLIPBOARD_STRING, string)
+                        .putExtra(CLIPBOARD_ACTION, actionCode);
                 context.startService(openIntent);
                 refreshMainView();
                 return true;
@@ -89,7 +89,7 @@ public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCa
         context.startActivity(i);
     }
 
-    public static class ClipCardViewHolder extends RecyclerView.ViewHolder{
+    public static class ClipCardViewHolder extends RecyclerView.ViewHolder {
         protected TextView vTime;
         protected TextView vDate;
         protected TextView vText;

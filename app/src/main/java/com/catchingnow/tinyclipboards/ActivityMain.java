@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 
 import java.util.List;
@@ -170,4 +171,9 @@ public class ActivityMain extends ActionBarActivity {
         recList.setOnScrollListener(touchListener.makeScrollListener());
     }
 
+    public void actionAdd(View view) {
+        Intent i = new Intent(this, StringActionIntentService.class)
+                .putExtra(ClipCardAdapter.CLIPBOARD_ACTION ,StringActionIntentService.ACTION_EDIT);
+        startService(i);
+    }
 }
