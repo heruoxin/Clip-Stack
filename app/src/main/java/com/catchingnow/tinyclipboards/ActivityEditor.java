@@ -19,6 +19,7 @@ public class ActivityEditor extends ActionBarActivity {
 
     private String oldText;
     private EditText editText;
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,9 @@ public class ActivityEditor extends ActionBarActivity {
         setContentView(R.layout.activity_editor);
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (oldText == null) {
+            oldText = "";
+        }
         editText = (EditText) findViewById(R.id.edit_text);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
