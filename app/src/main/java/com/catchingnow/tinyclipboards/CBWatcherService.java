@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,4 +169,58 @@ public class CBWatcherService extends Service {
         context.startService(intent);
     }
 
+    public class NotificationClipListAdapter {
+
+        private int buttonNumber = 0;
+
+        private RemoteViews expandedView;
+        private Context c;
+        int id=0;
+        public NotificationClipListAdapter(Context context, String currentClip) {
+            c = context;
+            currentClip = currentClip.trim();
+            expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
+            expandedView.setTextViewText(R.id.current_clip, currentClip);
+            //add pIntent for share
+            Intent openShareIntent = new Intent(c, StringActionIntentService.class);
+            openShareIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, currentClip);
+            openShareIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
+            PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
+        }
+        public NotificationClipListAdapter addClips (String s) {
+            id += 1;
+            s = s.trim();
+            //Log.v(PACKAGE_NAME,"ID "+id);
+            //Log.v(PACKAGE_NAME,s);
+            //add view
+            RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_card_view);
+            theClipView.setTextViewText(R.id.clip_text, s);
+
+            //add pIntent for copy
+
+            Intent openCopyIntent = new Intent(c, StringActionIntentService.class);
+            openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
+            openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
+            PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
+
+            //add pIntent for edit
+
+            Intent openEditIntent = new Intent(c, StringActionIntentService.class);
+            openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
+            openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
+            PendingIntent pOpenEditIntent = PendingIntent.getService(c, buttonNumber++, openEditIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            theClipView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
+
+
+            expandedView.addView(R.id.main_view, theClipView);
+            return this;
+        }
+        public RemoteViews build () {
+            //expandedView.setTextViewText(R.id.text, "Hello World!");
+            return expandedView;
+        }
+    }
 }

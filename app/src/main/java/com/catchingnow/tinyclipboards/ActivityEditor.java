@@ -92,8 +92,8 @@ public class ActivityEditor extends ActionBarActivity {
     private void shareText() {
         String text = editText.getText().toString();
         Intent openIntent = new Intent(this, StringActionIntentService.class);
-        openIntent.putExtra(ClipCardAdapter.CLIPBOARD_STRING, text);
-        openIntent.putExtra(ClipCardAdapter.CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
+        openIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, text);
+        openIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
         startService(openIntent);
     }
 

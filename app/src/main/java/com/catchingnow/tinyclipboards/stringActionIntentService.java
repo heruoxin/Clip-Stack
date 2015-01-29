@@ -15,6 +15,8 @@ public class StringActionIntentService extends IntentService {
     public final static int ACTION_COPY = 1;
     public final static int ACTION_SHARE = 2;
     public final static int ACTION_EDIT = 3;
+    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
+    public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
 
     public Handler mHandler;
     public StringActionIntentService() {
@@ -30,8 +32,8 @@ public class StringActionIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            String clips = intent.getStringExtra(NotificationClipListAdapter.CLIPBOARD_STRING);
-            int actionCode = intent.getIntExtra(NotificationClipListAdapter.CLIPBOARD_ACTION, 0);
+            String clips = intent.getStringExtra(CLIPBOARD_STRING);
+            int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
             switch (actionCode) {
                 case 0:
                     break;
