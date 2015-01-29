@@ -34,10 +34,12 @@ public class ActivitySetting extends PreferenceActivity {
                         CBWatcherService.forceShowNotification(c);
                         break;
                     case SAVE_DATES:
-                        findPreference(key).setSummary(String.format(
-                                "Keep clips for %d days.",
-                                Integer.parseInt(sharedPreferences.getString(key, "7"))
-                        ));
+                        int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
+                        if (i > 9998) {
+                            findPreference(key).setSummary("Remember clips forever.");
+                        } else {
+                            findPreference(key).setSummary(String.format("Remember clips for %d days.", i));
+                        }
                         break;
                     case NOTIFICATION_ALWAYS_SHOW:
                         CBWatcherService.forceShowNotification(c);
