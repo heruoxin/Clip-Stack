@@ -65,6 +65,11 @@ public class ActivityEditor extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void finish(){
+        super.finish();
+    }
+
     private void shareText() {
         String text = editText.getText().toString();
         Intent openIntent = new Intent(this, StringActionIntentService.class);

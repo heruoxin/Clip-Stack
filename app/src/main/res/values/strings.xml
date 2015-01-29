@@ -21,8 +21,8 @@
     <string name="time_formart">HH:mm</string>
     <string name="title_activity_activity_editor">Edit</string>
     <string name="action_share">Share</string>
-    <string name="action_save">save</string>
-    <string name="action_cancel">cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
     <string name="toast_deleted">Deleted.</string>
 
 </resources>
