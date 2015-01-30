@@ -24,8 +24,7 @@ public class SyncJobService extends JobService {
         db = new Storage(this.getBaseContext());
         db.deleteClipHistoryBefore(days);
         Log.v(PACKAGE_NAME,"Start JobScheduler, the days is"+days);
-        Intent i = new Intent(this, CBWatcherService.class);
-        this.startService(i);
+        CBWatcherService.startCBService(this, false);
         return true;
     }
 

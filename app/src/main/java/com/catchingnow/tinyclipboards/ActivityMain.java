@@ -32,10 +32,8 @@ public class ActivityMain extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
-        CBWatcherService.forceShowNotification(context);
+        CBWatcherService.startCBService(context, true);
         queryText = handleIntent(getIntent());
-        Intent i = new Intent(this, CBWatcherService.class);
-        this.startService(i);
     }
 
     @Override

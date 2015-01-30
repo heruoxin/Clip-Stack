@@ -3,7 +3,6 @@ package com.catchingnow.tinyclipboards;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -101,7 +100,7 @@ public class Storage {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
-        CBWatcherService.forceShowNotification(c);
+        CBWatcherService.startCBService(c, true);
         return true;
     }
 

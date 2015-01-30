@@ -48,8 +48,7 @@ public class StringActionIntentService extends IntentService {
                     break;
             }
         }
-        Intent i = new Intent(this, CBWatcherService.class);
-        this.startService(i);
+        CBWatcherService.startCBService(this, false);
     }
 
     private void shareText(final String clips) {

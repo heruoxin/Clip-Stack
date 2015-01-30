@@ -206,17 +206,15 @@ public class CBWatcherService extends Service {
 
     public static void toggleService(Context c, boolean startOrStop) {
         if (startOrStop) {
-            c.startService(new Intent(c, CBWatcherService.class)
-                    .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true));
+            CBWatcherService.startCBService(c, true);
         } else {
             c.stopService(new Intent(c, CBWatcherService.class));
         }
     }
 
-    public static void forceShowNotification(Context context) {
-        Log.v(PACKAGE_NAME,"sending force show intent");
+    public static void startCBService(Context context, boolean forceShowNotification) {
         Intent intent = new Intent(context, CBWatcherService.class);
-        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
+        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification);
         context.startService(intent);
     }
 

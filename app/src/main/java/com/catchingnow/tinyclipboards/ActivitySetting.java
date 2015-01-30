@@ -1,18 +1,14 @@
 package com.catchingnow.tinyclipboards;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
-import java.util.Date;
 
 public class ActivitySetting extends PreferenceActivity {
 
@@ -41,7 +37,7 @@ public class ActivitySetting extends PreferenceActivity {
                         }
                         break;
                     case NOTIFICATION_ALWAYS_SHOW:
-                        CBWatcherService.forceShowNotification(c);
+                        CBWatcherService.startCBService(c, true);
                         break;
                 }
             }
