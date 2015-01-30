@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;

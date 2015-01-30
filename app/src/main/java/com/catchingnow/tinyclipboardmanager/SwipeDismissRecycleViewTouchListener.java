@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

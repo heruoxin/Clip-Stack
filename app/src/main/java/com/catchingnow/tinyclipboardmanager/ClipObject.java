@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import java.util.Date;
 

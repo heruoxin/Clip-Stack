@@ -5,11 +5,11 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "com.catchingnow.tinyclipboards"
+        applicationId "com.catchingnow.tinyclipboardmanager"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.1"
     }
     buildTypes {
         release {

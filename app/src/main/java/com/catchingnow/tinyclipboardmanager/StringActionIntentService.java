@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.app.IntentService;
 import android.content.ClipboardManager;
@@ -15,8 +15,8 @@ public class StringActionIntentService extends IntentService {
     public final static int ACTION_COPY = 1;
     public final static int ACTION_SHARE = 2;
     public final static int ACTION_EDIT = 3;
-    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboards.clipboardString";
-    public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboards.clipboarAction";
+    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
+    public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboardmanager.clipboarAction";
 
     public Handler mHandler;
     public StringActionIntentService() {

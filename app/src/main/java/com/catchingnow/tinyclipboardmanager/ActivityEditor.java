@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.content.ClipboardManager;
 import android.content.Context;

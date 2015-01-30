@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -24,9 +24,9 @@ import java.util.List;
 
 public class CBWatcherService extends Service {
 
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
-    public final static String INTENT_EXTRA_FORCE_START = "com.catchingnow.tinyclipboards.EXTRA.FORCE_START";
-    public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboards.EXTRA.FORCE_SHOW_NOTIFICATION";
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
+    public final static String INTENT_EXTRA_FORCE_START = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_START";
+    public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;

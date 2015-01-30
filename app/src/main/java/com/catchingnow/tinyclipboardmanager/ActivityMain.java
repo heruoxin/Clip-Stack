@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public class ActivityMain extends ActionBarActivity {
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     private String queryText;
     private  RecyclerView recList;

@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +15,7 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -147,7 +147,7 @@ public class Storage {
     }
 
     public class StorageHelper extends SQLiteOpenHelper {
-        private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+        private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
         private static final int DATABASE_VERSION = 2;
         private static final String DATABASE_NAME = "clippingnow.db";
         private static final String TABLE_NAME = "cliphistory";

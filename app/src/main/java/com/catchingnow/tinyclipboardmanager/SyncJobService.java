@@ -1,4 +1,4 @@
-package com.catchingnow.tinyclipboards;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
@@ -11,7 +11,7 @@ import android.util.Log;
  * Created by heruoxin on 15/1/19.
  */
 public class SyncJobService extends JobService {
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     private final static String STORAGE_DATE = "pref_save_dates";
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
