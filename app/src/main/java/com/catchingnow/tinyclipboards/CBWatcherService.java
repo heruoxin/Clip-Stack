@@ -106,7 +106,9 @@ public class CBWatcherService extends Service {
     }
 
     public boolean addClip(String s) {
-        if (s == null) return false;
+        if (s == null) {
+            return false;
+        }
         return db.addClipHistory(s);
     }
 
