@@ -89,14 +89,19 @@ public class CBWatcherService extends Service {
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                String thisClip = cd.getItemAt(0).getText().toString();
-                addClip(thisClip);
-                showNotification();
+                CharSequence thisClip = cd.getItemAt(0).getText();
+                if (thisClip != null) {
+                    addClip(thisClip.toString());
+                    showNotification();
+                }
             }
         }
     }
 
     public List<ClipObject> getClips() {
+        if (db == null) {
+            db = new Storage(this.getBaseContext());
+        }
         return db.getClipHistory(NUMBER_OF_CLIPS);
     }
 
@@ -185,8 +190,10 @@ public class CBWatcherService extends Service {
             Intent openShareIntent = new Intent(c, StringActionIntentService.class);
             openShareIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, currentClip);
             openShareIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
-            PendingIntent pOpenShareIntent = PendingIntent.getService(c, buttonNumber++, openShareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+            PendingIntent pOpenShareIntent = PendingIntent.getService(c,
+                    buttonNumber++,
+                    openShareIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
         }
         public NotificationClipListAdapter addClips (String s) {
@@ -203,7 +210,10 @@ public class CBWatcherService extends Service {
             Intent openCopyIntent = new Intent(c, StringActionIntentService.class);
             openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
             openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
-            PendingIntent pOpenCopyIntent = PendingIntent.getService(c, buttonNumber++, openCopyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pOpenCopyIntent = PendingIntent.getService(c,
+                    buttonNumber++,
+                    openCopyIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
 
             //add pIntent for edit
@@ -211,7 +221,11 @@ public class CBWatcherService extends Service {
             Intent openEditIntent = new Intent(c, StringActionIntentService.class);
             openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
             openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
-            PendingIntent pOpenEditIntent = PendingIntent.getService(c, buttonNumber++, openEditIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pOpenEditIntent = PendingIntent.getService(
+                    c,
+                    buttonNumber++,
+                    openEditIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             theClipView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
 
 
