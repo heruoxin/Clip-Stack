@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboards;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +59,9 @@ public class ActivityMain extends ActionBarActivity {
     protected void onNewIntent(Intent intent) {
         String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
         if (s != null) {
+            if (!"".equals(s)) {
             queryText = s;
+            }
         }
         setView(queryText);
         super.onNewIntent(intent);
@@ -146,11 +150,6 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     public void setView(String query) {
-//    TextView textView = new TextView(this);
-//    textView.setTextSize(40);
-//    textView.setText("your query is: " + query);
-//    setContentView(textView);
-
         //get clips
         db = new Storage(this);
         final List<ClipObject> clips = db.getClipHistory(query);

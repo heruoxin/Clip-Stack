@@ -25,6 +25,8 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/ripple"
         android:stateListAnimator="@animator/anim"
+        android:src="@drawable/ic_action_add"
+        android:scaleType="centerInside"
         android:elevation="4dp"
         android:onClick="actionAdd"
         />
