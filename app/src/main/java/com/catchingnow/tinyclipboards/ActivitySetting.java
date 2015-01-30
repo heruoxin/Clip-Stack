@@ -31,7 +31,6 @@ public class ActivitySetting extends PreferenceActivity {
                 switch (key) {
                     case SERVICE_STATUS:
                         CBWatcherService.toggleService(c, sharedPreferences.getBoolean(key, true));
-                        CBWatcherService.forceShowNotification(c);
                         break;
                     case SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));

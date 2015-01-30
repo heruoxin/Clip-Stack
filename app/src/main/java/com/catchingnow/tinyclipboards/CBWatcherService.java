@@ -70,6 +70,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onDestroy() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Log.v(PACKAGE_NAME, "onDes");
         notificationManager.cancel(0);
     }
 
@@ -205,13 +206,15 @@ public class CBWatcherService extends Service {
 
     public static void toggleService(Context c, boolean startOrStop) {
         if (startOrStop) {
-            c.startService(new Intent(c, CBWatcherService.class));
+            c.startService(new Intent(c, CBWatcherService.class)
+                    .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true));
         } else {
             c.stopService(new Intent(c, CBWatcherService.class));
         }
     }
 
     public static void forceShowNotification(Context context) {
+        Log.v(PACKAGE_NAME,"sending force show intent");
         Intent intent = new Intent(context, CBWatcherService.class);
         intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, true);
         context.startService(intent);

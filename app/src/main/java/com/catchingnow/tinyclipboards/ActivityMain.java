@@ -32,6 +32,7 @@ public class ActivityMain extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
+        CBWatcherService.forceShowNotification(context);
         queryText = handleIntent(getIntent());
         Intent i = new Intent(this, CBWatcherService.class);
         this.startService(i);
@@ -82,7 +83,7 @@ public class ActivityMain extends ActionBarActivity {
             public boolean onClose() {
                 searchItem.collapseActionView();
                 queryText = null;
-                setView(queryText);
+                setView(null);
                 return false;
             }
         });
@@ -165,7 +166,6 @@ public class ActivityMain extends ActionBarActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     db.deleteClipHistory(clips.get(position).text);
-                                    CBWatcherService.forceShowNotification(context);
                                     clips.remove(position);
                                 }
                                 // do not call notifyItemRemoved for every item, it will cause gaps on deleting items

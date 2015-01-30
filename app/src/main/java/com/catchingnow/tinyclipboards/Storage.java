@@ -101,6 +101,7 @@ public class Storage {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
+        CBWatcherService.forceShowNotification(c);
         return true;
     }
 
@@ -118,6 +119,7 @@ public class Storage {
     }
 
     public boolean addClipHistory(String currentString) {
+        Log.v(PACKAGE_NAME,"ADD CLIP:"+currentString);
         List<ClipObject> tmpClips = getClipHistory();
         for (ClipObject thisClip : tmpClips) {
             String str = thisClip.text;
