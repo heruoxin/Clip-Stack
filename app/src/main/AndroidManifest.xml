@@ -69,7 +69,7 @@
         </activity>
         <activity
             android:name=".ActivityEditor"
-            android:documentLaunchMode="always"
+            android:documentLaunchMode="intoExisting"
             android:maxRecents="1"
             android:label="@string/title_activity_activity_editor" >
         </activity>

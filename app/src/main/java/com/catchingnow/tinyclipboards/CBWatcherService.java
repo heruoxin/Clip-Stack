@@ -279,9 +279,9 @@ public class CBWatcherService extends Service {
 
             //add pIntent for copy
 
-            Intent openCopyIntent = new Intent(c, StringActionIntentService.class);
-            openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
-            openCopyIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
+            Intent openCopyIntent = new Intent(c, StringActionIntentService.class)
+                    .putExtra(StringActionIntentService.CLIPBOARD_STRING, s)
+                    .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
             PendingIntent pOpenCopyIntent = PendingIntent.getService(c,
                     buttonNumber++,
                     openCopyIntent,
@@ -290,9 +290,9 @@ public class CBWatcherService extends Service {
 
             //add pIntent for edit
 
-            Intent openEditIntent = new Intent(c, StringActionIntentService.class);
-            openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, s);
-            openEditIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
+            Intent openEditIntent = new Intent(c, StringActionIntentService.class)
+                    .putExtra(StringActionIntentService.CLIPBOARD_STRING, s)
+                    .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     c,
                     buttonNumber++,

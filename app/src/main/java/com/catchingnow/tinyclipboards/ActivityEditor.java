@@ -58,6 +58,10 @@ public class ActivityEditor extends ActionBarActivity {
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
+    @Override
+    public void onBackPressed() {
+        finishAndRemoveTaskWithToast();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
