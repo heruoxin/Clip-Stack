@@ -121,6 +121,7 @@ public class CBWatcherService extends Service {
         }
         int length = thisClipText.size();
         if (length <= 1) {
+            showSingleNotification();
             return;
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
@@ -155,6 +156,46 @@ public class CBWatcherService extends Service {
         Notification n = preBuildNotification.build();
 
         n.bigContentView = bigView.build();
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
+        notificationManager.notify(0, n);
+    }
+
+    private void showSingleNotification() {
+        String currentClip = "Clipboard is empty.";
+        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (cb.hasPrimaryClip()) {
+            ClipData cd = cb.getPrimaryClip();
+            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                CharSequence thisClip = cd.getItemAt(0).getText();
+                if (thisClip != null) {
+                    currentClip = thisClip.toString();
+                }
+            }
+        }
+
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+
+        Intent resultIntent = new Intent(this, ActivityMain.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        Notification n = new Notification.Builder(this)
+                .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
+                .setContentText(getString(R.string.clip_notification_single_text))
+                .setSmallIcon(R.drawable.ic_action_copy_black)
+                .setPriority(Notification.PRIORITY_MIN)
+                .setContentIntent(resultPendingIntent)
+                .setOngoing(pinOnTop)
+                .setAutoCancel(!pinOnTop)
+                .build();
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);

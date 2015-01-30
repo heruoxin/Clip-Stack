@@ -151,10 +151,10 @@ public class ActivityMain extends ActionBarActivity {
         final ClipCardAdapter ca = new ClipCardAdapter(clips, this);
         recList.setAdapter(ca);
 
-        SwipeDismissRecyclerViewTouchListener touchListener =
-                new SwipeDismissRecyclerViewTouchListener(
+        SwipeDismissRecycleViewTouchListener touchListener =
+                new SwipeDismissRecycleViewTouchListener(
                         recList,
-                        new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
+                        new SwipeDismissRecycleViewTouchListener.DismissCallbacks() {
                             @Override
                             public boolean canDismiss(int position) {
                                 return true;

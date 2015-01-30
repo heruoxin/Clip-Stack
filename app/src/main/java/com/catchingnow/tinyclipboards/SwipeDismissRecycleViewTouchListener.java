@@ -45,16 +45,16 @@ import java.util.List;
  * {@link ListView#setOnScrollListener(AbsListView.OnScrollListener)}, passing
  * in the scroll listener returned by {@link #makeScrollListener()}. If a scroll listener is
  * already assigned, the caller should still pass scroll changes through to this listener. This will
- * ensure that this {@link SwipeDismissRecyclerViewTouchListener} is paused during list view
+ * ensure that this {@link SwipeDismissRecycleViewTouchListener} is paused during list view
  * scrolling.</p>
  *
  * <p>Example usage:</p>
  *
  * <pre>
- * SwipeDismissRecyclerViewTouchListener touchListener =
- *         new SwipeDismissRecyclerViewTouchListener(
+ * SwipeDismissRecycleViewTouchListener touchListener =
+ *         new SwipeDismissRecycleViewTouchListener(
  *                 listView,
- *                 new SwipeDismissRecyclerViewTouchListener.OnDismissCallback() {
+ *                 new SwipeDismissRecycleViewTouchListener.OnDismissCallback() {
  *                     public void onDismiss(ListView listView, int[] reverseSortedPositions) {
  *                         for (int position : reverseSortedPositions) {
  *                             adapter.remove(adapter.getItem(position));
@@ -70,7 +70,7 @@ import java.util.List;
  * ViewPropertyAnimator}.</p>
  *
  */
-public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListener {
+public class SwipeDismissRecycleViewTouchListener implements View.OnTouchListener {
     // Cached ViewConfiguration and system-wide constant values
     private int mSlop;
     private int mMinFlingVelocity;
@@ -95,7 +95,7 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
     private boolean mPaused;
 
     /**
-     * The callback interface used by {@link SwipeDismissRecyclerViewTouchListener} to inform its client
+     * The callback interface used by {@link SwipeDismissRecycleViewTouchListener} to inform its client
      * about a successful dismissal of one or more list item positions.
      */
     public interface DismissCallbacks {
@@ -122,7 +122,7 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
      * @param callbacks The callback to trigger when the user has indicated that she would like to
      *                  dismiss one or more list items.
      */
-    public SwipeDismissRecyclerViewTouchListener(RecyclerView recyclerView, DismissCallbacks callbacks) {
+    public SwipeDismissRecycleViewTouchListener(RecyclerView recyclerView, DismissCallbacks callbacks) {
         ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
@@ -146,10 +146,10 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
      * Returns an {@link AbsListView.OnScrollListener} to be added to the {@link
      * ListView} using {@link ListView#setOnScrollListener(AbsListView.OnScrollListener)}.
      * If a scroll listener is already assigned, the caller should still pass scroll changes through
-     * to this listener. This will ensure that this {@link SwipeDismissRecyclerViewTouchListener} is
+     * to this listener. This will ensure that this {@link SwipeDismissRecycleViewTouchListener} is
      * paused during list view scrolling.</p>
      *
-     * @see SwipeDismissRecyclerViewTouchListener
+     * @see SwipeDismissRecycleViewTouchListener
      */
     public RecyclerView.OnScrollListener makeScrollListener() {
         return new RecyclerView.OnScrollListener() {
@@ -361,8 +361,8 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
                         dismissPositions[i] = mPendingDismisses.get(i).position;
                     }
                     mCallbacks.onDismiss(mRecyclerView, dismissPositions);
-                    
-                    // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss 
+
+                    // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
                     // animation with a stale position
                     mDownPosition = ListView.INVALID_POSITION;
 
