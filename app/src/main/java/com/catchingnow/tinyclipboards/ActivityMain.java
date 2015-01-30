@@ -32,8 +32,19 @@ public class ActivityMain extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
-        CBWatcherService.startCBService(context, true);
+        CBWatcherService.startCBService(context, true, true);
         queryText = handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onStop() {
+        CBWatcherService.startCBService(context, false);
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override

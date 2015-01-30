@@ -21,10 +21,9 @@ public class SyncJobService extends JobService {
     public boolean onStartJob(JobParameters jobParameters) {
         preference = PreferenceManager.getDefaultSharedPreferences(this);
         float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
+        Log.v(PACKAGE_NAME,"Start JobScheduler, the days is"+days);
         db = new Storage(this.getBaseContext());
         db.deleteClipHistoryBefore(days);
-        Log.v(PACKAGE_NAME,"Start JobScheduler, the days is"+days);
-        CBWatcherService.startCBService(this, false);
         return true;
     }
 

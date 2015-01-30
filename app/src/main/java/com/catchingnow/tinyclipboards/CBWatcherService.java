@@ -25,11 +25,13 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboards";
+    public final static String INTENT_EXTRA_FORCE_START = "com.catchingnow.tinyclipboards.EXTRA.FORCE_START";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboards.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;
     private Storage db;
+    private boolean onListened = false;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -40,20 +42,30 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
-            Log.v(PACKAGE_NAME, "pref said cannot start service!");
-            return;
+        if (onListened == false) {
+            db = new Storage(this.getBaseContext());
+            bindJobScheduler();
+            ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
+            onListened = true;
         }
-        db = new Storage(this.getBaseContext());
-        ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
-        bindJobScheduler();
+        super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
+
+            if (!intent.getBooleanExtra(INTENT_EXTRA_FORCE_START, false)) {
+                SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+                if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
+                    Log.v(PACKAGE_NAME, "pref said cannot start service!");
+                    stopGroup();
+                    Log.v(PACKAGE_NAME, "not see this......");
+                    return Service.START_NOT_STICKY;
+                }
+            }
+
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 showNotification();
             }
@@ -72,6 +84,14 @@ public class CBWatcherService extends Service {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.v(PACKAGE_NAME, "onDes");
         notificationManager.cancel(0);
+    }
+
+    private void stopGroup() {
+        db.close();
+        ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
+        onListened = false;
+        stopSelf();
+        stopService(new Intent(this, CBWatcherService.class));
     }
 
     public void bindJobScheduler() {
@@ -204,17 +224,23 @@ public class CBWatcherService extends Service {
     }
 
 
-    public static void toggleService(Context c, boolean startOrStop) {
-        if (startOrStop) {
-            CBWatcherService.startCBService(c, true);
-        } else {
-            c.stopService(new Intent(c, CBWatcherService.class));
-        }
-    }
+//    public static void toggleService(Context c, boolean startOrStop) {
+//        if (startOrStop) {
+//            CBWatcherService.startCBService(c, true);
+//        } else {
+//            c.stopService(new Intent(c, CBWatcherService.class));
+//        }
+//    }
 
     public static void startCBService(Context context, boolean forceShowNotification) {
+        startCBService(context, forceShowNotification, false);
+
+    }
+
+    public static void startCBService(Context context, boolean forceShowNotification, boolean forceStart) {
         Intent intent = new Intent(context, CBWatcherService.class);
         intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification);
+        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_START, forceStart);
         context.startService(intent);
     }
 
@@ -224,7 +250,8 @@ public class CBWatcherService extends Service {
 
         private RemoteViews expandedView;
         private Context c;
-        int id=0;
+        int id = 0;
+
         public NotificationClipListAdapter(Context context, String currentClip) {
             c = context;
             currentClip = currentClip.trim();
@@ -240,7 +267,8 @@ public class CBWatcherService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
         }
-        public NotificationClipListAdapter addClips (String s) {
+
+        public NotificationClipListAdapter addClips(String s) {
             id += 1;
             s = s.trim();
             //Log.v(PACKAGE_NAME,"ID "+id);
@@ -276,7 +304,8 @@ public class CBWatcherService extends Service {
             expandedView.addView(R.id.main_view, theClipView);
             return this;
         }
-        public RemoteViews build () {
+
+        public RemoteViews build() {
             //expandedView.setTextViewText(R.id.text, "Hello World!");
             return expandedView;
         }

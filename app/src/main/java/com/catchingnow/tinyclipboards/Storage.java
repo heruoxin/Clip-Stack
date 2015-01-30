@@ -52,7 +52,11 @@ public class Storage {
     }
 
     public void close() {
-        db.close();
+        if (db != null) {
+            if (db.isOpen()) {
+                db.close();
+            }
+        }
     }
 
     public List<ClipObject> getClipHistory() {
@@ -118,7 +122,7 @@ public class Storage {
     }
 
     public boolean addClipHistory(String currentString) {
-        Log.v(PACKAGE_NAME,"ADD CLIP:"+currentString);
+        Log.v(PACKAGE_NAME, "ADD CLIP:" + currentString);
         List<ClipObject> tmpClips = getClipHistory();
         for (ClipObject thisClip : tmpClips) {
             String str = thisClip.text;
@@ -153,9 +157,11 @@ public class Storage {
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_STRING + " TEXT);";
+
         public StorageHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
+
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(TABLE_CREATE);
