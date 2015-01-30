@@ -115,6 +115,9 @@ public class ActivityMain extends ActionBarActivity {
         switch (id) {
             case R.id.action_search:
                 return super.onOptionsItemSelected(item);
+            case R.id.action_refresh:
+                setView(queryText);
+                return super.onOptionsItemSelected(item);
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
                 return super.onOptionsItemSelected(item);
