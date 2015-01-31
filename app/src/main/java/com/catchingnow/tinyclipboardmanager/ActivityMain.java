@@ -26,7 +26,7 @@ public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     private String queryText;
-    private  RecyclerView recList;
+    private RecyclerView recList;
     private Storage db;
     private Context context;
 
@@ -35,7 +35,7 @@ public class ActivityMain extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
         CBWatcherService.startCBService(context, true, true);
-        queryText = handleIntent(getIntent());
+        queryText = "";
     }
 
     @Override
@@ -57,13 +57,15 @@ public class ActivityMain extends ActionBarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
-        if (s != null) {
-            if (!"".equals(s)) {
-            queryText = s;
+        if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
+            String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
+            if (s != null) {
+                if (!"".equals(s)) {
+                    queryText = s;
+                }
             }
+            setView(queryText);
         }
-        setView(queryText);
         super.onNewIntent(intent);
     }
 
@@ -85,8 +87,6 @@ public class ActivityMain extends ActionBarActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                queryText = null;
-                setView(null);
                 searchView.clearFocus();
                 return true;
             }
@@ -140,16 +140,14 @@ public class ActivityMain extends ActionBarActivity {
 
     }
 
-    private String handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            queryText = intent.getStringExtra(SearchManager.QUERY);
-            setView(queryText);
-            return queryText;
-        }
-        return null;
+    public static void refreshMainView(Context context, String query) {
+        Intent intent = new Intent(context, ActivityMain.class)
+                .putExtra(EXTRA_QUERY_TEXT, query)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
-    public void setView(String query) {
+    private void setView(String query) {
         //get clips
         db = new Storage(this);
         final List<ClipObject> clips = db.getClipHistory(query);
@@ -176,7 +174,7 @@ public class ActivityMain extends ActionBarActivity {
                             public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    db.deleteClipHistory(clips.get(position).text);
+                                    db.modifyClip(clips.get(position).text, null);
                                     clips.remove(position);
                                 }
                                 // do not call notifyItemRemoved for every item, it will cause gaps on deleting items

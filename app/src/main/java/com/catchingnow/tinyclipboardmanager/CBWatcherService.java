@@ -42,7 +42,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
-        if (onListened == false) {
+        if (!onListened) {
             db = new Storage(this.getBaseContext());
             bindJobScheduler();
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
@@ -87,7 +87,6 @@ public class CBWatcherService extends Service {
     }
 
     private void stopGroup() {
-        db.close();
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
         onListened = false;
         stopSelf();
@@ -112,8 +111,7 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    addClip(thisClip.toString());
-                    showNotification();
+                    db.modifyClip(null ,thisClip.toString());
                 }
             }
         }
@@ -126,14 +124,7 @@ public class CBWatcherService extends Service {
         return db.getClipHistory(NUMBER_OF_CLIPS);
     }
 
-    public boolean addClip(String s) {
-        if (s == null) {
-            return false;
-        }
-        return db.addClipHistory(s);
-    }
-
-    public void showNotification() {
+    private void showNotification() {
 
         List<String> thisClipText = new ArrayList<String>();
         List<ClipObject> thisClips = getClips();

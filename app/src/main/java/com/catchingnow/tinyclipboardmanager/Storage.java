@@ -30,7 +30,7 @@ public class Storage {
         dbHelper = new StorageHelper(c);
     }
 
-    public String sqliteEscape(String keyWord) {
+    private String sqliteEscape(String keyWord) {
         if ("".equals(keyWord) || keyWord == null) {
             return keyWord;
         }
@@ -47,11 +47,11 @@ public class Storage {
                 ;
     }
 
-    public void open() {
+    private void open() {
         db = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
+    private void close() {
         if (db != null) {
             if (db.isOpen()) {
                 db.close();
@@ -61,6 +61,16 @@ public class Storage {
 
     public List<ClipObject> getClipHistory() {
         return getClipHistory("");
+    }
+
+    public List<ClipObject> getClipHistory(int n) {
+        List<ClipObject> ClipHistory = getClipHistory();
+        List<ClipObject> thisClips = new ArrayList<ClipObject>();
+        n = (n > ClipHistory.size() ? ClipHistory.size() : n);
+        for (int i = 0; i < n; i++) {
+            thisClips.add(ClipHistory.get(i));
+        }
+        return thisClips;
     }
 
     public List<ClipObject> getClipHistory(String queryString) {
@@ -86,28 +96,6 @@ public class Storage {
         return clipsInMemory;
     }
 
-    public List<ClipObject> getClipHistory(int n) {
-        List<ClipObject> ClipHistory = getClipHistory();
-        List<ClipObject> thisClips = new ArrayList<ClipObject>();
-        n = (n > ClipHistory.size() ? ClipHistory.size() : n);
-        for (int i = 0; i < n; i++) {
-            thisClips.add(ClipHistory.get(i));
-        }
-        return thisClips;
-    }
-
-    public boolean deleteClipHistory(String query) {
-        open();
-        int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
-        close();
-        if (row_id == -1) {
-            Log.e("Storage", "write db error: deleteClipHistory " + query);
-            return false;
-        }
-        CBWatcherService.startCBService(c, true);
-        return true;
-    }
-
     public boolean deleteClipHistoryBefore(float days) {
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
@@ -121,7 +109,17 @@ public class Storage {
         return true;
     }
 
-    public boolean addClipHistory(String currentString) {
+    private boolean deleteClipHistory(String query) {
+        int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
+        if (row_id == -1) {
+            Log.e("Storage", "write db error: deleteClipHistory " + query);
+            return false;
+        }
+        CBWatcherService.startCBService(c, true);
+        return true;
+    }
+
+    private boolean addClipHistory(String currentString) {
         Log.v(PACKAGE_NAME, "ADD CLIP:" + currentString);
         List<ClipObject> tmpClips = getClipHistory();
         for (ClipObject thisClip : tmpClips) {
@@ -130,20 +128,44 @@ public class Storage {
                 deleteClipHistory(str);
             }
         }
-        open();
         Date date = new Date();
         long timeStamp = date.getTime();
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, currentString);
         long row_id = db.insert(TABLE_NAME, null, values);
-        close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: addClipHistory " + currentString);
             return false;
         }
         isClipsInMemoryChanged = true;
         return true;
+    }
+
+    public void modifyClip(String oldClip, String newClip) {
+        if (oldClip == null) {
+            oldClip = "";
+        }
+        if (newClip == null) {
+            newClip = "";
+        }
+        if (newClip.equals(oldClip)) {
+            return;
+        }
+        open();
+        if (!newClip.equals("")) {
+            addClipHistory(newClip);
+        }
+        if (!oldClip.equals(oldClip)) {
+            deleteClipHistory(oldClip);
+        }
+        close();
+        refreshAllTypeOfList();
+    }
+
+    private void refreshAllTypeOfList() {
+        CBWatcherService.startCBService(c, true);
+        ActivityMain.refreshMainView(c, "");
     }
 
     public class StorageHelper extends SQLiteOpenHelper {
