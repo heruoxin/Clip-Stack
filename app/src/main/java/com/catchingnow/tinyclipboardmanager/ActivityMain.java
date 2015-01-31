@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -176,6 +177,9 @@ public class ActivityMain extends ActionBarActivity {
 
                                     db.modifyClip(clips.get(position).getText(), null);
                                     clips.remove(position);
+                                    Toast.makeText(context,
+                                            getString(R.string.toast_deleted),
+                                            Toast.LENGTH_SHORT).show();
                                 }
                                 // do not call notifyItemRemoved for every item, it will cause gaps on deleting items
                                 ca.notifyDataSetChanged();

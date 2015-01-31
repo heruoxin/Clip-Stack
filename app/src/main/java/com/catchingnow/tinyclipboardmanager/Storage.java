@@ -115,7 +115,6 @@ public class Storage {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
-        CBWatcherService.startCBService(c, true);
         return true;
     }
 
