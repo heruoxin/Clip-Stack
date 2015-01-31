@@ -15,7 +15,9 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
+    public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
+    public final static int NOTIFICATION_VIEW = 1;
+    public final static int MAIN_ACTIVITY_VIEW = 2;
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -142,6 +144,9 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip) {
+        modifyClip(oldClip, newClip, 0);
+    }
+    public void modifyClip(String oldClip, String newClip,  int notUpdateWhich) {
         if (oldClip == null) {
             oldClip = "";
         }
@@ -159,12 +164,18 @@ public class Storage {
             deleteClipHistory(oldClip);
         }
         close();
-        refreshAllTypeOfList();
+        refreshAllTypeOfList(notUpdateWhich);
     }
 
-    private void refreshAllTypeOfList() {
-        CBWatcherService.startCBService(c, true);
-        ActivityMain.refreshMainView(c, "");
+    private void refreshAllTypeOfList(int notUpdateWhich) {
+        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
+            CBWatcherService.startCBService(c, true);
+        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
+            ActivityMain.refreshMainView(c, "");
+        } else {
+            CBWatcherService.startCBService(c, true);
+            ActivityMain.refreshMainView(c, "");
+        }
     }
 
     public class StorageHelper extends SQLiteOpenHelper {

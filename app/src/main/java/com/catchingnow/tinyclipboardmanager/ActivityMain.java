@@ -175,7 +175,7 @@ public class ActivityMain extends ActionBarActivity {
                             public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    db.modifyClip(clips.get(position).getText(), null);
+                                    db.modifyClip(clips.get(position).getText(), null, Storage.MAIN_ACTIVITY_VIEW);
                                     clips.remove(position);
                                     Toast.makeText(context,
                                             getString(R.string.toast_deleted),
