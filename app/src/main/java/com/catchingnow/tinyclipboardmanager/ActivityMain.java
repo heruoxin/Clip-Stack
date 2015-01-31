@@ -174,7 +174,7 @@ public class ActivityMain extends ActionBarActivity {
                             public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    db.modifyClip(clips.get(position).text, null);
+                                    db.modifyClip(clips.get(position).getText(), null);
                                     clips.remove(position);
                                 }
                                 // do not call notifyItemRemoved for every item, it will cause gaps on deleting items
@@ -214,12 +214,12 @@ public class ActivityMain extends ActionBarActivity {
         @Override
         public void onBindViewHolder(ClipCardViewHolder clipCardViewHolder, int i) {
             ClipObject clipObject = clipObjectList.get(i);
-            clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.date));
-            clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.date));
-            clipCardViewHolder.vText.setText(clipObject.text.trim());
-            addClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
-            addLongClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
-            addClickStringAction(context, clipObject.text, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
+            clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
+            clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
+            clipCardViewHolder.vText.setText(clipObject.getText().trim());
+            addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
+            addLongClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
+            addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
         }
 
         @Override

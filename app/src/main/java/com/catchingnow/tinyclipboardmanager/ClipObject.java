@@ -12,4 +12,10 @@ public class ClipObject {
         this.text = text;
         this.date = date;
     }
+    public String getText() {
+        return text;
+    }
+    public Date getDate() {
+        return date;
+    }
 }

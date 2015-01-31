@@ -123,7 +123,7 @@ public class Storage {
         Log.v(PACKAGE_NAME, "ADD CLIP:" + currentString);
         List<ClipObject> tmpClips = getClipHistory();
         for (ClipObject thisClip : tmpClips) {
-            String str = thisClip.text;
+            String str = thisClip.getText();
             if (str.equals(currentString)) {
                 deleteClipHistory(str);
             }

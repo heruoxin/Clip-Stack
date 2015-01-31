@@ -54,16 +54,16 @@ public class CBWatcherService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
-
-            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-            if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
-                Log.v(PACKAGE_NAME, "pref said cannot start service!");
-                stopSelf();
-                return Service.START_NOT_STICKY;
-            }
-
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 showNotification();
+            }
+            if (false) {
+                return  START_STICKY;
+            }
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+            if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
+                stopSelf();
+                return Service.START_NOT_STICKY;
             }
         }
         return START_STICKY;
@@ -121,7 +121,7 @@ public class CBWatcherService extends Service {
         List<String> thisClipText = new ArrayList<String>();
         List<ClipObject> thisClips = getClips();
         for (ClipObject thisClip : thisClips) {
-            thisClipText.add(thisClip.text);
+            thisClipText.add(thisClip.getText());
         }
         int length = thisClipText.size();
         if (length <= 1) {
