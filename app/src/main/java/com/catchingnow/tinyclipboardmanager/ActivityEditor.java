@@ -49,6 +49,7 @@ public class ActivityEditor extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         editText.requestFocus();
+        CBWatcherService.startCBService(this, false, 1);
     }
 
     @Override
@@ -56,6 +57,7 @@ public class ActivityEditor extends ActionBarActivity {
         super.onPause();
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        CBWatcherService.startCBService(this, false, -1);
     }
 
     @Override

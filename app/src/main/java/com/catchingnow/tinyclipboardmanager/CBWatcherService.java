@@ -26,11 +26,13 @@ public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
+    public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;
     private Storage db;
     private boolean onListened = false;
+    private int isMyActivitiesOnForeground = 0;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -54,16 +56,22 @@ public class CBWatcherService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
+            Log.v(PACKAGE_NAME, "IIOOV:"+isMyActivitiesOnForeground);
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 showNotification();
             }
-            if (false) {
-                return  START_STICKY;
-            }
+
+            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE, 0);
+            isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+
             SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
             if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
-                stopSelf();
-                return Service.START_NOT_STICKY;
+                if (isMyActivitiesOnForeground <= 0) {
+                    Log.v(PACKAGE_NAME, "IIOOW:"+isMyActivitiesOnForeground);
+                    stopSelf();
+                    isMyActivitiesOnForeground = 0;
+                    return Service.START_NOT_STICKY;
+                }
             }
         }
         return START_STICKY;
@@ -207,8 +215,13 @@ public class CBWatcherService extends Service {
     }
 
     public static void startCBService(Context context, boolean forceShowNotification) {
-        Intent intent = new Intent(context, CBWatcherService.class);
-        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification);
+        startCBService(context, forceShowNotification, 0);
+    }
+
+    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
+        Intent intent = new Intent(context, CBWatcherService.class)
+                .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
+                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
     }
 

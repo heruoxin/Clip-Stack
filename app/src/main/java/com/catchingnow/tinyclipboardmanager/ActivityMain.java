@@ -45,14 +45,14 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        CBWatcherService.startCBService(context, false);
+        CBWatcherService.startCBService(context, false, -1);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setView(queryText);
-        CBWatcherService.startCBService(context, false);
+        CBWatcherService.startCBService(context, false, 1);
     }
 
     @Override

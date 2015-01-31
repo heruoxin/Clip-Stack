@@ -26,6 +26,8 @@ public class ActivitySetting extends PreferenceActivity {
                                                   String key) {
                 switch (key) {
                     case SERVICE_STATUS:
+                    case NOTIFICATION_ALWAYS_SHOW:
+                        CBWatcherService.startCBService(c, true);
                         break;
                     case SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
@@ -34,9 +36,6 @@ public class ActivitySetting extends PreferenceActivity {
                         } else {
                             findPreference(key).setSummary(String.format("Remember clips for %d days.", i));
                         }
-                        break;
-                    case NOTIFICATION_ALWAYS_SHOW:
-                        CBWatcherService.startCBService(c, true);
                         break;
                 }
             }
@@ -62,6 +61,7 @@ public class ActivitySetting extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
         initSharedPrefListener();
+        CBWatcherService.startCBService(this, false, 1);
     }
 
 
@@ -70,6 +70,7 @@ public class ActivitySetting extends PreferenceActivity {
     protected void onPause() {
         super.onPause();
         initSharedPrefListener();
+        CBWatcherService.startCBService(this, false, -1);
 
     }
 
