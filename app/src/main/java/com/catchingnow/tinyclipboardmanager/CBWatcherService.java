@@ -60,8 +60,7 @@ public class CBWatcherService extends Service {
                 SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
                 if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
                     Log.v(PACKAGE_NAME, "pref said cannot start service!");
-                    stopGroup();
-                    Log.v(PACKAGE_NAME, "not see this......");
+                    stopSelf();
                     return Service.START_NOT_STICKY;
                 }
             }
@@ -81,16 +80,12 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onDestroy() {
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.v(PACKAGE_NAME, "onDes");
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
-    }
-
-    private void stopGroup() {
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
         onListened = false;
-        stopSelf();
-        stopService(new Intent(this, CBWatcherService.class));
+        super.onDestroy();
     }
 
     public void bindJobScheduler() {
