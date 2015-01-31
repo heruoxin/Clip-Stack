@@ -26,5 +26,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="toast_deleted">Deleted.</string>
     <string name="action_refresh">Refresh</string>
+    <string name="toast_saved">Saved.</string>
+    <string name="toast_no_saved">Not saved.</string>
 
 </resources>

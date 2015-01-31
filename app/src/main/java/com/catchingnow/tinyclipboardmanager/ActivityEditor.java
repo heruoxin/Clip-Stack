@@ -62,7 +62,7 @@ public class ActivityEditor extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        finishAndRemoveTaskWithToast();
+        finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ActivityEditor extends ActionBarActivity {
                 break;
             case (R.id.action_cancel):
             case (android.R.id.home):
-                finishAndRemoveTaskWithToast();
+                finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
                 break;
             default:
                 break;
@@ -106,8 +106,9 @@ public class ActivityEditor extends ActionBarActivity {
 
     private void saveText() {
         String newText = editText.getText().toString();
+        String toastMessage = "";
         if (oldText.equals(newText)) {
-            finishAndRemoveTaskWithToast();
+            finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
             return;
         }
         Storage db = new Storage(this);
@@ -115,17 +116,16 @@ public class ActivityEditor extends ActionBarActivity {
         if (newText != null && !"".equals(newText)) {
             ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             cb.setText(newText);
+            toastMessage = getString(R.string.toast_saved);
         } else {
-            Toast.makeText(this,
-                    getString(R.string.toast_deleted),
-                    Toast.LENGTH_SHORT).show();
+            toastMessage = getString(R.string.toast_deleted);
         }
-        finishAndRemoveTask();
+        finishAndRemoveTaskWithToast(toastMessage);
     }
 
-    private void finishAndRemoveTaskWithToast() {
+    private void finishAndRemoveTaskWithToast(String toastMessage) {
         Toast.makeText(this,
-                "Not saved.",
+                toastMessage,
                 Toast.LENGTH_SHORT).show();
         finishAndRemoveTask();
     }

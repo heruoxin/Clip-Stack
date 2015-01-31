@@ -156,7 +156,7 @@ public class Storage {
         if (!newClip.equals("")) {
             addClipHistory(newClip);
         }
-        if (!oldClip.equals(oldClip)) {
+        if (!oldClip.equals("")) {
             deleteClipHistory(oldClip);
         }
         close();
