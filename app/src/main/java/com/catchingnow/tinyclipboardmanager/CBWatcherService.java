@@ -25,7 +25,6 @@ import java.util.List;
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
-    public final static String INTENT_EXTRA_FORCE_START = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_START";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 6; //3-9
@@ -56,13 +55,11 @@ public class CBWatcherService extends Service {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
 
-            if (!intent.getBooleanExtra(INTENT_EXTRA_FORCE_START, false)) {
-                SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-                if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
-                    Log.v(PACKAGE_NAME, "pref said cannot start service!");
-                    stopSelf();
-                    return Service.START_NOT_STICKY;
-                }
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+            if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
+                Log.v(PACKAGE_NAME, "pref said cannot start service!");
+                stopSelf();
+                return Service.START_NOT_STICKY;
             }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
@@ -106,7 +103,7 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    db.modifyClip(null ,thisClip.toString());
+                    db.modifyClip(null, thisClip.toString());
                 }
             }
         }
@@ -209,28 +206,13 @@ public class CBWatcherService extends Service {
         notificationManager.notify(0, n);
     }
 
-
-//    public static void toggleService(Context c, boolean startOrStop) {
-//        if (startOrStop) {
-//            CBWatcherService.startCBService(c, true);
-//        } else {
-//            c.stopService(new Intent(c, CBWatcherService.class));
-//        }
-//    }
-
     public static void startCBService(Context context, boolean forceShowNotification) {
-        startCBService(context, forceShowNotification, false);
-
-    }
-
-    public static void startCBService(Context context, boolean forceShowNotification, boolean forceStart) {
         Intent intent = new Intent(context, CBWatcherService.class);
         intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification);
-        intent.putExtra(CBWatcherService.INTENT_EXTRA_FORCE_START, forceStart);
         context.startService(intent);
     }
 
-    public class NotificationClipListAdapter {
+    private class NotificationClipListAdapter {
 
         private int buttonNumber = 0;
 
