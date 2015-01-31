@@ -50,7 +50,11 @@ public class Storage {
     }
 
     private void open() {
-        db = dbHelper.getWritableDatabase();
+        if (db == null) {
+            db = dbHelper.getWritableDatabase();
+        } else if (!db.isOpen()) {
+            db = dbHelper.getWritableDatabase();
+        }
     }
 
     private void close() {
@@ -92,6 +96,7 @@ public class Storage {
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
             }
             c.close();
+            Log.v(PACKAGE_NAME, "Closed by getClipHistory");
             close();
             isClipsInMemoryChanged = false;
         }
@@ -103,6 +108,7 @@ public class Storage {
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
         int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
+        Log.v(PACKAGE_NAME, "Closed by deleteClipHistoryBefore");
         close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
@@ -112,6 +118,7 @@ public class Storage {
     }
 
     private boolean deleteClipHistory(String query) {
+        Log.v(PACKAGE_NAME, "DEL CLIP:" + query);
         int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
@@ -122,13 +129,7 @@ public class Storage {
 
     private boolean addClipHistory(String currentString) {
         Log.v(PACKAGE_NAME, "ADD CLIP:" + currentString);
-        List<ClipObject> tmpClips = getClipHistory();
-        for (ClipObject thisClip : tmpClips) {
-            String str = thisClip.getText();
-            if (str.equals(currentString)) {
-                deleteClipHistory(str);
-            }
-        }
+        deleteClipHistory(currentString);
         Date date = new Date();
         long timeStamp = date.getTime();
         ContentValues values = new ContentValues();
@@ -156,6 +157,7 @@ public class Storage {
         if (newClip.equals(oldClip)) {
             return;
         }
+        Log.v(PACKAGE_NAME, "Opened by modifyClip");
         open();
         if (!newClip.equals("")) {
             addClipHistory(newClip);
@@ -163,6 +165,7 @@ public class Storage {
         if (!oldClip.equals("")) {
             deleteClipHistory(oldClip);
         }
+        Log.v(PACKAGE_NAME, "Closed by modifyClip");
         close();
         refreshAllTypeOfList(notUpdateWhich);
     }
