@@ -112,7 +112,7 @@ public class ActivityEditor extends ActionBarActivity {
             return;
         }
         Storage db = new Storage(this);
-        db.modifyClip(oldText, null);
+        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         if (newText != null && !"".equals(newText)) {
             ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             cb.setText(newText);

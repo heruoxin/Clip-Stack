@@ -111,7 +111,13 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    db.modifyClip(null, thisClip.toString());
+                    if (isMyActivitiesOnForeground <= 0) {
+                        Log.v(PACKAGE_NAME, "this:TTTTTT");
+                        db.modifyClip(null, thisClip.toString(), Storage.MAIN_ACTIVITY_VIEW);
+                    } else {
+                        Log.v(PACKAGE_NAME, "this:FFFFFF");
+                        db.modifyClip(null, thisClip.toString());
+                    }
                 }
             }
         }

@@ -36,6 +36,7 @@ public class ActivityMain extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
         queryText = "";
+        CBWatcherService.startCBService(context, false);
     }
 
     @Override
