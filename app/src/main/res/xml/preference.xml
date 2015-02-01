@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="App setting">
+    <PreferenceCategory android:title="@string/pref_app_setting_category">
         <SwitchPreference
-            android:title="Service"
-            android:summary="Listen system clipboard in background"
+            android:title="@string/pref_service_title"
+            android:summary="@string/pref_service_summary"
             android:key="pref_start_service"
             android:defaultValue="true" />
         <SwitchPreference
-            android:title="Notification"
+            android:title="@string/pref_notification_title"
             android:key="pref_notification_always_show"
-            android:summaryOn="Always show."
-            android:summaryOff="Only show when clipboard changed."
+            android:summaryOn="@string/pref_notification_summary_on"
+            android:summaryOff="@string/pref_notification_summary_off"
             android:defaultValue="false"
             android:dependency="pref_start_service" />
         <!-- <SwitchPreference
@@ -19,17 +19,17 @@
             android:key="pref_show_icon"
             android:defaultValue="true" /> -->
         <ListPreference
-            android:title="Storage"
-            android:summary="Days of clipboard to save"
+            android:title="@string/pref_storage_title"
+            android:summary="@string/pref_storage_summary"
             android:key="pref_save_dates"
-            android:dialogTitle="Save clipboard for"
+            android:dialogTitle="@string/pref_storage_dialog"
             android:entries="@array/pref_save_dates_descriptions"
             android:entryValues="@array/pref_save_dates_values" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="@string/pref_about_category">
         <Preference
-            android:title="Open Source"
-            android:summary="View source code on Github">
+            android:title="@string/pref_about_title"
+            android:summary="@string/pref_about_summary">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/heruoxin/TinyClipboards" />

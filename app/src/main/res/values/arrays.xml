@@ -5,7 +5,7 @@
         <item name="3">3 days</item>
         <item name="7">7 days</item>
         <item name="30">30 days</item>
-        <item name="9999">Forever</item>
+        <item name="9999">infinite</item>
     </string-array>
     <string-array name="pref_save_dates_values">
         <item name="1">1</item>

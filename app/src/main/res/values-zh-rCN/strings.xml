@@ -28,5 +28,17 @@
     <string name="action_refresh">刷新</string>
     <string name="toast_saved">已保存</string>
     <string name="toast_no_saved">已放弃</string>
+    <string name="pref_about_category">关于</string>
+    <string name="pref_about_summary">去 GitHub 查看源码</string>
+    <string name="pref_about_title">开源</string>
+    <string name="pref_app_setting_category">程序设置</string>
+    <string name="pref_notification_summary_off">仅在系统剪贴板内容变动时显示。</string>
+    <string name="pref_notification_summary_on">总是显示</string>
+    <string name="pref_notification_title">通知</string>
+    <string name="pref_service_summary">在后台时仍记录剪贴板变化</string>
+    <string name="pref_service_title">后台服务</string>
+    <string name="pref_storage_dialog">将剪贴板历史保存:</string>
+    <string name="pref_storage_summary">保存多久的剪贴板历史？</string>
+    <string name="pref_storage_title">存储</string>
 
 </resources>
