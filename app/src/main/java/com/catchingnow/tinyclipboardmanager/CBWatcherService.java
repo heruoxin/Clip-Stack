@@ -157,7 +157,7 @@ public class CBWatcherService extends Service {
         boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
 
         Notification.Builder preBuildNotification = new Notification.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0)) //title
+                .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setSmallIcon(R.drawable.ic_action_copy_black)
                 .setPriority(Notification.PRIORITY_MIN)
@@ -188,7 +188,7 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    currentClip = thisClip.toString();
+                    currentClip = thisClip.toString().trim();
                 }
             }
         }

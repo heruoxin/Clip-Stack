@@ -11,7 +11,7 @@
     <string name="toast_end_string">has copied</string>
     <string name="clip_notification_text">Expand to show more.</string>
     <string name="clip_notification_single_text">Click to add text.</string>
-    <string name="share_clipboard_to">Share the text to...</string>
+    <string name="share_clipboard_to">Share text to...</string>
     <string name="title_activity_main">Clipping Stack</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
