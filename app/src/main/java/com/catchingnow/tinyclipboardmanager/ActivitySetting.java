@@ -32,9 +32,9 @@ public class ActivitySetting extends PreferenceActivity {
                     case SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
                         if (i > 9998) {
-                            findPreference(key).setSummary("Remember clips forever.");
+                            findPreference(key).setSummary(getString(R.string.pref_storage_summary_infinite));
                         } else {
-                            findPreference(key).setSummary(String.format("Remember clips for %d days.", i));
+                            findPreference(key).setSummary(String.format(getString(R.string.pref_storage_summary_days), i));
                         }
                         break;
                 }

@@ -18,7 +18,7 @@
     <string name="action_search">搜索</string>
     <string name="search_hint">搜索……</string>
     <string name="title_activity_activity_setting">设置</string>
-    <string name="date_formart">EEE, MMM d</string>
+    <string name="date_formart">MMM d，EEE</string>
     <string name="time_formart">HH:mm</string>
     <string name="title_activity_activity_editor">编辑</string>
     <string name="action_share">分享</string>
@@ -27,7 +27,7 @@
     <string name="toast_deleted">已删除</string>
     <string name="action_refresh">刷新</string>
     <string name="toast_saved">已保存</string>
-    <string name="toast_no_saved">已放弃</string>
+    <string name="toast_no_saved">已舍弃</string>
     <string name="pref_about_category">关于</string>
     <string name="pref_about_summary">去 GitHub 查看源码</string>
     <string name="pref_about_title">开源</string>
@@ -41,5 +41,7 @@
     <string name="pref_storage_summary">保存多久的剪贴板历史？</string>
     <string name="pref_storage_title">存储</string>
     <string name="action_delete">删除</string>
+    <string name="pref_storage_summary_infinite">永久存储剪贴板。</string>
+    <string name="pref_storage_summary_days">将剪贴板保存 %d 天。</string>
 
 </resources>

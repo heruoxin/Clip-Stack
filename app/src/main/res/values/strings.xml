@@ -29,8 +29,8 @@
     <string name="toast_saved">Saved.</string>
     <string name="toast_no_saved">Not saved.</string>
     <string name="pref_storage_title">Storage</string>
-    <string name="pref_storage_summary">Days of clipboard to save.</string>
-    <string name="pref_storage_dialog">Save clipboard for</string>
+    <string name="pref_storage_summary">Days of clips to save.</string>
+    <string name="pref_storage_dialog">Save clips for</string>
     <string name="pref_about_category">About</string>
     <string name="pref_about_title">Open Source</string>
     <string name="pref_about_summary">View source code on Github</string>
@@ -41,5 +41,7 @@
     <string name="pref_notification_summary_on">Always show.</string>
     <string name="pref_notification_summary_off">Only show when clipboard changed.</string>
     <string name="action_delete">Delete</string>
+    <string name="pref_storage_summary_infinite">Remember all clips.</string>
+    <string name="pref_storage_summary_days">Remember clips for %d days.</string>
 
 </resources>
