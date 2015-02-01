@@ -5,21 +5,23 @@
     <item android:id="@+id/action_share"
         android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
         android:title="@string/action_share"
-        app:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         />
+    <group>
     <item android:id="@+id/action_save"
         android:icon="@drawable/ic_action_save"
         android:title="@string/action_save"
-        app:showAsAction="never|withText"
+        app:showAsAction="ifRoom|withText"
         />
     <item android:id="@+id/action_cancel"
-        android:icon="@drawable/ic_action_cancel"
+        android:icon="@drawable/ic_action_undo"
         android:title="@string/action_cancel"
-        app:showAsAction="never|withText"
+        app:showAsAction="ifRoom|withText"
         />
     <item android:id="@+id/action_delete"
-        android:icon="@drawable/ic_action_cancel"
+        android:icon="@drawable/ic_action_delete"
         android:title="@string/action_delete"
-        app:showAsAction="never|withText"
+        app:showAsAction="ifRoom|withText"
         />
+    </group>
 </menu>
