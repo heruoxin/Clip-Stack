@@ -2,7 +2,7 @@
 
 A tiny clipboard history manager app.
 
-You can Jump through multi clips in a simple notification when typing.
+You can jump through multi clips in a simple notification when typing.
 
 Material Design, Free, Open-Source, and No-Ads.
 
