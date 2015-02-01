@@ -54,7 +54,7 @@ public class ActivityMain extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         setView(queryText);
-        CBWatcherService.startCBService(context, false, 1);
+        CBWatcherService.startCBService(context, true, 1);
     }
 
     @Override

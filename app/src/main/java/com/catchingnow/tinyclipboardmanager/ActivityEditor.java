@@ -85,6 +85,9 @@ public class ActivityEditor extends ActionBarActivity {
             case (R.id.action_save):
                 saveText();
                 break;
+            case (R.id.action_delete):
+                deleteText();
+                break;
             case (R.id.action_cancel):
             case (android.R.id.home):
                 finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
@@ -95,6 +98,11 @@ public class ActivityEditor extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void deleteText() {
+        Storage db = new Storage(this);
+        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
+        finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
+    }
 
     private void shareText() {
         String text = editText.getText().toString();

@@ -40,5 +40,6 @@
     <string name="pref_storage_dialog">将剪贴板历史保存:</string>
     <string name="pref_storage_summary">保存多久的剪贴板历史？</string>
     <string name="pref_storage_title">存储</string>
+    <string name="action_delete">删除</string>
 
 </resources>
