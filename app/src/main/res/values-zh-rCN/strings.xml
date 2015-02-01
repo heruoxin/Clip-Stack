@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">剪贴板助手</string>
+    <string name="app_name">剪纸堆</string>
     <string name="clip_notification_title"></string>
     <string name="clip_notification_copy_button">复制</string>
     <string name="clip_notification_share_button">分享</string>
@@ -12,7 +12,7 @@
     <string name="clip_notification_text">展开此通知以查看更多。</string>
     <string name="clip_notification_single_text">点击添加文本。</string>
     <string name="share_clipboard_to">分享文本至：</string>
-    <string name="title_activity_main">剪贴板助手</string>
+    <string name="title_activity_main">剪纸堆</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">设置</string>
     <string name="action_search">搜索</string>
