@@ -14,20 +14,24 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CBWatcherService extends Service {
 
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
-    public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
+    public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
+    public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
     public final static int JOB_ID = 1;
+    private final static String STORAGE_DATE = "pref_save_dates";
     public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;
     private Storage db;
@@ -45,8 +49,10 @@ public class CBWatcherService extends Service {
         Log.v(PACKAGE_NAME, "onCreate");
         if (!onListened) {
             db = new Storage(this.getBaseContext());
-            bindJobScheduler();
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                bindJobScheduler();
+            }
             onListened = true;
         }
         super.onCreate();
@@ -56,18 +62,19 @@ public class CBWatcherService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
-            Log.v(PACKAGE_NAME, "IIOOV:"+isMyActivitiesOnForeground);
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 showNotification();
             }
+            if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
+                cleanUpSqlite();
+            }
 
-            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE, 0);
+            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
 
             SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
             if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
                 if (isMyActivitiesOnForeground <= 0) {
-                    Log.v(PACKAGE_NAME, "IIOOW:"+isMyActivitiesOnForeground);
                     stopSelf();
                     isMyActivitiesOnForeground = 0;
                     return Service.START_NOT_STICKY;
@@ -123,17 +130,25 @@ public class CBWatcherService extends Service {
         }
     }
 
-    public List<ClipObject> getClips() {
+    private void cleanUpSqlite() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
+        Log.v(PACKAGE_NAME,
+                "Start clean up SQLite at "+new Date().toString()+", clean clips before "+days+" days");
         if (db == null) {
             db = new Storage(this.getBaseContext());
         }
-        return db.getClipHistory(NUMBER_OF_CLIPS);
+        db = new Storage(this.getBaseContext());
+        db.deleteClipHistoryBefore(days);
     }
 
     private void showNotification() {
 
         List<String> thisClipText = new ArrayList<String>();
-        List<ClipObject> thisClips = getClips();
+        if (db == null) {
+            db = new Storage(this.getBaseContext());
+        }
+        List<ClipObject> thisClips = db.getClipHistory(NUMBER_OF_CLIPS);
         for (ClipObject thisClip : thisClips) {
             thisClipText.add(thisClip.getText());
         }
@@ -221,13 +236,21 @@ public class CBWatcherService extends Service {
     }
 
     public static void startCBService(Context context, boolean forceShowNotification) {
-        startCBService(context, forceShowNotification, 0);
+        startCBService(context, forceShowNotification, 0, false);
     }
 
+    public static void startCBService(Context context, boolean forceShowNotification, boolean doCleanUp) {
+        startCBService(context, forceShowNotification, 0, doCleanUp);
+    }
     public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
+       startCBService(context, forceShowNotification, myActivitiesOnForegroundMessage, false);
+    }
+
+    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage, boolean doCleanUp) {
         Intent intent = new Intent(context, CBWatcherService.class)
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
-                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FORGROUND_MESSAGE, myActivitiesOnForegroundMessage);
+                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage)
+                .putExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, doCleanUp);
         context.startService(intent);
     }
 
