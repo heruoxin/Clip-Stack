@@ -18,7 +18,7 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Search...</string>
     <string name="title_activity_activity_setting">Settings</string>
-    <string name="date_formart">EEE, MMM d</string>
+    <string name="date_formart">EEE, MMM dd</string>
     <string name="time_formart">HH:mm</string>
     <string name="title_activity_activity_editor">Edit</string>
     <string name="action_share">Share</string>

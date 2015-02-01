@@ -18,7 +18,7 @@
     <string name="action_search">搜索</string>
     <string name="search_hint">搜索……</string>
     <string name="title_activity_activity_setting">设置</string>
-    <string name="date_formart">MMM d，EEE</string>
+    <string name="date_formart">MMM dd，EEE</string>
     <string name="time_formart">HH:mm</string>
     <string name="title_activity_activity_editor">编辑</string>
     <string name="action_share">分享</string>

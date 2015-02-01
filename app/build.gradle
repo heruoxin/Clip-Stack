@@ -8,8 +8,8 @@ android {
         applicationId "com.catchingnow.tinyclipboardmanager"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 4
-        versionName "0.2.1"
+        versionCode 6
+        versionName "0.3.0"
     }
     buildTypes {
         release {
