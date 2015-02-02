@@ -1,10 +1,13 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import java.util.List;
 
 public class LaunchServiceAtStartup extends BroadcastReceiver {
 
@@ -14,6 +17,13 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
 //            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
 //            boolean forceShowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
 //            CBWatcherService.startCBService(context, forceShowNotification);
+            Storage db = new Storage(context);
+            List<ClipObject> clipObjects = db.getClipHistory(0);
+            if (clipObjects.size() > 0) {
+                String clips = clipObjects.get(0).getText();
+                ClipboardManager cb = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
+                cb.setText(clips);
+            }
             CBWatcherService.startCBService(context, true);
         }
     }

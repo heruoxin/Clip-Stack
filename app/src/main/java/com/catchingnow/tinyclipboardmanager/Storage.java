@@ -147,6 +147,7 @@ public class Storage {
     public void modifyClip(String oldClip, String newClip) {
         modifyClip(oldClip, newClip, 0);
     }
+
     public void modifyClip(String oldClip, String newClip,  int notUpdateWhich) {
         if (oldClip == null) {
             oldClip = "";
