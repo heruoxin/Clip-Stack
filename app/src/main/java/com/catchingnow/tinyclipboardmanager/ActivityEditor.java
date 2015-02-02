@@ -31,6 +31,7 @@ public class ActivityEditor extends ActionBarActivity {
         if (oldText == null) {
             oldText = "";
         }
+
         editText = (EditText) findViewById(R.id.edit_text);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -44,6 +45,9 @@ public class ActivityEditor extends ActionBarActivity {
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if ("".equals(oldText)) {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_editor));
+        }
     }
 
     @Override

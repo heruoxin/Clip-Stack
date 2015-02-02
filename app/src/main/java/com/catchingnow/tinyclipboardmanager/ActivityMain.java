@@ -2,9 +2,14 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -26,6 +31,7 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
+    public final static String FIRST_LAUNCH = "pref_is_first_launch";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     private String queryText;
     private RecyclerView recList;
@@ -57,9 +63,22 @@ public class ActivityMain extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         setView(queryText);
         CBWatcherService.startCBService(context, true, 1);
+        super.onResume();
+        //check if first launch
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preference.getBoolean(FIRST_LAUNCH, true)) {
+            try {
+                firstLaunch();
+                preference.edit()
+                        .putBoolean(FIRST_LAUNCH, false)
+                        .apply();
+            } catch (InterruptedException e) {
+                Log.e(PACKAGE_NAME, "first launch error:");
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -195,6 +214,28 @@ public class ActivityMain extends ActionBarActivity {
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
         recList.setOnScrollListener(touchListener.makeScrollListener());
+    }
+
+    private void firstLaunch() throws InterruptedException {
+        String oldClip = null;
+        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (cb.hasPrimaryClip()) {
+            ClipData cd = cb.getPrimaryClip();
+            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                CharSequence thisClip = cd.getItemAt(0).getText();
+                if (thisClip != null) {
+                    oldClip = thisClip.toString();
+                }
+            }
+        }
+        db = new Storage(this);
+        db.modifyClip(null, getString(R.string.first_launch_clips_3, "😇"));
+        Thread.sleep(100);
+        db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"));
+        Thread.sleep(100);
+        db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"));
+        Thread.sleep(100);
+        db.modifyClip(null, oldClip);
     }
 
     public void actionAdd(View view) {

@@ -43,5 +43,9 @@
     <string name="action_delete">删除</string>
     <string name="pref_storage_summary_infinite">永久存储剪贴板。</string>
     <string name="pref_storage_summary_days">将剪贴板保存 %d 天。</string>
+    <string name="title_activity_editor">新建剪贴板</string>
+    <string name="first_launch_clips_1">欢迎使用「剪纸堆」  %1$s\n 它可以记录剪贴板历史并显示在通知栏。</string>
+    <string name="first_launch_clips_2">点击此文本%1$s即可编辑。</string>
+    <string name="first_launch_clips_3">&lt;== %1$s 从边缘滑动即可删除。</string>
 
 </resources>
