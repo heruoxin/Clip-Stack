@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -57,14 +58,13 @@ public class ActivitySetting extends PreferenceActivity {
         mActionBar.setTitle(getTitle());
         initSharedPrefListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         initSharedPrefListener();
         CBWatcherService.startCBService(this, false, 1);
     }
-
-
 
     @Override
     protected void onPause() {

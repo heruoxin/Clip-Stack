@@ -64,6 +64,7 @@
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_action_share"
                 android:layout_below="@id/activity_main_card_time"

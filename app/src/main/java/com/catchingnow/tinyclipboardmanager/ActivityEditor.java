@@ -3,6 +3,7 @@ package com.catchingnow.tinyclipboardmanager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -135,7 +136,11 @@ public class ActivityEditor extends ActionBarActivity {
         Toast.makeText(this,
                 toastMessage,
                 Toast.LENGTH_SHORT).show();
-        finishAndRemoveTask();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            finish();
+        } else {
+            finishAndRemoveTask();
+        }
     }
 
 }

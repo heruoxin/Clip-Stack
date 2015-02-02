@@ -41,12 +41,14 @@
 
     </LinearLayout>
     <ImageView
+        android:id="@+id/notification_item_up_line"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_below="@id/each_item"
         android:background="#B6B6B6"/>
 
     <ImageView
+        android:id="@+id/notification_item_down_line"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_above="@id/each_item"
