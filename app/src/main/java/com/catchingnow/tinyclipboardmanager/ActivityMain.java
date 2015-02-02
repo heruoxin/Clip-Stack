@@ -31,8 +31,8 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
-    public final static String FIRST_LAUNCH = "pref_is_first_launch";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
+    public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private String queryText;
     private RecyclerView recList;
     private Storage db;
@@ -217,25 +217,12 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     private void firstLaunch() throws InterruptedException {
-        String oldClip = null;
-        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (cb.hasPrimaryClip()) {
-            ClipData cd = cb.getPrimaryClip();
-            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                CharSequence thisClip = cd.getItemAt(0).getText();
-                if (thisClip != null) {
-                    oldClip = thisClip.toString();
-                }
-            }
-        }
         db = new Storage(this);
         db.modifyClip(null, getString(R.string.first_launch_clips_3, "😇"));
-        Thread.sleep(100);
+        Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"));
-        Thread.sleep(100);
+        Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"));
-        Thread.sleep(100);
-        db.modifyClip(null, oldClip);
     }
 
     public void actionAdd(View view) {
