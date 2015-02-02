@@ -2,26 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.catchingnow.tinyclipboardmanager.ActivityEditor">
-    <item android:id="@+id/action_share"
+    <item
+        android:id="@+id/action_share"
         android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
         android:title="@string/action_share"
-        app:showAsAction="ifRoom|withText"
-        />
+        app:showAsAction="ifRoom|withText" />
     <group>
-    <item android:id="@+id/action_save"
-        android:icon="@drawable/ic_action_save"
-        android:title="@string/action_save"
-        app:showAsAction="ifRoom|withText"
-        />
-    <item android:id="@+id/action_cancel"
-        android:icon="@drawable/ic_action_undo"
-        android:title="@string/action_cancel"
-        app:showAsAction="ifRoom|withText"
-        />
-    <item android:id="@+id/action_delete"
-        android:icon="@drawable/ic_action_delete"
-        android:title="@string/action_delete"
-        app:showAsAction="ifRoom|withText"
-        />
+        <item
+            android:id="@+id/action_save"
+            android:icon="@drawable/ic_action_save"
+            android:title="@string/action_save"
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/action_cancel"
+            android:icon="@drawable/ic_action_undo"
+            android:title="@string/action_cancel"
+            app:showAsAction="ifRoom|withText" />
+        <item
+            android:id="@+id/action_delete"
+            android:icon="@drawable/ic_action_delete"
+            android:title="@string/action_delete"
+            app:showAsAction="ifRoom|withText" />
     </group>
 </menu>

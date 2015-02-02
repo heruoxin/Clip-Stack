@@ -2,5 +2,4 @@
 
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:label="@string/title_activity_main"
-    android:hint="@string/search_hint"
-    />
+    android:hint="@string/search_hint" />

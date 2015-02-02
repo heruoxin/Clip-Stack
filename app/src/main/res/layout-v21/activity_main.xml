@@ -13,8 +13,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cardList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
+
     <ImageButton
         android:id="@+id/fab"
         android:layout_alignParentRight="true"
@@ -30,7 +30,6 @@
         android:src="@drawable/ic_action_add"
         android:scaleType="centerInside"
         android:elevation="4dp"
-        android:onClick="actionAdd"
-        />
+        android:onClick="actionAdd" />
 
 </RelativeLayout>

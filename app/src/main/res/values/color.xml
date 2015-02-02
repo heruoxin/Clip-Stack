@@ -6,4 +6,5 @@
     <color name="secondary_text">#727272</color>
     <color name="divider">#B6B6B6</color>
     <color name="white">#FFFFFF</color>
+    <color name="like_black">#212121</color>
 </resources>

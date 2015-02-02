@@ -282,10 +282,6 @@ public class CBWatcherService extends Service {
                     openShareIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                expandedView.setTextColor(R.id.current_clip, getResources().getColor(R.color.white));
-            }
         }
 
         public NotificationClipListAdapter addClips(String s) {
@@ -319,12 +315,6 @@ public class CBWatcherService extends Service {
                     openEditIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             theClipView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
-
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                theClipView.setTextColor(R.id.clip_text, getResources().getColor(R.color.divider));
-                theClipView.setViewVisibility(R.id.notification_item_up_line, View.GONE);
-                theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
-            }
 
             expandedView.addView(R.id.main_view, theClipView);
             return this;

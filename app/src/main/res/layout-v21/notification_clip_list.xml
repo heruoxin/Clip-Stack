@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="90dp"
-    android:background="@color/like_black"
     android:orientation="vertical">
 
     <ImageView
@@ -33,7 +32,7 @@
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:text="Title test test"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_text_default_material_light"
                 android:layout_gravity="center"
                 android:lines="1"
                 android:ellipsize="end"
@@ -57,7 +56,7 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:background="@color/secondary_text" />
+            android:background="#B6B6B6" />
 
     </LinearLayout>
 </RelativeLayout>
