@@ -179,7 +179,7 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
-                .setSmallIcon(R.drawable.ic_action_copy_black)
+                .setSmallIcon(R.drawable.ic_action_copy_icon_title)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
@@ -228,7 +228,7 @@ public class CBWatcherService extends Service {
         Notification n = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setContentText(getString(R.string.clip_notification_single_text))
-                .setSmallIcon(R.drawable.ic_action_copy_black)
+                .setSmallIcon(R.drawable.ic_action_copy_icon_title)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
