@@ -35,12 +35,12 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this.getBaseContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CBWatcherService.startCBService(context, false);
         } else {
             CBWatcherService.startCBService(context, false, true);
         }
-        context = this.getBaseContext();
         queryText = "";
     }
 
