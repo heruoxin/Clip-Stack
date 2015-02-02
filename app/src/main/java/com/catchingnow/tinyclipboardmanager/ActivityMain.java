@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -34,9 +35,13 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CBWatcherService.startCBService(context, false);
+        } else {
+            CBWatcherService.startCBService(context, false, true);
+        }
         context = this.getBaseContext();
         queryText = "";
-        CBWatcherService.startCBService(context, false);
     }
 
     @Override

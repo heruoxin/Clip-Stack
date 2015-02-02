@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -50,7 +51,9 @@ public class CBWatcherService extends Service {
         if (!onListened) {
             db = new Storage(this.getBaseContext());
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                Log.w(PACKAGE_NAME, "Not support JobScheduler");
+            } else {
                 bindJobScheduler();
             }
             onListened = true;
@@ -62,15 +65,17 @@ public class CBWatcherService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
-            if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
-                showNotification();
-            }
+
+            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
+            isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
                 cleanUpSqlite();
             }
 
-            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
-            isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+            if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
+                showNotification();
+            }
 
             SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
             if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
@@ -100,7 +105,8 @@ public class CBWatcherService extends Service {
         super.onDestroy();
     }
 
-    public void bindJobScheduler() {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void bindJobScheduler() {
         // JobScheduler for auto clean sqlite
         JobInfo job = new JobInfo.Builder(JOB_ID, new ComponentName(this, SyncJobService.class))
                 .setRequiresCharging(true)
@@ -134,7 +140,7 @@ public class CBWatcherService extends Service {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
         Log.v(PACKAGE_NAME,
-                "Start clean up SQLite at "+new Date().toString()+", clean clips before "+days+" days");
+                "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
         if (db == null) {
             db = new Storage(this.getBaseContext());
         }
@@ -242,8 +248,9 @@ public class CBWatcherService extends Service {
     public static void startCBService(Context context, boolean forceShowNotification, boolean doCleanUp) {
         startCBService(context, forceShowNotification, 0, doCleanUp);
     }
+
     public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
-       startCBService(context, forceShowNotification, myActivitiesOnForegroundMessage, false);
+        startCBService(context, forceShowNotification, myActivitiesOnForegroundMessage, false);
     }
 
     public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage, boolean doCleanUp) {
