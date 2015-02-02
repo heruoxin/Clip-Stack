@@ -1,9 +1,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:top="6dp"
-        android:left="6dp">
+        android:top="8dp"
+        android:left="8dp">
         <shape android:shape="oval">
-            <solid android:color="@color/secondary_text" />
+            <corners android:radius="16dp" />
+            <solid android:color="@color/divider" />
         </shape>
     </item>
     <item>

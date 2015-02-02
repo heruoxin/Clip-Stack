@@ -174,7 +174,7 @@ public class CBWatcherService extends Service {
                 );
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, true);
 
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
@@ -214,7 +214,7 @@ public class CBWatcherService extends Service {
         }
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, true);
 
         Intent resultIntent = new Intent(this, ActivityMain.class);
         PendingIntent resultPendingIntent =
