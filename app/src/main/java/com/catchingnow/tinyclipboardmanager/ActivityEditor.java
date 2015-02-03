@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.ActivityManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +48,9 @@ public class ActivityEditor extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if ("".equals(oldText)) {
             getSupportActionBar().setTitle(getString(R.string.title_activity_editor));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.title_activity_editor)));
+            }
         }
     }
 
