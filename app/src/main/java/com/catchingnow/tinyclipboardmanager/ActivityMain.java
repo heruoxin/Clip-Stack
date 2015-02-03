@@ -218,11 +218,13 @@ public class ActivityMain extends ActionBarActivity {
 
     private void firstLaunch() throws InterruptedException {
         db = new Storage(this);
-        db.modifyClip(null, getString(R.string.first_launch_clips_3, "😇"));
+        db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"));
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"));
+        Thread.sleep(50);
+        db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"));
     }
 
     public void actionAdd(View view) {
