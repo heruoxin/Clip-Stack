@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -49,7 +51,11 @@ public class ActivityEditor extends ActionBarActivity {
         if ("".equals(oldText)) {
             getSupportActionBar().setTitle(getString(R.string.title_activity_editor));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.title_activity_editor)));
+                setTaskDescription(new ActivityManager.TaskDescription(
+                        getString(R.string.title_activity_editor),
+                        BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+                        getResources().getColor(R.color.primary)
+                        ));
             }
         }
     }
