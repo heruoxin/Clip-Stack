@@ -10,7 +10,7 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_color_copy" />
 
     <LinearLayout
         android:id="@+id/main_view"
