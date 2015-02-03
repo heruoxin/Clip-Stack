@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.catchingnow.tinyclipboardmanager">
+    package="com.catchingnow.tinyclipboardmanager" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -70,8 +70,17 @@
         <activity
             android:name=".ActivityEditor"
             android:documentLaunchMode="intoExisting"
-            android:maxRecents="1"
-            android:label="@string/title_activity_activity_editor" >
+            android:label="@string/title_activity_activity_editor"
+            android:maxRecents="1" >
+        </activity>
+        <activity
+            android:name=".ActivityGetShareText"
+            android:label="@string/title_activity_activity_get_share_text" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 
