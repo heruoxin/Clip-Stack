@@ -31,7 +31,7 @@
         <ImageButton
             android:id="@+id/clip_copy_button"
             android:background="#00000000"
-            android:src="@drawable/ic_action_copy_grey"
+            android:src="@drawable/ic_notification_action_copy"
             android:padding="4dp"
             android:layout_gravity="center"
             android:layout_width="36dp"
