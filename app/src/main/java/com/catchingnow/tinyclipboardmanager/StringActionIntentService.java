@@ -34,6 +34,7 @@ public class StringActionIntentService extends IntentService {
         if (intent != null) {
             Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             sendBroadcast(it);
+
             String clips = intent.getStringExtra(CLIPBOARD_STRING);
             int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
             switch (actionCode) {
