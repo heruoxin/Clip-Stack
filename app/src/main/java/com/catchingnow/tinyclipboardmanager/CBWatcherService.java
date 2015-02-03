@@ -15,6 +15,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -44,7 +46,6 @@ public class CBWatcherService extends Service {
             performClipboardCheck();
         }
     };
-
 
     @Override
     public void onCreate() {
@@ -179,11 +180,15 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
-                .setSmallIcon(R.drawable.ic_action_copy_icon_title)
+                .setSmallIcon(R.drawable.icon)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            preBuildNotification.setColor(getResources().getColor(R.color.primary_light));
+        }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
 
@@ -225,15 +230,18 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        Notification n = new Notification.Builder(this)
+        Notification.Builder preBuildN = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setContentText(getString(R.string.clip_notification_single_text))
-                .setSmallIcon(R.drawable.ic_action_copy_icon_title)
+                .setSmallIcon(R.drawable.icon)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop)
-                .build();
+                .setAutoCancel(!pinOnTop);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        preBuildN.setColor(getResources().getColor(R.color.primary_light));
+    }
+        Notification n = preBuildN.build();
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
