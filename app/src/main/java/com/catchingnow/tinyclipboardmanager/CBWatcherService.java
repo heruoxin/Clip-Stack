@@ -180,14 +180,17 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
-                .setSmallIcon(R.drawable.icon)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            preBuildNotification.setColor(getResources().getColor(R.color.primary_light));
+            preBuildNotification
+                    .setSmallIcon(R.drawable.icon)
+                    .setColor(getResources().getColor(R.color.primary_light));
+        } else {
+            preBuildNotification.setSmallIcon(R.drawable.ic_notification_title);
         }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
@@ -233,13 +236,16 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildN = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setContentText(getString(R.string.clip_notification_single_text))
-                .setSmallIcon(R.drawable.icon)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        preBuildN.setColor(getResources().getColor(R.color.primary_light));
+        preBuildN
+                .setSmallIcon(R.drawable.icon)
+                .setColor(getResources().getColor(R.color.primary_light));
+    } else {
+        preBuildN.setSmallIcon(R.drawable.ic_notification_title);
     }
         Notification n = preBuildN.build();
 
