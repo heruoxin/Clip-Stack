@@ -36,5 +36,4 @@
                 android:data="https://github.com/heruoxin/TinyClipboards" />
         </Preference>
     </PreferenceCategory>
-
 </PreferenceScreen>

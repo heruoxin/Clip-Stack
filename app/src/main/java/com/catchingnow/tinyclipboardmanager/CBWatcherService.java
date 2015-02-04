@@ -292,6 +292,16 @@ public class CBWatcherService extends Service {
                     openShareIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
+            //add pIntent for edit
+            Intent openEditIntent = new Intent(c, StringActionIntentService.class)
+                    .putExtra(StringActionIntentService.CLIPBOARD_STRING, currentClip)
+                    .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
+            PendingIntent pOpenEditIntent = PendingIntent.getService(
+                    c,
+                    buttonNumber++,
+                    openEditIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            expandedView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
         }
 
         public NotificationClipListAdapter addClips(String s) {
