@@ -17,14 +17,14 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
 //            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
 //            boolean forceShowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
 //            CBWatcherService.startCBService(context, forceShowNotification);
-            Storage db = new Storage(context);
             List<ClipObject> clipObjects = db.getClipHistory(0);
+            CBWatcherService.startCBService(context, true);
+            Storage db = Storage.getInstance(context);
             if (clipObjects.size() > 0) {
                 String clips = clipObjects.get(0).getText();
                 ClipboardManager cb = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
                 cb.setText(clips);
             }
-            CBWatcherService.startCBService(context, true);
         }
     }
 }

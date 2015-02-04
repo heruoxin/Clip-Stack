@@ -115,7 +115,7 @@ public class ActivityEditor extends ActionBarActivity {
     }
 
     private void deleteText() {
-        Storage db = new Storage(this);
+        Storage db = Storage.getInstance(this);
         db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
     }
@@ -135,7 +135,7 @@ public class ActivityEditor extends ActionBarActivity {
             finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
             return;
         }
-        Storage db = new Storage(this);
+        Storage db = Storage.getInstance(this);
         db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         if (newText != null && !"".equals(newText)) {
             ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);

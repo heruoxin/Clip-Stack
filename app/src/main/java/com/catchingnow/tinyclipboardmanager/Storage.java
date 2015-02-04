@@ -1,12 +1,14 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,18 +22,29 @@ public class Storage {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static int NOTIFICATION_VIEW = 1;
     public final static int MAIN_ACTIVITY_VIEW = 2;
+    public final static int SYSTEM_CLIPBOARD = 4;
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
+    private static Storage mInstance = null;
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
     private Context c;
+    private ClipboardManager cb;
     private List<ClipObject> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
 
-    public Storage(Context context) {
-        c = context;
-        dbHelper = new StorageHelper(c);
+    private Storage(Context context) {
+        this.c = context;
+        this.cb = (ClipboardManager) c.getSystemService(c.CLIPBOARD_SERVICE);
+        this.dbHelper = new StorageHelper(c);
+    }
+
+    public static Storage getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new Storage(context.getApplicationContext());
+        }
+        return mInstance;
     }
 
     private String sqliteEscape(String keyWord) {
@@ -94,7 +107,6 @@ public class Storage {
             }
             clipsInMemory = new ArrayList<ClipObject>();
             while (c.moveToNext()) {
-                //clipsInMemory.add(c.getString(0));
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
             }
             c.close();
@@ -106,6 +118,7 @@ public class Storage {
     }
 
     public boolean deleteClipHistoryBefore(float days) {
+        isClipsInMemoryChanged = true;
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
@@ -142,7 +155,6 @@ public class Storage {
             Log.e("Storage", "write db error: addClipHistory " + currentString);
             return false;
         }
-        isClipsInMemoryChanged = true;
         return true;
     }
 
@@ -151,6 +163,7 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip,  int notUpdateWhich) {
+        isClipsInMemoryChanged = true;
         if (oldClip == null) {
             oldClip = "";
         }
@@ -168,26 +181,53 @@ public class Storage {
         if (!oldClip.equals("")) {
             deleteClipHistory(oldClip);
         }
-        Log.v(PACKAGE_NAME, "Closed by modifyClip");
+        Log.v(PACKAGE_NAME, "Closed by modifyClip:"+notUpdateWhich);
+        Log.v(PACKAGE_NAME, oldClip);
         close();
-        try {
-            refreshAllTypeOfList(notUpdateWhich);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        refreshAllTypeOfList(notUpdateWhich);
+
+    }
+
+    private void updateSystemClipboard() {
+        String topClipInStack = null;
+        if (getClipHistory().size() > 0) {
+            topClipInStack = getClipHistory().get(0).getText();
+        }
+        //sync system clipboard and storage.
+        Log.v(PACKAGE_NAME,"Change topStack, topClipInStack is:"+topClipInStack);
+        if (cb.hasPrimaryClip()) {
+            ClipData cd = cb.getPrimaryClip();
+            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                CharSequence thisClip = cd.getItemAt(0).getText();
+                if (thisClip != null) {
+                    Log.v(PACKAGE_NAME,"Change topStack, thisClip is:"+thisClip.toString());
+                    if (!thisClip.toString().equals(topClipInStack)) {
+                        cb.setText(topClipInStack);
+                    }
+                }
+            }
         }
     }
 
-    private void refreshAllTypeOfList(int notUpdateWhich) throws InterruptedException {
-        Thread.sleep(30);
+    private void refreshAllTypeOfList(int notUpdateWhich) {
+        Log.v(PACKAGE_NAME, "Closed111 by modifyClip"+notUpdateWhich);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
             CBWatcherService.startCBService(c, true);
+            updateSystemClipboard();
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
             ActivityMain.refreshMainView(c, "");
+            updateSystemClipboard();
+        } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
+            ActivityMain.refreshMainView(c, "");
+            CBWatcherService.startCBService(c, true);
         } else {
             CBWatcherService.startCBService(c, true);
             ActivityMain.refreshMainView(c, "");
+            updateSystemClipboard();
         }
     }
+
 
     public class StorageHelper extends SQLiteOpenHelper {
         private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
@@ -215,6 +255,7 @@ public class Storage {
             Log.v(PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
         }
     }
+
 
 //    public void printClips(int n) {
 //        for (int i=0; i<n; i++){

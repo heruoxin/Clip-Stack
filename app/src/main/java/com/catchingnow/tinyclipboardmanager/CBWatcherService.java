@@ -48,7 +48,7 @@ public class CBWatcherService extends Service {
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
         if (!onListened) {
-            db = new Storage(this.getBaseContext());
+            db = Storage.getInstance(this.getBaseContext());
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 Log.w(PACKAGE_NAME, "Not support JobScheduler");
@@ -139,9 +139,8 @@ public class CBWatcherService extends Service {
         Log.v(PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
         if (db == null) {
-            db = new Storage(this.getBaseContext());
+            db = Storage.getInstance(this.getBaseContext());
         }
-        db = new Storage(this.getBaseContext());
         db.deleteClipHistoryBefore(days);
     }
 
@@ -149,7 +148,7 @@ public class CBWatcherService extends Service {
 
         List<String> thisClipText = new ArrayList<String>();
         if (db == null) {
-            db = new Storage(this.getBaseContext());
+            db = Storage.getInstance(this.getBaseContext());
         }
         List<ClipObject> thisClips = db.getClipHistory(NUMBER_OF_CLIPS);
         for (ClipObject thisClip : thisClips) {

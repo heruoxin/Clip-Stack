@@ -173,7 +173,7 @@ public class ActivityMain extends ActionBarActivity {
 
     private void setView(String query) {
         //get clips
-        db = new Storage(this);
+        db = Storage.getInstance(this);
         final List<ClipObject> clips = db.getClipHistory(query);
 
         setContentView(R.layout.activity_main);
@@ -215,15 +215,15 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     private void firstLaunch() throws InterruptedException {
-        db = new Storage(this);
+        db = Storage.getInstance(this);
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", ""));
+        db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", ""), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"));
+        db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"));
+        db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"));
+        db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"), Storage.SYSTEM_CLIPBOARD);
     }
 
     public void actionAdd(View view) {
