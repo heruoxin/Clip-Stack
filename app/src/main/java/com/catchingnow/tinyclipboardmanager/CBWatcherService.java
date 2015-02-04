@@ -15,13 +15,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -190,7 +187,7 @@ public class CBWatcherService extends Service {
                     .setSmallIcon(R.drawable.icon)
                     .setColor(getResources().getColor(R.color.primary_light));
         } else {
-            preBuildNotification.setSmallIcon(R.drawable.ic_notification_title);
+            preBuildNotification.setSmallIcon(R.drawable.icon_with_shadow);
         }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
@@ -245,7 +242,7 @@ public class CBWatcherService extends Service {
                 .setSmallIcon(R.drawable.icon)
                 .setColor(getResources().getColor(R.color.primary_light));
     } else {
-        preBuildN.setSmallIcon(R.drawable.ic_notification_title);
+        preBuildN.setSmallIcon(R.drawable.icon_with_shadow);
     }
         Notification n = preBuildN.build();
 

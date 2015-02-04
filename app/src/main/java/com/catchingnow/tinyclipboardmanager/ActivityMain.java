@@ -1,10 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.app.Activity;
 import android.app.SearchManager;
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +37,8 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.icon_with_shadow);
         context = this.getBaseContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CBWatcherService.startCBService(context, false);

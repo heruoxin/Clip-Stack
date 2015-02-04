@@ -11,7 +11,7 @@
     <string name="clip_notification_text">展开此通知以查看更多。</string>
     <string name="clip_notification_single_text">点击添加文本。</string>
     <string name="share_clipboard_to">分享文本至：</string>
-    <string name="title_activity_main">剪纸堆</string>
+    <string name="title_activity_main">"  剪纸堆"</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">设置</string>
     <string name="action_search">搜索</string>
