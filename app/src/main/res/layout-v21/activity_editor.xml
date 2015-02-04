@@ -53,6 +53,8 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_action_save"
                 android:scaleType="centerInside"
+                android:elevation="4dp"
+                android:stateListAnimator="@animator/anim"
                 android:onClick="saveTextOnClick" />
 
         </RelativeLayout>
