@@ -178,7 +178,7 @@ public class Storage {
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) throws InterruptedException {
-        Thread.sleep(300);
+        Thread.sleep(30);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
             CBWatcherService.startCBService(c, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
