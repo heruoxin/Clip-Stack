@@ -42,9 +42,9 @@
     <string name="action_delete">Delete</string>
     <string name="pref_storage_summary_infinite">Remember all clips.</string>
     <string name="pref_storage_summary_days">Remember clips for %d days.</string>
-    <string name="title_activity_editor">New clips</string>
+    <string name="title_activity_editor">New Clip</string>
     <string name="first_launch_clips_0">Welcome to Clipping Stack. %1$s</string>
-    <string name="first_launch_clips_1">It can show clip history on notification.</string>
+    <string name="first_launch_clips_1">It can show clip history in notification.</string>
     <string name="first_launch_clips_2">click here %1$s to edit.</string>
     <string name="first_launch_clips_3">%1$s Swipe from edge to delete. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>

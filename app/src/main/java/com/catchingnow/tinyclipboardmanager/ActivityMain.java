@@ -294,7 +294,7 @@ public class ActivityMain extends ActionBarActivity {
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                     refreshMainView();
-                    return true;
+                    return false;
                 }
             });
         }
