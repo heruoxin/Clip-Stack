@@ -187,7 +187,7 @@ public class CBWatcherService extends Service {
                     .setSmallIcon(R.drawable.icon)
                     .setColor(getResources().getColor(R.color.primary_light));
         } else {
-            preBuildNotification.setSmallIcon(R.drawable.icon_with_shadow);
+            preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
         }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
@@ -242,7 +242,7 @@ public class CBWatcherService extends Service {
                 .setSmallIcon(R.drawable.icon)
                 .setColor(getResources().getColor(R.color.primary_light));
     } else {
-        preBuildN.setSmallIcon(R.drawable.icon_with_shadow);
+        preBuildN.setSmallIcon(R.drawable.icon_shadow);
     }
         Notification n = preBuildN.build();
 

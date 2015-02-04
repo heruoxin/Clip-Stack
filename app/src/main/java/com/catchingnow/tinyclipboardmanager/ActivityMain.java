@@ -38,7 +38,7 @@ public class ActivityMain extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.icon_with_shadow);
+        getSupportActionBar().setIcon(R.drawable.icon_shadow);
         context = this.getBaseContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CBWatcherService.startCBService(context, false);
