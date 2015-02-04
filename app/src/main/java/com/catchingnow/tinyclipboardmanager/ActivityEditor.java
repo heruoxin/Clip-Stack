@@ -127,6 +127,10 @@ public class ActivityEditor extends ActionBarActivity {
         startService(openIntent);
     }
 
+    public void saveText(View view) {
+        saveText();
+    }
+
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage = "";

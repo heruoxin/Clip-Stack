@@ -12,16 +12,16 @@
             android:id="@+id/action_save"
             android:icon="@drawable/ic_action_save"
             android:title="@string/action_save"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="never|withText" />
         <item
             android:id="@+id/action_cancel"
             android:icon="@drawable/ic_action_undo"
             android:title="@string/action_cancel"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="never|withText" />
         <item
             android:id="@+id/action_delete"
             android:icon="@drawable/ic_action_delete"
             android:title="@string/action_delete"
-            app:showAsAction="ifRoom|withText" />
+            app:showAsAction="never|withText" />
     </group>
 </menu>

@@ -7,7 +7,6 @@
     <string name="clip_notification_share_button">Share </string>
     <string name="clip_notification_big_title">Recent clipboards</string>
     <string name="clip_notification_big_summary_text"></string>
-    <string name="toast_front_string">""</string>
     <string name="toast_end_string">has copied</string>
     <string name="clip_notification_text">Expand to show more.</string>
     <string name="clip_notification_single_text">Click to add text.</string>
@@ -33,10 +32,10 @@
     <string name="pref_storage_dialog">Save clips for</string>
     <string name="pref_about_category">About</string>
     <string name="pref_about_title">Open Source</string>
-    <string name="pref_about_summary">View source code on Github</string>
+    <string name="pref_about_summary">View source code on Github.</string>
     <string name="pref_app_setting_category">App setting</string>
     <string name="pref_service_title">Service</string>
-    <string name="pref_service_summary">Listen system clipboard in background</string>
+    <string name="pref_service_summary">Listen system clipboard in background.</string>
     <string name="pref_notification_title">Pin notification</string>
     <string name="pref_notification_summary_on">Always show.</string>
     <string name="pref_notification_summary_off">Only show when clipboard changed.</string>
@@ -49,5 +48,7 @@
     <string name="first_launch_clips_2">click here %1$s to edit.</string>
     <string name="first_launch_clips_3">%1$s Swipe from edge to delete. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>
+    <string name="action_add">Add</string>
+    <string name="toast_front_string">""</string>
 
 </resources>
