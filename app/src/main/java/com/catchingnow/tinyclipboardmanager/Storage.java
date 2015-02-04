@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by heruoxin on 14/12/9.
@@ -168,10 +170,15 @@ public class Storage {
         }
         Log.v(PACKAGE_NAME, "Closed by modifyClip");
         close();
-        refreshAllTypeOfList(notUpdateWhich);
+        try {
+            refreshAllTypeOfList(notUpdateWhich);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void refreshAllTypeOfList(int notUpdateWhich) {
+    private void refreshAllTypeOfList(int notUpdateWhich) throws InterruptedException {
+        Thread.sleep(300);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
             CBWatcherService.startCBService(c, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
