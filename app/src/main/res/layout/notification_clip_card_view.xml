@@ -17,7 +17,7 @@
         <TextView
             android:id="@+id/clip_text"
             android:gravity="center_vertical|start"
-            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:ellipsize="end"
             android:lines="1"
             android:text="text test test"

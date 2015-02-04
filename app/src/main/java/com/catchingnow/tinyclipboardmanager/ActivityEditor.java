@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -127,10 +128,6 @@ public class ActivityEditor extends ActionBarActivity {
         startService(openIntent);
     }
 
-    public void saveText(View view) {
-        saveText();
-    }
-
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage = "";
@@ -148,6 +145,10 @@ public class ActivityEditor extends ActionBarActivity {
             toastMessage = getString(R.string.toast_deleted);
         }
         finishAndRemoveTaskWithToast(toastMessage);
+    }
+
+    public void saveTextOnClick(View view) {
+        saveText();
     }
 
     private void finishAndRemoveTaskWithToast(String toastMessage) {

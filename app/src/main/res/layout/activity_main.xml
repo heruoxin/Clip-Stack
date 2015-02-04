@@ -29,7 +29,6 @@
         android:padding="12dp"
         android:src="@drawable/ic_action_add"
         android:scaleType="centerInside"
-        android:elevation="4dp"
         android:onClick="actionAdd" />
 
 </RelativeLayout>

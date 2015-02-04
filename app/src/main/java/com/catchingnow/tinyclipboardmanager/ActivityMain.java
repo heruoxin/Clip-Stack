@@ -26,7 +26,7 @@ import java.util.List;
 
 
 public class ActivityMain extends ActionBarActivity {
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
+    public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private String queryText;
