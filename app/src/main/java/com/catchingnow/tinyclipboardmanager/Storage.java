@@ -213,18 +213,18 @@ public class Storage {
     private void refreshAllTypeOfList(int notUpdateWhich) {
         Log.v(PACKAGE_NAME, "Closed111 by modifyClip"+notUpdateWhich);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
+            updateSystemClipboard();
             CBWatcherService.startCBService(c, true);
-            updateSystemClipboard();
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
-            ActivityMain.refreshMainView(c, "");
             updateSystemClipboard();
+            ActivityMain.refreshMainView(c, "");
         } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
             ActivityMain.refreshMainView(c, "");
             CBWatcherService.startCBService(c, true);
         } else {
+            updateSystemClipboard();
             CBWatcherService.startCBService(c, true);
             ActivityMain.refreshMainView(c, "");
-            updateSystemClipboard();
         }
     }
 
