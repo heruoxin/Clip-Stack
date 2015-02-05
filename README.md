@@ -10,7 +10,7 @@ Only Support Android 5.0 or above.
 
 <a href="https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager">
   <img alt="Get it on Google Play"
-       src="/images/brand/en_generic_rgb_wo_60.png" />
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
 </a>
 
 剪纸堆 —— 复制粘贴增强工具，帮助你在通知栏处管理剪贴历史记录。
