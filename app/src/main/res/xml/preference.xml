@@ -12,7 +12,7 @@
             android:key="pref_notification_always_show"
             android:summaryOn="@string/pref_notification_summary_on"
             android:summaryOff="@string/pref_notification_summary_off"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:dependency="pref_start_service" />
         <!-- <SwitchPreference
             android:title="Display"

@@ -171,7 +171,7 @@ public class CBWatcherService extends Service {
                 );
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, true);
 
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
@@ -184,6 +184,7 @@ public class CBWatcherService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildNotification
                     .setSmallIcon(R.drawable.icon)
+                    .setVisibility(Notification.VISIBILITY_SECRET)
                     .setColor(getResources().getColor(R.color.primary_light));
         } else {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
@@ -218,7 +219,7 @@ public class CBWatcherService extends Service {
         }
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, true);
 
         Intent resultIntent = new Intent(this, ActivityMain.class);
         PendingIntent resultPendingIntent =
@@ -239,6 +240,7 @@ public class CBWatcherService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         preBuildN
                 .setSmallIcon(R.drawable.icon)
+                .setVisibility(Notification.VISIBILITY_SECRET)
                 .setColor(getResources().getColor(R.color.primary_light));
     } else {
         preBuildN.setSmallIcon(R.drawable.icon_shadow);

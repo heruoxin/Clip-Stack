@@ -189,7 +189,7 @@ public class Storage {
 
     }
 
-    private void updateSystemClipboard() {
+    private void updateSystemClipboard(boolean alsoStartService) {
         String topClipInStack = null;
         if (getClipHistory().size() > 0) {
             topClipInStack = getClipHistory().get(0).getText();
@@ -204,26 +204,30 @@ public class Storage {
                     Log.v(PACKAGE_NAME,"Change topStack, thisClip is:"+thisClip.toString());
                     if (!thisClip.toString().equals(topClipInStack)) {
                         cb.setText(topClipInStack);
+                        return;
                     }
                 }
             }
+        }
+        if (alsoStartService) {
+            CBWatcherService.startCBService(c, true);
         }
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
         Log.v(PACKAGE_NAME, "Closed111 by modifyClip"+notUpdateWhich);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
-            updateSystemClipboard();
-            CBWatcherService.startCBService(c, true);
+            updateSystemClipboard(true);
+            //CBWatcherService.startCBService(c, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
-            updateSystemClipboard();
+            updateSystemClipboard(false);
             ActivityMain.refreshMainView(c, "");
         } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
             ActivityMain.refreshMainView(c, "");
             CBWatcherService.startCBService(c, true);
         } else {
-            updateSystemClipboard();
-            CBWatcherService.startCBService(c, true);
+            updateSystemClipboard(true);
+            //CBWatcherService.startCBService(c, true);
             ActivityMain.refreshMainView(c, "");
         }
     }
