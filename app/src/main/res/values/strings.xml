@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Clipping Stack</string>
+    <string name="app_name">ClippingStack</string>
     <string name="clip_notification_title"></string>
     <string name="clip_notification_copy_button">Copy </string>
     <string name="clip_notification_share_button">Share </string>
@@ -50,5 +50,9 @@
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>
     <string name="action_add">Add</string>
     <string name="toast_front_string">""</string>
+    <string name="action_delete_all">Clear all</string>
+    <string name="dialog_delete_all">Are you sure you want to clear all clips?</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
 
 </resources>

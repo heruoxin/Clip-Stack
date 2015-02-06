@@ -50,5 +50,9 @@
     <string name="title_activity_activity_get_share_text">复制到剪贴板</string>
     <string name="action_add">添加</string>
     <string name="toast_front_string">""</string>
+    <string name="action_delete_all">清除全部</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_delete_all">确定清除全部剪贴历史？</string>
 
 </resources>

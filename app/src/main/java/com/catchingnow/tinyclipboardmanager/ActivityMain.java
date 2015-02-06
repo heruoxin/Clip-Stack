@@ -1,10 +1,15 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -155,6 +160,9 @@ public class ActivityMain extends ActionBarActivity {
             case R.id.action_refresh:
                 setView(queryText);
                 return super.onOptionsItemSelected(item);
+            case R.id.action_delete_all:
+                clearAll();
+                return super.onOptionsItemSelected(item);
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
                 return super.onOptionsItemSelected(item);
@@ -224,6 +232,22 @@ public class ActivityMain extends ActionBarActivity {
         db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"), Storage.SYSTEM_CLIPBOARD);
+    }
+
+    private void clearAll() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.action_delete_all)
+                .setMessage(getString(R.string.dialog_delete_all))
+                .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.deleteClipHistoryBefore(0);
+                            }
+                        }
+                )
+                .setNegativeButton(getString(R.string.dialog_cancel), null)
+                .create()
+                .show();
     }
 
     public void actionAdd(View view) {
