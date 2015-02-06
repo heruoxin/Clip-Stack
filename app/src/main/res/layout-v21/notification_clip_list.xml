@@ -43,7 +43,7 @@
                 android:id="@+id/clip_share_button"
                 android:background="#00000000"
                 android:padding="2dp"
-                android:src="@drawable/ic_action_share"
+                android:src="@drawable/ic_notification_action_share"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="end"

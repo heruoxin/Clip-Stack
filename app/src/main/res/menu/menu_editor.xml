@@ -4,7 +4,7 @@
     tools:context="com.catchingnow.tinyclipboardmanager.ActivityEditor">
     <item
         android:id="@+id/action_share"
-        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
         app:showAsAction="ifRoom|withText" />
     <group>
