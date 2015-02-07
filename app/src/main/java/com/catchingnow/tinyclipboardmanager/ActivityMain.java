@@ -213,7 +213,7 @@ public class ActivityMain extends ActionBarActivity {
 
                             @Override
                             public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-
+                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
                             }
                         });
         recList.addOnItemTouchListener(touchListener);
