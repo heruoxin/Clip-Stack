@@ -1,15 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -183,7 +180,6 @@ public class ActivityMain extends ActionBarActivity {
         //get clips
         db = Storage.getInstance(this);
         final List<ClipObject> clips = db.getClipHistory(query);
-
         setContentView(R.layout.activity_main);
         recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
@@ -193,17 +189,17 @@ public class ActivityMain extends ActionBarActivity {
         final ClipCardAdapter ca = new ClipCardAdapter(clips, this);
         recList.setAdapter(ca);
 
-        SwipeDismissRecycleViewTouchListener touchListener =
-                new SwipeDismissRecycleViewTouchListener(
+        SwipeableRecyclerViewTouchListener touchListener =
+                new SwipeableRecyclerViewTouchListener(
                         recList,
-                        new SwipeDismissRecycleViewTouchListener.DismissCallbacks() {
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
-                            public boolean canDismiss(int position) {
+                            public boolean canSwipe(int position) {
                                 return true;
                             }
 
                             @Override
-                            public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
                                     db.modifyClip(clips.get(position).getText(), null, Storage.MAIN_ACTIVITY_VIEW);
@@ -212,14 +208,16 @@ public class ActivityMain extends ActionBarActivity {
                                             getString(R.string.toast_deleted),
                                             Toast.LENGTH_SHORT).show();
                                 }
-                                // do not call notifyItemRemoved for every item, it will cause gaps on deleting items
                                 ca.notifyDataSetChanged();
                             }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+
+                            }
                         });
-        recList.setOnTouchListener(touchListener);
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        recList.setOnScrollListener(touchListener.makeScrollListener());
+        recList.addOnItemTouchListener(touchListener);
+
     }
 
     private void firstLaunch() throws InterruptedException {
@@ -259,12 +257,13 @@ public class ActivityMain extends ActionBarActivity {
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
+        private View mView;
         public SimpleDateFormat sdfDate;
         public SimpleDateFormat sdfTime;
 
         public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
-            this.clipObjectList = clipObjectList;
             this.context = context;
+            this.clipObjectList = clipObjectList;
             sdfDate = new SimpleDateFormat(context.getString(R.string.date_formart));
             sdfTime = new SimpleDateFormat(context.getString(R.string.time_formart));
         }
@@ -276,7 +275,7 @@ public class ActivityMain extends ActionBarActivity {
 
         @Override
         public void onBindViewHolder(ClipCardViewHolder clipCardViewHolder, int i) {
-            ClipObject clipObject = clipObjectList.get(i);
+            final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
             clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
             clipCardViewHolder.vText.setText(clipObject.getText().trim());
@@ -302,7 +301,6 @@ public class ActivityMain extends ActionBarActivity {
                             .putExtra(StringActionIntentService.CLIPBOARD_STRING, string)
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
-                    refreshMainView();
                 }
             });
         }
@@ -315,7 +313,6 @@ public class ActivityMain extends ActionBarActivity {
                             .putExtra(StringActionIntentService.CLIPBOARD_STRING, string)
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
-                    refreshMainView();
                     return false;
                 }
             });
@@ -334,6 +331,7 @@ public class ActivityMain extends ActionBarActivity {
 
             public ClipCardViewHolder(View v) {
                 super(v);
+                mView = v;
                 vTime = (TextView) v.findViewById(R.id.activity_main_card_time);
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
