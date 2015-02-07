@@ -117,7 +117,21 @@ public class Storage {
         return clipsInMemory;
     }
 
+    public void deleteAllClipHistory() {
+        //for ActivityMain Clear All
+        isClipsInMemoryChanged = true;
+        open();
+        int row_id = db.delete(TABLE_NAME, CLIP_DATE + ">'" + 0 + "'", null);
+        Log.v(PACKAGE_NAME, "Closed by deleteClipHistoryBefore");
+        close();
+        if (row_id == -1) {
+            Log.e("Storage", "write db error: deleteAllClipHistory.");
+        }
+        refreshAllTypeOfList(0);
+    }
+
     public boolean deleteClipHistoryBefore(float days) {
+        //for bindJobScheduler
         isClipsInMemoryChanged = true;
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);

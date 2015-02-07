@@ -239,7 +239,7 @@ public class ActivityMain extends ActionBarActivity {
                 .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                db.deleteClipHistoryBefore(0);
+                                db.deleteAllClipHistory();
                             }
                         }
                 )
