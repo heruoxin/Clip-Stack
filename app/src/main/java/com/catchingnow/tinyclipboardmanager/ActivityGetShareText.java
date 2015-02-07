@@ -1,12 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.ActivityManager;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 
@@ -33,25 +33,42 @@ public class ActivityGetShareText extends ActionBarActivity {
         }
     }
 
-    protected void copyText(String clips) {
-        if (clips == null) {
+    protected void copyText(String clip) {
+        if (clip == null) {
             return;
         }
-        if ("".equals(clips)) {
+        if ("".equals(clip)) {
             return;
         }
         //copy clips to clipboard
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        cb.setText(clips);
+        cb.setText(clip);
 
-        if (clips.length() > 15) {
-            clips = clips.substring(0, 15) + "…";
+        //check service statues
+        //if no service, manually add clip to db
+        if (!isMyServiceRunning(CBWatcherService.class)) {
+            Storage db = Storage.getInstance(this);
+            db.modifyClip(null, clip, Storage.NOTIFICATION_VIEW);
+        }
+
+        if (clip.length() > 15) {
+            clip = clip.substring(0, 15) + "…";
         }
         Toast.makeText(this,
-                getString(R.string.toast_front_string) + clips + "\n" + getString(R.string.toast_end_string),
+                getString(R.string.toast_front_string) + clip + "\n" + getString(R.string.toast_end_string),
                 Toast.LENGTH_LONG
         ).show();
 
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
