@@ -125,7 +125,7 @@ public class Storage {
         int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
         Log.v(PACKAGE_NAME, "Closed by deleteClipHistoryBefore");
         close();
-        refreshAllTypeOfList(0);
+        refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
             return false;
