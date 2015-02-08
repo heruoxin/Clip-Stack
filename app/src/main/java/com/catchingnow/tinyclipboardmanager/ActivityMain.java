@@ -19,9 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.ActionClickListener;
+import com.nispok.snackbar.listeners.EventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -33,6 +38,7 @@ public class ActivityMain extends ActionBarActivity {
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private String queryText;
     private RecyclerView recList;
+    private ImageButton mFAB;
     private Storage db;
     private Context context;
 
@@ -180,7 +186,10 @@ public class ActivityMain extends ActionBarActivity {
         //get clips
         db = Storage.getInstance(this);
         final List<ClipObject> clips = db.getClipHistory(query);
+
+        //set view
         setContentView(R.layout.activity_main);
+        mFAB = (ImageButton) findViewById(R.id.main_fab);
         recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -202,11 +211,9 @@ public class ActivityMain extends ActionBarActivity {
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    db.modifyClip(clips.get(position).getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+                                    showSnackbar(position, clips.get(position), clipCardAdapter);
                                     clips.remove(position);
-                                    Toast.makeText(context,
-                                            getString(R.string.toast_deleted),
-                                            Toast.LENGTH_SHORT).show();
+
                                 }
                                 clipCardAdapter.notifyDataSetChanged();
                             }
@@ -218,6 +225,48 @@ public class ActivityMain extends ActionBarActivity {
                         });
         recList.addOnItemTouchListener(touchListener);
 
+    }
+
+    private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
+        final boolean[] isUndo = new boolean[1];
+        SnackbarManager.show(
+                Snackbar.with(getApplicationContext())
+                        .text(getString(R.string.toast_deleted))
+                        .actionLabel(getString(R.string.toast_undo))
+                        .actionColor(R.color.accent)
+                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                        .eventListener(new EventListener() {
+                            @Override
+                            public void onShow(Snackbar snackbar) {
+                                //mFAB.moveUp(snackbar.getHeight());
+                            }
+
+                            @Override
+                            public void onShown(Snackbar snackbar) {
+
+                            }
+
+                            @Override
+                            public void onDismiss(Snackbar snackbar) {
+                                //mFAB.moveDown(snackbar.getHeight());
+                            }
+
+                            @Override
+                            public void onDismissed(Snackbar snackbar) {
+                                if (isUndo[0]) {
+                                    return;
+                                }
+                                db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+                            }
+                        })
+                        .actionListener(new ActionClickListener() {
+                            @Override
+                            public void onActionClicked(Snackbar snackbar) {
+                                isUndo[0] = true;
+                                clipCardAdapter.add(position, clipObject);
+                            }
+                        })
+                , this);
     }
 
     private void firstLaunch() throws InterruptedException {
@@ -293,7 +342,7 @@ public class ActivityMain extends ActionBarActivity {
             return new ClipCardViewHolder(itemView);
         }
 
-        public void add(ClipObject clip, int position) {
+        public void add(int position, ClipObject clip) {
             clipObjectList.add(position, clip);
             notifyItemInserted(position);
         }

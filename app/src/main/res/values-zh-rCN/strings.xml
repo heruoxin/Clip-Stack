@@ -54,5 +54,6 @@
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
     <string name="dialog_delete_all">确定清除全部剪贴历史？</string>
+    <string name="toast_undo">撤销</string>
 
 </resources>

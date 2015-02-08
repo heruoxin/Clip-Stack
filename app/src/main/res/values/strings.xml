@@ -54,5 +54,6 @@
     <string name="dialog_delete_all">Are you sure you want to clear all clips?</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="toast_undo">Undo</string>
 
 </resources>

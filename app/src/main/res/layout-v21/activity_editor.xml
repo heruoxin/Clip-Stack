@@ -41,7 +41,7 @@
                 android:background="@color/accent" />
 
             <ImageButton
-                android:id="@+id/fab"
+                android:id="@+id/main_fab"
                 android:contentDescription="@string/action_save"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
