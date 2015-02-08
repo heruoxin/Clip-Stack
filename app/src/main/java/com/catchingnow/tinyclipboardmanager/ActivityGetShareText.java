@@ -48,7 +48,7 @@ public class ActivityGetShareText extends ActionBarActivity {
         //if no service, manually add clip to db
         if (!isMyServiceRunning(CBWatcherService.class)) {
             Storage db = Storage.getInstance(this);
-            db.modifyClip(null, clip, Storage.NOTIFICATION_VIEW);
+            db.modifyClip(null, clip, Storage.SYSTEM_CLIPBOARD);
         }
 
         if (clip.length() > 15) {
