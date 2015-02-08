@@ -214,8 +214,7 @@ public class ActivityMain extends ActionBarActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    clips.remove(position);
-                                    clipCardAdapter.notifyItemRemoved(position);
+                                    clipCardAdapter.remove(position);
                                 }
                                 clipCardAdapter.notifyDataSetChanged();
                             }
@@ -344,9 +343,19 @@ public class ActivityMain extends ActionBarActivity {
             return new ClipCardViewHolder(itemView);
         }
 
-        public void add(int position, ClipObject clip) {
-            clipObjectList.add(position, clip);
+        public void add(int position, ClipObject clipObject) {
+            clipObjectList.add(position, clipObject);
             notifyItemInserted(position);
+        }
+
+        public void remove(ClipObject clipObject) {
+            int position = clipObjectList.indexOf(clipObject);
+            remove(position);
+        }
+
+        public void remove(int position) {
+            clipObjectList.remove(position);
+            notifyItemRemoved(position);
         }
 
         public void addClickStringAction(final Context context, final String string, final int actionCode, View button) {
