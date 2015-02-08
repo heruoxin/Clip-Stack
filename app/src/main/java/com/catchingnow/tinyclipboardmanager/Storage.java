@@ -230,7 +230,6 @@ public class Storage {
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
-        Log.v(PACKAGE_NAME, "Closed111 by modifyClip"+notUpdateWhich);
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
             updateSystemClipboard(true);
             //CBWatcherService.startCBService(c, true);

@@ -43,6 +43,7 @@ public class ActivityMain extends ActionBarActivity {
     private ImageButton mFAB;
     private Storage db;
     private Context context;
+    private int isSnackbarShow = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,7 +213,6 @@ public class ActivityMain extends ActionBarActivity {
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-
                                     showSnackbar(position, clips.get(position), clipCardAdapter);
                                     clipCardAdapter.remove(position);
                                 }
@@ -244,16 +244,20 @@ public class ActivityMain extends ActionBarActivity {
 
                             @Override
                             public void onShown(Snackbar snackbar) {
-
+                                isSnackbarShow += 1;
                             }
 
                             @Override
                             public void onDismiss(Snackbar snackbar) {
-                                mFAB.animate().translationY(0);
+                                isSnackbarShow -= 1;
                             }
 
                             @Override
                             public void onDismissed(Snackbar snackbar) {
+                                if (isSnackbarShow <= 0) {
+                                    isSnackbarShow = 0;
+                                    mFAB.animate().translationY(0);
+                                }
                                 if (isUndo[0]) {
                                     return;
                                 }
