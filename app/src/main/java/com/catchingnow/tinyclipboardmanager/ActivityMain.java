@@ -183,11 +183,11 @@ public class ActivityMain extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-        final ClipCardAdapter ca = new ClipCardAdapter(clips, this);
-        recList.setAdapter(ca);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(linearLayoutManager);
+        final ClipCardAdapter clipCardAdapter = new ClipCardAdapter(clips, this);
+        recList.setAdapter(clipCardAdapter);
 
         SwipeableRecyclerViewTouchListener touchListener =
                 new SwipeableRecyclerViewTouchListener(
@@ -208,7 +208,7 @@ public class ActivityMain extends ActionBarActivity {
                                             getString(R.string.toast_deleted),
                                             Toast.LENGTH_SHORT).show();
                                 }
-                                ca.notifyDataSetChanged();
+                                clipCardAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -293,6 +293,11 @@ public class ActivityMain extends ActionBarActivity {
             return new ClipCardViewHolder(itemView);
         }
 
+        public void add(ClipObject clip, int position) {
+            clipObjectList.add(position, clip);
+            notifyItemInserted(position);
+        }
+
         public void addClickStringAction(final Context context, final String string, final int actionCode, View button) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -316,11 +321,6 @@ public class ActivityMain extends ActionBarActivity {
                     return false;
                 }
             });
-        }
-
-        private void refreshMainView() {
-            Intent i = new Intent(context, ActivityMain.class);
-            context.startActivity(i);
         }
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {
