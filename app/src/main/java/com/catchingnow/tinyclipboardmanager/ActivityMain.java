@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -212,10 +214,6 @@ public class ActivityMain extends ActionBarActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                                        setView(queryText);
-                                        return;
-                                    }
                                     clips.remove(position);
                                     clipCardAdapter.notifyItemRemoved(position);
                                 }
@@ -237,12 +235,12 @@ public class ActivityMain extends ActionBarActivity {
                 Snackbar.with(getApplicationContext())
                         .text(getString(R.string.toast_deleted))
                         .actionLabel(getString(R.string.toast_undo))
-                        .actionColor(R.color.accent)
+                        .actionColor(getResources().getColor(R.color.accent))
                         .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
                         .eventListener(new EventListener() {
                             @Override
                             public void onShow(Snackbar snackbar) {
-                                //mFAB.moveUp(snackbar.getHeight());
+                                mFAB.animate().translationY(-snackbar.getHeight());
                             }
 
                             @Override
@@ -252,7 +250,7 @@ public class ActivityMain extends ActionBarActivity {
 
                             @Override
                             public void onDismiss(Snackbar snackbar) {
-                                //mFAB.moveDown(snackbar.getHeight());
+                                mFAB.animate().translationY(0);
                             }
 
                             @Override
