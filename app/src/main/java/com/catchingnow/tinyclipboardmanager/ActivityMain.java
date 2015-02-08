@@ -212,8 +212,12 @@ public class ActivityMain extends ActionBarActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     showSnackbar(position, clips.get(position), clipCardAdapter);
+                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                                        setView(queryText);
+                                        return;
+                                    }
                                     clips.remove(position);
-
+                                    clipCardAdapter.notifyItemRemoved(position);
                                 }
                                 clipCardAdapter.notifyDataSetChanged();
                             }
