@@ -46,7 +46,7 @@
     <string name="first_launch_clips_0">欢迎使用「剪纸堆」  %1$s</string>
     <string name="first_launch_clips_1">它可以记录剪贴板历史，并显示在通知栏。</string>
     <string name="first_launch_clips_2">点击此文本%1$s即可编辑。</string>
-    <string name="first_launch_clips_3">%1$s 从边缘滑动即可删除。%2$s</string>
+    <string name="first_launch_clips_3">%1$s 滑动即可删除。%2$s</string>
     <string name="title_activity_activity_get_share_text">复制到剪贴板</string>
     <string name="action_add">添加</string>
     <string name="toast_front_string">""</string>
@@ -55,5 +55,6 @@
     <string name="dialog_ok">确定</string>
     <string name="dialog_delete_all">确定清除全部剪贴历史？</string>
     <string name="toast_undo">撤销</string>
+    <string name="title_activity_activity_export_and_import">导入和导出</string>
 
 </resources>

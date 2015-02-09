@@ -277,7 +277,7 @@ public class ActivityMain extends ActionBarActivity {
     private void firstLaunch() throws InterruptedException {
         db = Storage.getInstance(this);
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", ""), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clips_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
