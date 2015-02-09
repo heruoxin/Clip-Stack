@@ -80,8 +80,21 @@ public class Storage {
         }
     }
 
-    public List<ClipObject> getClipHistory() {
-        return getClipHistory("");
+    public List<ClipObject> getClipHistory(String queryString) {
+        List<ClipObject> allClips = getClipHistory();
+        if ("".equals(queryString)) {
+            return allClips;
+        }
+        if (queryString == null) {
+            return allClips;
+        }
+        List<ClipObject> queryClips = new ArrayList<>();
+        for (ClipObject clip:allClips) {
+            if(clip.getText().contains(queryString)) {
+                queryClips.add(clip);
+            }
+        }
+        return queryClips;
     }
 
     public List<ClipObject> getClipHistory(int n) {
@@ -94,17 +107,14 @@ public class Storage {
         return thisClips;
     }
 
-    public List<ClipObject> getClipHistory(String queryString) {
+    public List<ClipObject> getClipHistory() {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
             String[] COLUMNS = {CLIP_STRING, CLIP_DATE};
             Cursor c;
-            if (queryString == null) {
-                c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
-            } else {
-                c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
-            }
+            c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+            //c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<ClipObject>();
             while (c.moveToNext()) {
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
@@ -177,7 +187,7 @@ public class Storage {
         modifyClip(oldClip, newClip, 0);
     }
 
-    public void modifyClip(String oldClip, String newClip,  int notUpdateWhich) {
+    public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
         isClipsInMemoryChanged = true;
         if (oldClip == null) {
             oldClip = "";
@@ -196,7 +206,7 @@ public class Storage {
         if (!oldClip.equals("")) {
             deleteClipHistory(oldClip);
         }
-        Log.v(PACKAGE_NAME, "Closed by modifyClip:"+notUpdateWhich);
+        Log.v(PACKAGE_NAME, "Closed by modifyClip:" + notUpdateWhich);
         Log.v(PACKAGE_NAME, oldClip);
         close();
 
@@ -210,13 +220,13 @@ public class Storage {
             topClipInStack = getClipHistory().get(0).getText();
         }
         //sync system clipboard and storage.
-        Log.v(PACKAGE_NAME,"Change topStack, topClipInStack is:"+topClipInStack);
+        Log.v(PACKAGE_NAME, "Change topStack, topClipInStack is:" + topClipInStack);
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    Log.v(PACKAGE_NAME,"Change topStack, thisClip is:"+thisClip.toString());
+                    Log.v(PACKAGE_NAME, "Change topStack, thisClip is:" + thisClip.toString());
                     if (!thisClip.toString().equals(topClipInStack)) {
                         cb.setText(topClipInStack);
                         return;
