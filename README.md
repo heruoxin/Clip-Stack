@@ -43,6 +43,7 @@
 
 - Support Android 4.1 above and work better with Android 📍Lollipop. 👍
 
+![screenshot](http://ww4.sinaimg.cn/large/66cab368gw1ep3ki6o4yzj21eq0h67am.jpg)
 
 #剪纸堆
 
@@ -67,7 +68,7 @@
 
 - Material Design
 
-    📌 不仅图标和颜色，剪纸堆的每一个像素都遵循 Material design 设计标准。尽我可能的利用了 Android 📍Lollipop 的新特性。
+    📌 不仅图标和颜色，剪纸堆的每一个细节都遵循 Material design 设计标准。尽我可能的利用了 Android 📍Lollipop 的新特性。
 
 - 自动清理
 
@@ -76,17 +77,11 @@
 
 - 其他特性
 
-    ✓  免费
-    ✓  开源
-    ✓  无广告
+    ✓  免费 ✓  开源 ✓  无广告
 
 
 - 支持 4.1 以上的所有版本 Android 系统，与 Android 5.0📍Lollipop 最为搭配。
 
-- 源代码：
-
-    https://github.com/heruoxin/Clipping-Stack
-
----------------------
+----------
 
 强迫症患者注意：这个程序会在后台保留一个服务来跟踪剪贴板变动，没有任何其他权限，日常使用对电池续航毫无影响。请别任性的杀掉它，真的不需要的话设置里有开关……
