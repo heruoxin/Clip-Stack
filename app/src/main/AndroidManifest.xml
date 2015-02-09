@@ -78,9 +78,19 @@
             android:label="@string/title_activity_activity_get_share_text" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityExportAndImport"
+            android:label="@string/title_activity_activity_export_and_import"
+            android:parentActivityName=".ActivityMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
         </activity>
     </application>
 
