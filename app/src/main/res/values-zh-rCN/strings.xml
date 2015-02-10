@@ -57,5 +57,8 @@
     <string name="toast_undo">撤销</string>
     <string name="title_activity_activity_export_and_import">导入和导出</string>
     <string name="backup_file_name">剪纸堆备份</string>
+    <string name="action_export">导出</string>
+    <string name="export_success">导出成功：</string>
+    <string name="export_failed">导出失败，可能是没有SD卡或者空间不足。</string>
 
 </resources>

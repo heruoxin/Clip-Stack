@@ -61,5 +61,7 @@
     <string name="title_section3">Section 3</string>
     <string name="backup_file_name">Clipping Now Backup</string>
     <string name="action_export">Export</string>
+    <string name="export_success">Export success: </string>
+    <string name="export_failed">Export failed. Maybe no SD-card or it\'s full.</string>
 
 </resources>
