@@ -120,7 +120,6 @@ public class Storage {
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
             }
             c.close();
-            Log.v(PACKAGE_NAME, "Closed by getClipHistory");
             close();
             isClipsInMemoryChanged = false;
         }
@@ -140,7 +139,6 @@ public class Storage {
         isClipsInMemoryChanged = true;
         open();
         int row_id = db.delete(TABLE_NAME, CLIP_DATE + ">'" + 0 + "'", null);
-        Log.v(PACKAGE_NAME, "Closed by deleteClipHistoryBefore");
         close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteAllClipHistory.");
@@ -156,7 +154,6 @@ public class Storage {
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
         int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
-        Log.v(PACKAGE_NAME, "Closed by deleteClipHistoryBefore");
         close();
         refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
         refreshTopClipInStack();
@@ -168,7 +165,6 @@ public class Storage {
     }
 
     private boolean deleteClipHistory(String query) {
-        Log.v(PACKAGE_NAME, "DEL CLIP:" + query);
         int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
@@ -178,7 +174,6 @@ public class Storage {
     }
 
     private boolean addClipHistory(String currentString) {
-        Log.v(PACKAGE_NAME, "ADD CLIP:" + currentString);
         deleteClipHistory(currentString);
         Date date = new Date();
         long timeStamp = date.getTime();
@@ -198,7 +193,6 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
-        Log.v(PACKAGE_NAME, "CLIPBOARD CHANGED modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich);
         isClipsInMemoryChanged = true;
         if (oldClip == null) {
             oldClip = "";
@@ -212,7 +206,6 @@ public class Storage {
         if (newClip.equals(topClipInStack)) {
             return;
         }
-        Log.v(PACKAGE_NAME, "Opened by modifyClip");
         open();
         if (!newClip.equals("")) {
             addClipHistory(newClip);
@@ -220,7 +213,6 @@ public class Storage {
         if (!oldClip.equals("")) {
             deleteClipHistory(oldClip);
         }
-        Log.v(PACKAGE_NAME, "Closed by modifyClip:" + notUpdateWhich + "-" + oldClip);
         close();
 
         refreshTopClipInStack();
@@ -229,16 +221,13 @@ public class Storage {
     }
 
     private void updateSystemClipboard(boolean alsoStartService) {
-        Log.v(PACKAGE_NAME, "CLIPBOARD CHANGED updateSystemClipboard "+alsoStartService);
 
         //sync system clipboard and storage.
-        Log.v(PACKAGE_NAME, "Change topStack, topClipInStack is:" + topClipInStack);
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    Log.v(PACKAGE_NAME, "CLIPBOARD CHANGED Change topStack, thisClip is:" + thisClip.toString());
                     if (!thisClip.toString().equals(topClipInStack)) {
                         cb.setText(topClipInStack);
                         return;

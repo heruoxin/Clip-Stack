@@ -31,6 +31,7 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -165,6 +166,9 @@ public class ActivityMain extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
             case R.id.action_refresh:
                 setView(queryText);
+                return super.onOptionsItemSelected(item);
+            case R.id.action_export:
+                ImportAndExport.makeExport(context, new Date(2000-1900, 12-1, 12), new Date(2022-1900, 12-1, 12), false);
                 return super.onOptionsItemSelected(item);
             case R.id.action_delete_all:
                 clearAll();

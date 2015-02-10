@@ -56,5 +56,6 @@
     <string name="dialog_delete_all">确定清除全部剪贴历史？</string>
     <string name="toast_undo">撤销</string>
     <string name="title_activity_activity_export_and_import">导入和导出</string>
+    <string name="backup_file_name">剪纸堆备份</string>
 
 </resources>
