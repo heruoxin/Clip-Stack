@@ -13,7 +13,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by heruoxin on 14/12/9.
@@ -98,13 +97,13 @@ public class Storage {
     }
 
     public List<ClipObject> getClipHistory(int n) {
-        List<ClipObject> ClipHistory = getClipHistory();
-        List<ClipObject> thisClips = new ArrayList<ClipObject>();
-        n = (n > ClipHistory.size() ? ClipHistory.size() : n);
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> queryClips = new ArrayList<>();
+        n = (n > allClips.size() ? allClips.size() : n);
         for (int i = 0; i < n; i++) {
-            thisClips.add(ClipHistory.get(i));
+            queryClips.add(allClips.get(i));
         }
-        return thisClips;
+        return queryClips;
     }
 
     public List<ClipObject> getClipHistory() {
@@ -195,7 +194,7 @@ public class Storage {
         if (newClip == null) {
             newClip = "";
         }
-        if (newClip.equals(oldClip)) {
+        if (newClip.equals(oldClip) || newClip.equals(getClipHistory(1).get(0).getText())) {
             return;
         }
         Log.v(PACKAGE_NAME, "Opened by modifyClip");
