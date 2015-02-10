@@ -55,10 +55,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="toast_undo">Undo</string>
-    <string name="title_activity_activity_export_and_import">Import &amp; Export</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="backup_file_name">Clipping Now Backup</string>
     <string name="action_export">Export</string>
     <string name="export_success">Export success: </string>
