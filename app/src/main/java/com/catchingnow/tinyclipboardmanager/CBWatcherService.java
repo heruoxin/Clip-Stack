@@ -122,7 +122,8 @@ public class CBWatcherService extends Service {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
-                if (thisClip != null) {
+                if (thisClip != null && !"".equals(thisClip.toString().trim())) {
+                    Log.v(PACKAGE_NAME, "CLIPBOARD CHANGED");
                     if (isMyActivitiesOnForeground <= 0) {
                         db.modifyClip(null, thisClip.toString(), Storage.MAIN_ACTIVITY_VIEW);
                     } else {
