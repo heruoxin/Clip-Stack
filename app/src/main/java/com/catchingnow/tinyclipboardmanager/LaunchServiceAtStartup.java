@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
 //            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
 //            boolean forceShowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
 //            CBWatcherService.startCBService(context, forceShowNotification);
+            Log.v(ActivityMain.PACKAGE_NAME, "LaunchServiceAtStartup");
             CBWatcherService.startCBService(context, true);
             Storage db = Storage.getInstance(context);
             List<ClipObject> clipObjects = db.getClipHistory();

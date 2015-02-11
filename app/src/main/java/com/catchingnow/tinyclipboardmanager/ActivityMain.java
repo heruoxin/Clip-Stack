@@ -52,16 +52,14 @@ public class ActivityMain extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.icon_shadow);
         context = this.getBaseContext();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CBWatcherService.startCBService(context, false);
-        } else {
-            CBWatcherService.startCBService(context, false, true);
-        }
         queryText = "";
     }
 
     @Override
     protected void onStop() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CBWatcherService.startCBService(context, false, true);
+        }
         super.onStop();
     }
 
@@ -74,7 +72,8 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onResume() {
         setView(queryText);
-        CBWatcherService.startCBService(context, true, 1);
+        Log.v(PACKAGE_NAME, "ActivityMain onResume");
+        CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
         //check if first launch
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);

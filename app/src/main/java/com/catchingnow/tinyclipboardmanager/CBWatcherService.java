@@ -69,10 +69,12 @@ public class CBWatcherService extends Service {
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
+                Log.v(PACKAGE_NAME, "onStartCommand cleanUpSqlite");
                 cleanUpSqlite();
             }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
+                Log.v(PACKAGE_NAME, "onStartCommand showNotification");
                 showNotification();
             }
 

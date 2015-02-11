@@ -155,7 +155,7 @@ public class Storage {
         open();
         int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
         close();
-        refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
+        //refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
         refreshTopClipInStack();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
@@ -193,6 +193,7 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
+        Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich);
         isClipsInMemoryChanged = true;
         if (oldClip == null) {
             oldClip = "";
@@ -204,6 +205,7 @@ public class Storage {
             return;
         }
         if (newClip.equals(topClipInStack)) {
+            Log.v(PACKAGE_NAME,"Equals to TopStack");
             return;
         }
         open();
@@ -236,6 +238,7 @@ public class Storage {
             }
         }
         if (alsoStartService) {
+            Log.v(PACKAGE_NAME, "Storage updateSystemClipboard");
             CBWatcherService.startCBService(c, true);
         }
     }
@@ -249,6 +252,7 @@ public class Storage {
             ActivityMain.refreshMainView(c, "");
         } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
             ActivityMain.refreshMainView(c, "");
+            Log.v(PACKAGE_NAME, "Storage refreshAllTypeOfList");
             CBWatcherService.startCBService(c, true);
         } else {
             updateSystemClipboard(true);

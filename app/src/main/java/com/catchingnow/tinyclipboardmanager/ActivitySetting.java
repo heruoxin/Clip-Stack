@@ -7,6 +7,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -31,6 +32,7 @@ public class ActivitySetting extends PreferenceActivity {
                 switch (key) {
                     case SERVICE_STATUS:
                     case NOTIFICATION_ALWAYS_SHOW:
+                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION_ALWAYS_SHOW or SERVICE_STATUS");
                         CBWatcherService.startCBService(c, true);
                         break;
                     case SAVE_DATES:
