@@ -167,7 +167,7 @@ public class ActivityMain extends ActionBarActivity {
                 setView(queryText);
                 return super.onOptionsItemSelected(item);
             case R.id.action_export:
-                showExportDialog();
+                startActivity(new Intent(context, ActivityExport.class));
                 return super.onOptionsItemSelected(item);
             case R.id.action_delete_all:
                 clearAll();
@@ -229,12 +229,6 @@ public class ActivityMain extends ActionBarActivity {
                         });
         recList.addOnItemTouchListener(touchListener);
 
-    }
-
-    private void showExportDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        ExportDialog exportDialog = new ExportDialog();
-        exportDialog.show(fragmentManager, "fragment_export");
     }
 
     private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
@@ -315,21 +309,6 @@ public class ActivityMain extends ActionBarActivity {
         Intent i = new Intent(this, StringActionIntentService.class)
                 .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
         startService(i);
-    }
-
-    public static class ExportDialog extends DialogFragment {
-
-        public ExportDialog() {
-
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.dialog_export, container);
-            getDialog().setTitle(getString(R.string.action_export));
-            return view;
-        }
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {

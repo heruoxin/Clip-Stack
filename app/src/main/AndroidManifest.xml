@@ -85,6 +85,14 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActivityExport"
+            android:label="@string/title_activity_activity_export"
+            android:parentActivityName=".ActivityMain" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
+        </activity>
     </application>
 
 </manifest>

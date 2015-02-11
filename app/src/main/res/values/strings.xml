@@ -2,11 +2,11 @@
 <resources>
 
     <string name="app_name">ClippingStack</string>
-    <string name="clip_notification_title"></string>
+    <string name="clip_notification_title"/>
     <string name="clip_notification_copy_button">Copy </string>
     <string name="clip_notification_share_button">Share </string>
     <string name="clip_notification_big_title">Recent clipboards</string>
-    <string name="clip_notification_big_summary_text"></string>
+    <string name="clip_notification_big_summary_text"/>
     <string name="toast_end_string">has copied</string>
     <string name="clip_notification_text">Expand to show more.</string>
     <string name="clip_notification_single_text">Click to add text.</string>
@@ -64,5 +64,6 @@
     <string name="dialog_date_piker_to">To:</string>
     <string name="pref_notification_summary_on">Show notification.</string>
     <string name="pref_notification_summary_off">Don\'t show any notification.</string>
+    <string name="title_activity_activity_export">Export</string>
 
 </resources>
