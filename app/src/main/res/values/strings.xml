@@ -59,5 +59,7 @@
     <string name="action_export">Export</string>
     <string name="export_success">Export success: </string>
     <string name="export_failed">Export failed. Maybe no SD-card or it\'s full.</string>
+    <string name="dialog_date_piker_from">From:</string>
+    <string name="dialog_date_piker_to">To:</string>
 
 </resources>

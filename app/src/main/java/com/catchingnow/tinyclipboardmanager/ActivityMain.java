@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,8 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -168,7 +168,7 @@ public class ActivityMain extends ActionBarActivity {
                 setView(queryText);
                 return super.onOptionsItemSelected(item);
             case R.id.action_export:
-                ImportAndExport.makeExport(context, new Date(2000-1900, 12-1, 12), new Date(2022-1900, 12-1, 12), false);
+                showExportDialog();
                 return super.onOptionsItemSelected(item);
             case R.id.action_delete_all:
                 clearAll();
@@ -230,6 +230,12 @@ public class ActivityMain extends ActionBarActivity {
                         });
         recList.addOnItemTouchListener(touchListener);
 
+    }
+
+    private void showExportDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ExportDialog exportDialog = new ExportDialog();
+        exportDialog.show(fragmentManager, "fragment_export");
     }
 
     private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
@@ -310,6 +316,21 @@ public class ActivityMain extends ActionBarActivity {
         Intent i = new Intent(this, StringActionIntentService.class)
                 .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
         startService(i);
+    }
+
+    public static class ExportDialog extends DialogFragment {
+
+        public ExportDialog() {
+
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.dialog_export, container);
+            getDialog().setTitle(getString(R.string.action_export));
+            return view;
+        }
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {

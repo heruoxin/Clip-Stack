@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="420dp"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_left"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_piker_from"
+                    android:text="@string/dialog_date_piker_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <DatePicker
+                    android:layout_width="match_parent"
+                    android:layout_height="340dp"
+                    android:scaleY="0.95"
+                    android:scaleX="0.95"
+                    android:id="@+id/date_picker_from"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_right"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_piker_to"
+                    android:text="@string/dialog_date_piker_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <DatePicker
+                    android:layout_width="match_parent"
+                    android:layout_height="340dp"
+                    android:scaleY="0.95"
+                    android:scaleX="0.95"
+                    android:id="@+id/date_picker_to"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_left"
+                android:layout_alignParentBottom="true"
+                android:text="Reverse sort clips"
+                android:id="@+id/switch1" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:text="@string/action_export"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
