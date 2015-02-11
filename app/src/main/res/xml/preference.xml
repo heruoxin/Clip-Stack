@@ -8,12 +8,19 @@
             android:key="pref_start_service"
             android:defaultValue="true" />
         <SwitchPreference
-            android:title="@string/pref_notification_title"
-            android:key="pref_notification_always_show"
-            android:summaryOn="@string/pref_notification_summary_on"
-            android:summaryOff="@string/pref_notification_summary_off"
-            android:defaultValue="false"
+            android:title="Notification"
+            android:key="pref_notification_show"
+            android:summaryOn="Show notification."
+            android:summaryOff="Don't show any notification."
+            android:defaultValue="true"
             android:dependency="pref_start_service" />
+        <SwitchPreference
+            android:title="@string/pref_notification_pin_title"
+            android:key="pref_notification_pin"
+            android:summaryOn="@string/pref_notification_pin_summary_on"
+            android:summaryOff="@string/pref_notification_pin_summary_off"
+            android:defaultValue="false"
+            android:dependency="pref_notification_show" />
         <!-- <SwitchPreference
             android:title="Display"
             android:summary="Show icon in launcher"

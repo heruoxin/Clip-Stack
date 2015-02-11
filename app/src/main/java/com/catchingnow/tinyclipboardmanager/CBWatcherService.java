@@ -35,6 +35,7 @@ public class CBWatcherService extends Service {
     private final static String STORAGE_DATE = "pref_save_dates";
     public int NUMBER_OF_CLIPS = 6; //3-9
     private NotificationManager notificationManager;
+    private SharedPreferences preference;
     private Storage db;
     private boolean onListened = false;
     private int isMyActivitiesOnForeground = 0;
@@ -48,6 +49,8 @@ public class CBWatcherService extends Service {
     public void onCreate() {
         Log.v(PACKAGE_NAME, "onCreate");
         if (!onListened) {
+            preference = PreferenceManager.getDefaultSharedPreferences(this);
+            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             db = Storage.getInstance(this.getBaseContext());
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -78,7 +81,6 @@ public class CBWatcherService extends Service {
                 showNotification();
             }
 
-            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
             if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
                 if (isMyActivitiesOnForeground <= 0) {
                     stopSelf();
@@ -99,7 +101,6 @@ public class CBWatcherService extends Service {
     @Override
     public void onDestroy() {
         Log.v(PACKAGE_NAME, "onDes");
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
         onListened = false;
@@ -136,7 +137,6 @@ public class CBWatcherService extends Service {
     }
 
     private void cleanUpSqlite() {
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
         Log.v(PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
@@ -146,7 +146,19 @@ public class CBWatcherService extends Service {
         db.deleteClipHistoryBefore(days);
     }
 
+    private boolean checkNotificationPermission() {
+        boolean allowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_SHOW, true);
+        if (!allowNotification) {
+            notificationManager.cancel(0);
+        }
+        return allowNotification;
+    }
+
     private void showNotification() {
+
+        if (!checkNotificationPermission()) {
+            return;
+        }
 
         List<String> thisClipText = new ArrayList<String>();
         if (db == null) {
@@ -172,8 +184,7 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
 
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
@@ -202,12 +213,16 @@ public class CBWatcherService extends Service {
 
         n.bigContentView = bigView.build();
 
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
     }
 
     private void showSingleNotification() {
+
+        if (!checkNotificationPermission()) {
+            return;
+        }
+
         String currentClip = "Clipboard is empty.";
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
@@ -220,8 +235,7 @@ public class CBWatcherService extends Service {
             }
         }
 
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_ALWAYS_SHOW, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
 
         Intent resultIntent = new Intent(this, ActivityMain.class);
         PendingIntent resultPendingIntent =
@@ -249,7 +263,6 @@ public class CBWatcherService extends Service {
     }
         Notification n = preBuildN.build();
 
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
     }

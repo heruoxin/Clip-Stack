@@ -2,22 +2,19 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 public class ActivitySetting extends PreferenceActivity {
 
-    public final static String NOTIFICATION_ALWAYS_SHOW = "pref_notification_always_show";
+    public final static String NOTIFICATION_SHOW = "pref_notification_show";
+    public final static String NOTIFICATION_PIN = "pref_notification_pin";
     public final static String SERVICE_STATUS = "pref_start_service";
     public final static String SAVE_DATES = "pref_save_dates";
     public final static String LAST_ACTIVE_THIS = "pref_last_active_this";
@@ -31,8 +28,9 @@ public class ActivitySetting extends PreferenceActivity {
                                                   String key) {
                 switch (key) {
                     case SERVICE_STATUS:
-                    case NOTIFICATION_ALWAYS_SHOW:
-                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION_ALWAYS_SHOW or SERVICE_STATUS");
+                    case NOTIFICATION_SHOW:
+                    case NOTIFICATION_PIN:
+                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION or SERVICE_STATUS");
                         CBWatcherService.startCBService(c, true);
                         break;
                     case SAVE_DATES:
