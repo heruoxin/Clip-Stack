@@ -1,13 +1,8 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -25,7 +20,7 @@ import java.util.List;
 /**
  * Created by heruoxin on 15/2/10.
  */
-public class ImportAndExport {
+public class Export {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
 
     private static boolean isExternalStorageReadable() {
@@ -39,28 +34,21 @@ public class ImportAndExport {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static File getBackupStorageDir(Context context, Date backupDate) {
+    private static File getBackupStorage(Context context, Date backupDate) {
         // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS), context.getString(R.string.backup_file_name) + backupDate + ".txt");
-        return file;
+        return new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS), context.getString(R.string.backup_file_name) + backupDate + ".txt");
     }
 
-    public static void exportDialog(Context context) {
-
-    }
 
     public static boolean makeExport(Context context, Date startDate, Date endDate, boolean reverse) {
+        Log.v(ActivityMain.PACKAGE_NAME, "EXPORT:"+startDate.toString()+endDate.toString());
         if (!isExternalStorageWritable()) {
             return false;
         }
         List<ClipObject> clipObjects = Storage.getInstance(context).getClipHistory();
-        if (reverse) { //reverse
-            Collections.reverse(clipObjects);
-        }
+
         List<String> backupStringList = new ArrayList<>();
-        backupStringList.add(context.getString(R.string.backup_file_name));
         for (ClipObject clipObject : clipObjects) { //delete out of date clips
             Date clipObjectDate = clipObject.getDate();
             if (clipObjectDate.after(startDate) && clipObjectDate.before(endDate)) {
@@ -68,7 +56,13 @@ public class ImportAndExport {
             }
         }
 
-        File backupFile = getBackupStorageDir(context, new Date());
+        if (reverse) { //reverse
+            Collections.reverse(backupStringList);
+        }
+
+        backupStringList.add(0, context.getString(R.string.backup_file_name));
+
+        File backupFile = getBackupStorage(context, new Date());
         try {
             if (!backupFile.exists()) {
                 backupFile.createNewFile();

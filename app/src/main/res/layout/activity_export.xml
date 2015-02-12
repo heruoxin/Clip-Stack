@@ -89,9 +89,10 @@
         android:layout_margin="8dp"
         android:layout_marginTop="2dp"
         android:textSize="@dimen/abc_text_size_body_1_material"
-        android:id="@+id/switch1" />
+        android:id="@+id/switch_reverse_sort" />
 
     <Button
+        android:id="@+id/export_button"
         android:text="@string/action_export"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
