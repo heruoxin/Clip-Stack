@@ -175,7 +175,8 @@ public class CBWatcherService extends Service {
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
-        Intent resultIntent = new Intent(this, ActivityMain.class);
+        Intent resultIntent = new Intent(this, ActivityMain.class)
+                .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
@@ -237,7 +238,8 @@ public class CBWatcherService extends Service {
 
         boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
 
-        Intent resultIntent = new Intent(this, ActivityMain.class);
+        Intent resultIntent = new Intent(this, ActivityMain.class)
+                .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,

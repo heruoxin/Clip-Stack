@@ -35,6 +35,7 @@ import java.util.List;
 public class ActivityMain extends ActionBarActivity {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
+    public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private String queryText;
     private RecyclerView recList;
@@ -42,6 +43,7 @@ public class ActivityMain extends ActionBarActivity {
     private Storage db;
     private Context context;
     private int isSnackbarShow = 0;
+    private boolean isFromNotification = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,7 @@ public class ActivityMain extends ActionBarActivity {
             }
             setView(queryText);
         }
+        isFromNotification = intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false);
         super.onNewIntent(intent);
     }
 
@@ -382,6 +385,9 @@ public class ActivityMain extends ActionBarActivity {
                             .putExtra(StringActionIntentService.CLIPBOARD_STRING, string)
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
+                    if (isFromNotification) {
+                        finish();
+                    }
                     return false;
                 }
             });
