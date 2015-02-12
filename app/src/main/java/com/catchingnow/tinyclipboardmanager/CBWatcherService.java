@@ -148,10 +148,12 @@ public class CBWatcherService extends Service {
 
     private boolean checkNotificationPermission() {
         boolean allowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_SHOW, true);
-        if (!allowNotification) {
-            notificationManager.cancel(0);
+        boolean allowService = preference.getBoolean(ActivitySetting.SERVICE_STATUS, true);
+        if (allowNotification && allowService) {
+            return true;
         }
-        return allowNotification;
+        notificationManager.cancel(0);
+        return false;
     }
 
     private void showNotification() {
