@@ -8,11 +8,13 @@
         android:title="@string/action_search"
         app:showAsAction="collapseActionView|ifRoom|withText"
         app:actionViewClass="android.widget.SearchView" />
+    <!--
     <item
         android:id="@+id/action_refresh"
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="never" />
+        -->
     <item
         android:id="@+id/action_export"
         android:title="@string/action_export"
