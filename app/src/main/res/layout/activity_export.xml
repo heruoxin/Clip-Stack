@@ -85,7 +85,7 @@
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reverse sort"
+        android:text="@string/switch_reverse_sort"
         android:layout_margin="8dp"
         android:layout_marginTop="2dp"
         android:textSize="@dimen/abc_text_size_body_1_material"

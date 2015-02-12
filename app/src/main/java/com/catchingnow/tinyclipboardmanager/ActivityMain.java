@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -31,7 +29,6 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -163,9 +160,9 @@ public class ActivityMain extends ActionBarActivity {
         switch (id) {
             case R.id.action_search:
                 return super.onOptionsItemSelected(item);
-            case R.id.action_refresh:
-                setView(queryText);
-                return super.onOptionsItemSelected(item);
+//            case R.id.action_refresh:
+//                setView(queryText);
+//                return super.onOptionsItemSelected(item);
             case R.id.action_export:
                 startActivity(new Intent(context, ActivityExport.class));
                 return super.onOptionsItemSelected(item);
@@ -321,8 +318,8 @@ public class ActivityMain extends ActionBarActivity {
         public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
             this.context = context;
             this.clipObjectList = clipObjectList;
-            sdfDate = new SimpleDateFormat(context.getString(R.string.date_formart));
-            sdfTime = new SimpleDateFormat(context.getString(R.string.time_formart));
+            sdfDate = new SimpleDateFormat(context.getString(R.string.date_format));
+            sdfTime = new SimpleDateFormat(context.getString(R.string.time_format));
         }
 
         @Override

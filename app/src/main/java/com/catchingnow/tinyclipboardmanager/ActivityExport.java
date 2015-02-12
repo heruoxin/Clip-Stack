@@ -58,7 +58,10 @@ public class ActivityExport extends ActionBarActivity {
         });
         datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
         datePickerTo.init(dateTo.get(Calendar.YEAR), dateTo.get(Calendar.MONTH), dateTo.get(Calendar.DAY_OF_MONTH), null);
-
+        datePickerFrom.setMinDate(dateFrom.getTimeInMillis());
+        datePickerTo.setMinDate(dateFrom.getTimeInMillis());
+        datePickerTo.setMaxDate(dateTo.getTimeInMillis());
+        datePickerFrom.setMaxDate(dateTo.getTimeInMillis());
     }
 
     @Override
@@ -87,7 +90,7 @@ public class ActivityExport extends ActionBarActivity {
     private void export() {
         if(Export.makeExport(
                 this,
-                new Date(datePickerFrom.getYear()-1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()-1),
+                new Date(datePickerFrom.getYear()-1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
                 new Date(datePickerTo.getYear()-1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth()+1),
                 isReverseSort
         )) {

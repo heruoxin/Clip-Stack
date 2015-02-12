@@ -17,8 +17,8 @@
     <string name="action_search">搜索</string>
     <string name="search_hint">搜索……</string>
     <string name="title_activity_activity_setting">设置</string>
-    <string name="date_formart">MMM dd，EEE</string>
-    <string name="time_formart">HH:mm</string>
+    <string name="date_format">MMM dd，EEE</string>
+    <string name="time_format">HH:mm</string>
     <string name="title_activity_activity_editor">编辑</string>
     <string name="action_share">分享</string>
     <string name="action_save">保存</string>
@@ -62,5 +62,9 @@
     <string name="pref_notification_summary_off">不显示任何通知。</string>
     <string name="pref_notification_summary_on">显示通知。</string>
     <string name="pref_notification_title">通知</string>
+    <string name="dialog_date_piker_from">从：</string>
+    <string name="dialog_date_piker_to">到：</string>
+    <string name="title_activity_activity_export">导出</string>
+    <string name="switch_reverse_sort">倒序排列</string>
 
 </resources>

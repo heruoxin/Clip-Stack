@@ -56,7 +56,7 @@ public class Export {
             }
         }
 
-        if (reverse) { //reverse
+        if (!reverse) { //reverse
             Collections.reverse(backupStringList);
         }
 
