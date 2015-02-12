@@ -48,17 +48,25 @@ public class ActivityEditor extends ActionBarActivity {
             }
         });
 
+        // if is copied form other application.
+        if (Intent.ACTION_SEND.equals(intent.getAction()) && "text/plain".equals(intent.getType())) {
+            oldText = "";
+        }
+
+        //set activity title and icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        String titleText = getString(R.string.title_activity_activity_editor);
         if ("".equals(oldText)) {
-            getSupportActionBar().setTitle(getString(R.string.title_activity_editor));
+            titleText = getString(R.string.title_activity_editor);
+        }
+            getSupportActionBar().setTitle(titleText);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 setTaskDescription(new ActivityManager.TaskDescription(
-                        getString(R.string.title_activity_editor),
+                        titleText,
                         BitmapFactory.decodeResource(getResources(), R.drawable.icon),
                         getResources().getColor(R.color.primary)
                         ));
             }
-        }
     }
 
     @Override
