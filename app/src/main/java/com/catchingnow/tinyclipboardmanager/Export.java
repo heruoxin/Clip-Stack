@@ -60,7 +60,7 @@ public class Export {
             Collections.reverse(backupStringList);
         }
 
-        backupStringList.add(0, context.getString(R.string.backup_file_name));
+        backupStringList.add(0, context.getString(R.string.backup_file_name)+"\n");
 
         File backupFile = getBackupStorage(context, new Date());
         try {
