@@ -64,7 +64,7 @@
     <string name="pref_notification_title">通知</string>
     <string name="dialog_date_piker_from">从：</string>
     <string name="dialog_date_piker_to">到：</string>
-    <string name="title_activity_activity_export">导出</string>
+    <string name="title_activity_backup">备份</string>
     <string name="switch_reverse_sort">倒序排列</string>
 
 </resources>

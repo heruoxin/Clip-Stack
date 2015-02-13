@@ -167,7 +167,7 @@ public class ActivityMain extends ActionBarActivity {
 //                setView(queryText);
 //                return super.onOptionsItemSelected(item);
             case R.id.action_export:
-                startActivity(new Intent(context, ActivityExport.class));
+                startActivity(new Intent(context, ActivityBackup.class));
                 return super.onOptionsItemSelected(item);
             case R.id.action_delete_all:
                 clearAll();

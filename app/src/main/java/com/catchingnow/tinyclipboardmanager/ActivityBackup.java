@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class ActivityExport extends ActionBarActivity {
+public class ActivityBackup extends ActionBarActivity {
     private boolean isReverseSort = false;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
@@ -27,8 +26,12 @@ public class ActivityExport extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_backup);
+        initExportView();
+    }
 
-        //installed date
+    private void initExportView() {
+        //get installed date
         dateFrom.set(2015, 2, 1);
         try {
             long installedDate = this.getPackageManager()
@@ -39,7 +42,6 @@ public class ActivityExport extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        setContentView(R.layout.activity_export);
         Button buttonExport = (Button) findViewById(R.id.export_button);
         Switch switchReverseSort = (Switch) findViewById(R.id.switch_reverse_sort);
         datePickerFrom = (DatePicker) findViewById(R.id.date_picker_from);

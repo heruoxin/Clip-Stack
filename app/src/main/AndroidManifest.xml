@@ -82,8 +82,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityExport"
-            android:label="@string/title_activity_activity_export"
+            android:name=".ActivityBackup"
+            android:label="@string/title_activity_backup"
             android:parentActivityName=".ActivityMain" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
