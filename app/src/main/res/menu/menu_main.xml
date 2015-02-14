@@ -16,14 +16,14 @@
         app:showAsAction="never" />
         -->
     <item
-        android:id="@+id/action_export"
-        android:title="@string/action_backup"
-        android:icon="@drawable/ic_action_import_export"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_delete_all"
         android:title="@string/action_delete_all"
         android:icon="@drawable/ic_action_delete"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_export"
+        android:title="@string/action_backup"
+        android:icon="@drawable/ic_action_import_export"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"

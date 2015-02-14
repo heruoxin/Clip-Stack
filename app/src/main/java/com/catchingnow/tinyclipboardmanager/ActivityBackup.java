@@ -1,22 +1,34 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 
 public class ActivityBackup extends ActionBarActivity {
+    private Context context;
     private boolean isReverseSort = false;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
@@ -26,8 +38,75 @@ public class ActivityBackup extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_backup);
         initExportView();
+        initImportView();
+    }
+
+    private void initImportView() {
+
+        LinearLayout backupView = (LinearLayout) findViewById(R.id.backup_list);
+        LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        File[] backupFiles = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String filename) {
+                        return (filename.startsWith(getString(R.string.backup_file_name)));
+                    }
+                });
+        ArrayList<BackupObject> backupObjects = new ArrayList<>();
+        for (File backupFile: backupFiles) {
+            BackupObject backupObject = new BackupObject(this);
+            if (backupObject.init(backupFile)) {
+                backupObjects.add(backupObject);
+            }
+        }
+        for (final BackupObject backupObject: backupObjects) {
+            View backupListView = layoutInflater.inflate(R.layout.activity_backup_card, null);
+            TextView dateView = (TextView) backupListView.findViewById(R.id.date);
+            TextView sizeView = (TextView) backupListView.findViewById(R.id.size);
+            ImageButton deleteButton = (ImageButton) backupListView.findViewById(R.id.action_delete);
+            backupListView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.action_import)
+                            .setMessage(R.string.dialog_description_are_you_sure)
+                            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    backupObject.makeImport();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .create()
+                            .show();
+                }
+            });
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.action_delete)
+                            .setMessage(R.string.dialog_description_are_you_sure)
+                            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    backupObject.delete();
+                                    initImportView();
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .create()
+                            .show();
+                }
+            });
+            dateView.setText(backupObject.getBackupDate().toString());
+            sizeView.setText(backupObject.getBackupSize()+"");
+            backupView.addView(backupListView);
+        }
     }
 
     private void initExportView() {
@@ -90,10 +169,10 @@ public class ActivityBackup extends ActionBarActivity {
     }
 
     private void export() {
-        if(Export.makeExport(
+        if (BackupAction.makeExport(
                 this,
-                new Date(datePickerFrom.getYear()-1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
-                new Date(datePickerTo.getYear()-1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth()+1),
+                new Date(datePickerFrom.getYear() - 1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
+                new Date(datePickerTo.getYear() - 1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth() + 1),
                 isReverseSort
         )) {
             finish();

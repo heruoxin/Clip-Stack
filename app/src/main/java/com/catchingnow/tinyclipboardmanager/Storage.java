@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,16 +29,16 @@ public class Storage {
     private static Storage mInstance = null;
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
-    private Context c;
+    private Context context;
     private ClipboardManager cb;
     private List<ClipObject> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
     private String topClipInStack = "";
 
     private Storage(Context context) {
-        this.c = context;
-        this.cb = (ClipboardManager) c.getSystemService(c.CLIPBOARD_SERVICE);
-        this.dbHelper = new StorageHelper(c);
+        this.context = context;
+        this.cb = (ClipboardManager) this.context.getSystemService(this.context.CLIPBOARD_SERVICE);
+        this.dbHelper = new StorageHelper(this.context);
     }
 
     public static Storage getInstance(Context context) {
@@ -114,7 +115,7 @@ public class Storage {
             String[] COLUMNS = {CLIP_STRING, CLIP_DATE};
             Cursor c;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
-            //c = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
+            //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<ClipObject>();
             while (c.moveToNext()) {
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
@@ -174,18 +175,33 @@ public class Storage {
     }
 
     private boolean addClipHistory(String currentString) {
-        deleteClipHistory(currentString);
-        Date date = new Date();
-        long timeStamp = date.getTime();
+        return addClipHistory(new ClipObject(currentString, new Date()));
+    }
+
+    private boolean addClipHistory(ClipObject clipObject) {
+        deleteClipHistory(clipObject.getText());
+        long timeStamp = clipObject.getDate().getTime();
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timeStamp);
-        values.put(CLIP_STRING, currentString);
+        values.put(CLIP_STRING, clipObject.getText());
         long row_id = db.insert(TABLE_NAME, null, values);
         if (row_id == -1) {
-            Log.e("Storage", "write db error: addClipHistory " + currentString);
+            Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
         }
         return true;
+    }
+
+    public void importClips(ArrayList<ClipObject> clipObjects) {
+        open();
+        for (ClipObject clipObject: clipObjects) {
+            addClipHistory(clipObject);
+        }
+        close();
+        context.stopService(new Intent(context, CBWatcherService.class));
+        context.startActivity(new Intent(context, ActivityMain.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(ActivityMain.EXTRA_RESTART_ACTIVITY, true));
     }
 
     public void modifyClip(String oldClip, String newClip) {
@@ -239,25 +255,25 @@ public class Storage {
         }
         if (alsoStartService) {
             Log.v(PACKAGE_NAME, "Storage updateSystemClipboard");
-            CBWatcherService.startCBService(c, true);
+            CBWatcherService.startCBService(context, true);
         }
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
             updateSystemClipboard(true);
-            //CBWatcherService.startCBService(c, true);
+            //CBWatcherService.startCBService(context, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
             updateSystemClipboard(false);
-            ActivityMain.refreshMainView(c, "");
+            ActivityMain.refreshMainView(context, "");
         } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
-            ActivityMain.refreshMainView(c, "");
+            ActivityMain.refreshMainView(context, "");
             Log.v(PACKAGE_NAME, "Storage refreshAllTypeOfList");
-            CBWatcherService.startCBService(c, true);
+            CBWatcherService.startCBService(context, true);
         } else {
             updateSystemClipboard(true);
-            //CBWatcherService.startCBService(c, true);
-            ActivityMain.refreshMainView(c, "");
+            //CBWatcherService.startCBService(context, true);
+            ActivityMain.refreshMainView(context, "");
         }
     }
 

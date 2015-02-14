@@ -68,5 +68,6 @@
     <string name="title_activity_backup">Backup</string>
     <string name="switch_reverse_sort">Reverse sort</string>
     <string name="action_backup">Backup</string>
+    <string name="dialog_description_are_you_sure">Are you sure?</string>
 
 </resources>

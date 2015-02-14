@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by heruoxin on 15/2/10.
  */
-public class Export {
+public class BackupAction {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
 
     private static boolean isExternalStorageReadable() {
@@ -102,5 +102,7 @@ public class Export {
                     ).show();
         }
     }
+
+
 }
 
