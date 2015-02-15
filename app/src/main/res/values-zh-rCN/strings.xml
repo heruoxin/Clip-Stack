@@ -66,5 +66,9 @@
     <string name="dialog_date_piker_to">到：</string>
     <string name="title_activity_backup">备份</string>
     <string name="switch_reverse_sort">倒序排列</string>
+    <string name="action_backup">备份</string>
+    <string name="action_import">导入</string>
+    <string name="dialog_description_are_you_sure">确定吗？</string>
+    <string name="progress_importing">导入中……</string>
 
 </resources>

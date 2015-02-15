@@ -27,6 +27,8 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ActivityBackup extends ActionBarActivity {
@@ -36,6 +38,7 @@ public class ActivityBackup extends ActionBarActivity {
     private Calendar dateTo = Calendar.getInstance();
     private DatePicker datePickerFrom;
     private DatePicker datePickerTo;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,22 +76,28 @@ public class ActivityBackup extends ActionBarActivity {
             backupListView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    alertDialog = new AlertDialog.Builder(context)
                             .setTitle(R.string.action_import)
                             .setMessage(R.string.dialog_description_are_you_sure)
                             .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ProgressDialog progressDialog = ProgressDialog.show(context, "",
-                                            "Loading. Please wait...", true);
-                                    backupObject.makeImport();
-                                    progressDialog.dismiss();
-                                    finish();
+                                    alertDialog.dismiss();
+                                    final ProgressDialog progressDialog = ProgressDialog.show(context, "",
+                                            getString(R.string.progress_importing), true);
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            backupObject.makeImport();
+                                            progressDialog.dismiss();
+                                            finish();
+                                        }
+                                    }, 1);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, null)
                             .create();
-                            alertDialog.show();
+                    alertDialog.show();
                 }
             });
             deleteButton.setOnClickListener(new View.OnClickListener() {
