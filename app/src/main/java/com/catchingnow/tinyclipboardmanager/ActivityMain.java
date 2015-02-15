@@ -34,7 +34,6 @@ import java.util.List;
 
 public class ActivityMain extends ActionBarActivity {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
-    public final static String EXTRA_RESTART_ACTIVITY = "com.catchingnow.tinyclipboard.EXTRA.restartActivity";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
@@ -92,9 +91,6 @@ public class ActivityMain extends ActionBarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.hasExtra(EXTRA_RESTART_ACTIVITY)) {
-            recreate();
-        }
         if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
             String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
             if (s != null) {

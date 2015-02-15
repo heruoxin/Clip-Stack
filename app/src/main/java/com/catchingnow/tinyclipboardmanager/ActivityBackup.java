@@ -1,6 +1,8 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,13 +59,13 @@ public class ActivityBackup extends ActionBarActivity {
                     }
                 });
         ArrayList<BackupObject> backupObjects = new ArrayList<>();
-        for (File backupFile: backupFiles) {
+        for (File backupFile : backupFiles) {
             BackupObject backupObject = new BackupObject(this);
             if (backupObject.init(backupFile)) {
                 backupObjects.add(backupObject);
             }
         }
-        for (final BackupObject backupObject: backupObjects) {
+        for (final BackupObject backupObject : backupObjects) {
             View backupListView = layoutInflater.inflate(R.layout.activity_backup_card, null);
             TextView dateView = (TextView) backupListView.findViewById(R.id.date);
             TextView sizeView = (TextView) backupListView.findViewById(R.id.size);
@@ -71,18 +73,22 @@ public class ActivityBackup extends ActionBarActivity {
             backupListView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(context)
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context)
                             .setTitle(R.string.action_import)
                             .setMessage(R.string.dialog_description_are_you_sure)
                             .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    ProgressDialog progressDialog = ProgressDialog.show(context, "",
+                                            "Loading. Please wait...", true);
                                     backupObject.makeImport();
+                                    progressDialog.dismiss();
+                                    finish();
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, null)
-                            .create()
-                            .show();
+                            .create();
+                            alertDialog.show();
                 }
             });
             deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +110,7 @@ public class ActivityBackup extends ActionBarActivity {
                 }
             });
             dateView.setText(backupObject.getBackupDate().toString());
-            sizeView.setText(backupObject.getBackupSize()+"");
+            sizeView.setText(backupObject.getBackupSize() + "");
             backupView.addView(backupListView);
         }
     }

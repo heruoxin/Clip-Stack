@@ -198,10 +198,8 @@ public class Storage {
             addClipHistory(clipObject);
         }
         close();
-        context.stopService(new Intent(context, CBWatcherService.class));
-        context.startActivity(new Intent(context, ActivityMain.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(ActivityMain.EXTRA_RESTART_ACTIVITY, true));
+        isClipsInMemoryChanged = true;
+        refreshAllTypeOfList(0);
     }
 
     public void modifyClip(String oldClip, String newClip) {
