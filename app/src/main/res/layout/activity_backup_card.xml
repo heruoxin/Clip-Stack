@@ -20,6 +20,7 @@
         <TextView
             android:id="@+id/size"
             android:textSize="@dimen/abc_text_size_body_2_material"
+            android:textColor="@color/secondary_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -28,7 +29,9 @@
         android:id="@+id/action_delete"
         android:contentDescription="@string/action_delete"
         android:src="@drawable/ic_action_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/abc_action_bar_subtitle_bottom_margin_material" />
+        android:scaleType="centerInside"
+        android:background="@color/divider"
+        android:layout_width="46dp"
+        android:layout_height="52dp" />
 
 </LinearLayout>
