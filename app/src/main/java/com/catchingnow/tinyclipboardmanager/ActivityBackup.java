@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -33,11 +34,7 @@ import java.util.TimerTask;
 
 public class ActivityBackup extends ActionBarActivity {
     private Context context;
-    private boolean isReverseSort = false;
-    private Calendar dateFrom = Calendar.getInstance();
-    private Calendar dateTo = Calendar.getInstance();
-    private DatePicker datePickerFrom;
-    private DatePicker datePickerTo;
+
     private AlertDialog alertDialog;
 
     @Override
@@ -45,7 +42,6 @@ public class ActivityBackup extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_backup);
-        initExportView();
         initImportView();
     }
 
@@ -124,42 +120,6 @@ public class ActivityBackup extends ActionBarActivity {
         }
     }
 
-    private void initExportView() {
-        //get installed date
-        dateFrom.set(2015, 2, 1);
-        try {
-            long installedDate = this.getPackageManager()
-                    .getPackageInfo(ActivityMain.PACKAGE_NAME, 0)
-                    .firstInstallTime;
-            dateFrom.setTimeInMillis(installedDate);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Button buttonExport = (Button) findViewById(R.id.export_button);
-        Switch switchReverseSort = (Switch) findViewById(R.id.switch_reverse_sort);
-        datePickerFrom = (DatePicker) findViewById(R.id.date_picker_from);
-        datePickerTo = (DatePicker) findViewById(R.id.date_picker_to);
-        buttonExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                export();
-            }
-        });
-        switchReverseSort.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isReverseSort = isChecked;
-            }
-        });
-        datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
-        datePickerTo.init(dateTo.get(Calendar.YEAR), dateTo.get(Calendar.MONTH), dateTo.get(Calendar.DAY_OF_MONTH), null);
-        datePickerFrom.setMinDate(dateFrom.getTimeInMillis());
-        datePickerTo.setMinDate(dateFrom.getTimeInMillis());
-        datePickerTo.setMaxDate(dateTo.getTimeInMillis());
-        datePickerFrom.setMaxDate(dateTo.getTimeInMillis());
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -176,21 +136,12 @@ public class ActivityBackup extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, ActivitySetting.class));
+            //startActivity(new Intent(this, ActivitySetting.class));
+            startActivity(new Intent(this, ActivityNewBackup.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void export() {
-        if (BackupAction.makeExport(
-                this,
-                new Date(datePickerFrom.getYear() - 1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
-                new Date(datePickerTo.getYear() - 1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth() + 1),
-                isReverseSort
-        )) {
-            finish();
-        }
-    }
 }

@@ -89,6 +89,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
         </activity>
+        <activity
+            android:name=".ActivityNewBackup"
+            android:label="@string/title_activity_new_backup"
+            android:parentActivityName=".ActivityBackup" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
+        </activity>
     </application>
 
 </manifest>
