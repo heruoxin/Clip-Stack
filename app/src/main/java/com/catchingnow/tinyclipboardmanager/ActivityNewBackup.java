@@ -2,15 +2,10 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -96,7 +91,7 @@ public class ActivityNewBackup extends ActionBarActivity {
 
 
     private void export() {
-        if (BackupAction.makeExport(
+        if (BackupExport.makeExport(
                 this,
                 new Date(datePickerFrom.getYear() - 1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
                 new Date(datePickerTo.getYear() - 1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth() + 1),

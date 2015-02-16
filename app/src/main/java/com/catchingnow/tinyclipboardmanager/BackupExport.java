@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by heruoxin on 15/2/10.
  */
-public class BackupAction {
+public class BackupExport {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
 
     private static boolean isExternalStorageReadable() {
@@ -43,6 +43,11 @@ public class BackupAction {
 
     public static boolean makeExport(Context context, Date startDate, Date endDate, boolean reverse) {
         Log.v(ActivityMain.PACKAGE_NAME, "EXPORT:"+startDate.toString()+endDate.toString());
+        if (startDate.after(endDate)) {
+            Date tmpDate = startDate;
+            startDate = endDate;
+            endDate = tmpDate;
+        }
         if (!isExternalStorageWritable()) {
             return false;
         }
