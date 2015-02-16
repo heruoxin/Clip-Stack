@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,11 @@ public class ActivityBackup extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_backup);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initImportView();
     }
 
@@ -116,12 +122,12 @@ public class ActivityBackup extends ActionBarActivity {
                 }
             });
             dateView.setText(backupObject.getBackupDate().toString());
-            sizeView.setText(backupObject.getBackupSize() + "");
+            sizeView.setText(backupObject.getBackupSize());
             backupView.addView(backupListView);
+        }
 
-            if (backupView.getChildCount() == 0) {
-                backupView.addView(layoutInflater.inflate(R.layout.activity_backup_card_empty, null));
-            }
+        if (backupView.getChildCount() == 0) {
+            backupView.addView(layoutInflater.inflate(R.layout.activity_backup_card_empty, null));
         }
     }
 

@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class BackupObject {
     private Date backupDate;
-    private int backupSize;
+    private String backupSize;
     private File backupFile;
     private Context context;
 
@@ -29,7 +29,7 @@ public class BackupObject {
             String fileName = backupFile.getName();
             this.backupFile = backupFile;
             backupDate = new Date(fileName.replace(context.getString(R.string.backup_file_name), "").replace(".txt", ""));
-            backupSize = Integer.parseInt(String.valueOf(backupFile.length() / 1024));
+            backupSize = humanReadableByteCount(backupFile.length(), false);
 
             return true;
         } catch (Error error) {
@@ -37,7 +37,7 @@ public class BackupObject {
         }
     }
 
-    public int getBackupSize() {
+    public String getBackupSize() {
         return backupSize;
     }
 
@@ -83,5 +83,16 @@ public class BackupObject {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        //stackOverflow 3758606
+        int unit = si ? 1000: 1024;
+        if (bytes < unit) {
+            return bytes + "B";
+        }
+        int exp = (int) (Math.log(bytes)/Math.log(unit));
+        String pre = (si?"kMGTPE":"KMGTPE").charAt(exp-1) + (si?"":"i");
+        return String.format("%1f%sB",bytes/Math.pow(unit, exp), pre);
     }
 }
