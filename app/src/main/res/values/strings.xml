@@ -70,6 +70,9 @@
     <string name="action_backup">Backup</string>
     <string name="dialog_description_are_you_sure">Are you sure?</string>
     <string name="progress_importing">Importing…</string>
-    <string name="title_activity_new_backup">NewBackupActivity</string>
+    <string name="title_activity_new_backup">New Backup</string>
+    <string name="title_backups">Backups</string>
+    <string name="action_new_backup">New Backup</string>
+    <string name="empty_card">No backup</string>
 
 </resources>

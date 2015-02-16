@@ -9,47 +9,35 @@
     tools:context="com.catchingnow.tinyclipboardmanager.ActivityBackup"
     android:orientation="vertical">
 
+    <TextView
+        android:text="@string/title_backups"
+        android:textColor="@color/accent"
+        android:textStyle="bold"
+        android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
+        android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin_material"
+        android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ScrollView
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/backup_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:text="@string/action_import"
-                android:textColor="@color/accent"
-                android:textStyle="bold"
-                android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
-                android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin_material"
-                android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-                        <LinearLayout
-                            android:id="@+id/backup_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                        </LinearLayout>
-
-            <TextView
-                android:text="@string/action_export"
-                android:textColor="@color/accent"
-                android:textStyle="bold"
-                android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
-                android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin_material"
-                android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/new_backup"
+        android:text="@string/action_new_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
