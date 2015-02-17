@@ -1,4 +1,4 @@
-# Clipping-Stack
+# Clip-Stack
 
 ###A tiny clipboard history manager app.
 
@@ -11,7 +11,7 @@
 
 ####Unlimited Clips
 
-📌 Clipping Stack can remember all your clipboard history and recover text after reboot. 
+📌 Clip Stack can remember all your clipboard history and recover text after reboot. 
 
 ####Easy to Manage
 
@@ -31,7 +31,7 @@
 
 ####Auto Clean Up
 
-📌 Using Android 🍭Lollipop's new JobScheduler API, Clipping Stack can automatic clean up it's catches and RAM when phone is charging. 
+📌 Using Android 🍭Lollipop's new JobScheduler API, Clip Stack can automatic clean up it's catches and RAM when phone is charging. 
 
 
 ####Other Feature
