@@ -8,11 +8,13 @@
         android:title="@string/action_share"
         app:showAsAction="ifRoom|withText" />
     <group>
+        <!--
         <item
             android:id="@+id/action_save"
             android:icon="@drawable/ic_action_save"
             android:title="@string/action_save"
             app:showAsAction="never|withText" />
+            -->
         <item
             android:id="@+id/action_cancel"
             android:icon="@drawable/ic_action_undo"
