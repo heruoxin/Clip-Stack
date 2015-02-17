@@ -3,6 +3,7 @@ package com.catchingnow.tinyclipboardmanager;
 import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,11 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Switch;
 
+import java.security.PrivilegedAction;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ActivityNewBackup extends ActionBarActivity {
@@ -83,10 +87,15 @@ public class ActivityNewBackup extends ActionBarActivity {
         });
         datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
         datePickerTo.init(dateTo.get(Calendar.YEAR), dateTo.get(Calendar.MONTH), dateTo.get(Calendar.DAY_OF_MONTH), null);
+
+        datePickerFrom.setCalendarViewShown(false);
+        datePickerTo.setCalendarViewShown(false);
+
         datePickerFrom.setMinDate(dateFrom.getTimeInMillis());
         datePickerTo.setMinDate(dateFrom.getTimeInMillis());
-        datePickerTo.setMaxDate(dateTo.getTimeInMillis());
         datePickerFrom.setMaxDate(dateTo.getTimeInMillis());
+        datePickerTo.setMaxDate(dateTo.getTimeInMillis());
+
     }
 
 
