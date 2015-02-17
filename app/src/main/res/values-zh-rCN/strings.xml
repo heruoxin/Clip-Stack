@@ -18,7 +18,7 @@
     <string name="search_hint">搜索……</string>
     <string name="title_activity_activity_setting">设置</string>
     <string name="date_format">MMM dd，EEE</string>
-    <string name="time_format">HH:mm:ss</string>
+    <string name="time_format">HH:mm</string>
     <string name="title_activity_activity_editor">编辑</string>
     <string name="action_share">分享</string>
     <string name="action_save">保存</string>
@@ -75,5 +75,7 @@
     <string name="title_activity_new_backup">新建备份</string>
     <string name="title_backups">备份列表</string>
     <string name="toast_find_backup">条备份，位于 </string>
+    <string name="backup_file_name_old">"Clip Stack Backup "</string>
+    <string name="time_format_with_second">HH:mm:ss</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,8 +89,10 @@ public class ActivityNewBackup extends ActionBarActivity {
         datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
         datePickerTo.init(dateTo.get(Calendar.YEAR), dateTo.get(Calendar.MONTH), dateTo.get(Calendar.DAY_OF_MONTH), null);
 
-        datePickerFrom.setCalendarViewShown(false);
-        datePickerTo.setCalendarViewShown(false);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            datePickerFrom.setCalendarViewShown(false);
+            datePickerTo.setCalendarViewShown(false);
+        }
 
         datePickerFrom.setMinDate(dateFrom.getTimeInMillis());
         datePickerTo.setMinDate(dateFrom.getTimeInMillis());
