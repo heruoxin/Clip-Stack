@@ -1,7 +1,10 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -85,7 +88,15 @@ public class BackupObject {
         }
     }
 
-    public static String humanReadableByteCount(long bytes, boolean si) {
+    public void openInEditor() {
+        context.startActivity(new Intent()
+                .setAction(android.content.Intent.ACTION_VIEW)
+                .setDataAndType(Uri.fromFile(backupFile), MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        );
+    }
+
+    private static String humanReadableByteCount(long bytes, boolean si) {
         //stackOverflow 3758606
         int unit = si ? 1000: 1024;
         if (bytes < unit) {

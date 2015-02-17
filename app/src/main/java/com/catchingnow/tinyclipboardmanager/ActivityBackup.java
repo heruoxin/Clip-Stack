@@ -103,6 +103,13 @@ public class ActivityBackup extends ActionBarActivity {
                     alertDialog.show();
                 }
             });
+            backupListView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    backupObject.openInEditor();
+                    return false;
+                }
+            });
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
