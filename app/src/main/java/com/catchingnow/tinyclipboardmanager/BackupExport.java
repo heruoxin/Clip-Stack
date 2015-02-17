@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -36,8 +37,12 @@ public class BackupExport {
 
     private static File getBackupStorage(Context context, Date backupDate) {
         // Get the directory for the user's public pictures directory.
+        String formatDate = new SimpleDateFormat(
+                context.getString(R.string.date_format)
+                        + context.getString(R.string.time_format).replace(":", "-")
+        ).format(backupDate);
         return new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS), context.getString(R.string.backup_file_name) + backupDate + ".txt");
+                Environment.DIRECTORY_DOWNLOADS), context.getString(R.string.backup_file_name) + formatDate + ".txt");
     }
 
 

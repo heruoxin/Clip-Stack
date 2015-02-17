@@ -18,7 +18,7 @@
     <string name="search_hint">Search…</string>
     <string name="title_activity_activity_setting">Settings</string>
     <string name="date_format">EEE, MMM dd</string>
-    <string name="time_format">HH:mm</string>
+    <string name="time_format">HH:mm:ss</string>
     <string name="title_activity_activity_editor">Edit</string>
     <string name="action_share">Share</string>
     <string name="action_save">Save</string>
@@ -56,7 +56,7 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="toast_undo">Undo</string>
-    <string name="backup_file_name">Clipping Now Backup</string>
+    <string name="backup_file_name">"Clipping Now Backup "</string>
     <string name="action_export">Export</string>
     <string name="action_import">Import</string>
     <string name="export_success">Export success: </string>

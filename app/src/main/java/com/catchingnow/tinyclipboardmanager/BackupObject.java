@@ -3,7 +3,6 @@ package com.catchingnow.tinyclipboardmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.BufferedReader;
@@ -20,7 +19,7 @@ import java.util.Locale;
  * Created by heruoxin on 15/2/14.
  */
 public class BackupObject {
-    private Date backupDate;
+    private String backupDateString;
     private String backupSize;
     private File backupFile;
     private Context context;
@@ -32,7 +31,7 @@ public class BackupObject {
         try {
             String fileName = backupFile.getName();
             this.backupFile = backupFile;
-            backupDate = new Date(fileName.replace(context.getString(R.string.backup_file_name), "").replace(".txt", ""));
+            backupDateString = fileName.replace(context.getString(R.string.backup_file_name), "").replace(".txt", "");
             backupSize = humanReadableByteCount(backupFile.length(), false);
 
             return true;
@@ -45,8 +44,8 @@ public class BackupObject {
         return backupSize;
     }
 
-    public Date getBackupDate() {
-        return backupDate;
+    public String getBackupDateString() {
+        return backupDateString;
     }
 
     public void delete() {

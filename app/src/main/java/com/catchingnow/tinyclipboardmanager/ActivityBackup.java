@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +61,7 @@ public class ActivityBackup extends ActionBarActivity {
                 .listFiles(new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String filename) {
-                        return (filename.startsWith(getString(R.string.backup_file_name)));
+                        return (filename.startsWith(getString(R.string.backup_file_name).trim()));
                     }
                 });
 
@@ -137,7 +136,7 @@ public class ActivityBackup extends ActionBarActivity {
                             .show();
                 }
             });
-            dateView.setText(backupObject.getBackupDate().toString());
+            dateView.setText(backupObject.getBackupDateString());
             sizeView.setText(backupObject.getBackupSize());
             backupView.addView(backupListView);
         }
