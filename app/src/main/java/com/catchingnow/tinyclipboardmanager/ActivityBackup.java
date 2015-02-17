@@ -61,7 +61,10 @@ public class ActivityBackup extends ActionBarActivity {
                 .listFiles(new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String filename) {
-                        return (filename.startsWith(getString(R.string.backup_file_name).trim()));
+                        return (
+                                filename.startsWith(getString(R.string.backup_file_name_old).trim())
+                                        || filename.startsWith(getString(R.string.backup_file_name).trim())
+                        );
                     }
                 });
 

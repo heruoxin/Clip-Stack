@@ -52,6 +52,7 @@ public class ActivityMain extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.icon_shadow);
+        getSupportActionBar().setTitle(" "+getString(R.string.title_activity_main));
         context = this.getBaseContext();
         queryText = "";
     }

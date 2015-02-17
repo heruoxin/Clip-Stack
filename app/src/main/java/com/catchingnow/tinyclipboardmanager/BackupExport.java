@@ -39,7 +39,8 @@ public class BackupExport {
         // Get the directory for the user's public pictures directory.
         String formatDate = new SimpleDateFormat(
                 context.getString(R.string.date_format)
-                        + context.getString(R.string.time_format).replace(":", "-")
+                        + " "
+                        + context.getString(R.string.time_format_with_second).replace(":", "-")
         ).format(backupDate);
         return new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOWNLOADS), context.getString(R.string.backup_file_name) + formatDate + ".txt");
