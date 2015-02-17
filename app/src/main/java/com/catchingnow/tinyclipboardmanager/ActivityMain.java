@@ -65,6 +65,7 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        isFromNotification = false;
         CBWatcherService.startCBService(context, false, -1);
     }
 
@@ -100,7 +101,9 @@ public class ActivityMain extends ActionBarActivity {
             }
             setView(queryText);
         }
-        isFromNotification = intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false);
+        if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
+            isFromNotification = true;
+        }
         super.onNewIntent(intent);
     }
 
@@ -388,7 +391,7 @@ public class ActivityMain extends ActionBarActivity {
                     if (isFromNotification) {
                         finish();
                     }
-                    return false;
+                    return true;
                 }
             });
         }
