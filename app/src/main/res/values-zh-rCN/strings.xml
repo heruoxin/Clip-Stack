@@ -69,5 +69,11 @@
     <string name="action_import">导入</string>
     <string name="dialog_description_are_you_sure">确定吗？</string>
     <string name="progress_importing">导入中……</string>
+    <string name="action_export">导出</string>
+    <string name="action_new_backup">新建备份</string>
+    <string name="empty_card">无备份</string>
+    <string name="title_activity_new_backup">新建备份</string>
+    <string name="title_backups">备份列表</string>
+    <string name="toast_find_backup">条备份，位于 </string>
 
 </resources>
