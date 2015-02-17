@@ -29,6 +29,7 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,6 +44,7 @@ public class ActivityMain extends ActionBarActivity {
     private Storage db;
     private Context context;
     private int isSnackbarShow = 0;
+    private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private boolean isFromNotification = false;
 
     @Override
@@ -66,6 +68,9 @@ public class ActivityMain extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         isFromNotification = false;
+        for (ClipObject clipObject: deleteQueue) {
+            db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+        }
         CBWatcherService.startCBService(context, false, -1);
     }
 
@@ -235,6 +240,7 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
+        deleteQueue.add(clipObject);
         final boolean[] isUndo = new boolean[1];
         SnackbarManager.show(
                 Snackbar.with(getApplicationContext())
@@ -267,6 +273,7 @@ public class ActivityMain extends ActionBarActivity {
                                 if (isUndo[0]) {
                                     return;
                                 }
+                                deleteQueue.remove(clipObject);
                                 db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
                             }
                         })
