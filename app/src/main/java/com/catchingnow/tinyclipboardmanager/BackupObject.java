@@ -71,8 +71,8 @@ public class BackupObject {
                     if (!"".equals(clipString)) {
                         if (dateTwo != null) {
                             clipObjects.add(new ClipObject(clipString, dateTwo));
-                            clipString = "";
                         }
+                        clipString = "";
                         dateTwo = dateOne;
                     }
                 } catch (ParseException error) {
