@@ -74,5 +74,6 @@
     <string name="title_backups">Backups</string>
     <string name="action_new_backup">New Backup</string>
     <string name="empty_card">No backup</string>
+    <string name="toast_find_backup">" backups in "</string>
 
 </resources>

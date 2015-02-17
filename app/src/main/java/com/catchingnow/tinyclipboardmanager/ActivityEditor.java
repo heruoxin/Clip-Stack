@@ -106,9 +106,9 @@ public class ActivityEditor extends ActionBarActivity {
             case (R.id.action_share):
                 shareText();
                 break;
-            case (R.id.action_save):
-                saveText();
-                break;
+//            case (R.id.action_save):
+//                saveText();
+//                break;
             case (R.id.action_delete):
                 deleteText();
                 break;

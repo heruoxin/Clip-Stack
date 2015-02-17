@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -64,6 +65,12 @@ public class ActivityBackup extends ActionBarActivity {
                         return (filename.startsWith(getString(R.string.backup_file_name)));
                     }
                 });
+
+        Toast.makeText(context,
+                backupFiles.length + getString(R.string.toast_find_backup) + "/sdcard/Download/",
+                Toast.LENGTH_SHORT
+        ).show();
+
         ArrayList<BackupObject> backupObjects = new ArrayList<>();
         for (File backupFile : backupFiles) {
             BackupObject backupObject = new BackupObject(this);
@@ -107,7 +114,7 @@ public class ActivityBackup extends ActionBarActivity {
                 @Override
                 public boolean onLongClick(View v) {
                     backupObject.openInEditor();
-                    return false;
+                    return true;
                 }
             });
             deleteButton.setOnClickListener(new View.OnClickListener() {
