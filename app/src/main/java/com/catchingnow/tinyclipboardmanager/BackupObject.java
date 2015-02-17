@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by heruoxin on 15/2/14.
@@ -64,7 +65,8 @@ public class BackupObject {
             while ((line = br.readLine()) != null) {
                 try {
                     String localTimeFormat = "E MMM d H:m:s ZZZZ y";
-                    dateOne =  new SimpleDateFormat(localTimeFormat).parse(line);
+                    dateOne =  new SimpleDateFormat(localTimeFormat, Locale.ENGLISH)
+                            .parse(line);
                     if (clipString.endsWith("\n")) {
                         clipString = clipString.substring(0, clipString.length()-1);
                     }

@@ -102,7 +102,7 @@ public class ActivityBackup extends ActionBarActivity {
                                             progressDialog.dismiss();
                                             finish();
                                         }
-                                    }, 10);
+                                    }, 100);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, null)
