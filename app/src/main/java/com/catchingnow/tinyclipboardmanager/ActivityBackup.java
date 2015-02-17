@@ -41,10 +41,10 @@ public class ActivityBackup extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initImportView();
+        initImportView(false);
     }
 
-    private void initImportView() {
+    private void initImportView(boolean showToast) {
 
         Button buttonNewBackup = (Button) findViewById(R.id.new_backup);
         buttonNewBackup.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +66,12 @@ public class ActivityBackup extends ActionBarActivity {
                     }
                 });
 
-        Toast.makeText(context,
-                backupFiles.length + getString(R.string.toast_find_backup) + "/sdcard/Download/",
-                Toast.LENGTH_SHORT
-        ).show();
+        if (showToast) {
+            Toast.makeText(context,
+                    backupFiles.length + getString(R.string.toast_find_backup) + "/sdcard/Download/",
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
 
         ArrayList<BackupObject> backupObjects = new ArrayList<>();
         for (File backupFile : backupFiles) {
@@ -127,7 +129,7 @@ public class ActivityBackup extends ActionBarActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     backupObject.delete();
-                                    initImportView();
+                                    initImportView(false);
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel, null)
@@ -160,7 +162,7 @@ public class ActivityBackup extends ActionBarActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_refresh:
-                initImportView();
+                initImportView(true);
                 break;
         }
         return super.onOptionsItemSelected(item);
