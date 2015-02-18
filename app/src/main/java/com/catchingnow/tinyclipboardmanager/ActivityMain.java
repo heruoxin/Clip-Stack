@@ -43,6 +43,8 @@ public class ActivityMain extends ActionBarActivity {
     private String queryText;
     private RecyclerView mRecList;
     private ImageButton mFAB;
+    private SearchView searchView;
+    private MenuItem searchItem;
     private Storage db;
     private Context context;
     private int isSnackbarShow = 0;
@@ -119,9 +121,9 @@ public class ActivityMain extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -192,6 +194,13 @@ public class ActivityMain extends ActionBarActivity {
 
     }
 
+    @Override
+    public boolean onSearchRequested() {
+        MenuItemCompat.expandActionView(searchItem);
+        searchView.requestFocus();
+        return true;
+    }
+
     public static void refreshMainView(Context context, String query) {
         Intent intent = new Intent(context, ActivityMain.class)
                 .putExtra(EXTRA_QUERY_TEXT, query)
@@ -255,7 +264,7 @@ public class ActivityMain extends ActionBarActivity {
                             @Override
                             public void onShow(Snackbar snackbar) {
                                 mFAB.animate().translationY(-snackbar.getHeight());
-                                if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 5) {
+                                if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
                                     mRecList.animate().translationY(-snackbar.getHeight());
                                 }
                             }
