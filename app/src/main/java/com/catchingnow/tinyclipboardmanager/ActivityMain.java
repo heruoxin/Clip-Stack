@@ -31,6 +31,8 @@ import com.nispok.snackbar.listeners.EventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ActivityMain extends ActionBarActivity {
@@ -39,7 +41,7 @@ public class ActivityMain extends ActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private String queryText;
-    private RecyclerView recList;
+    private RecyclerView mRecList;
     private ImageButton mFAB;
     private Storage db;
     private Context context;
@@ -69,7 +71,7 @@ public class ActivityMain extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         isFromNotification = false;
-        for (ClipObject clipObject: deleteQueue) {
+        for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
         }
         CBWatcherService.startCBService(context, false, -1);
@@ -205,17 +207,17 @@ public class ActivityMain extends ActionBarActivity {
         //set view
         setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-        recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
+        mRecList = (RecyclerView) findViewById(R.id.cardList);
+        mRecList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(linearLayoutManager);
+        mRecList.setLayoutManager(linearLayoutManager);
         final ClipCardAdapter clipCardAdapter = new ClipCardAdapter(clips, this);
-        recList.setAdapter(clipCardAdapter);
+        mRecList.setAdapter(clipCardAdapter);
 
         SwipeableRecyclerViewTouchListener touchListener =
                 new SwipeableRecyclerViewTouchListener(
-                        recList,
+                        mRecList,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {
@@ -236,7 +238,7 @@ public class ActivityMain extends ActionBarActivity {
                                 onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
                             }
                         });
-        recList.addOnItemTouchListener(touchListener);
+        mRecList.addOnItemTouchListener(touchListener);
 
     }
 
@@ -253,6 +255,9 @@ public class ActivityMain extends ActionBarActivity {
                             @Override
                             public void onShow(Snackbar snackbar) {
                                 mFAB.animate().translationY(-snackbar.getHeight());
+                                if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 5) {
+                                    mRecList.animate().translationY(-snackbar.getHeight());
+                                }
                             }
 
                             @Override
@@ -263,6 +268,10 @@ public class ActivityMain extends ActionBarActivity {
                             @Override
                             public void onDismiss(Snackbar snackbar) {
                                 isSnackbarShow -= 1;
+                                if (!isUndo[0]) {
+                                    deleteQueue.remove(clipObject);
+                                    db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+                                }
                             }
 
                             @Override
@@ -270,12 +279,11 @@ public class ActivityMain extends ActionBarActivity {
                                 if (isSnackbarShow <= 0) {
                                     isSnackbarShow = 0;
                                     mFAB.animate().translationY(0);
+                                    mRecList.animate().translationY(0);
                                 }
-                                if (isUndo[0]) {
-                                    return;
+                                if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
+                                    //mRecList.smoothScrollToPosition(position);
                                 }
-                                deleteQueue.remove(clipObject);
-                                db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
                             }
                         })
                         .actionListener(new ActionClickListener() {
