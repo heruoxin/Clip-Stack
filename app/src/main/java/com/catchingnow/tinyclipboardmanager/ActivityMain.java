@@ -130,12 +130,16 @@ public class ActivityMain extends ActionBarActivity {
             public boolean onMenuItemActionExpand(MenuItem item) {
                 searchView.setIconified(false);
                 searchView.requestFocus();
+                queryText = searchView.getQuery().toString();
+                setView(queryText);
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
+                queryText = null;
+                setView(queryText);
                 return true;
             }
         });
