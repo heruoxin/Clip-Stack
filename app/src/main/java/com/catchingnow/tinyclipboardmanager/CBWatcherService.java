@@ -122,15 +122,17 @@ public class CBWatcherService extends Service {
     private void performClipboardCheck() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
-            ClipData cd = cb.getPrimaryClip();
-            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                CharSequence thisClip = cd.getItemAt(0).getText();
-                if (thisClip != null && !"".equals(thisClip.toString().trim())) {
-                    if (isMyActivitiesOnForeground <= 0) {
-                        db.modifyClip(null, thisClip.toString(), Storage.MAIN_ACTIVITY_VIEW);
-                    } else {
-                        db.modifyClip(null, thisClip.toString());
-                    }
+            String clipString;
+            try {
+                clipString = cb.getPrimaryClip().getItemAt(0).getText().toString();
+            } catch (Error ignored) {
+                return;
+            }
+            if (clipString != null && !"".equals(clipString.trim())) {
+                if (isMyActivitiesOnForeground <= 0) {
+                    db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW);
+                } else {
+                    db.modifyClip(null, clipString);
                 }
             }
         }
@@ -257,14 +259,14 @@ public class CBWatcherService extends Service {
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        preBuildN
-                .setSmallIcon(R.drawable.icon)
-                .setVisibility(Notification.VISIBILITY_SECRET)
-                .setColor(getResources().getColor(R.color.primary_light));
-    } else {
-        preBuildN.setSmallIcon(R.drawable.icon_shadow);
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            preBuildN
+                    .setSmallIcon(R.drawable.icon)
+                    .setVisibility(Notification.VISIBILITY_SECRET)
+                    .setColor(getResources().getColor(R.color.primary_light));
+        } else {
+            preBuildN.setSmallIcon(R.drawable.icon_shadow);
+        }
         Notification n = preBuildN.build();
 
         notificationManager.cancel(0);
