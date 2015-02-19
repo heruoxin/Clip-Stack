@@ -76,7 +76,9 @@ public class BackupExport {
         File backupFile = getBackupStorage(context, new Date());
         try {
             if (!backupFile.exists()) {
-                backupFile.createNewFile();
+                if (!backupFile.createNewFile()) {
+                    throw new  IOException("Can't create file: " + backupFile.getName());
+                }
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(backupFile, true /*append*/));
             for (String backupString : backupStringList) {

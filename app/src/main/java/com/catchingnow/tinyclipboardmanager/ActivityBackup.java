@@ -70,7 +70,7 @@ public class ActivityBackup extends ActionBarActivity {
 
         if (showToast) {
             Toast.makeText(context,
-                    backupFiles.length + getString(R.string.toast_find_backup) + "/sdcard/Download/",
+                    backupFiles.length + getString(R.string.toast_find_backup) + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath(),
                     Toast.LENGTH_SHORT
             ).show();
         }

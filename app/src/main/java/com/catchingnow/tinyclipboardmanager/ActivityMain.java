@@ -31,8 +31,6 @@ import com.nispok.snackbar.listeners.EventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class ActivityMain extends ActionBarActivity {
@@ -40,7 +38,7 @@ public class ActivityMain extends ActionBarActivity {
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
-    private String queryText;
+    private String queryText = "";
     private RecyclerView mRecList;
     private ImageButton mFAB;
     private SearchView searchView;
@@ -139,7 +137,7 @@ public class ActivityMain extends ActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
-                setView(queryText);
+                setView(null);
                 return true;
             }
         });
@@ -294,9 +292,9 @@ public class ActivityMain extends ActionBarActivity {
                                     mFAB.animate().translationY(0);
                                     mRecList.animate().translationY(0);
                                 }
-                                if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
-                                    //mRecList.smoothScrollToPosition(position);
-                                }
+                                //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
+                                //mRecList.smoothScrollToPosition(position);
+                                //}
                             }
                         })
                         .actionListener(new ActionClickListener() {
@@ -346,7 +344,6 @@ public class ActivityMain extends ActionBarActivity {
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
-        private View mView;
         public SimpleDateFormat sdfDate;
         public SimpleDateFormat sdfTime;
 
@@ -433,11 +430,10 @@ public class ActivityMain extends ActionBarActivity {
 
             public ClipCardViewHolder(View v) {
                 super(v);
-                mView = v;
                 vTime = (TextView) v.findViewById(R.id.activity_main_card_time);
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
-                vShare = (View) v.findViewById(R.id.activity_main_card_share_button);
+                vShare = v.findViewById(R.id.activity_main_card_share_button);
             }
         }
 

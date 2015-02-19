@@ -1,20 +1,16 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -138,7 +134,7 @@ public class ActivityEditor extends ActionBarActivity {
 
     private void saveText() {
         String newText = editText.getText().toString();
-        String toastMessage = "";
+        String toastMessage;
         if (oldText.equals(newText)) {
             finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
             return;

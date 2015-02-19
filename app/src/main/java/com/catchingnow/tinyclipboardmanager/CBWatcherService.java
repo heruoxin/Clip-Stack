@@ -173,7 +173,7 @@ public class CBWatcherService extends Service {
             return;
         }
 
-        List<String> thisClipText = new ArrayList<String>();
+        List<String> thisClipText = new ArrayList<>();
         if (db == null) {
             db = Storage.getInstance(this.getBaseContext());
         }
@@ -267,10 +267,13 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildN = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setContentText(getString(R.string.clip_notification_single_text))
-                .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            preBuildN
+                    .setPriority(Notification.PRIORITY_MIN);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildN
                     .setSmallIcon(R.drawable.icon)

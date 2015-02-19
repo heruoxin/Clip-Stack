@@ -48,8 +48,8 @@ public class BackupObject {
         return backupDateString;
     }
 
-    public void delete() {
-        backupFile.delete();
+    public boolean delete() {
+        return backupFile.delete();
     }
 
     public boolean makeImport() {

@@ -37,7 +37,7 @@ public class Storage {
 
     private Storage(Context context) {
         this.context = context;
-        this.cb = (ClipboardManager) this.context.getSystemService(this.context.CLIPBOARD_SERVICE);
+        this.cb = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
         this.dbHelper = new StorageHelper(this.context);
     }
 
@@ -116,7 +116,7 @@ public class Storage {
             Cursor c;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
-            clipsInMemory = new ArrayList<ClipObject>();
+            clipsInMemory = new ArrayList<>();
             while (c.moveToNext()) {
                 clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
             }
