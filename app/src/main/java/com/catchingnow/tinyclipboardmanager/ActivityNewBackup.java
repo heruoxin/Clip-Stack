@@ -63,7 +63,7 @@ public class ActivityNewBackup extends ActionBarActivity {
                     .firstInstallTime;
             dateFrom.setTimeInMillis(installedDate);
             while (dateFrom.after(dateTo)) {
-                dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 80000000);
+                dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 70000000);
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -93,8 +93,8 @@ public class ActivityNewBackup extends ActionBarActivity {
             datePickerTo.setCalendarViewShown(false);
         }
 
-        long dateDiff = dateFrom.getTimeInMillis() - dateTo.getTimeInMillis();
-        if (dateDiff > 80000000 || dateDiff < -80000000) {
+        long dateDiff = dateTo.getTimeInMillis() - dateFrom.getTimeInMillis();
+        if (dateDiff > 80000000) {
             datePickerFrom.setMinDate(dateFrom.getTimeInMillis());
             datePickerTo.setMinDate(dateFrom.getTimeInMillis());
         }

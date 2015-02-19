@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -33,7 +34,7 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
     public final static int JOB_ID = 1;
     private final static String STORAGE_DATE = "pref_save_dates";
-    public int NUMBER_OF_CLIPS = 6; //3-9
+    public int NUMBER_OF_CLIPS = 6; //3-6
     private NotificationManager notificationManager;
     private SharedPreferences preference;
     private Storage db;
@@ -200,7 +201,7 @@ public class CBWatcherService extends Service {
 
         boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
 
-        Notification.Builder preBuildNotification = new Notification.Builder(this)
+        NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
                 .setContentIntent(resultPendingIntent)
@@ -208,13 +209,13 @@ public class CBWatcherService extends Service {
                 .setAutoCancel(!pinOnTop);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             preBuildNotification
-                    .setPriority(Notification.PRIORITY_MIN);
+                    .setPriority(NotificationCompat.PRIORITY_MIN);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildNotification
                     .setSmallIcon(R.drawable.icon)
-                    .setVisibility(Notification.VISIBILITY_SECRET)
+                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                     .setColor(getResources().getColor(R.color.primary_light));
         } else {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
@@ -228,7 +229,9 @@ public class CBWatcherService extends Service {
 
         Notification n = preBuildNotification.build();
 
-        n.bigContentView = bigView.build();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            n.bigContentView = bigView.build();
+        }
 
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
@@ -264,7 +267,7 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        Notification.Builder preBuildN = new Notification.Builder(this)
+        NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setContentText(getString(R.string.clip_notification_single_text))
                 .setContentIntent(resultPendingIntent)
@@ -272,12 +275,12 @@ public class CBWatcherService extends Service {
                 .setAutoCancel(!pinOnTop);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             preBuildN
-                    .setPriority(Notification.PRIORITY_MIN);
+                    .setPriority(NotificationCompat.PRIORITY_MIN);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildN
                     .setSmallIcon(R.drawable.icon)
-                    .setVisibility(Notification.VISIBILITY_SECRET)
+                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                     .setColor(getResources().getColor(R.color.primary_light));
         } else {
             preBuildN.setSmallIcon(R.drawable.icon_shadow);
