@@ -124,7 +124,16 @@ public class CBWatcherService extends Service {
         if (cb.hasPrimaryClip()) {
             String clipString;
             try {
-                clipString = cb.getPrimaryClip().getItemAt(0).getText().toString();
+                String textClipString = (String) cb.getPrimaryClip().getItemAt(0).getText();
+                String htmlTextClipString = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    htmlTextClipString = cb.getPrimaryClip().getItemAt(0).getHtmlText();
+                }
+                if (textClipString != null) {
+                    clipString = textClipString;
+                } else {
+                    clipString = htmlTextClipString;
+                }
             } catch (Error ignored) {
                 return;
             }
@@ -194,10 +203,13 @@ public class CBWatcherService extends Service {
         Notification.Builder preBuildNotification = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
                 .setContentText(getString(R.string.clip_notification_text))
-                .setPriority(Notification.PRIORITY_MIN)
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            preBuildNotification
+                    .setPriority(Notification.PRIORITY_MIN);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildNotification
