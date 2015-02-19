@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_save_dates_descriptions">
+        <item>1 天</item>
+        <item>3 天</item>
+        <item>7 天</item>
+        <item>30 天</item>
+        <item>永久</item>
+    </string-array>
+    <string-array name="pref_save_dates_values">
+        <item>1</item>
+        <item>3</item>
+        <item>7</item>
+        <item>30</item>
+        <item>9999</item>
+    </string-array>
+</resources>

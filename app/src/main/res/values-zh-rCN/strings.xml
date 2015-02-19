@@ -57,7 +57,7 @@
     <string name="toast_undo">撤销</string>
     <string name="backup_file_name">剪纸堆备份</string>
     <string name="export_success">导出成功：</string>
-    <string name="export_failed">导出失败，可能是没有SD卡或者空间不足。</string>
+    <string name="export_failed">导出失败，可能是没有 SD 卡或者空间不足。</string>
     <string name="pref_notification_summary_off">不显示任何通知。</string>
     <string name="pref_notification_summary_on">显示通知。</string>
     <string name="pref_notification_title">通知</string>
