@@ -1,4 +1,4 @@
-# Clip-Stack
+#Clip-Stack
 
 ###A tiny clipboard history manager app.
 
@@ -47,6 +47,17 @@ RECEIVE_BOOT_COMPLETED:  Start a background service to listen the system clipboa
 
 WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history. This app won't write any other files to your SD card.
 
+-----
+
+###Credits
+
+[nispok/Snackbar](https://github.com/nispok/snackbar)
+
+[brnunes/SwipeableRecyclerView](https://github.com/brnunes/SwipeableRecyclerView)
+
+[jacky030607/Traditional Chinese translate](http://apk.tw/thread-645505-1-1.html)
+
+-----
 
 #剪纸堆
 
