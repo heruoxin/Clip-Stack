@@ -203,13 +203,16 @@ public class CBWatcherService extends Service {
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
-                .setContentText(getString(R.string.clip_notification_text))
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             preBuildNotification
+                    .setContentText(getString(R.string.clip_notification_text))
                     .setPriority(NotificationCompat.PRIORITY_MIN);
+        } else {
+            preBuildNotification
+                    .setContentText(getString(R.string.clip_notification_text_old));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

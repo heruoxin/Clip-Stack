@@ -76,4 +76,6 @@
     <string name="toast_find_backup">條備份，路徑</string>
     <string name="action_new_backup">新備份</string>
     <string name="action_import">匯入</string>
+    <string name="action_backup">備份</string>
+    <string name="clip_notification_text_old">查看更多。</string>
 </resources>

@@ -77,5 +77,6 @@
     <string name="toast_find_backup">条备份，位于 </string>
     <string name="backup_file_name_old">"Clip Stack Backup "</string>
     <string name="time_format_with_second">HH:mm:ss</string>
+    <string name="clip_notification_text_old">点击查看更多。</string>
 
 </resources>
