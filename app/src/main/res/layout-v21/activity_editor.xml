@@ -51,7 +51,7 @@
                 android:layout_marginBottom="18dp"
                 android:background="@drawable/background_fab"
                 android:padding="8dp"
-                android:src="@drawable/ic_action_save"
+                android:src="@drawable/ic_action_copy"
                 android:scaleType="centerInside"
                 android:elevation="4dp"
                 android:stateListAnimator="@animator/anim"
