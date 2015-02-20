@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "com.catchingnow.tinyclipboardmanager"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 21
-        versionCode 41
-        versionName "1.0.8.1"
+        versionCode 44
+        versionName "1.0.9.1"
     }
     buildTypes {
         release {

@@ -123,11 +123,10 @@ public class CBWatcherService extends Service {
     private void performClipboardCheck() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (!cb.hasPrimaryClip()) return;
-        ClipData.Item item = cb.getPrimaryClip().getItemAt(0);
         String clipString;
         try {
             //Don't use CharSequence .toString()!
-            CharSequence charSequence = item.getText();
+            CharSequence charSequence = cb.getPrimaryClip().getItemAt(0).getText();
             clipString = String.valueOf(charSequence);
         } catch (Error ignored) {
             return;
