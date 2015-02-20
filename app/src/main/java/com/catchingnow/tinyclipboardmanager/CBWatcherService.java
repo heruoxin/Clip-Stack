@@ -82,7 +82,7 @@ public class CBWatcherService extends Service {
                 showNotification();
             }
 
-            if (!preference.getBoolean(ActivitySetting.SERVICE_STATUS, true)) {
+            if (!preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true)) {
                 if (isMyActivitiesOnForeground <= 0) {
                     stopSelf();
                     isMyActivitiesOnForeground = 0;
@@ -159,8 +159,8 @@ public class CBWatcherService extends Service {
     }
 
     private boolean checkNotificationPermission() {
-        boolean allowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_SHOW, true);
-        boolean allowService = preference.getBoolean(ActivitySetting.SERVICE_STATUS, true);
+        boolean allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
+        boolean allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
         if (allowNotification && allowService) {
             return true;
         }
@@ -199,7 +199,7 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
@@ -258,7 +258,7 @@ public class CBWatcherService extends Service {
             }
         }
 
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
+        boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         Intent resultIntent = new Intent(this, ActivityMain.class)
                 .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true);

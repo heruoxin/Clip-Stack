@@ -16,7 +16,7 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 //            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
-//            boolean forceShowNotification = preference.getBoolean(ActivitySetting.NOTIFICATION_PIN, false);
+//            boolean forceShowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 //            CBWatcherService.startCBService(context, forceShowNotification);
             Log.v(ActivityMain.PACKAGE_NAME, "LaunchServiceAtStartup");
             CBWatcherService.startCBService(context, true);

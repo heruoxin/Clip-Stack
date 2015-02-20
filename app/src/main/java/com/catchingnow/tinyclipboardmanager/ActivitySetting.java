@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,27 +14,27 @@ import android.widget.LinearLayout;
 
 public class ActivitySetting extends PreferenceActivity {
 
-    public final static String NOTIFICATION_SHOW = "pref_notification_show";
-    public final static String NOTIFICATION_PIN = "pref_notification_pin";
-    public final static String SERVICE_STATUS = "pref_start_service";
-    public final static String SAVE_DATES = "pref_save_dates";
-    public final static String LAST_ACTIVE_THIS = "pref_last_active_this";
+    public final static String PREF_NOTIFICATION_SHOW = "pref_notification_show";
+    public final static String PREF_NOTIFICATION_PIN = "pref_notification_pin";
+    public final static String PREF_START_SERVICE = "pref_start_service";
+    public final static String PREF_SAVE_DATES = "pref_save_dates";
+//    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefListener;
-    private Context c;
+    private Context context;
 
     public ActivitySetting() {
         myPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                   String key) {
                 switch (key) {
-                    case SERVICE_STATUS:
-                    case NOTIFICATION_SHOW:
-                    case NOTIFICATION_PIN:
-                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION or SERVICE_STATUS");
-                        CBWatcherService.startCBService(c, true);
+                    case PREF_START_SERVICE:
+                    case PREF_NOTIFICATION_SHOW:
+                    case PREF_NOTIFICATION_PIN:
+                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION or PREF_START_SERVICE");
+                        CBWatcherService.startCBService(context, true);
                         break;
-                    case SAVE_DATES:
+                    case PREF_SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
                         if (i > 9998) {
                             findPreference(key).setSummary(getString(R.string.pref_storage_summary_infinite));
@@ -42,6 +43,7 @@ public class ActivitySetting extends PreferenceActivity {
                         }
                         break;
                 }
+                requestBackup(context);
             }
         };
     }
@@ -49,14 +51,20 @@ public class ActivitySetting extends PreferenceActivity {
     public void initSharedPrefListener(){
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListener);
 //        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-//        preference.edit().putLong(LAST_ACTIVE_THIS, new Date().getTime()).commit();
+//        preference.edit().putLong(PREF_LAST_ACTIVE_THIS, new Date().getTime()).commit();
+    }
+
+    public static void requestBackup(Context context) {
+        Log.d(ActivityMain.PACKAGE_NAME, "requestBackup");
+        BackupManager backupManager = new BackupManager(context);
+        backupManager.dataChanged();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        c = this.getBaseContext();
+        context = this.getBaseContext();
         addPreferencesFromResource(R.xml.preference);
         mActionBar.setTitle(getTitle());
         initSharedPrefListener();

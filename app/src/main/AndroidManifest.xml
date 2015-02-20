@@ -7,9 +7,15 @@
 
     <application
         android:allowBackup="true"
+        android:backupAgent="BackupAgent"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAImD2xzM1mjVqrMOV7G1_ccLkNvpmbu8KPJ5XeJg" />
+
         <service
             android:name=".CBWatcherService"
             android:enabled="true"

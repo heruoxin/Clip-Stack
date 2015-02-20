@@ -2,6 +2,8 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.app.backup.BackupManager;
+import android.app.backup.RestoreObserver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -317,6 +319,13 @@ public class ActivityMain extends ActionBarActivity {
         db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"), Storage.SYSTEM_CLIPBOARD);
+        BackupManager backupManager = new BackupManager(this);
+        backupManager.requestRestore(new RestoreObserver() {
+            @Override
+            public void restoreFinished(int error) {
+                super.restoreFinished(error);
+            }
+        });
     }
 
     private void clearAll() {
