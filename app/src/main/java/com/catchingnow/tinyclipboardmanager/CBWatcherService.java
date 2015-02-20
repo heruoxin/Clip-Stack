@@ -122,29 +122,21 @@ public class CBWatcherService extends Service {
 
     private void performClipboardCheck() {
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (cb.hasPrimaryClip()) {
-            String clipString;
-            try {
-                String textClipString = (String) cb.getPrimaryClip().getItemAt(0).getText();
-                String htmlTextClipString = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    htmlTextClipString = cb.getPrimaryClip().getItemAt(0).getHtmlText();
-                }
-                if (textClipString != null) {
-                    clipString = textClipString;
-                } else {
-                    clipString = htmlTextClipString;
-                }
-            } catch (Error ignored) {
-                return;
-            }
-            if (clipString != null && !"".equals(clipString.trim())) {
-                if (isMyActivitiesOnForeground <= 0) {
-                    db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW);
-                } else {
-                    db.modifyClip(null, clipString);
-                }
-            }
+        if (!cb.hasPrimaryClip()) return;
+        ClipData.Item item = cb.getPrimaryClip().getItemAt(0);
+        String clipString;
+        try {
+            //Don't use CharSequence .toString()!
+            CharSequence charSequence = item.getText();
+            clipString = String.valueOf(charSequence);
+        } catch (Error ignored) {
+            return;
+        }
+        if ("".equals(clipString.trim())) return;
+        if (isMyActivitiesOnForeground <= 0) {
+            db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW);
+        } else {
+            db.modifyClip(null, clipString);
         }
     }
 
