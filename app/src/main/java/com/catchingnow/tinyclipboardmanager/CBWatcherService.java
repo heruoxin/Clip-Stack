@@ -140,7 +140,7 @@ public class CBWatcherService extends Service {
     }
 
     private void cleanUpSqlite() {
-        float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "9999"));
+        float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "7"));
         Log.v(PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
         if (db == null) {

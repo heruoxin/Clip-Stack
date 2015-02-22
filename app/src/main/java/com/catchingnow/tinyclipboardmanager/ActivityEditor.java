@@ -21,16 +21,11 @@ public class ActivityEditor extends ActionBarActivity {
     private String oldText;
     private EditText editText;
     private InputMethodManager inputMethodManager;
-    private ClipboardManager cb;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        context = this.getBaseContext();
-
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (oldText == null) {
@@ -60,14 +55,14 @@ public class ActivityEditor extends ActionBarActivity {
         if ("".equals(oldText)) {
             titleText = getString(R.string.title_activity_editor);
         }
-        getSupportActionBar().setTitle(titleText);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(new ActivityManager.TaskDescription(
-                    titleText,
-                    BitmapFactory.decodeResource(getResources(), R.drawable.icon),
-                    getResources().getColor(R.color.primary)
-            ));
-        }
+            getSupportActionBar().setTitle(titleText);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setTaskDescription(new ActivityManager.TaskDescription(
+                        titleText,
+                        BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+                        getResources().getColor(R.color.primary)
+                        ));
+            }
     }
 
     @Override
@@ -124,17 +119,8 @@ public class ActivityEditor extends ActionBarActivity {
     }
 
     private void deleteText() {
-
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        Storage db = Storage.getInstance(context);
-                        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
-                    }
-                }
-        ).start();
-
+        Storage db = Storage.getInstance(this);
+        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
     }
 
@@ -147,27 +133,17 @@ public class ActivityEditor extends ActionBarActivity {
     }
 
     private void saveText() {
-        final String newText = editText.getText().toString();
+        String newText = editText.getText().toString();
         String toastMessage;
         if (oldText.equals(newText)) {
             finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
             return;
         }
-
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        Storage db = Storage.getInstance(context);
-                        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
-                        if (newText != null && !"".equals(newText)) {
-                            cb.setText(newText);
-                        }
-                    }
-                }
-        ).start();
-
+        Storage db = Storage.getInstance(this);
+        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         if (newText != null && !"".equals(newText)) {
+            ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            cb.setText(newText);
             toastMessage = getString(R.string.toast_saved);
         } else {
             toastMessage = getString(R.string.toast_deleted);
