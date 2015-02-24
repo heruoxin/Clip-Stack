@@ -3,8 +3,8 @@
 
     <string name="app_name">Clip Stack</string>
     <string name="clip_notification_title"></string>
-    <string name="clip_notification_copy_button">Copy </string>
-    <string name="clip_notification_share_button">Share </string>
+    <string name="clip_notification_copy_button">Copy</string>
+    <string name="clip_notification_share_button">Share</string>
     <string name="clip_notification_big_title">Recent clipboards</string>
     <string name="clip_notification_big_summary_text"></string>
     <string name="toast_end_string">has copied</string>
@@ -33,8 +33,8 @@
     <string name="pref_storage_dialog">Save clips for</string>
     <string name="pref_about_category">About</string>
     <string name="pref_about_title">Open Source</string>
-    <string name="pref_about_summary">View source code on Github.</string>
-    <string name="pref_app_setting_category">App Setting</string>
+    <string name="pref_about_summary">View source code on GitHub.</string>
+    <string name="pref_app_setting_category">App Settings</string>
     <string name="pref_service_title">Service</string>
     <string name="pref_service_summary">Listen system clipboard in background.</string>
     <string name="pref_notification_title">Notification</string>
@@ -47,7 +47,7 @@
     <string name="title_activity_editor">New Clip</string>
     <string name="first_launch_clips_0">Welcome to Clip Stack. %1$s</string>
     <string name="first_launch_clips_1">It can show clip history in notification.</string>
-    <string name="first_launch_clips_2">click here %1$s to edit.</string>
+    <string name="first_launch_clips_2">Click here %1$s to edit.</string>
     <string name="first_launch_clips_3">%1$s Swipe to delete. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>
     <string name="action_add">Add</string>
