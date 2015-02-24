@@ -55,7 +55,11 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 [brnunes/SwipeableRecyclerView](https://github.com/brnunes/SwipeableRecyclerView)
 
-[jacky030607/Traditional Chinese translate](http://apk.tw/thread-645505-1-1.html)
+###Translate
+
+[Traditional Chinese: jacky030607](http://apk.tw/thread-645505-1-1.html)
+
+[Serbian: pejakm](https://github.com/heruoxin/Clip-Stack/pull/4)
 
 -----
 
