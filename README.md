@@ -1,46 +1,45 @@
-#Clip-Stack
+# Clip-Stack
 
-###A tiny clipboard history manager app.
+### A tiny clipboard history manager app.
 
 ![screenshot](http://ww4.sinaimg.cn/large/66cab368gw1ep3ki6o4yzj21eq0h67am.jpg)
 
-<a href="https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager">
-  <img alt="Get it on Google Play"
-   src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
-</a>
+[![Get it on Google Play Store](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager)
+[![Get it on F-Droid](https://guardianproject.info/wp-content/uploads/2014/07/logo-fdroid.png)](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
 
-####Unlimited Clips
+#### Unlimited Clips
 
 📌 Clip Stack can remember all your clipboard history and recover text after reboot. 
 
-####Easy to Manage
+#### Easy to Manage
 
-📌 Easy to search, edit, and delete by a simple swipe gesture. You can also export history into a TXT file.
+📌 Easy to search, edit, and delete by a simple swipe gesture. You can also export history into a plain-text file.
 
-####Useful Notification
+#### Useful Notification
 
 📌 It can show your clipboard history in a simple notification. Help you switch between clips and paste them easily when typing. Will only show when new text copied.
 
-####Easy to Share
+#### Easy to Share
 
-📌 Any clips are shareable. You can easily share clips to many apps such as Twitter, Gmail, Evernote, and more.
+📌 Any clips are shareable. You can easily share clips to many apps such as Email, SMS/MMS, Twitter, and more.
 
-####Material Design
+#### Material Design
 
 📌 Full material design, not only color & icon.
 
-####Auto Clean Up
+#### Auto Clean Up
 
 📌 Using Android 🍭Lollipop's new JobScheduler API, Clip Stack can automatic clean up it's catches and RAM when phone is charging. 
 
+#### Other Features
 
-####Other Feature
-
-✓ Free ✓ Open-Source ✓ No-Ads
+✓ Gratis
+✓ Free/Libre and Open-Source
+✓ No-Ads
 
 - Support Android 4.1 above and work better with Android 🍭Lollipop. 👍
 
-####Permission Usage
+#### Permission Usage
 
 RECEIVE_BOOT_COMPLETED:  Start a background service to listen the system clipboard. It only cost 4.5M - 6M RAM. You can close it in Settings if you really don't want it.
 
@@ -49,17 +48,15 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 -----
 
-###Credits
+### Credits
 
-[nispok/Snackbar](https://github.com/nispok/snackbar)
+* [nispok/Snackbar](https://github.com/nispok/snackbar)
+* [brnunes/SwipeableRecyclerView](https://github.com/brnunes/SwipeableRecyclerView)
 
-[brnunes/SwipeableRecyclerView](https://github.com/brnunes/SwipeableRecyclerView)
+### Translate
 
-###Translate
-
-[Traditional Chinese: jacky030607](http://apk.tw/thread-645505-1-1.html)
-
-[Serbian: pejakm](https://github.com/heruoxin/Clip-Stack/pull/4)
+* [Traditional Chinese: jacky030607](http://apk.tw/thread-645505-1-1.html)
+* [Serbian: pejakm](https://github.com/heruoxin/Clip-Stack/pull/4)
 
 -----
 
