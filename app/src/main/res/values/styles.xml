@@ -18,11 +18,4 @@
         <item name="toolbarStyle">@style/Widget.Toolbar</item>
     </style>
 
-    <style name="Widget.Toolbar" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="navigationIcon">?attr/homeAsUpIndicator</item>
-    </style>
-
 </resources>
