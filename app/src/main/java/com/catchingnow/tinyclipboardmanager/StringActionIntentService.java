@@ -12,9 +12,9 @@ import android.widget.Toast;
  * a service on a separate handler thread.
  */
 public class StringActionIntentService extends IntentService {
-    public final static int ACTION_COPY = 1;
+    public final static int ACTION_COPY  = 1;
     public final static int ACTION_SHARE = 2;
-    public final static int ACTION_EDIT = 3;
+    public final static int ACTION_EDIT  = 3;
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboardmanager.clipboarAction";
 

@@ -105,7 +105,7 @@ public class ActivityMain extends ActionBarActivity {
         if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
             String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
             if (s != null) {
-                if (!"".equals(s)) {
+                if (!s.isEmpty()) {
                     queryText = s;
                 }
             }

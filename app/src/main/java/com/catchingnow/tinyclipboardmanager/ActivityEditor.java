@@ -52,17 +52,17 @@ public class ActivityEditor extends ActionBarActivity {
         //set activity title and icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String titleText = getString(R.string.title_activity_activity_editor);
-        if ("".equals(oldText)) {
+        if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-            getSupportActionBar().setTitle(titleText);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setTaskDescription(new ActivityManager.TaskDescription(
-                        titleText,
-                        BitmapFactory.decodeResource(getResources(), R.drawable.icon),
-                        getResources().getColor(R.color.primary)
-                        ));
-            }
+		getSupportActionBar().setTitle(titleText);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			setTaskDescription(new ActivityManager.TaskDescription(
+					titleText,
+					BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+					getResources().getColor(R.color.primary)
+					));
+		}
     }
 
     @Override
@@ -111,9 +111,6 @@ public class ActivityEditor extends ActionBarActivity {
             case (R.id.action_cancel):
             case (android.R.id.home):
                 finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
-                break;
-            default:
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

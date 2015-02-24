@@ -223,10 +223,10 @@ public class Storage {
             return;
         }
         open();
-        if (!newClip.equals("")) {
+        if (!newClip.isEmpty()) {
             addClipHistory(newClip);
         }
-        if (!oldClip.equals("")) {
+        if (!oldClip.isEmpty()) {
             deleteClipHistory(oldClip);
         }
         close();
