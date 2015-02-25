@@ -8,6 +8,7 @@ import java.util.Date;
 public class ClipObject {
     protected String text;
     protected Date date;
+    
     public ClipObject(String text, Date date) {
         this.text = text;
         this.date = date;

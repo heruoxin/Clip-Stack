@@ -104,6 +104,4 @@ public class ActivitySetting extends PreferenceActivity {
         getWindow().setContentView(contentView);
     }
 
-
-
 }

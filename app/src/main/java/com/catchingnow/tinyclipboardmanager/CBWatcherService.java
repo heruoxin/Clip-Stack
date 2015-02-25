@@ -131,7 +131,7 @@ public class CBWatcherService extends Service {
         } catch (Error ignored) {
             return;
         }
-        if ("".equals(clipString.trim())) return;
+        if (clipString.trim().isEmpty()) return;
         if (isMyActivitiesOnForeground <= 0) {
             db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW);
         } else {
