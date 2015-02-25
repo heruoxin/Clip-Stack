@@ -5,7 +5,11 @@
 ![screenshot](http://ww4.sinaimg.cn/large/66cab368gw1ep3ki6o4yzj21eq0h67am.jpg)
 
 [![Get it on Google Play Store](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager)
-[![Get it on F-Droid](https://guardianproject.info/wp-content/uploads/2014/07/logo-fdroid.png)](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
+
+Other Market:
+
+[F-Droid](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
+[CoolAPK](http://coolapk.com/apk/com.catchingnow.tinyclipboardmanager)
 
 #### Unlimited Clips
 
@@ -37,7 +41,7 @@
 ✓ Free/Libre and Open-Source
 ✓ No-Ads
 
-- Support Android 4.1 above and work better with Android 🍭Lollipop. 👍
+- Support Android 4.0 above and work better with Android 🍭Lollipop. 👍
 
 #### Permission Usage
 
@@ -94,7 +98,7 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 ✓  免费 ✓  开源 ✓  无广告
 
-- 支持 4.1 以上的所有版本 Android 系统，与 Android 5.0🍭Lollipop 最为搭配。
+- 支持 4.0 以上的所有版本 Android 系统，与 Android 5.0🍭Lollipop 最为搭配。
 
 ####权限说明
 
