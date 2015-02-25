@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--
+		License Creative Commons 0 (like the public domain)
+		This file is provided with no warranty
+		Done by Spanti Nicola (RyDroid) in 2015
+	-->
+	
+    <string-array name="pref_save_dates_descriptions">
+        <item name="1">1 jour</item>
+        <item name="3">3 jours</item>
+        <item name="7">7 jours</item>
+        <item name="30">30 jours</item>
+        <item name="9999">infini</item>
+    </string-array>
+    <string-array name="pref_save_dates_values">
+        <item name="1">1</item>
+        <item name="1">3</item>
+        <item name="7">7</item>
+        <item name="30">30</item>
+        <item name="9999">9999</item>
+    </string-array>
+</resources>
