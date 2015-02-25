@@ -81,6 +81,6 @@
     <string name="title_backups">Backups</string>
     <string name="action_new_backup">Nouveau backup</string>
     <string name="empty_card">Pas de backup</string>
-    <string name="toast_find_backup">" backups dans "</string>
+    <string name="toast_find_backup">%1$s backups\ndans %2$s</string>
     <string name="clip_notification_text_old">Cliquer pour en voir plus.</string>
 </resources>

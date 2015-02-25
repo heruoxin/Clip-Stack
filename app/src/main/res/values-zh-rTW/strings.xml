@@ -54,7 +54,6 @@
     <string name="switch_reverse_sort">倒序排列</string>
     <string name="time_format">HH:mm</string>
     <string name="title_activity_activity_editor">編輯</string>
-    <string name="title_activity_activity_export">匯出</string>
     <string name="title_activity_activity_get_share_text">複製到剪貼簿</string>
     <string name="title_activity_activity_setting">設定</string>
     <string name="title_activity_editor">新建剪貼簿</string>
@@ -73,7 +72,7 @@
     <string name="title_activity_backup">備份</string>
     <string name="title_activity_new_backup">新備份</string>
     <string name="title_backups">備份列表</string>
-    <string name="toast_find_backup">條備份，路徑</string>
+    <string name="toast_find_backup">%1$s 條備份\n路徑 %2$s</string>
     <string name="action_new_backup">新備份</string>
     <string name="action_import">匯入</string>
     <string name="action_backup">備份</string>

@@ -76,7 +76,7 @@
     <string name="title_backups">Резерве</string>
     <string name="action_new_backup">Нова резерва</string>
     <string name="empty_card">Нема резерви</string>
-    <string name="toast_find_backup">" резерви у "</string>
+    <string name="toast_find_backup">%1$s резерви\nу %2$s</string>
     <string name="clip_notification_text_old">Кликните за још.</string>
 
 </resources>

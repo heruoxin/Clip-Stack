@@ -74,7 +74,7 @@
     <string name="empty_card">无备份</string>
     <string name="title_activity_new_backup">新建备份</string>
     <string name="title_backups">备份列表</string>
-    <string name="toast_find_backup">条备份，位于 </string>
+    <string name="toast_find_backup">%1$s 条备份\n位于 %2$s</string>
     <string name="backup_file_name_old">"Clip Stack Backup "</string>
     <string name="time_format_with_second">HH:mm:ss</string>
     <string name="clip_notification_text_old">点击查看更多。</string>
