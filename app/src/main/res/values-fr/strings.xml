@@ -51,7 +51,7 @@
     <string name="pref_storage_summary_days">Conserver les presse-papiers pendant %d jours.</string>
     <string name="title_activity_editor">Nouveau presse-papier</string>
     <string name="first_launch_clips_0">Bienvenue dans Clip Stack. %1$s</string>
-    <string name="first_launch_clips_1">Cette app peut montrer l'historique du presse-papier dans une notification.</string>
+    <string name="first_launch_clips_1">Cette app peut montrer l\'historique du presse-papier dans une notification.</string>
     <string name="first_launch_clips_2">Cliquez içi %1$s pour éditer.</string>
     <string name="first_launch_clips_3">%1$s Swiper pour supprimer. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copier dans le presse-papier</string>
@@ -69,7 +69,7 @@
     <string name="export_success">Succès de l\'export : </string>
     <string name="export_failed">Échec de l\'export. Il n\'y a peut être pas de carte SD ou elle est pleine.</string>
     <string name="dialog_date_piker_from">Depuis :</string>
-    <string name="dialog_date_piker_to">Jusqu'à :</string>
+    <string name="dialog_date_piker_to">Jusqu\'à :</string>
     <string name="pref_notification_summary_on">Afficher une notification.</string>
     <string name="pref_notification_summary_off">N\'afficher aucune notification.</string>
     <string name="title_activity_backup">Backup</string>
