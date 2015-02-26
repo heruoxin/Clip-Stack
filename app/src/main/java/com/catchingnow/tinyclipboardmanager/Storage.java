@@ -5,7 +5,6 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -132,7 +131,7 @@ public class Storage {
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> starredClips = new ArrayList<>();
         for (ClipObject clipObject: allClips) {
-            if (clipObject.isStar()) {
+            if (clipObject.isStarred()) {
                 starredClips.add(clipObject);
             }
         }
@@ -215,7 +214,7 @@ public class Storage {
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
-        values.put(CLIP_IS_STAR, clipObject.isStar());
+        values.put(CLIP_IS_STAR, clipObject.isStarred());
         long row_id = db.insert(TABLE_NAME, null, values);
         if (row_id == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());

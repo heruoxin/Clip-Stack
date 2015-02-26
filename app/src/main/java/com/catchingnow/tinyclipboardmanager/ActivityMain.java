@@ -40,16 +40,18 @@ public class ActivityMain extends ActionBarActivity {
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
-    private String queryText = "";
     private RecyclerView mRecList;
     private ImageButton mFAB;
     private SearchView searchView;
     private MenuItem searchItem;
+    private MenuItem starItem;
     private Storage db;
     private Context context;
     private int isSnackbarShow = 0;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private boolean isFromNotification = false;
+    private boolean isStarred = false;
+    private String queryText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,7 @@ public class ActivityMain extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        setView(queryText);
+        setView();
         Log.v(PACKAGE_NAME, "ActivityMain onResume");
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
@@ -109,7 +111,7 @@ public class ActivityMain extends ActionBarActivity {
                     queryText = s;
                 }
             }
-            setView(queryText);
+            setView();
         }
         if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
             isFromNotification = true;
@@ -121,6 +123,7 @@ public class ActivityMain extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        starItem = menu.findItem(R.id.action_star);
         searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) searchItem.getActionView();
@@ -131,7 +134,7 @@ public class ActivityMain extends ActionBarActivity {
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
-                setView(queryText);
+                setView();
                 return true;
             }
 
@@ -139,7 +142,7 @@ public class ActivityMain extends ActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
-                setView(null);
+                setView();
                 return true;
             }
         });
@@ -148,7 +151,7 @@ public class ActivityMain extends ActionBarActivity {
             public boolean onClose() {
                 searchItem.collapseActionView();
                 queryText = null;
-                setView(null);
+                setView();
                 return false;
             }
         });
@@ -162,7 +165,7 @@ public class ActivityMain extends ActionBarActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryText = newText;
-                setView(queryText);
+                setView();
                 return true;
             }
         });
@@ -180,6 +183,11 @@ public class ActivityMain extends ActionBarActivity {
         switch (id) {
             case R.id.action_search:
                 return super.onOptionsItemSelected(item);
+            case R.id.action_star:
+                isStarred = !isStarred;
+                setStarIcon();
+                setView();
+                return super.onOptionsItemSelected(item);
 //            case R.id.action_refresh:
 //                setView(queryText);
 //                return super.onOptionsItemSelected(item);
@@ -195,7 +203,6 @@ public class ActivityMain extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override
@@ -212,10 +219,23 @@ public class ActivityMain extends ActionBarActivity {
         context.startActivity(intent);
     }
 
-    private void setView(String query) {
+    private void setStarIcon() {
+        if (isStarred) {
+            starItem.setIcon(R.drawable.ic_action_star_white);
+        } else {
+            starItem.setIcon(R.drawable.ic_action_star_outline_white);
+        }
+    }
+
+    private void setView() {
         //get clips
         db = Storage.getInstance(this);
-        final List<ClipObject> clips = db.getClipHistory(query);
+        final List<ClipObject> clips;
+        if (isStarred) {
+            clips = db.getStarredClipHistory(queryText);
+        } else {
+            clips = db.getClipHistory(queryText);
+        }
 
         //set view
         setContentView(R.layout.activity_main);

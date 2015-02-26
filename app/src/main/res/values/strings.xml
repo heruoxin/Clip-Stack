@@ -78,5 +78,6 @@
     <string name="empty_card">No backup</string>
     <string name="toast_find_backup">%1$s backups in %2$s</string>
     <string name="clip_notification_text_old">Click to show more.</string>
+    <string name="action_star">Starred</string>
 
 </resources>

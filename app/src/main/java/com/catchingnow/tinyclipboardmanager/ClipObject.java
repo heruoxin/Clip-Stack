@@ -26,11 +26,11 @@ public class ClipObject {
     public Date getDate() {
         return date;
     }
-    public  boolean isStar() {
+    public  boolean isStarred() {
         return star;
     }
-    public void  setStar(boolean isStar) {
-        this.star = isStar;
+    public void  setStar(boolean isStarred) {
+        this.star = isStarred;
     }
 }
 
