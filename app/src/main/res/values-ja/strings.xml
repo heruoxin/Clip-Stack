@@ -33,7 +33,7 @@
     <string name="pref_notification_pin_summary_off">システムクリップボード変化があるのみ、通知を表示する</string>
     <string name="pref_notification_pin_summary_on">常に通知を表示する</string>
     <string name="pref_notification_pin_title">通知表示</string>
-    <string name="pref_service_summary">在后台时仍记录剪贴板变化。</string>
+    <string name="pref_service_summary">バックグラウンドで実行されている時，クリップボードの変化を記録し</string>
     <string name="pref_service_title">バックグラウンドサービス</string>
     <string name="pref_storage_dialog">“最近のクリップ”を保存：</string>
     <string name="pref_storage_summary">どのくらいの“最近のクリップ”を保存したいのですか？</string>
