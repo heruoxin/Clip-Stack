@@ -112,13 +112,19 @@ public class Storage {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
-            String[] COLUMNS = {CLIP_STRING, CLIP_DATE};
+            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
             Cursor c;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<>();
             while (c.moveToNext()) {
-                clipsInMemory.add(new ClipObject(c.getString(0), new Date(c.getLong(1))));
+                clipsInMemory.add(
+                        new ClipObject(
+                                c.getString(0),
+                                new Date(c.getLong(1)),
+                                c.getInt(2) > 0
+                        )
+                );
             }
             c.close();
             close();

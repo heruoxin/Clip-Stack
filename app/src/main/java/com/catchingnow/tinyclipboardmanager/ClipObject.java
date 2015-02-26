@@ -29,7 +29,7 @@ public class ClipObject {
     public  boolean isStarred() {
         return star;
     }
-    public void  setStar(boolean isStarred) {
+    public void setStarred(boolean isStarred) {
         this.star = isStarred;
     }
 }

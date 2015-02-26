@@ -389,14 +389,34 @@ public class ActivityMain extends ActionBarActivity {
         }
 
         @Override
-        public void onBindViewHolder(ClipCardViewHolder clipCardViewHolder, int i) {
+        public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
             clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
             clipCardViewHolder.vText.setText(clipObject.getText().trim());
+            if (clipObject.isStarred()) {
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
+            }
             addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
             addLongClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
             addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
+
+            clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clipObject.setStarred(!clipObject.isStarred());
+                    db.starredClip(clipObject);
+                    if (clipObject.isStarred()) {
+                        clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
+                    } else {
+                        clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
+                        if (isStarred) {
+                            //remove form starred list.
+                            remove(clipObject);
+                        }
+                    }
+                }
+            });
         }
 
         @Override
@@ -455,6 +475,7 @@ public class ActivityMain extends ActionBarActivity {
             protected TextView vTime;
             protected TextView vDate;
             protected TextView vText;
+            protected ImageButton vStarred;
             protected View vShare;
 
             public ClipCardViewHolder(View v) {
@@ -462,6 +483,7 @@ public class ActivityMain extends ActionBarActivity {
                 vTime = (TextView) v.findViewById(R.id.activity_main_card_time);
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
+                vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = v.findViewById(R.id.activity_main_card_share_button);
             }
         }
