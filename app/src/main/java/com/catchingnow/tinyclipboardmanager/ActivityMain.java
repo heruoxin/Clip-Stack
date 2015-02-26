@@ -254,7 +254,7 @@ public class ActivityMain extends ActionBarActivity {
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {
-                                return true;
+                                return !clips.get(position).isStarred();
                             }
 
                             @Override

@@ -171,12 +171,12 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     mDownX = motionEvent.getRawX();
                     mDownY = motionEvent.getRawY();
                     mDownPosition = mRecyclerView.getChildPosition(mDownView);
-                    if (mSwipeListener.canSwipe(mDownPosition)) {
+//                    if (mSwipeListener.canSwipe(mDownPosition)) {
                         mVelocityTracker = VelocityTracker.obtain();
                         mVelocityTracker.addMovement(motionEvent);
-                    } else {
-                        mDownView = null;
-                    }
+//                    } else {
+//                        mDownView = null;
+//                    }
                 }
                 break;
             }
@@ -226,7 +226,11 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     dismiss = (velocityX < 0) == (mFinalDelta < 0);
                     dismissRight = mVelocityTracker.getXVelocity() > 0;
                 }
-                if (dismiss && mDownPosition != ListView.INVALID_POSITION) {
+                if (
+                        dismiss &&
+                        mDownPosition != ListView.INVALID_POSITION &&
+                        mSwipeListener.canSwipe(mDownPosition)
+                        ) {
                     // dismiss
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
