@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/like_black"
     android:orientation="vertical">
 
     <ImageView
@@ -30,15 +29,14 @@
             <TextView
                 android:id="@+id/current_clip"
                 android:layout_marginLeft="10dp"
-                android:textSize="16sp"
                 android:text="Title test test"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:lines="1"
                 android:ellipsize="end"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.StatusBar.EventContent.Title" />
 
             <ImageButton
                 android:id="@+id/clip_share_button"
@@ -56,7 +54,7 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:background="@color/secondary_text" />
+            android:background="@color/divider" />
 
     </LinearLayout>
 </RelativeLayout>

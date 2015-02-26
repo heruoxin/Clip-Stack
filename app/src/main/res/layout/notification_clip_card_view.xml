@@ -21,12 +21,11 @@
             android:ellipsize="end"
             android:lines="1"
             android:text="text test test"
-            android:textSize="14sp"
-            android:textColor="@color/divider"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.StatusBar.EventContent" />
 
         <ImageButton
             android:id="@+id/clip_copy_button"
@@ -46,14 +45,14 @@
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_below="@id/each_item"
-        android:background="@color/secondary_text" />
+        android:background="@color/divider" />
 
     <ImageView
         android:id="@+id/notification_item_down_line"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_above="@id/each_item"
-        android:background="@color/secondary_text" />
+        android:background="@color/divider" />
 
 </RelativeLayout>
 
