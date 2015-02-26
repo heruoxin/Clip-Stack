@@ -330,7 +330,9 @@ public class Storage {
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
-                        CLIP_STRING + " TEXT);";
+                        CLIP_STRING + " TEXT, "+
+                        CLIP_IS_STAR + " BOOLEAN"+
+                        ");";
 
         public StorageHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
