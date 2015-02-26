@@ -26,6 +26,7 @@ public class Storage {
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
+    private static final String CLIP_IS_STAR = "star";
     private static Storage mInstance = null;
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
@@ -83,13 +84,13 @@ public class Storage {
 
     public List<ClipObject> getClipHistory(String queryString) {
         List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> queryClips = new ArrayList<>();
         if ("".equals(queryString)) {
             return allClips;
         }
         if (queryString == null) {
             return allClips;
         }
-        List<ClipObject> queryClips = new ArrayList<>();
         for (ClipObject clip:allClips) {
             if(clip.getText().contains(queryString)) {
                 queryClips.add(clip);
@@ -125,6 +126,32 @@ public class Storage {
             isClipsInMemoryChanged = false;
         }
         return clipsInMemory;
+    }
+
+    public List<ClipObject> getStarredClipHistory() {
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> starredClips = new ArrayList<>();
+        for (ClipObject clipObject: allClips) {
+            if (clipObject.isStar()) {
+                starredClips.add(clipObject);
+            }
+        }
+        return starredClips;
+    }
+
+    public List<ClipObject> getStarredClipHistory(int n) {
+        return getStarredClipHistory().subList(0, n);
+    }
+
+    public List<ClipObject> getStarredClipHistory(String queryString) {
+        List<ClipObject> allStarredClips = getStarredClipHistory();
+        List<ClipObject> queryClips = new ArrayList<>();
+        for (ClipObject clipObject: allStarredClips) {
+            if (clipObject.getText().contains(queryString)) {
+                queryClips.add(clipObject);
+            }
+        }
+        return queryClips;
     }
 
     private void refreshTopClipInStack() {
@@ -165,6 +192,10 @@ public class Storage {
         return true;
     }
 
+    private boolean deleteClipHistory(ClipObject clipObject) {
+        return deleteClipHistory(clipObject.getText());
+    }
+
     private boolean deleteClipHistory(String query) {
         int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
         if (row_id == -1) {
@@ -184,12 +215,22 @@ public class Storage {
         ContentValues values = new ContentValues();
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
+        values.put(CLIP_IS_STAR, clipObject.isStar());
         long row_id = db.insert(TABLE_NAME, null, values);
         if (row_id == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
         }
         return true;
+    }
+
+    public void starredClip(ClipObject clipObject) {
+        open();
+        deleteClipHistory(clipObject);
+        addClipHistory(clipObject);
+        close();
+        isClipsInMemoryChanged = true;
+        refreshAllTypeOfList(MAIN_ACTIVITY_VIEW);
     }
 
     public void importClips(ArrayList<ClipObject> clipObjects) {
@@ -278,11 +319,9 @@ public class Storage {
 
     public class StorageHelper extends SQLiteOpenHelper {
         private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
-        private static final int DATABASE_VERSION = 2;
+        private static final int DATABASE_VERSION = 3;
         private static final String DATABASE_NAME = "clippingnow.db";
         private static final String TABLE_NAME = "cliphistory";
-        private static final String CLIP_STRING = "history";
-        private static final String CLIP_DATE = "date";
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
@@ -300,6 +339,10 @@ public class Storage {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.v(PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
+            if (oldVersion <= 2) {
+                // add star option
+                db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+CLIP_IS_STAR+" BOOLEAN DEFAULT 0");
+            }
         }
     }
 

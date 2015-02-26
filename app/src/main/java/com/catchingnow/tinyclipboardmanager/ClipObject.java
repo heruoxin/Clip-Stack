@@ -8,10 +8,17 @@ import java.util.Date;
 public class ClipObject {
     protected String text;
     protected Date date;
-    
+    protected boolean star;
+
     public ClipObject(String text, Date date) {
         this.text = text;
         this.date = date;
+        this.star = false;
+    }
+    public ClipObject(String text, Date date, boolean star) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
     }
     public String getText() {
         return text;
@@ -19,4 +26,11 @@ public class ClipObject {
     public Date getDate() {
         return date;
     }
+    public  boolean isStar() {
+        return star;
+    }
+    public void  setStar(boolean isStar) {
+        this.star = isStar;
+    }
 }
+
