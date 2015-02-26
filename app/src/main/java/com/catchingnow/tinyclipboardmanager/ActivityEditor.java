@@ -19,6 +19,7 @@ import android.widget.Toast;
 public class ActivityEditor extends ActionBarActivity {
 
     private String oldText;
+    private boolean isStarred;
     private EditText editText;
     private InputMethodManager inputMethodManager;
 
@@ -137,10 +138,8 @@ public class ActivityEditor extends ActionBarActivity {
             return;
         }
         Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
+        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW);
         if (newText != null && !"".equals(newText)) {
-            ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            cb.setText(newText);
             toastMessage = getString(R.string.toast_saved);
         } else {
             toastMessage = getString(R.string.toast_deleted);

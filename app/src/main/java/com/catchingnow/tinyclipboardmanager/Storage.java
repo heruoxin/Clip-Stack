@@ -254,7 +254,6 @@ public class Storage {
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
         Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+")");
-        isClipsInMemoryChanged = true;
         if (oldClip == null) {
             oldClip = "";
         }
@@ -268,14 +267,31 @@ public class Storage {
             Log.v(PACKAGE_NAME,"Equals to TopStack");
             return;
         }
+
+        //check old text is starred or not
+        boolean isStarred = false;
+        List<ClipObject> lookLikeClips = getStarredClipHistory(oldClip);
+        if (lookLikeClips.size() > 0) {
+            for (ClipObject clipObject: lookLikeClips) {
+                if (clipObject.getText().equals(oldClip)) {
+                    isStarred = true;
+                }
+            }
+        }
+
         open();
         if (!newClip.isEmpty()) {
-            addClipHistory(newClip);
+            addClipHistory(new ClipObject(
+                    newClip,
+                    new Date(),
+                    isStarred
+            ));
         }
         if (!oldClip.isEmpty()) {
             deleteClipHistory(oldClip);
         }
         close();
+        isClipsInMemoryChanged = true;
 
         refreshTopClipInStack();
         refreshAllTypeOfList(notUpdateWhich);
