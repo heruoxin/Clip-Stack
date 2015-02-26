@@ -77,4 +77,9 @@
     <string name="backup_file_name_old">"Clip Stack Backup "</string>
     <string name="time_format_with_second">HH:mm:ss</string>
     <string name="clip_notification_text_old">他のクリップを見て、タップください</string>
+    <string name="arrays_one_day">一日</string>
+    <string name="arrays_three_days">三日</string>
+    <string name="arrays_seven_days">一週間（七日）</string>
+    <string name="arrays_thirty_days">一か月（三十日）</string>
+    <string name="arrays_infinite">永遠</string>
 </resources>

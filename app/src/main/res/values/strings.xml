@@ -79,5 +79,10 @@
     <string name="toast_find_backup">%1$s backups in %2$s</string>
     <string name="clip_notification_text_old">Click to show more.</string>
     <string name="action_star">Starred</string>
+    <string name="arrays_one_day">1 day</string>
+    <string name="arrays_three_days">3 days</string>
+    <string name="arrays_seven_days">7 days</string>
+    <string name="arrays_thirty_days">30 days</string>
+    <string name="arrays_infinite">infinite</string>
 
 </resources>

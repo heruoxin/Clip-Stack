@@ -78,5 +78,10 @@
     <string name="empty_card">Нема резерви</string>
     <string name="toast_find_backup">%1$s резерви\nу %2$s</string>
     <string name="clip_notification_text_old">Кликните за још.</string>
+    <string name="arrays_one_day">1 дан</string>
+    <string name="arrays_three_days">3 дана</string>
+    <string name="arrays_seven_days">7 дана</string>
+    <string name="arrays_thirty_days">30 дана</string>
+    <string name="arrays_infinite">трајан</string>
 
 </resources>

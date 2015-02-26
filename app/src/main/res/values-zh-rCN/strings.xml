@@ -78,5 +78,10 @@
     <string name="backup_file_name_old">"Clip Stack Backup "</string>
     <string name="time_format_with_second">HH:mm:ss</string>
     <string name="clip_notification_text_old">点击查看更多。</string>
+    <string name="arrays_infinite">永久</string>
+    <string name="arrays_one_day">一天</string>
+    <string name="arrays_seven_days">七天</string>
+    <string name="arrays_thirty_days">三十天</string>
+    <string name="arrays_three_days">三天</string>
 
 </resources>

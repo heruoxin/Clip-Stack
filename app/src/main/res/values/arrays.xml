@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pref_save_dates_descriptions">
-        <item name="1">1 day</item>
-        <item name="3">3 days</item>
-        <item name="7">7 days</item>
-        <item name="30">30 days</item>
-        <item name="9999">infinite</item>
+        <item name="1">@string/arrays_one_day</item>
+        <item name="3">@string/arrays_three_days</item>
+        <item name="7">@string/arrays_seven_days</item>
+        <item name="30">@string/arrays_thirty_days</item>
+        <item name="9999">@string/arrays_infinite</item>
     </string-array>
     <string-array name="pref_save_dates_values">
         <item name="1">1</item>

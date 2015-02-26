@@ -83,4 +83,9 @@
     <string name="empty_card">Pas de backup</string>
     <string name="toast_find_backup">%1$s backups\ndans %2$s</string>
     <string name="clip_notification_text_old">Cliquer pour en voir plus.</string>
+    <string name="arrays_one_day">1 jour</string>
+    <string name="arrays_seven_days">7 jours</string>
+    <string name="arrays_three_days">3 jours</string>
+    <string name="arrays_thirty_days">30 jours</string>
+    <string name="arrays_infinite">infini</string>
 </resources>

@@ -77,4 +77,9 @@
     <string name="action_import">匯入</string>
     <string name="action_backup">備份</string>
     <string name="clip_notification_text_old">查看更多。</string>
+    <string name="arrays_infinite">永久</string>
+    <string name="arrays_one_day">1 天</string>
+    <string name="arrays_seven_days">7 天</string>
+    <string name="arrays_thirty_days">30 天</string>
+    <string name="arrays_three_days">3 天</string>
 </resources>
