@@ -171,7 +171,11 @@ public class Storage {
         //for ActivityMain Clear All
         isClipsInMemoryChanged = true;
         open();
-        int row_id = db.delete(TABLE_NAME, CLIP_DATE + ">'" + 0 + "'", null);
+        int row_id = db.delete(
+                TABLE_NAME,
+                CLIP_IS_STAR + "='" + 0 + "'",
+                null
+        );
         close();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteAllClipHistory.");
@@ -186,7 +190,11 @@ public class Storage {
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
-        int row_id = db.delete(TABLE_NAME, CLIP_DATE + "<'" + timeStamp + "'", null);
+        int row_id = db.delete(
+                TABLE_NAME,
+                CLIP_DATE + "<'" + timeStamp + "'"+" AND "+CLIP_IS_STAR + "='" + 0 + "'",
+                null
+        );
         close();
         //refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
         refreshTopClipInStack();
