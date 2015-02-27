@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,9 +33,11 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
+    public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
+    public final static String INTENT_EXTRA_IS_STARRED = "com.catchingnow.tinyclipboardmanager.EXTRA.IS_STARRED";
     public final static int JOB_ID = 1;
-    private final static String STORAGE_DATE = "pref_save_dates";
     public int NUMBER_OF_CLIPS = 6; //3-6
+    protected boolean showStarred = false;
     private NotificationManager notificationManager;
     private SharedPreferences preference;
     private Storage db;
@@ -79,6 +82,12 @@ public class CBWatcherService extends Service {
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 Log.v(PACKAGE_NAME, "onStartCommand showNotification");
+                showNotification();
+            }
+
+            if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
+                Log.v(PACKAGE_NAME, "onStartCommand changeStarStatues");
+                showStarred = !showStarred;
                 showNotification();
             }
 
@@ -140,7 +149,7 @@ public class CBWatcherService extends Service {
     }
 
     private void cleanUpSqlite() {
-        float days = (float) Integer.parseInt(preference.getString(STORAGE_DATE, "9999"));
+        float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
         Log.v(PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
         if (db == null) {
@@ -165,18 +174,29 @@ public class CBWatcherService extends Service {
             return;
         }
 
-        List<String> thisClipText = new ArrayList<>();
         if (db == null) {
             db = Storage.getInstance(this.getBaseContext());
         }
-        List<ClipObject> thisClips = db.getClipHistory(NUMBER_OF_CLIPS);
-        for (ClipObject thisClip : thisClips) {
-            thisClipText.add(thisClip.getText());
+        List<ClipObject> thisClips;
+        if (showStarred) {
+            thisClips = db.getStarredClipHistory(NUMBER_OF_CLIPS);
+            thisClips.add(0, db.getClipHistory().get(0));
+        } else {
+            thisClips = db.getClipHistory(NUMBER_OF_CLIPS);
         }
-        int length = thisClipText.size();
-        if (length <= 1) {
+
+        int length = thisClips.size();
+        if (length <= 1 && !showStarred) {
             showSingleNotification();
             return;
+        }
+        if (length <= 1 && showStarred) {
+            thisClips.add(new ClipObject(
+                    getString(R.string.clip_notification_single_text),
+                    new Date(),
+                    true
+            ));
+            length +=1;
         }
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
@@ -193,13 +213,17 @@ public class CBWatcherService extends Service {
         boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title) + thisClipText.get(0).trim()) //title
+                .setContentTitle(getString(R.string.clip_notification_title) + thisClips.get(0).getText().trim()) //title
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            String description = getString(R.string.clip_notification_text);
+            if (showStarred) {
+                description = "★ " + description;
+            }
             preBuildNotification
-                    .setContentText(getString(R.string.clip_notification_text))
+                    .setContentText(description)
                     .setPriority(NotificationCompat.PRIORITY_MIN);
         } else {
             preBuildNotification
@@ -215,10 +239,10 @@ public class CBWatcherService extends Service {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
         }
 
-        NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClipText.get(0));
+        NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
 
         for (int i = 1; i < length; i++) {
-            bigView.addClips(thisClipText.get(i));
+            bigView.addClips(thisClips.get(i));
         }
 
         Notification n = preBuildNotification.build();
@@ -263,10 +287,14 @@ public class CBWatcherService extends Service {
 
         NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
-                .setContentText(getString(R.string.clip_notification_single_text))
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
+        if (showStarred) {
+            preBuildN.setContentText(getString(R.string.clip_notification_single_text));
+        } else {
+            preBuildN.setContentText(getString(R.string.clip_notification_starred_single_text));
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             preBuildN
                     .setPriority(NotificationCompat.PRIORITY_MIN);
@@ -313,9 +341,9 @@ public class CBWatcherService extends Service {
         private Context c;
         int id = 0;
 
-        public NotificationClipListAdapter(Context context, String currentClip) {
+        public NotificationClipListAdapter(Context context, ClipObject clip) {
             c = context;
-            currentClip = currentClip.trim();
+            String currentClip = clip.getText().trim();
             expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
             expandedView.setTextViewText(R.id.current_clip, currentClip);
             //add pIntent for share
@@ -337,21 +365,41 @@ public class CBWatcherService extends Service {
                     openEditIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.current_clip, pOpenEditIntent);
+            //add pIntent for star click
+            Intent openStarIntent = new Intent(c, CBWatcherService.class)
+                    .putExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, true);
+            PendingIntent pOpenStarIntent = PendingIntent.getService(
+                    c,
+                    buttonNumber++,
+                    openStarIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            expandedView.setOnClickPendingIntent(R.id.star, pOpenStarIntent);
+            //set star's icon
+            if (showStarred) {
+                expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_grey600);
+            } else {
+                expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_outline_grey600);
+            }
         }
 
-        public NotificationClipListAdapter addClips(String s) {
+        public NotificationClipListAdapter addClips(ClipObject clipObject) {
             id += 1;
-            s = s.trim();
+            String s = clipObject.getText().trim();
             //Log.v(PACKAGE_NAME,"ID "+id);
             //Log.v(PACKAGE_NAME,s);
             //add view
             RemoteViews theClipView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_card_view);
-            theClipView.setTextViewText(R.id.clip_text, s);
+            if (clipObject.isStarred()) {
+                theClipView.setTextViewText(R.id.clip_text, "★ "+s);
+            } else {
+                theClipView.setTextViewText(R.id.clip_text, s);
+            }
 
             //add pIntent for copy
 
             Intent openCopyIntent = new Intent(c, StringActionIntentService.class)
                     .putExtra(StringActionIntentService.CLIPBOARD_STRING, s)
+                    .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, true)
                     .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_COPY);
             PendingIntent pOpenCopyIntent = PendingIntent.getService(c,
                     buttonNumber++,
@@ -363,6 +411,7 @@ public class CBWatcherService extends Service {
 
             Intent openEditIntent = new Intent(c, StringActionIntentService.class)
                     .putExtra(StringActionIntentService.CLIPBOARD_STRING, s)
+                    .putExtra(INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
                     .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     c,

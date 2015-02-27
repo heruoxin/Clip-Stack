@@ -89,4 +89,5 @@
     <string name="arrays_thirty_days">30 jours</string>
     <string name="arrays_infinite">infini</string>
     <string name="action_star">★</string>
+    <string name="clip_notification_starred_single_text">There is no starred items.</string>
 </resources>

@@ -145,7 +145,11 @@ public class Storage {
     }
 
     public List<ClipObject> getStarredClipHistory(int n) {
-        return getStarredClipHistory().subList(0, n);
+        List<ClipObject> starredClips = getStarredClipHistory();
+        if (n > starredClips.size()) {
+            n = starredClips.size();
+        }
+        return starredClips.subList(0, n);
     }
 
     public List<ClipObject> getStarredClipHistory(String queryString) {
@@ -261,6 +265,10 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
+        modifyClip(oldClip, newClip, notUpdateWhich, false);
+    }
+
+    public void modifyClip(String oldClip, String newClip, int notUpdateWhich, boolean isImportant) {
         Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+")");
         if (oldClip == null) {
             oldClip = "";
@@ -285,6 +293,10 @@ public class Storage {
                     isStarred = true;
                 }
             }
+        }
+
+        if (isImportant) {
+            isStarred = true;
         }
 
         open();

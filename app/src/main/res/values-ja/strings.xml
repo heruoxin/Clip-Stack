@@ -83,4 +83,5 @@
     <string name="arrays_thirty_days">一か月（三十日）</string>
     <string name="arrays_infinite">永遠</string>
     <string name="action_star">★</string>
+    <string name="clip_notification_starred_single_text">There is no starred items.</string>
 </resources>

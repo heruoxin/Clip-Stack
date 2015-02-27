@@ -19,8 +19,8 @@ import android.widget.Toast;
 public class ActivityEditor extends ActionBarActivity {
 
     private String oldText;
-    private boolean isStarred;
     private EditText editText;
+    private boolean isStarred;
     private InputMethodManager inputMethodManager;
 
     @Override
@@ -29,7 +29,8 @@ public class ActivityEditor extends ActionBarActivity {
         setContentView(R.layout.activity_editor);
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (oldText == null) {
+        isStarred = intent.getBooleanExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, false);
+        if (oldText == null || oldText.equals(getString(R.string.clip_notification_single_text))) {
             oldText = "";
         }
 
@@ -138,7 +139,7 @@ public class ActivityEditor extends ActionBarActivity {
             return;
         }
         Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW);
+        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, isStarred);
         if (newText != null && !"".equals(newText)) {
             toastMessage = getString(R.string.toast_saved);
         } else {

@@ -83,4 +83,5 @@
     <string name="arrays_thirty_days">30 天</string>
     <string name="arrays_three_days">3 天</string>
     <string name="action_star">星標</string>
+    <string name="clip_notification_starred_single_text">沒有加星標的項目。</string>
 </resources>

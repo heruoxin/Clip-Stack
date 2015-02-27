@@ -23,6 +23,8 @@ public class StringActionIntentService extends IntentService {
         super("StringActionIntentService");
     }
 
+    private Intent intent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -34,6 +36,8 @@ public class StringActionIntentService extends IntentService {
         if (intent != null) {
             Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             sendBroadcast(it);
+
+            this.intent = intent;
 
             String clips = intent.getStringExtra(CLIPBOARD_STRING);
             int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
@@ -89,6 +93,9 @@ public class StringActionIntentService extends IntentService {
     public void editText(final String clips) {
         Intent i = new Intent(this, ActivityEditor.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED,
+                        intent.getBooleanExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, false)
+                        )
                 .putExtra(Intent.EXTRA_TEXT, clips);
         startActivity(i);
     }
