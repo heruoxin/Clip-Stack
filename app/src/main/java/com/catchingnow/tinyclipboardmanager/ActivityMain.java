@@ -84,6 +84,7 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     protected void onResume() {
         setView();
+        mFAB.animate().rotation(360).setDuration(1000);
         Log.v(PACKAGE_NAME, "ActivityMain onResume");
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
