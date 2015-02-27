@@ -1,30 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+    <LinearLayout
+        android:id="@+id/icons"
         android:layout_margin="10dp"
-        android:src="@drawable/icon" />
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/icon" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="116dp" />
+
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/ic_action_star_outline_grey600" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/main_view"
-        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/icon"
         android:layout_marginStart="-4dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/clip_line"
-            android:layout_width="match_parent"
             android:gravity="center"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/current_clip"
@@ -53,9 +69,9 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#B6B6B6" />
 
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
