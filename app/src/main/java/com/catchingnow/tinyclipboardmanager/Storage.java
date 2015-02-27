@@ -318,7 +318,7 @@ public class Storage {
 
     }
 
-    private void updateSystemClipboard(boolean alsoStartService) {
+    private void updateSystemClipboard() {
 
         //sync system clipboard and storage.
         if (cb.hasPrimaryClip()) {
@@ -328,31 +328,25 @@ public class Storage {
                 if (thisClip != null) {
                     if (!thisClip.toString().equals(topClipInStack)) {
                         cb.setText(topClipInStack);
-                        return;
                     }
                 }
             }
-        }
-        if (alsoStartService) {
-            Log.v(PACKAGE_NAME, "Storage updateSystemClipboard");
-            CBWatcherService.startCBService(context, true);
         }
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
-            updateSystemClipboard(true);
-            //CBWatcherService.startCBService(context, true);
+            updateSystemClipboard();
+            CBWatcherService.startCBService(context, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
-            updateSystemClipboard(false);
+            updateSystemClipboard();
             ActivityMain.refreshMainView(context, "");
         } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
             ActivityMain.refreshMainView(context, "");
-            Log.v(PACKAGE_NAME, "Storage refreshAllTypeOfList");
             CBWatcherService.startCBService(context, true);
         } else {
-            updateSystemClipboard(true);
-            //CBWatcherService.startCBService(context, true);
+            updateSystemClipboard();
+            CBWatcherService.startCBService(context, true);
             ActivityMain.refreshMainView(context, "");
         }
     }
