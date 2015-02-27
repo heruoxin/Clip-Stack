@@ -53,7 +53,7 @@
     <string name="action_delete_all">清除全部</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
-    <string name="dialog_delete_all">确定清除全部剪贴历史？</string>
+    <string name="dialog_delete_all">（星标项目会被保留）</string>
     <string name="toast_undo">撤销</string>
     <string name="backup_file_name">剪纸堆备份</string>
     <string name="export_success">导出成功：</string>
@@ -83,5 +83,6 @@
     <string name="arrays_seven_days">七天</string>
     <string name="arrays_thirty_days">三十天</string>
     <string name="arrays_three_days">三天</string>
+    <string name="action_star">星标</string>
 
 </resources>

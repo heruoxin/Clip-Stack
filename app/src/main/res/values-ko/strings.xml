@@ -53,7 +53,7 @@
     <string name="action_add">추가</string>
     <string name="toast_front_string">""</string>
     <string name="action_delete_all">모두 지우기</string>
-    <string name="dialog_delete_all">정말 모든 내역을 지울거에요?</string>
+    <string name="dialog_delete_all">정말 모든 내역을 지울거에요?\n(별표 항목은 그대로 유지됩니다)</string>
     <string name="dialog_ok">네</string>
     <string name="dialog_cancel">아니오</string>
     <string name="toast_undo">실행 취소</string>

@@ -23,7 +23,7 @@
     <string name="dialog_cancel">取消</string>
     <string name="dialog_date_piker_from">從：</string>
     <string name="dialog_date_piker_to">到：</string>
-    <string name="dialog_delete_all">確定清除全部剪貼紀錄？</string>
+    <string name="dialog_delete_all">確定清除全部剪貼紀錄？\n（星標項目不會移除）</string>
     <string name="dialog_ok">確定</string>
     <string name="export_failed">匯出失敗，可能是沒有 SD 卡或者空間不足。</string>
     <string name="export_success">匯出成功：</string>
@@ -82,4 +82,5 @@
     <string name="arrays_seven_days">7 天</string>
     <string name="arrays_thirty_days">30 天</string>
     <string name="arrays_three_days">3 天</string>
+    <string name="action_star">星標</string>
 </resources>

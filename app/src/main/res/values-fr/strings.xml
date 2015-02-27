@@ -58,7 +58,7 @@
     <string name="action_add">Ajouter</string>
     <string name="toast_front_string">""</string>
     <string name="action_delete_all">Supprimer tout</string>
-    <string name="dialog_delete_all">Êtes vous sûr de vouloir supprimer tous les presse-papiers ?</string>
+    <string name="dialog_delete_all">Êtes vous sûr de vouloir supprimer tous les presse-papiers ?\nArticles étoilés seront conservés</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="toast_undo">Annuler</string>
@@ -88,4 +88,5 @@
     <string name="arrays_three_days">3 jours</string>
     <string name="arrays_thirty_days">30 jours</string>
     <string name="arrays_infinite">infini</string>
+    <string name="action_star">★</string>
 </resources>

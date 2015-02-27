@@ -53,7 +53,7 @@
     <string name="action_add">Add</string>
     <string name="toast_front_string">""</string>
     <string name="action_delete_all">Clear all</string>
-    <string name="dialog_delete_all">Are you sure you want to clear all clips?</string>
+    <string name="dialog_delete_all">Are you sure you want to clear all clips?\nStarred items will be retained.</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="toast_undo">Undo</string>

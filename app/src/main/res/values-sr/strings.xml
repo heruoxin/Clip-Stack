@@ -53,7 +53,7 @@
     <string name="action_add">Додај</string>
     <string name="toast_front_string">""</string>
     <string name="action_delete_all">Очисти све</string>
-    <string name="dialog_delete_all">Желите ли заиста да уклоните све ставке?</string>
+    <string name="dialog_delete_all">Желите ли заиста да уклоните све ставке?\nСа звездицом ставке остају</string>
     <string name="dialog_ok">У реду</string>
     <string name="dialog_cancel">Одустани</string>
     <string name="toast_undo">Врати</string>
@@ -83,5 +83,6 @@
     <string name="arrays_seven_days">7 дана</string>
     <string name="arrays_thirty_days">30 дана</string>
     <string name="arrays_infinite">трајан</string>
+    <string name="action_star">★</string>
 
 </resources>
