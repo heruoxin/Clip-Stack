@@ -75,9 +75,7 @@ public class ActivityMain extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         isFromNotification = false;
-        for (ClipObject clipObject : deleteQueue) {
-            db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
-        }
+        clearDeleteQueue();
         CBWatcherService.startCBService(context, false, -1);
     }
 
@@ -183,27 +181,27 @@ public class ActivityMain extends ActionBarActivity {
 
         switch (id) {
             case R.id.action_search:
-                return super.onOptionsItemSelected(item);
+                break;
             case R.id.action_star:
                 isStarred = !isStarred;
                 setStarIcon();
                 setView();
-                return super.onOptionsItemSelected(item);
+                break;
 //            case R.id.action_refresh:
 //                setView(queryText);
 //                return super.onOptionsItemSelected(item);
             case R.id.action_export:
                 startActivity(new Intent(context, ActivityBackup.class));
-                return super.onOptionsItemSelected(item);
+                break;
             case R.id.action_delete_all:
                 clearAll();
-                return super.onOptionsItemSelected(item);
+                break;
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
-                return super.onOptionsItemSelected(item);
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        boolean superReturn = super.onOptionsItemSelected(item);
+        clearDeleteQueue();
+        return superReturn;
     }
 
     @Override
@@ -211,6 +209,13 @@ public class ActivityMain extends ActionBarActivity {
         MenuItemCompat.expandActionView(searchItem);
         searchView.requestFocus();
         return true;
+    }
+
+    private void clearDeleteQueue() {
+        for (ClipObject clipObject : deleteQueue) {
+            db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+        }
+        deleteQueue.clear();
     }
 
     public static void refreshMainView(Context context, String query) {

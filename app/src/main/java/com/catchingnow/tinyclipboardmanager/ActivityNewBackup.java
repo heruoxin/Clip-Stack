@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,12 +60,24 @@ public class ActivityNewBackup extends ActionBarActivity {
                     .getPackageInfo(ActivityMain.PACKAGE_NAME, 0)
                     .firstInstallTime;
             dateFrom.setTimeInMillis(installedDate);
-            while (dateFrom.after(dateTo)) {
-                dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 70000000);
-            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        while (dateFrom.after(dateTo)) {
+            dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 70000000);
+        }
+
+        //set the start date to the minimum
+        dateFrom.set(Calendar.HOUR_OF_DAY, dateFrom.getMinimum(Calendar.HOUR_OF_DAY));
+        dateFrom.set(Calendar.MINUTE, dateFrom.getMinimum(Calendar.MINUTE));
+        dateFrom.set(Calendar.SECOND, dateFrom.getMinimum(Calendar.SECOND));
+        dateFrom.set(Calendar.MILLISECOND, dateFrom.getMinimum(Calendar.MILLISECOND));
+        //set the end date to the maximum
+        dateTo.set(Calendar.HOUR_OF_DAY, dateTo.getMaximum(Calendar.HOUR_OF_DAY));
+        dateTo.set(Calendar.MINUTE, dateTo.getMaximum(Calendar.MINUTE));
+        dateTo.set(Calendar.SECOND, dateTo.getMaximum(Calendar.SECOND));
+        dateTo.set(Calendar.MILLISECOND, dateTo.getMaximum(Calendar.MILLISECOND));
 
         Button buttonExport = (Button) findViewById(R.id.export_button);
         Switch switchReverseSort = (Switch) findViewById(R.id.switch_reverse_sort);
