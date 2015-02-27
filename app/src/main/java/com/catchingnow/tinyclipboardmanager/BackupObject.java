@@ -73,7 +73,6 @@ public class BackupObject {
                 }
                 try {
                     if (line.endsWith(ClipObject.markStar)) {
-                        Log.d(ActivityMain.PACKAGE_NAME, "1");
                         line = line.replace(ClipObject.markStar, "");
                         nextStarred = true;
                     } else {
@@ -81,9 +80,7 @@ public class BackupObject {
                     }
                     nextLineDate = new SimpleDateFormat(localTimeFormat, Locale.ENGLISH)
                             .parse(line);
-                    Log.d(ActivityMain.PACKAGE_NAME, "2");
                     if (preLineDate == null) {
-                        Log.d(ActivityMain.PACKAGE_NAME, "3");
                         preLineDate = new Date(nextLineDate.getTime());
                         continue;
                     }
@@ -92,14 +89,10 @@ public class BackupObject {
                     }
 
                     clipObjects.add(new ClipObject(clipString, preLineDate, preStarred));
-                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + preLineDate.toString());
-                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + nextLineDate.toString());
-                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + clipString);
                     preStarred = nextStarred;
                     clipString = "";
                     preLineDate = new Date(nextLineDate.getTime());
                 } catch (ParseException error) {
-                    Log.d(ActivityMain.PACKAGE_NAME, "5--");
                     if (nextStarred) {
                         line += ClipObject.markStar;
                     }

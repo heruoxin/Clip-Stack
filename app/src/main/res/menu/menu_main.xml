@@ -6,13 +6,13 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"
-        app:showAsAction="collapseActionView|ifRoom|withText"
+        app:showAsAction="collapseActionView|always|withText"
         app:actionViewClass="android.widget.SearchView" />
     <item
         android:id="@+id/action_star"
         android:icon="@drawable/ic_action_star_outline_white"
         android:title="@string/action_star"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
     <!--
     <item
         android:id="@+id/action_refresh"

@@ -47,9 +47,6 @@ public class ActivityNewBackup extends ActionBarActivity {
         initExportView();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
