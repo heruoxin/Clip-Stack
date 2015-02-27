@@ -6,6 +6,9 @@ import java.util.Date;
  * Created by heruoxin on 15/1/24.
  */
 public class ClipObject {
+
+    public final static String markStar = "☆★☆";
+
     protected String text;
     protected Date date;
     protected boolean star;

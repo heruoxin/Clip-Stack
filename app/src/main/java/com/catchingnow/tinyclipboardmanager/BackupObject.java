@@ -3,6 +3,7 @@ package com.catchingnow.tinyclipboardmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.BufferedReader;
@@ -24,10 +25,11 @@ public class BackupObject {
     private File backupFile;
     private Context context;
 
-    public BackupObject (Context context) {
+    public BackupObject(Context context) {
         this.context = context;
     }
-    public boolean init (File backupFile) {
+
+    public boolean init(File backupFile) {
         try {
             String fileName = backupFile.getName();
             this.backupFile = backupFile;
@@ -57,28 +59,55 @@ public class BackupObject {
             ArrayList<ClipObject> clipObjects = new ArrayList<>();
 
             BufferedReader br = new BufferedReader(new FileReader(backupFile));
+            String localTimeFormat = "E MMM d H:m:s ZZZZ y";
             String line;
             String clipString = "";
-            Date dateOne;
-            Date dateTwo = null;
+            boolean preStarred = false;
+            boolean nextStarred = false;
+            Date preLineDate = null;
+            Date nextLineDate;
+            int skipHead = 2;
             while ((line = br.readLine()) != null) {
-                try {
-                    String localTimeFormat = "E MMM d H:m:s ZZZZ y";
-                    dateOne =  new SimpleDateFormat(localTimeFormat, Locale.ENGLISH)
-                            .parse(line);
-                    if (clipString.endsWith("\n")) {
-                        clipString = clipString.substring(0, clipString.length()-1);
-                    }
-                    if (!"".equals(clipString)) {
-                        if (dateTwo != null) {
-                            clipObjects.add(new ClipObject(clipString, dateTwo));
-                        }
-                        clipString = "";
-                        dateTwo = dateOne;
-                    }
-                } catch (ParseException error) {
-                    clipString += (line+"\n");
+                if (skipHead --> 0 ) {
+                    continue;
                 }
+                try {
+                    if (line.endsWith(ClipObject.markStar)) {
+                        Log.d(ActivityMain.PACKAGE_NAME, "1");
+                        line = line.replace(ClipObject.markStar, "");
+                        nextStarred = true;
+                    } else {
+                        nextStarred = false;
+                    }
+                    nextLineDate = new SimpleDateFormat(localTimeFormat, Locale.ENGLISH)
+                            .parse(line);
+                    Log.d(ActivityMain.PACKAGE_NAME, "2");
+                    if (preLineDate == null) {
+                        Log.d(ActivityMain.PACKAGE_NAME, "3");
+                        preLineDate = new Date(nextLineDate.getTime());
+                        continue;
+                    }
+                    if (clipString.endsWith("\n")) {
+                        clipString = clipString.substring(0, clipString.length() - 1);
+                    }
+
+                    clipObjects.add(new ClipObject(clipString, preLineDate, preStarred));
+                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + preLineDate.toString());
+                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + nextLineDate.toString());
+                    Log.d(ActivityMain.PACKAGE_NAME, "4: " + clipString);
+                    preStarred = nextStarred;
+                    clipString = "";
+                    preLineDate = new Date(nextLineDate.getTime());
+                } catch (ParseException error) {
+                    Log.d(ActivityMain.PACKAGE_NAME, "5--");
+                    if (nextStarred) {
+                        line += ClipObject.markStar;
+                    }
+                    clipString += (line + "\n");
+                }
+            }
+            if (!clipString.isEmpty()) {
+                clipObjects.add(new ClipObject(clipString, preLineDate, preStarred));
             }
             br.close();
             Storage db = Storage.getInstance(context);
@@ -91,20 +120,20 @@ public class BackupObject {
 
     public void openInEditor() {
         context.startActivity(new Intent()
-                .setAction(android.content.Intent.ACTION_VIEW)
-                .setDataAndType(Uri.fromFile(backupFile), MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt"))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .setAction(android.content.Intent.ACTION_VIEW)
+                        .setDataAndType(Uri.fromFile(backupFile), MimeTypeMap.getSingleton().getMimeTypeFromExtension("txt"))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         );
     }
 
     private static String humanReadableByteCount(long bytes, boolean si) {
         //stackOverflow 3758606
-        int unit = si ? 1000: 1024;
+        int unit = si ? 1000 : 1024;
         if (bytes < unit) {
             return bytes + "B";
         }
-        int exp = (int) (Math.log(bytes)/Math.log(unit));
-        String pre = (si?"kMGTPE":"KMGTPE").charAt(exp-1) + (si?"":"i");
-        return String.format("%1f%sB",bytes/Math.pow(unit, exp), pre);
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        return String.format("%1f%sB", bytes / Math.pow(unit, exp), pre);
     }
 }

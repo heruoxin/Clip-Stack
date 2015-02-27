@@ -62,8 +62,12 @@ public class BackupExport {
         List<String> backupStringList = new ArrayList<>();
         for (ClipObject clipObject : clipObjects) { //delete out of date clips
             Date clipObjectDate = clipObject.getDate();
+            String clipTitle = clipObjectDate.toString();
+            if (clipObject.isStarred()) {
+                clipTitle += ClipObject.markStar;
+            }
             if (clipObjectDate.after(startDate) && clipObjectDate.before(endDate)) {
-                backupStringList.add("\n" + clipObjectDate.toString() + "\n" + clipObject.getText());
+                backupStringList.add("\n" + clipTitle + "\n" + clipObject.getText());
             }
         }
 
