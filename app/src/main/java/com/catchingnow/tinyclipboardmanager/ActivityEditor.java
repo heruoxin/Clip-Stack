@@ -30,7 +30,8 @@ public class ActivityEditor extends ActionBarActivity {
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
         isStarred = intent.getBooleanExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, false);
-        if (oldText == null || oldText.equals(getString(R.string.clip_notification_single_text))) {
+        if (oldText == null ||
+                (oldText.equals(getString(R.string.clip_notification_single_text)) && isStarred)) {
             oldText = "";
         }
 
