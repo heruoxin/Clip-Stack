@@ -39,7 +39,7 @@
                     android:id="@+id/activity_main_card_star_button"
                     android:contentDescription="@string/action_star"
                     android:src="@drawable/ic_action_star_outline_grey600"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:background="@drawable/background_star"
                     android:layout_gravity="center"
                     android:layout_width="42dp"
                     android:layout_height="42dp"

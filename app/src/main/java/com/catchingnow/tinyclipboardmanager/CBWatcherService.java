@@ -394,7 +394,7 @@ public class CBWatcherService extends Service {
             expandedView.setOnClickPendingIntent(R.id.star, pOpenStarIntent);
             //set star's icon
             if (showStarred) {
-                expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_grey600);
+                expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_yellow);
             } else {
                 expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_outline_grey600);
             }
@@ -406,7 +406,7 @@ public class CBWatcherService extends Service {
             //Log.v(PACKAGE_NAME,"ID "+id);
             //Log.v(PACKAGE_NAME,s);
             //add view
-            RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card_view);
+            RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {
                 theClipView.setTextViewText(R.id.clip_text, "★ "+s);
             } else {

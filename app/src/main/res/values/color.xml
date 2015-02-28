@@ -10,4 +10,6 @@
     <color name="white">#FFFFFF</color>
 
     <color name="shadow">#88555555</color>
+    <color name="ripple_green">@color/primary_light</color>
+    <color name="ripple_yellow">#FFF59D</color>
 </resources>

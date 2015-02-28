@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -403,7 +402,7 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
             clipCardViewHolder.vText.setText(clipObject.getText().trim());
             if (clipObject.isStarred()) {
-                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
             }
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
@@ -415,7 +414,7 @@ public class ActivityMain extends MyActionBarActivity {
                     clipObject.setStarred(!clipObject.isStarred());
                     db.starredClip(clipObject);
                     if (clipObject.isStarred()) {
-                        clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
+                        clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                     } else {
                         clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
                         if (isStarred) {
@@ -431,7 +430,7 @@ public class ActivityMain extends MyActionBarActivity {
         public ClipCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
-                    inflate(R.layout.activity_main_card_view, viewGroup, false);
+                    inflate(R.layout.activity_main_card, viewGroup, false);
 
             return new ClipCardViewHolder(itemView);
         }
