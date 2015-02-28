@@ -219,6 +219,7 @@ public class CBWatcherService extends Service {
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
             if (showStarred) {
@@ -240,6 +241,10 @@ public class CBWatcherService extends Service {
         } else {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
         }
+        if (pinOnTop) {
+            preBuildNotification
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
 
@@ -252,6 +257,7 @@ public class CBWatcherService extends Service {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             n.bigContentView = bigView.build();
         }
+        n.icon = R.drawable.ic_stat_icon;
 
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
@@ -312,7 +318,13 @@ public class CBWatcherService extends Service {
         } else {
             preBuildN.setSmallIcon(R.drawable.icon_shadow);
         }
+        if (pinOnTop) {
+            preBuildN
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        }
+
         Notification n = preBuildN.build();
+        n.icon = R.drawable.ic_stat_icon;
 
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
