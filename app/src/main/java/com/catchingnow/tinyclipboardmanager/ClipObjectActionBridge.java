@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -15,6 +16,7 @@ public class ClipObjectActionBridge extends IntentService {
     public final static int ACTION_COPY  = 1;
     public final static int ACTION_SHARE = 2;
     public final static int ACTION_EDIT  = 3;
+    public final static int ACTION_OPEN_MAIN  = 4;
     public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboardmanager.clipboarAction";
@@ -34,27 +36,27 @@ public class ClipObjectActionBridge extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            sendBroadcast(it);
+        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        sendBroadcast(it);
 
-            this.intent = intent;
+        this.intent = intent;
 
-            String clips = intent.getStringExtra(CLIPBOARD_STRING);
-            int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
-            switch (actionCode) {
-                case 0:
-                    break;
-                case ACTION_COPY:
-                    copyText(clips);
-                    break;
-                case ACTION_SHARE:
-                    shareText(clips);
-                    break;
-                case ACTION_EDIT:
-                    editText(clips);
-                    break;
-            }
+        String clips = intent.getStringExtra(CLIPBOARD_STRING);
+        int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
+        switch (actionCode) {
+            case 0:
+                break;
+            case ACTION_COPY:
+                copyText(clips);
+                break;
+            case ACTION_SHARE:
+                shareText(clips);
+                break;
+            case ACTION_EDIT:
+                editText(clips);
+                break;
+            case  ACTION_OPEN_MAIN:
+                openMainActivity();
         }
     }
 
@@ -68,7 +70,7 @@ public class ClipObjectActionBridge extends IntentService {
         startActivity(sendIntent);
     }
 
-    protected void copyText(final String clips) {
+    private void copyText(final String clips) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -91,7 +93,7 @@ public class ClipObjectActionBridge extends IntentService {
 
     }
 
-    public void editText(final String clips) {
+    private void editText(final String clips) {
         Intent i = new Intent(this, ActivityEditor.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(STATUE_IS_STARRED,
@@ -101,4 +103,11 @@ public class ClipObjectActionBridge extends IntentService {
         startActivity(i);
     }
 
+    private void openMainActivity() {
+        //open by this will be auto closed when copy.
+        Intent i = new Intent(this, ActivityMain.class)
+                .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
 }

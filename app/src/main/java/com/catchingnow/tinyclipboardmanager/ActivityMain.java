@@ -473,7 +473,7 @@ public class ActivityMain extends ActionBarActivity {
                             .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                     if (isFromNotification) {
-                        finish();
+                        moveTaskToBack(true);
                     }
                     return true;
                 }
