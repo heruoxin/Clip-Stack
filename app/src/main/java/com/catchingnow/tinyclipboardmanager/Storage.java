@@ -265,24 +265,26 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
-        modifyClip(oldClip, newClip, notUpdateWhich, false);
+        modifyClip(oldClip, newClip, notUpdateWhich, 0);
     }
 
-    public void modifyClip(String oldClip, String newClip, int notUpdateWhich, boolean isImportant) {
-        Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+")");
+    public void modifyClip(String oldClip, String newClip, int notUpdateWhich, int isImportant) {
+        Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+", "+isImportant+")");
         if (oldClip == null) {
             oldClip = "";
         }
         if (newClip == null) {
             newClip = "";
         }
+
+        /*
         if (newClip.equals(oldClip)) {
             return;
         }
         if (newClip.equals(topClipInStack)) {
-            Log.v(PACKAGE_NAME,"Equals to TopStack");
             return;
         }
+        */
 
         //check old text is starred or not
         boolean isStarred = false;
@@ -295,8 +297,11 @@ public class Storage {
             }
         }
 
-        if (isImportant) {
+        if (isImportant == 1) {
             isStarred = true;
+        }
+        if (isImportant == -1) {
+            isStarred = false;
         }
 
         open();

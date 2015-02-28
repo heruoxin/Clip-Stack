@@ -360,9 +360,9 @@ public class CBWatcherService extends Service {
         private Context c;
         int id = 0;
 
-        public NotificationClipListAdapter(Context context, ClipObject clip) {
+        public NotificationClipListAdapter(Context context, ClipObject clipObject) {
             c = context;
-            String currentClip = clip.getText().trim();
+            String currentClip = clipObject.getText().trim();
             expandedView = new RemoteViews(c.getPackageName(), R.layout.notification_clip_list);
             expandedView.setTextViewText(R.id.current_clip, currentClip);
             //add pIntent for share
@@ -377,6 +377,7 @@ public class CBWatcherService extends Service {
             //add pIntent for edit
             Intent openEditIntent = new Intent(c, StringActionIntentService.class)
                     .putExtra(StringActionIntentService.CLIPBOARD_STRING, currentClip)
+                    .putExtra(INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
                     .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     c,

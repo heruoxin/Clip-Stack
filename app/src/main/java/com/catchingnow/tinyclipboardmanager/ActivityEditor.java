@@ -1,7 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.app.ActivityManager;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -21,6 +20,8 @@ public class ActivityEditor extends ActionBarActivity {
     private String oldText;
     private EditText editText;
     private boolean isStarred;
+    private boolean textStatueHasChanged = false;
+    private MenuItem starItem;
     private InputMethodManager inputMethodManager;
 
     @Override
@@ -58,14 +59,14 @@ public class ActivityEditor extends ActionBarActivity {
         if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-		getSupportActionBar().setTitle(titleText);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			setTaskDescription(new ActivityManager.TaskDescription(
-					titleText,
-					BitmapFactory.decodeResource(getResources(), R.drawable.icon),
-					getResources().getColor(R.color.primary)
-					));
-		}
+        getSupportActionBar().setTitle(titleText);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setTaskDescription(new ActivityManager.TaskDescription(
+                    titleText,
+                    BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+                    getResources().getColor(R.color.primary)
+            ));
+        }
     }
 
     @Override
@@ -90,9 +91,10 @@ public class ActivityEditor extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_editor, menu);
-        return true;
+        starItem = menu.findItem(R.id.action_star);
+        setStarredIcon();
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -105,6 +107,12 @@ public class ActivityEditor extends ActionBarActivity {
             case (R.id.action_share):
                 shareText();
                 break;
+            case (R.id.action_star):
+                isStarred = !isStarred;
+                //Once click will change it. Twice won't change it.
+                textStatueHasChanged = !textStatueHasChanged;
+                setStarredIcon();
+                break;
 //            case (R.id.action_save):
 //                saveText();
 //                break;
@@ -116,6 +124,14 @@ public class ActivityEditor extends ActionBarActivity {
                 finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setStarredIcon() {
+        if (isStarred) {
+            starItem.setIcon(R.drawable.ic_action_star_white);
+        } else {
+            starItem.setIcon(R.drawable.ic_action_star_outline_white);
+        }
     }
 
     private void deleteText() {
@@ -135,13 +151,16 @@ public class ActivityEditor extends ActionBarActivity {
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage;
-        if (oldText.equals(newText)) {
+        if (!oldText.equals(newText)) {
+            textStatueHasChanged = true;
+        }
+        if (!textStatueHasChanged) {
             finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
             return;
         }
         Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, isStarred);
-        if (newText != null && !"".equals(newText)) {
+        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred? 1:-1));
+        if (newText != null && !newText.isEmpty()) {
             toastMessage = getString(R.string.toast_saved);
         } else {
             toastMessage = getString(R.string.toast_deleted);

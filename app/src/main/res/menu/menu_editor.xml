@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_star"
+        android:icon="@drawable/ic_action_star_outline_white"
+        android:title="@string/action_star"
+        app:showAsAction="always" />
     <group>
         <!--
         <item

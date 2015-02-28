@@ -185,7 +185,7 @@ public class ActivityMain extends ActionBarActivity {
                 break;
             case R.id.action_star:
                 isStarred = !isStarred;
-                setStarIcon();
+                setStarredIcon();
                 setView();
                 break;
 //            case R.id.action_refresh:
@@ -226,7 +226,7 @@ public class ActivityMain extends ActionBarActivity {
         context.startActivity(intent);
     }
 
-    private void setStarIcon() {
+    private void setStarredIcon() {
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_action_star_white);
         } else {
@@ -404,9 +404,9 @@ public class ActivityMain extends ActionBarActivity {
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
             }
-            addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
-            addLongClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
-            addClickStringAction(context, clipObject.getText(), StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
+            addClickStringAction(context, clipObject, StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
+            addLongClickStringAction(context, clipObject, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
+            addClickStringAction(context, clipObject, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -450,24 +450,26 @@ public class ActivityMain extends ActionBarActivity {
             notifyItemRemoved(position);
         }
 
-        public void addClickStringAction(final Context context, final String string, final int actionCode, View button) {
+        public void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent openIntent = new Intent(context, StringActionIntentService.class)
-                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, string)
+                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                 }
             });
         }
 
-        public void addLongClickStringAction(final Context context, final String string, final int actionCode, View button) {
+        public void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
             button.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Intent openIntent = new Intent(context, StringActionIntentService.class)
-                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, string)
+                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
                             .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                     if (isFromNotification) {
