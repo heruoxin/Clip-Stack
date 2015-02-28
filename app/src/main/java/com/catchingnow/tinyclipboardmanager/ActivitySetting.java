@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class ActivitySetting extends PreferenceActivity {
+public class ActivitySetting extends MyPreferenceActivity {
 
     public final static String PREF_NOTIFICATION_SHOW = "pref_notification_show";
     public final static String PREF_NOTIFICATION_PIN = "pref_notification_pin";

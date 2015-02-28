@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class ActivityEditor extends ActionBarActivity {
+public class ActivityEditor extends MyActionBarActivity {
 
     private String oldText;
     private EditText editText;

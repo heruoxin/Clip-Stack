@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActivityMain extends ActionBarActivity {
+public class ActivityMain extends MyActionBarActivity {
     public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
@@ -62,6 +62,7 @@ public class ActivityMain extends ActionBarActivity {
         getSupportActionBar().setTitle(" " + getString(R.string.title_activity_main));
         context = this.getBaseContext();
         queryText = "";
+        onNewIntent(getIntent());
     }
 
     @Override

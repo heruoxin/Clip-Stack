@@ -25,7 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class ActivityBackup extends ActionBarActivity {
+public class ActivityBackup extends MyActionBarActivity {
     private Context context;
 
     private AlertDialog alertDialog;

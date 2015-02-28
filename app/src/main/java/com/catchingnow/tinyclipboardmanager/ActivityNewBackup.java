@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class ActivityNewBackup extends ActionBarActivity {
+public class ActivityNewBackup extends MyActionBarActivity {
     private boolean isReverseSort = false;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
