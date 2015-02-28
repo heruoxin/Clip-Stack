@@ -91,7 +91,8 @@ public class ActivityBackup extends MyActionBarActivity {
             TextView dateView = (TextView) backupListView.findViewById(R.id.date);
             TextView sizeView = (TextView) backupListView.findViewById(R.id.size);
             ImageButton deleteButton = (ImageButton) backupListView.findViewById(R.id.action_delete);
-            backupListView.setOnClickListener(new View.OnClickListener() {
+            View backupContent = backupListView.findViewById(R.id.backup_content);
+            backupContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     alertDialog = new AlertDialog.Builder(context)
@@ -118,7 +119,7 @@ public class ActivityBackup extends MyActionBarActivity {
                     alertDialog.show();
                 }
             });
-            backupListView.setOnLongClickListener(new View.OnLongClickListener() {
+            backupContent.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     backupObject.openInEditor();

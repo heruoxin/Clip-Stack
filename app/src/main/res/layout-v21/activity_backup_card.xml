@@ -5,8 +5,11 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/backup_content"
+        android:background="@drawable/background_backup_content"
+        android:focusable="true"
+        android:clickable="true"
         android:orientation="vertical"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
@@ -31,7 +34,7 @@
         android:contentDescription="@string/action_delete"
         android:src="@drawable/ic_action_delete"
         android:scaleType="centerInside"
-        android:background="@color/divider"
+        android:background="@drawable/background_delete"
         android:stateListAnimator="@animator/anim"
         android:layout_width="46dp"
         android:layout_height="52dp" />
