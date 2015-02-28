@@ -52,6 +52,7 @@ public class ActivityMain extends ActionBarActivity {
     private boolean isFromNotification = false;
     private boolean isStarred = false;
     private String queryText = "";
+    private static int TRANSLATION_Y_TIME = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +294,7 @@ public class ActivityMain extends ActionBarActivity {
                         .eventListener(new EventListener() {
                             @Override
                             public void onShow(Snackbar snackbar) {
-                                mFAB.animate().translationY(-snackbar.getHeight());
+                                mFAB.animate().translationY(-snackbar.getHeight()).setDuration(TRANSLATION_Y_TIME);
                                 if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
                                     mRecList.animate().translationY(-snackbar.getHeight());
                                 }
@@ -317,7 +318,7 @@ public class ActivityMain extends ActionBarActivity {
                             public void onDismissed(Snackbar snackbar) {
                                 if (isSnackbarShow <= 0) {
                                     isSnackbarShow = 0;
-                                    mFAB.animate().translationY(0);
+                                    mFAB.animate().translationY(0).setDuration(TRANSLATION_Y_TIME);
                                     mRecList.animate().translationY(0);
                                 }
                                 //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
