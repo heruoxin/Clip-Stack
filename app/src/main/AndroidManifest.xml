@@ -39,7 +39,7 @@
         </receiver>
 
         <service
-            android:name=".StringActionIntentService"
+            android:name=".ClipObjectActionBridge"
             android:exported="false" />
 
         <activity

@@ -30,7 +30,7 @@ public class ActivityEditor extends ActionBarActivity {
         setContentView(R.layout.activity_editor);
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        isStarred = intent.getBooleanExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, false);
+        isStarred = intent.getBooleanExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false);
         if (oldText == null ||
                 (oldText.equals(getString(R.string.clip_notification_single_text)) && isStarred)) {
             oldText = "";
@@ -142,9 +142,9 @@ public class ActivityEditor extends ActionBarActivity {
 
     private void shareText() {
         String text = editText.getText().toString();
-        Intent openIntent = new Intent(this, StringActionIntentService.class);
-        openIntent.putExtra(StringActionIntentService.CLIPBOARD_STRING, text);
-        openIntent.putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_SHARE);
+        Intent openIntent = new Intent(this, ClipObjectActionBridge.class);
+        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, text);
+        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_SHARE);
         startService(openIntent);
     }
 

@@ -372,8 +372,8 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     public void actionAdd(View view) {
-        Intent i = new Intent(this, StringActionIntentService.class)
-                .putExtra(StringActionIntentService.CLIPBOARD_ACTION, StringActionIntentService.ACTION_EDIT);
+        Intent i = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
         startService(i);
     }
 
@@ -404,9 +404,9 @@ public class ActivityMain extends ActionBarActivity {
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_grey600);
             }
-            addClickStringAction(context, clipObject, StringActionIntentService.ACTION_EDIT, clipCardViewHolder.vText);
-            addLongClickStringAction(context, clipObject, StringActionIntentService.ACTION_COPY, clipCardViewHolder.vText);
-            addClickStringAction(context, clipObject, StringActionIntentService.ACTION_SHARE, clipCardViewHolder.vShare);
+            addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
+            addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+            addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -454,10 +454,10 @@ public class ActivityMain extends ActionBarActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent openIntent = new Intent(context, StringActionIntentService.class)
-                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, clipObject.getText())
-                            .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
-                            .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
+                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                 }
             });
@@ -467,10 +467,10 @@ public class ActivityMain extends ActionBarActivity {
             button.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Intent openIntent = new Intent(context, StringActionIntentService.class)
-                            .putExtra(StringActionIntentService.CLIPBOARD_STRING, clipObject.getText())
-                            .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, clipObject.isStarred())
-                            .putExtra(StringActionIntentService.CLIPBOARD_ACTION, actionCode);
+                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
                     context.startService(openIntent);
                     if (isFromNotification) {
                         finish();

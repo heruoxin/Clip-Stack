@@ -11,16 +11,17 @@ import android.widget.Toast;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  */
-public class StringActionIntentService extends IntentService {
+public class ClipObjectActionBridge extends IntentService {
     public final static int ACTION_COPY  = 1;
     public final static int ACTION_SHARE = 2;
     public final static int ACTION_EDIT  = 3;
+    public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
     public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
     public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboardmanager.clipboarAction";
 
     public Handler mHandler;
-    public StringActionIntentService() {
-        super("StringActionIntentService");
+    public ClipObjectActionBridge() {
+        super("ClipObjectActionBridge");
     }
 
     private Intent intent;
@@ -80,7 +81,7 @@ public class StringActionIntentService extends IntentService {
                 if ( clips.length() > 15) {
                     toastClips = clips.substring(0, 15) + "…";
                 }
-                Toast.makeText(StringActionIntentService.this,
+                Toast.makeText(ClipObjectActionBridge.this,
                         getString(R.string.toast_front_string)+toastClips+"\n"+getString(R.string.toast_end_string),
                         Toast.LENGTH_SHORT
                 ).show();
@@ -93,8 +94,8 @@ public class StringActionIntentService extends IntentService {
     public void editText(final String clips) {
         Intent i = new Intent(this, ActivityEditor.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED,
-                        intent.getBooleanExtra(CBWatcherService.INTENT_EXTRA_IS_STARRED, false)
+                .putExtra(STATUE_IS_STARRED,
+                        intent.getBooleanExtra(STATUE_IS_STARRED, false)
                         )
                 .putExtra(Intent.EXTRA_TEXT, clips);
         startActivity(i);
