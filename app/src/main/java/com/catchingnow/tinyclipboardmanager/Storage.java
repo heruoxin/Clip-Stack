@@ -277,14 +277,25 @@ public class Storage {
             newClip = "";
         }
 
-        /*
         if (newClip.equals(oldClip)) {
+            //WTF am I writing!
+            if (isImportant !=0) {
+                List<ClipObject> lookLikeClips = getClipHistory(oldClip);
+                if (lookLikeClips.size() > 0) {
+                    for (ClipObject clipObject: lookLikeClips) {
+                        if (clipObject.getText().equals(oldClip)) {
+                            clipObject.setStarred(isImportant == 1);
+                            starredClip(clipObject);
+                            return;
+                        }
+                    }
+                }
+            }
             return;
         }
         if (newClip.equals(topClipInStack)) {
             return;
         }
-        */
 
         //check old text is starred or not
         boolean isStarred = false;
@@ -305,15 +316,15 @@ public class Storage {
         }
 
         open();
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
         if (!newClip.isEmpty()) {
             addClipHistory(new ClipObject(
                     newClip,
                     new Date(),
                     isStarred
             ));
-        }
-        if (!oldClip.isEmpty()) {
-            deleteClipHistory(oldClip);
         }
         close();
         isClipsInMemoryChanged = true;
