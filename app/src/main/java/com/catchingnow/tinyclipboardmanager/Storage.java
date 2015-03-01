@@ -251,11 +251,11 @@ public class Storage {
         return true;
     }
 
-    private boolean isClipObjectStarred(ClipObject clipObject) {
+    public boolean isClipObjectStarred(ClipObject clipObject) {
         return isClipObjectStarred(clipObject.getText());
     }
 
-    private boolean isClipObjectStarred(String string) {
+    public boolean isClipObjectStarred(String string) {
         List<ClipObject> allClips = getClipHistory();
         for (ClipObject clipObject: allClips) {
             if (clipObject.getText().equals(string)) {
