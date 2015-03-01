@@ -37,6 +37,6 @@
         android:padding="8dp"
         android:src="@drawable/ic_action_add"
         android:scaleType="centerInside"
-        android:onClick="actionAdd" />
+        android:onClick="mFABonClick" />
 
 </RelativeLayout>

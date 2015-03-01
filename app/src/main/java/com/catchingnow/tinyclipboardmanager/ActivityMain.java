@@ -371,10 +371,11 @@ public class ActivityMain extends MyActionBarActivity {
                 .show();
     }
 
-    public void actionAdd(View view) {
-        Intent i = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
-        startService(i);
+    public void mFABonClick(View view) {
+        Intent intent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT)
+                .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
+        startService(intent);
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {

@@ -39,6 +39,6 @@
         android:src="@drawable/ic_action_add"
         android:scaleType="centerInside"
         android:elevation="4dp"
-        android:onClick="actionAdd" />
+        android:onClick="mFABonClick" />
 
 </RelativeLayout>
