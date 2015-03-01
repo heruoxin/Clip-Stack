@@ -421,9 +421,11 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
             clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
             clipCardViewHolder.vText.setText(clipObject.getText().trim());
-            if (clipObject.isStarred()) {
-                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
-            }
+            clipCardViewHolder.vStarred.setImageResource(
+                    clipObject.isStarred() ?
+                            R.drawable.ic_action_star_yellow : R.drawable.ic_action_star_outline_grey600
+            );
+
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
