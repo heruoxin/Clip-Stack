@@ -222,6 +222,16 @@ public class Storage {
         return true;
     }
 
+    private ClipObject getClipObjectFromString(String string) {
+        List<ClipObject> clipObjects = getClipHistory();
+        for (ClipObject clipObject: clipObjects) {
+            if (clipObject.getText().equals(string)) {
+                return clipObject;
+            }
+        }
+        return null;
+    }
+
     private boolean addClipHistory(String currentString) {
         return addClipHistory(new ClipObject(currentString, new Date()));
     }
@@ -239,6 +249,20 @@ public class Storage {
             return false;
         }
         return true;
+    }
+
+    private boolean isClipObjectStarred(ClipObject clipObject) {
+        return isClipObjectStarred(clipObject.getText());
+    }
+
+    private boolean isClipObjectStarred(String string) {
+        List<ClipObject> allClips = getClipHistory();
+        for (ClipObject clipObject: allClips) {
+            if (clipObject.getText().equals(string)) {
+                return clipObject.isStarred();
+            }
+        }
+        return false;
     }
 
     public void starredClip(ClipObject clipObject) {
@@ -278,18 +302,10 @@ public class Storage {
         }
 
         if (newClip.equals(oldClip)) {
-            //WTF am I writing!
             if (isImportant !=0) {
-                List<ClipObject> lookLikeClips = getClipHistory(oldClip);
-                if (lookLikeClips.size() > 0) {
-                    for (ClipObject clipObject: lookLikeClips) {
-                        if (clipObject.getText().equals(oldClip)) {
-                            clipObject.setStarred(isImportant == 1);
-                            starredClip(clipObject);
-                            return;
-                        }
-                    }
-                }
+                ClipObject oldClipObject = getClipObjectFromString(oldClip);
+                oldClipObject.setStarred((isImportant == 1));
+                starredClip(oldClipObject);
             }
             return;
         }
@@ -297,16 +313,7 @@ public class Storage {
             return;
         }
 
-        //check old text is starred or not
-        boolean isStarred = false;
-        List<ClipObject> lookLikeClips = getStarredClipHistory(oldClip);
-        if (lookLikeClips.size() > 0) {
-            for (ClipObject clipObject: lookLikeClips) {
-                if (clipObject.getText().equals(oldClip)) {
-                    isStarred = true;
-                }
-            }
-        }
+        boolean isStarred = isClipObjectStarred(oldClip);
 
         if (isImportant == 1) {
             isStarred = true;
