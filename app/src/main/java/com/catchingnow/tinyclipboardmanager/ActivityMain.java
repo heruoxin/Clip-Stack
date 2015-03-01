@@ -125,11 +125,11 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onResume() {
-        setView();
         mFAB.animate().rotation(360).setDuration(1000);
         Log.v(PACKAGE_NAME, "ActivityMain onResume");
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
+        setView();
         //check if first launch
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         if (preference.getBoolean(FIRST_LAUNCH, true)) {
