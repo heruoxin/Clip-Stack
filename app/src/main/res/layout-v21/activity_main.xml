@@ -10,6 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     -->
+
+    <ImageView
+        android:id="@+id/background_icon"
+        android:visibility="gone"
+        android:src="@drawable/background_main"
+        android:layout_centerInParent="true"
+        android:layout_width="180dp"
+        android:layout_height="180dp" />
+
     <LinearLayout
         android:layout_centerInParent="true"
         android:layout_width="520dp"

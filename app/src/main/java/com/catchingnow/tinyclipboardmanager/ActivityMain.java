@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class ActivityMain extends MyActionBarActivity {
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private RecyclerView mRecList;
     private ImageButton mFAB;
+    private ImageView mBgIcon;
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
@@ -247,6 +249,7 @@ public class ActivityMain extends MyActionBarActivity {
         //set view
         setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
+        mBgIcon = (ImageView) findViewById(R.id.background_icon);
         mRecList = (RecyclerView) findViewById(R.id.cardList);
         mRecList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -280,6 +283,9 @@ public class ActivityMain extends MyActionBarActivity {
                         });
         mRecList.addOnItemTouchListener(touchListener);
 
+        if (clipCardAdapter.getItemCount() == 0) {
+            mBgIcon.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
@@ -331,6 +337,7 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onActionClicked(Snackbar snackbar) {
                                 isUndo[0] = true;
                                 clipCardAdapter.add(position, clipObject);
+                                mBgIcon.setVisibility(View.GONE);
                             }
                         })
                 , this);
@@ -449,6 +456,9 @@ public class ActivityMain extends MyActionBarActivity {
         public void remove(int position) {
             clipObjectList.remove(position);
             notifyItemRemoved(position);
+            if (getItemCount() == 0) {
+                mBgIcon.setVisibility(View.VISIBLE);
+            }
         }
 
         public void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
