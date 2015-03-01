@@ -11,11 +11,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -402,12 +406,21 @@ public class ActivityMain extends MyActionBarActivity {
         private List<ClipObject> clipObjectList;
         public SimpleDateFormat sdfDate;
         public SimpleDateFormat sdfTime;
+        private boolean allowAnimate = true;
 
         public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
             this.context = context;
             this.clipObjectList = clipObjectList;
             sdfDate = new SimpleDateFormat(context.getString(R.string.date_format));
             sdfTime = new SimpleDateFormat(context.getString(R.string.time_format));
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    allowAnimate = false;
+                }
+            }, 1000);
         }
 
         @Override
@@ -446,6 +459,9 @@ public class ActivityMain extends MyActionBarActivity {
                     }
                 }
             });
+
+            setAnimation(clipCardViewHolder.vMain, i);
+
         }
 
         @Override
@@ -504,12 +520,42 @@ public class ActivityMain extends MyActionBarActivity {
             });
         }
 
+        private void setAnimation(final View viewToAnimate, int position)
+        {
+            if (!allowAnimate) {
+                return;
+            }
+            viewToAnimate.setVisibility(View.INVISIBLE);
+            final Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    viewToAnimate.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    viewToAnimate.startAnimation(animation);
+                }
+            }, position * 100);
+        }
+
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {
             protected TextView vTime;
             protected TextView vDate;
             protected TextView vText;
             protected ImageButton vStarred;
             protected View vShare;
+            protected View vMain;
 
             public ClipCardViewHolder(View v) {
                 super(v);
@@ -518,6 +564,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = v.findViewById(R.id.activity_main_card_share_button);
+                vMain = v;
             }
         }
 

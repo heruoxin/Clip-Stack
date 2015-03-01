@@ -1,0 +1,5 @@
+<!-- res/transition/change_image_transform.xml -->
+<!-- (see also Shared Transitions below) -->
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <changeImageTransform/>
+</transitionSet>
