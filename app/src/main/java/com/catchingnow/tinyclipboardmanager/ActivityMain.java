@@ -44,9 +44,9 @@ public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private RecyclerView mRecList;
+    private View mRecLayout;
     private ClipCardAdapter clipCardAdapter;
     private ImageButton mFAB;
-    private View mBgView;
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
@@ -73,8 +73,8 @@ public class ActivityMain extends MyActionBarActivity {
         //init View
         setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-        mBgView = findViewById(R.id.background_view);
         mRecList = (RecyclerView) findViewById(R.id.cardList);
+        mRecLayout = findViewById(R.id.recycler_layout);
         mRecList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -278,13 +278,10 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void setItemsVisibility() {
-        int isBgVisible = mBgView.getVisibility();
         if (clipCardAdapter.getItemCount() == 0) {
-            mRecList.setVisibility(View.GONE);
-            mBgView.setVisibility(View.VISIBLE);
+            mRecLayout.setVisibility(View.INVISIBLE);
         } else {
-            mBgView.setVisibility(View.GONE);
-            mRecList.setVisibility(View.VISIBLE);
+            mRecLayout.setVisibility(View.VISIBLE);
         }
     }
 
