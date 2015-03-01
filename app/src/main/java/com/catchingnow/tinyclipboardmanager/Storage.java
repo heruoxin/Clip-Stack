@@ -84,10 +84,7 @@ public class Storage {
     public List<ClipObject> getClipHistory(String queryString) {
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> queryClips = new ArrayList<>();
-        if ("".equals(queryString)) {
-            return allClips;
-        }
-        if (queryString == null) {
+        if ("".equals(queryString) || queryString == null) {
             return allClips;
         }
         for (ClipObject clip:allClips) {
@@ -155,6 +152,9 @@ public class Storage {
     public List<ClipObject> getStarredClipHistory(String queryString) {
         List<ClipObject> allStarredClips = getStarredClipHistory();
         List<ClipObject> queryClips = new ArrayList<>();
+        if ("".equals(queryString) || queryString == null) {
+            return allStarredClips;
+        }
         for (ClipObject clipObject: allStarredClips) {
             if (clipObject.getText().contains(queryString)) {
                 queryClips.add(clipObject);
