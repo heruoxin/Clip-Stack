@@ -41,12 +41,14 @@ public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private RecyclerView mRecList;
+    private ClipCardAdapter clipCardAdapter;
     private ImageButton mFAB;
     private ImageView mBgIcon;
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
     private Storage db;
+    private List<ClipObject> clips;
     private Context context;
     private int isSnackbarShow = 0;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
@@ -64,6 +66,17 @@ public class ActivityMain extends MyActionBarActivity {
         context = this.getBaseContext();
         queryText = "";
         onNewIntent(getIntent());
+
+        //init View
+        setContentView(R.layout.activity_main);
+        mFAB = (ImageButton) findViewById(R.id.main_fab);
+        mBgIcon = (ImageView) findViewById(R.id.background_icon);
+        mRecList = (RecyclerView) findViewById(R.id.cardList);
+        mRecList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecList.setLayoutManager(linearLayoutManager);
+
     }
 
     @Override
@@ -236,10 +249,19 @@ public class ActivityMain extends MyActionBarActivity {
         }
     }
 
+    private void setItemsVisibility() {
+        if (clipCardAdapter.getItemCount() == 0) {
+            mBgIcon.setVisibility(View.VISIBLE);
+            mRecList.setVisibility(View.GONE);
+        } else {
+            mBgIcon.setVisibility(View.GONE);
+            mRecList.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setView() {
         //get clips
         db = Storage.getInstance(this);
-        final List<ClipObject> clips;
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
         } else {
@@ -247,15 +269,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
         //set view
-        setContentView(R.layout.activity_main);
-        mFAB = (ImageButton) findViewById(R.id.main_fab);
-        mBgIcon = (ImageView) findViewById(R.id.background_icon);
-        mRecList = (RecyclerView) findViewById(R.id.cardList);
-        mRecList.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecList.setLayoutManager(linearLayoutManager);
-        final ClipCardAdapter clipCardAdapter = new ClipCardAdapter(clips, this);
+        clipCardAdapter = new ClipCardAdapter(clips, this);
         mRecList.setAdapter(clipCardAdapter);
 
         SwipeableRecyclerViewTouchListener touchListener =
@@ -283,9 +297,7 @@ public class ActivityMain extends MyActionBarActivity {
                         });
         mRecList.addOnItemTouchListener(touchListener);
 
-        if (clipCardAdapter.getItemCount() == 0) {
-            mBgIcon.setVisibility(View.VISIBLE);
-        }
+        setItemsVisibility();
     }
 
     private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
@@ -337,7 +349,7 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onActionClicked(Snackbar snackbar) {
                                 isUndo[0] = true;
                                 clipCardAdapter.add(position, clipObject);
-                                mBgIcon.setVisibility(View.GONE);
+                                setItemsVisibility();
                             }
                         })
                 , this);
@@ -456,9 +468,7 @@ public class ActivityMain extends MyActionBarActivity {
         public void remove(int position) {
             clipObjectList.remove(position);
             notifyItemRemoved(position);
-            if (getItemCount() == 0) {
-                mBgIcon.setVisibility(View.VISIBLE);
-            }
+            setItemsVisibility();
         }
 
         public void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
