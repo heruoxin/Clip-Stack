@@ -1,5 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,7 +46,7 @@ public class ActivityMain extends MyActionBarActivity {
     private RecyclerView mRecList;
     private ClipCardAdapter clipCardAdapter;
     private ImageButton mFAB;
-    private ImageView mBgIcon;
+    private View mBgView;
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
@@ -70,12 +73,37 @@ public class ActivityMain extends MyActionBarActivity {
         //init View
         setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-        mBgIcon = (ImageView) findViewById(R.id.background_icon);
+        mBgView = findViewById(R.id.background_view);
         mRecList = (RecyclerView) findViewById(R.id.cardList);
         mRecList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
+
+        SwipeableRecyclerViewTouchListener touchListener =
+                new SwipeableRecyclerViewTouchListener(
+                        mRecList,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return !clips.get(position).isStarred();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    showSnackbar(position, clips.get(position), clipCardAdapter);
+                                    clipCardAdapter.remove(position);
+                                }
+                                clipCardAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
+                            }
+                        });
+        mRecList.addOnItemTouchListener(touchListener);
 
     }
 
@@ -250,11 +278,12 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void setItemsVisibility() {
+        int isBgVisible = mBgView.getVisibility();
         if (clipCardAdapter.getItemCount() == 0) {
-            mBgIcon.setVisibility(View.VISIBLE);
             mRecList.setVisibility(View.GONE);
+            mBgView.setVisibility(View.VISIBLE);
         } else {
-            mBgIcon.setVisibility(View.GONE);
+            mBgView.setVisibility(View.GONE);
             mRecList.setVisibility(View.VISIBLE);
         }
     }
@@ -271,31 +300,6 @@ public class ActivityMain extends MyActionBarActivity {
         //set view
         clipCardAdapter = new ClipCardAdapter(clips, this);
         mRecList.setAdapter(clipCardAdapter);
-
-        SwipeableRecyclerViewTouchListener touchListener =
-                new SwipeableRecyclerViewTouchListener(
-                        mRecList,
-                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
-                            @Override
-                            public boolean canSwipe(int position) {
-                                return !clips.get(position).isStarred();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    clipCardAdapter.remove(position);
-                                }
-                                clipCardAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
-                            }
-                        });
-        mRecList.addOnItemTouchListener(touchListener);
 
         setItemsVisibility();
     }
@@ -349,7 +353,6 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onActionClicked(Snackbar snackbar) {
                                 isUndo[0] = true;
                                 clipCardAdapter.add(position, clipObject);
-                                setItemsVisibility();
                             }
                         })
                 , this);
@@ -460,6 +463,7 @@ public class ActivityMain extends MyActionBarActivity {
         public void add(int position, ClipObject clipObject) {
             clipObjectList.add(position, clipObject);
             notifyItemInserted(position);
+            setItemsVisibility();
         }
 
         public void remove(ClipObject clipObject) {

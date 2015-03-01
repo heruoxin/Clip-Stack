@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.catchingnow.tinyclipboardmanager.ActivityBackup"
     android:animateLayoutChanges="true"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <TextView

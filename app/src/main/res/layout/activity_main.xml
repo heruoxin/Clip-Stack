@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:background="@color/background"
     tools:context=".MyActivity">
     <!--
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -13,7 +14,7 @@
     -->
 
     <ImageView
-        android:id="@+id/background_icon"
+        android:id="@+id/background_view"
         android:visibility="gone"
         android:src="@drawable/background_main"
         android:layout_centerInParent="true"
