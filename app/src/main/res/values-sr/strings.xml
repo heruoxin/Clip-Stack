@@ -45,10 +45,10 @@
     <string name="pref_storage_summary_infinite">Сачувај све ставке.</string>
     <string name="pref_storage_summary_days">Сачувај ставке %d дан(а).</string>
     <string name="title_activity_editor">Нова ставка</string>
-    <string name="first_launch_clips_0">Добро дошли на Клип стек. %1$s</string>
-    <string name="first_launch_clips_1">Може да прикаже историјат клипборда у обавештењу.</string>
-    <string name="first_launch_clips_2">кликните овде %1$s да уредите.</string>
-    <string name="first_launch_clips_3">%1$s Померите да обришете. %2$s</string>
+    <string name="first_launch_clipboards_0">Добро дошли на Клип стек. %1$s</string>
+    <string name="first_launch_clipboards_1">Може да прикаже историјат клипборда у обавештењу.</string>
+    <string name="first_launch_clipboards_2">кликните овде %1$s да уредите.</string>
+    <string name="first_launch_clipboards_3">%1$s Померите да обришете. %2$s</string>
     <string name="title_activity_activity_get_share_text">Копирај на клипборд</string>
     <string name="action_add">Додај</string>
     <string name="toast_front_string">""</string>

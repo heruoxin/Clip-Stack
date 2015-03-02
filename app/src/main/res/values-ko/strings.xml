@@ -45,10 +45,10 @@
     <string name="pref_storage_summary_infinite">모든 클립보드를 보관.</string>
     <string name="pref_storage_summary_days">%d 일의 클립보드만 보관.</string>
     <string name="title_activity_editor">새로운 클립!</string>
-    <string name="first_launch_clips_0">클립 스택에 오신것을 환영합니다! %1$s</string>
-    <string name="first_launch_clips_1">저는 클립보드에 기록된 내역을 보여줍니다.</string>
-    <string name="first_launch_clips_2">여기릃눌러 %1$s 편집하세요.</string>
-    <string name="first_launch_clips_3">%1$s 옆으로 밀어서 지우세요. %2$s</string>
+    <string name="first_launch_clipboards_0">클립 스택에 오신것을 환영합니다! %1$s</string>
+    <string name="first_launch_clipboards_1">저는 클립보드에 기록된 내역을 보여줍니다.</string>
+    <string name="first_launch_clipboards_2">여기릃눌러 %1$s 편집하세요.</string>
+    <string name="first_launch_clipboards_3">%1$s 옆으로 밀어서 지우세요. %2$s</string>
     <string name="title_activity_activity_get_share_text">클립보드로 복사</string>
     <string name="action_add">추가</string>
     <string name="toast_front_string">""</string>

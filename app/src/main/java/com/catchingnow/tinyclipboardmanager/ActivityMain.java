@@ -224,13 +224,12 @@ public class ActivityMain extends MyActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        mFabRotation(true);
 
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_search:
-                break;
+                return super.onOptionsItemSelected(item);
             case R.id.action_star:
                 isStarred = !isStarred;
                 setStarredIcon();
@@ -248,6 +247,7 @@ public class ActivityMain extends MyActionBarActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
         }
+        mFabRotation(isStarred);
         clearDeleteQueue();
         return super.onOptionsItemSelected(item);
     }
@@ -413,13 +413,13 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void firstLaunch() throws InterruptedException {
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        db.modifyClip(null, getString(R.string.first_launch_clips_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_1, "😄"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clips_0, "😄"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD);
         BackupManager backupManager = new BackupManager(this);
         backupManager.requestRestore(new RestoreObserver() {
             @Override

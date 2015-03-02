@@ -27,10 +27,10 @@
     <string name="dialog_ok">確定</string>
     <string name="export_failed">匯出失敗，可能是沒有 SD 卡或者空間不足。</string>
     <string name="export_success">匯出成功：</string>
-    <string name="first_launch_clips_0">歡迎使用「剪紙堆」 %1$s</string>
-    <string name="first_launch_clips_1">它可以保存剪貼簿紀錄，並顯示在通知欄。</string>
-    <string name="first_launch_clips_2">點擊此文本 %1$s 即可編輯。</string>
-    <string name="first_launch_clips_3">%1$s 滑動即可刪除。%2$s</string>
+    <string name="first_launch_clipboards_0">歡迎使用「剪紙堆」 %1$s</string>
+    <string name="first_launch_clipboards_1">它可以保存剪貼簿紀錄，並顯示在通知欄。</string>
+    <string name="first_launch_clipboards_2">點擊此文本 %1$s 即可編輯。</string>
+    <string name="first_launch_clipboards_3">%1$s 滑動即可刪除。%2$s</string>
     <string name="hello_world">Hello world!</string>
     <string name="pref_about_category">關於</string>
     <string name="pref_about_summary">去 GitHub 查看源碼。</string>

@@ -62,7 +62,6 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 * [Traditional Chinese: jacky030607](http://apk.tw/thread-645505-1-1.html)
 * [Serbian: pejakm](https://github.com/heruoxin/Clip-Stack/pull/4)
 * [French: RyDroid](https://github.com/heruoxin/Clip-Stack/pull/10)
-* [Japanese: jasonlee, kcworms, fishsky](https://www.v2ex.com/t/172708)
 * [Korean: 준모](https://twitter.com/cns_)
 
 -----

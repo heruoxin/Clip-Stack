@@ -50,10 +50,10 @@
     <string name="pref_storage_summary_infinite">Conserver tous les presse-papiers.</string>
     <string name="pref_storage_summary_days">Conserver les presse-papiers pendant %d jours.</string>
     <string name="title_activity_editor">Nouveau presse-papier</string>
-    <string name="first_launch_clips_0">Bienvenue dans Clip Stack. %1$s</string>
-    <string name="first_launch_clips_1">Cette app peut montrer l\'historique du presse-papier dans une notification.</string>
-    <string name="first_launch_clips_2">Cliquez içi %1$s pour éditer.</string>
-    <string name="first_launch_clips_3">%1$s Swiper pour supprimer. %2$s</string>
+    <string name="first_launch_clipboards_0">Bienvenue dans Clip Stack. %1$s</string>
+    <string name="first_launch_clipboards_1">Cette app peut montrer l\'historique du presse-papier dans une notification.</string>
+    <string name="first_launch_clipboards_2">Cliquez içi %1$s pour éditer.</string>
+    <string name="first_launch_clipboards_3">%1$s Swiper pour supprimer. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copier dans le presse-papier</string>
     <string name="action_add">Ajouter</string>
     <string name="toast_front_string">""</string>

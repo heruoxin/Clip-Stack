@@ -42,10 +42,10 @@
     <string name="pref_storage_summary_infinite">すべてクリップ</string>
     <string name="pref_storage_summary_days">最近 %d 日からのクリップ。</string>
     <string name="title_activity_editor">新クリップボードを作成</string>
-    <string name="first_launch_clips_0">クリップスタックへようこそ！ %1$s</string>
-    <string name="first_launch_clips_1">最近のクリップを記録し、通知バーで表示をできます。</string>
-    <string name="first_launch_clips_2">%1$s タップで編集</string>
-    <string name="first_launch_clips_3">%1$s スワイプで削除 %2$s</string>
+    <string name="first_launch_clipboards_0">クリップスタックへようこそ！ %1$s</string>
+    <string name="first_launch_clipboards_1">最近のクリップを記録し、通知バーで表示をできます。</string>
+    <string name="first_launch_clipboards_2">%1$s タップで編集</string>
+    <string name="first_launch_clipboards_3">%1$s スワイプで削除 %2$s</string>
     <string name="title_activity_activity_get_share_text">クリップへコピー</string>
     <string name="action_add">追加</string>
     <string name="toast_front_string">""</string>

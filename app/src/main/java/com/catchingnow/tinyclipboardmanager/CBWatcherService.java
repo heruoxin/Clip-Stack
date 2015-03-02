@@ -20,7 +20,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -35,7 +34,7 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 6; //3-6
-    protected boolean showStarred = false;
+    protected boolean isStarred = false;
     private NotificationManager notificationManager;
     private SharedPreferences preference;
     private Storage db;
@@ -86,7 +85,7 @@ public class CBWatcherService extends Service {
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
                 Log.v(PACKAGE_NAME, "onStartCommand changeStarStatues");
-                showStarred = !showStarred;
+                isStarred = !isStarred;
                 showNotification();
             }
 
@@ -178,7 +177,7 @@ public class CBWatcherService extends Service {
             db = Storage.getInstance(this.getBaseContext());
         }
         List<ClipObject> thisClips;
-        if (showStarred) {
+        if (isStarred) {
             thisClips = db.getStarredClipHistory(NUMBER_OF_CLIPS);
             if (db.getClipHistory().size() == 0) {
                 showSingleNotification();
@@ -195,14 +194,14 @@ public class CBWatcherService extends Service {
         }
 
         int length = thisClips.size();
-        if (length <= 1 && !showStarred) {
+        if (length <= 1 && !isStarred) {
             showSingleNotification();
             return;
         }
         thisClips.add(new ClipObject(
                 getString(R.string.clip_notification_single_text),
                 new Date(),
-                showStarred
+                isStarred
         ));
         length += 1;
 
@@ -228,7 +227,7 @@ public class CBWatcherService extends Service {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
-            if (showStarred) {
+            if (isStarred) {
                 description = "★ " + description;
             }
             preBuildNotification
@@ -304,7 +303,7 @@ public class CBWatcherService extends Service {
                 .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
-        if (showStarred) {
+        if (isStarred) {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_starred_single_text));
         } else {
@@ -399,7 +398,7 @@ public class CBWatcherService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             expandedView.setOnClickPendingIntent(R.id.star, pOpenStarIntent);
             //set star's icon
-            if (showStarred) {
+            if (isStarred) {
                 expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_yellow);
             } else {
                 expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_outline_grey600);
