@@ -186,6 +186,7 @@ public class Storage {
         }
         refreshAllTypeOfList(0);
         refreshTopClipInStack();
+        cb.setText(topClipInStack);
     }
 
     public boolean deleteClipHistoryBefore(float days) {

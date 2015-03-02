@@ -1,7 +1,5 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
@@ -23,12 +21,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -62,6 +58,7 @@ public class ActivityMain extends MyActionBarActivity {
     private boolean isFromNotification = false;
     private boolean isStarred = false;
     private String queryText = "";
+    private int rotateDegree = 0;
     private static int TRANSLATION_Y_TIME = 300;
 
     @Override
@@ -71,8 +68,8 @@ public class ActivityMain extends MyActionBarActivity {
         getSupportActionBar().setIcon(R.drawable.icon_shadow);
         getSupportActionBar().setTitle(" " + getString(R.string.title_activity_main));
         context = this.getBaseContext();
+        db = Storage.getInstance(context);
         queryText = "";
-        onNewIntent(getIntent());
 
         //init View
         setContentView(R.layout.activity_main);
@@ -109,6 +106,7 @@ public class ActivityMain extends MyActionBarActivity {
                         });
         mRecList.addOnItemTouchListener(touchListener);
 
+        onNewIntent(getIntent());
     }
 
     @Override
@@ -129,8 +127,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onResume() {
-        mFAB.animate().rotation(360).setDuration(1000);
-        Log.v(PACKAGE_NAME, "ActivityMain onResume");
+        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
         setView();
@@ -247,9 +244,9 @@ public class ActivityMain extends MyActionBarActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
         }
-        boolean superReturn = super.onOptionsItemSelected(item);
+        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
         clearDeleteQueue();
-        return superReturn;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -291,7 +288,6 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void setView() {
         //get clips
-        db = Storage.getInstance(this);
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
         } else {
@@ -360,7 +356,6 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void firstLaunch() throws InterruptedException {
-        db = Storage.getInstance(this);
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
         db.modifyClip(null, getString(R.string.first_launch_clips_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
@@ -395,10 +390,16 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     public void mFABonClick(View view) {
-        Intent intent = new Intent(this, ClipObjectActionBridge.class)
+        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
+        final Intent intent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT)
                 .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
-        startService(intent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startService(intent);
+            }
+        }, 200);
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
@@ -420,7 +421,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public void run() {
                     allowAnimate = false;
                 }
-            }, 1000);
+            }, 100);
         }
 
         @Override

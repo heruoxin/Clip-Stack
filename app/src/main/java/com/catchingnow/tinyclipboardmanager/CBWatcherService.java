@@ -139,7 +139,7 @@ public class CBWatcherService extends Service {
             return;
         }
         if (clipString.trim().isEmpty()) return;
-        int isImportant = db.isClipObjectStarred(clipString) ? 1:0;
+        int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
         if (isMyActivitiesOnForeground <= 0) {
             db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW, isImportant);
         } else {
@@ -183,7 +183,12 @@ public class CBWatcherService extends Service {
                 showSingleNotification();
                 return;
             }
-            thisClips.add(0, db.getClipHistory().get(0));
+            ClipObject topClip = db.getClipHistory().get(0);
+            if (thisClips.size() == 0) {
+                thisClips.add(0, topClip);
+            } else if (!topClip.getText().equals(thisClips.get(0).getText())) {
+                thisClips.add(0, topClip);
+            }
         } else {
             thisClips = db.getClipHistory(NUMBER_OF_CLIPS);
         }
@@ -193,14 +198,13 @@ public class CBWatcherService extends Service {
             showSingleNotification();
             return;
         }
-        if (length <= 1 && showStarred) {
-            thisClips.add(new ClipObject(
-                    getString(R.string.clip_notification_single_text),
-                    new Date(),
-                    true
-            ));
-            length +=1;
-        }
+        thisClips.add(new ClipObject(
+                getString(R.string.clip_notification_single_text),
+                new Date(),
+                true
+        ));
+        length += 1;
+
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
         Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
@@ -409,7 +413,7 @@ public class CBWatcherService extends Service {
             //add view
             RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {
-                theClipView.setTextViewText(R.id.clip_text, "★ "+s);
+                theClipView.setTextViewText(R.id.clip_text, "★ " + s);
             } else {
                 theClipView.setTextViewText(R.id.clip_text, s);
             }
@@ -430,8 +434,8 @@ public class CBWatcherService extends Service {
             if (clipObject.getText().equals(getString(R.string.clip_notification_single_text)) && clipObject.isStarred()) {
                 //hide copy button for 'add'
 
-                //theClipView.setViewVisibility(R.id.clip_copy_button, View.GONE);
                 theClipView.setImageViewResource(R.id.clip_copy_button, R.drawable.transparent);
+                theClipView.setTextViewText(R.id.clip_text, "✍ " + s);
             } else {
                 //add pIntent for copy
 

@@ -8,7 +8,9 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:src="@drawable/icon"/>
@@ -19,7 +21,7 @@
         android:layout_width="42dp"
         android:layout_below="@+id/main_view"
         android:layout_alignLeft="@+id/icon"
-        android:layout_marginTop="-42dp"
+        android:layout_marginTop="-38dp"
         android:layout_height="42dp"
         android:src="@drawable/ic_action_star_outline_grey600"/>
 
@@ -29,12 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon"
         android:layout_marginLeft="-4dp"
+        android:layout_marginTop="0.5dp"
+        android:layout_marginBottom="0.5dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/clip_line"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
