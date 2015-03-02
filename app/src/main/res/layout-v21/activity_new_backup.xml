@@ -88,24 +88,30 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <Switch
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_width="520dp"
             android:layout_height="wrap_content"
-            android:text="@string/switch_reverse_sort"
-            android:textSize="@dimen/abc_text_size_body_1_material"
-            android:id="@+id/switch_reverse_sort" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/export_button"
-            android:text="@string/action_export"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/switch_reverse_sort"
+                android:textSize="@dimen/abc_text_size_body_1_material"
+                android:id="@+id/switch_reverse_sort" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/export_button"
+                android:text="@string/action_export"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

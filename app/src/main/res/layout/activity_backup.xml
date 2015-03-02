@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,35 +11,43 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <TextView
-        android:text="@string/title_backups"
-        android:textColor="@color/accent"
-        android:textStyle="bold"
-        android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
-        android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin_material"
-        android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_width="520dp"
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
 
-        <LinearLayout
-            android:id="@+id/backup_list"
+        <TextView
+            android:text="@string/title_backups"
+            android:textColor="@color/accent"
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_text_size_subtitle_material_toolbar"
+            android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin_material"
+            android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp">
 
-        </LinearLayout>
-    </ScrollView>
+            <LinearLayout
+                android:id="@+id/backup_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <Button
-        android:id="@+id/new_backup"
-        android:text="@string/action_new_backup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/new_backup"
+            android:text="@string/action_new_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
