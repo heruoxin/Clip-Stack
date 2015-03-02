@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -201,7 +202,7 @@ public class CBWatcherService extends Service {
         thisClips.add(new ClipObject(
                 getString(R.string.clip_notification_single_text),
                 new Date(),
-                true
+                showStarred
         ));
         length += 1;
 
@@ -431,14 +432,12 @@ public class CBWatcherService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             theClipView.setOnClickPendingIntent(R.id.clip_text, pOpenEditIntent);
 
-            if (clipObject.getText().equals(getString(R.string.clip_notification_single_text)) && clipObject.isStarred()) {
+            if (clipObject.getText().equals(getString(R.string.clip_notification_single_text))) {
                 //hide copy button for 'add'
-
                 theClipView.setImageViewResource(R.id.clip_copy_button, R.drawable.transparent);
-                theClipView.setTextViewText(R.id.clip_text, "✍ " + s);
+                theClipView.setTextViewText(R.id.clip_text, " ✍ " + s);
             } else {
                 //add pIntent for copy
-
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
                         .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, s)
                         .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, true)

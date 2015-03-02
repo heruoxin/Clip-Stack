@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
@@ -53,12 +54,12 @@ public class ActivityMain extends MyActionBarActivity {
     private Storage db;
     private List<ClipObject> clips;
     private Context context;
-    private int isSnackbarShow = 0;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
+    private int isSnackbarShow = 0;
+    private boolean isRotating = false;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
     private String queryText = "";
-    private int rotateDegree = 0;
     private static int TRANSLATION_MOVE_TIME = 300;
 
     @Override
@@ -128,7 +129,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onResume() {
-        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
+        mFabRotation(true);
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
         setView();
@@ -223,7 +224,7 @@ public class ActivityMain extends MyActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
+        mFabRotation(true);
 
         int id = item.getItemId();
 
@@ -260,6 +261,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onShowKeyboard(int keyboardHeight) {
+        mFabRotation(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -274,11 +276,41 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
-                mFAB.animate().rotation(rotateDegree-- * 360).setDuration(1000);
+                mFabRotation(false);
             }
         }, 200);
     }
 
+    private void mFabRotation(boolean clockwise) {
+        if (isRotating) return;
+        mFAB.setRotation(0);
+        float rotateDegree = (clockwise ? 360 : -360);
+        mFAB.animate()
+                .rotation(rotateDegree)
+                .setDuration(1000)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        isRotating = true;
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mFAB.setRotation(0);
+                        isRotating = false;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        isRotating = false;
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+    }
 
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
@@ -413,8 +445,8 @@ public class ActivityMain extends MyActionBarActivity {
                 .show();
     }
 
-    public void mFABonClick(View view) {
-        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
+    public void mFabOnClick(View view) {
+        mFabRotation(true);
         final Intent intent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT)
                 .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
@@ -545,8 +577,7 @@ public class ActivityMain extends MyActionBarActivity {
             });
         }
 
-        private void setAnimation(final View viewToAnimate, int position)
-        {
+        private void setAnimation(final View viewToAnimate, int position) {
             if (!allowAnimate) {
                 return;
             }
