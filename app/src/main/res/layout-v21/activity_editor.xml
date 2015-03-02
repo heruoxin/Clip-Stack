@@ -43,6 +43,7 @@
 
             <ImageButton
                 android:id="@+id/main_fab"
+                android:transitionName="@string/action_star"
                 android:contentDescription="@string/action_save"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"

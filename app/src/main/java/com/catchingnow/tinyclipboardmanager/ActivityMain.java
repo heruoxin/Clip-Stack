@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
@@ -129,7 +130,6 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onResume() {
-        mFabRotation(true);
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
         setView();
@@ -146,6 +146,10 @@ public class ActivityMain extends MyActionBarActivity {
                 e.printStackTrace();
             }
         }
+
+        mFAB.setX(mFAB.getX()+260);
+        mFabRotation(false);
+        mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
     }
 
     @Override
@@ -265,7 +269,7 @@ public class ActivityMain extends MyActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate().translationX(160).setDuration(TRANSLATION_MOVE_TIME);
+                mFAB.animate().translationX(180).setDuration(TRANSLATION_MOVE_TIME);
             }
         }, 200);
     }
@@ -310,6 +314,20 @@ public class ActivityMain extends MyActionBarActivity {
 
                     }
                 });
+    }
+
+    public void mFabOnClick(View view) {
+        mFabRotation(true);
+        final Intent intent = new Intent(this, ActivityEditor.class)
+                .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
+            //startActivity(intent, options.toBundle());
+            startActivity(intent);
+        } else {
+            startActivity(intent);
+        }
     }
 
     private void clearDeleteQueue() {
@@ -395,6 +413,7 @@ public class ActivityMain extends MyActionBarActivity {
                                     isSnackbarShow = 0;
                                     mFAB.animate().translationY(0).setDuration(TRANSLATION_MOVE_TIME);
                                     mRecList.animate().translationY(0);
+                                    mFabRotation(true);
                                 }
                                 //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
                                 //mRecList.smoothScrollToPosition(position);
@@ -443,19 +462,6 @@ public class ActivityMain extends MyActionBarActivity {
                 .setNegativeButton(getString(R.string.dialog_cancel), null)
                 .create()
                 .show();
-    }
-
-    public void mFabOnClick(View view) {
-        mFabRotation(true);
-        final Intent intent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT)
-                .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startService(intent);
-            }
-        }, 200);
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
@@ -583,6 +589,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
             viewToAnimate.setVisibility(View.INVISIBLE);
             final Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            animation.setDuration(500);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
