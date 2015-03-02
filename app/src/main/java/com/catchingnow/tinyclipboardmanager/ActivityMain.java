@@ -59,7 +59,7 @@ public class ActivityMain extends MyActionBarActivity {
     private boolean isStarred = false;
     private String queryText = "";
     private int rotateDegree = 0;
-    private static int TRANSLATION_Y_TIME = 300;
+    private static int TRANSLATION_MOVE_TIME = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class ActivityMain extends MyActionBarActivity {
                         });
         mRecList.addOnItemTouchListener(touchListener);
 
+        attachKeyboardListeners();
         onNewIntent(getIntent());
     }
 
@@ -222,6 +223,8 @@ public class ActivityMain extends MyActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
+
         int id = item.getItemId();
 
         switch (id) {
@@ -244,7 +247,6 @@ public class ActivityMain extends MyActionBarActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
         }
-        mFAB.animate().rotation(rotateDegree++ * 360).setDuration(1000);
         clearDeleteQueue();
         return super.onOptionsItemSelected(item);
     }
@@ -255,6 +257,28 @@ public class ActivityMain extends MyActionBarActivity {
         searchView.requestFocus();
         return true;
     }
+
+    @Override
+    protected void onShowKeyboard(int keyboardHeight) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFAB.animate().translationX(160).setDuration(TRANSLATION_MOVE_TIME);
+            }
+        }, 200);
+    }
+
+    @Override
+    protected void onHideKeyboard() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
+                mFAB.animate().rotation(rotateDegree-- * 360).setDuration(1000);
+            }
+        }, 200);
+    }
+
 
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
@@ -313,7 +337,7 @@ public class ActivityMain extends MyActionBarActivity {
                         .eventListener(new EventListener() {
                             @Override
                             public void onShow(Snackbar snackbar) {
-                                mFAB.animate().translationY(-snackbar.getHeight()).setDuration(TRANSLATION_Y_TIME);
+                                mFAB.animate().translationY(-snackbar.getHeight()).setDuration(TRANSLATION_MOVE_TIME);
                                 if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
                                     mRecList.animate().translationY(-snackbar.getHeight());
                                 }
@@ -337,7 +361,7 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onDismissed(Snackbar snackbar) {
                                 if (isSnackbarShow <= 0) {
                                     isSnackbarShow = 0;
-                                    mFAB.animate().translationY(0).setDuration(TRANSLATION_Y_TIME);
+                                    mFAB.animate().translationY(0).setDuration(TRANSLATION_MOVE_TIME);
                                     mRecList.animate().translationY(0);
                                 }
                                 //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
