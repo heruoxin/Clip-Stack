@@ -1,10 +1,13 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ import java.util.TimerTask;
 
 public class ActivityBackup extends MyActionBarActivity {
     private Context context;
+    private Activity activity;
 
     private AlertDialog alertDialog;
 
@@ -34,6 +38,7 @@ public class ActivityBackup extends MyActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        activity = this;
         setContentView(R.layout.activity_backup);
     }
 
@@ -45,11 +50,20 @@ public class ActivityBackup extends MyActionBarActivity {
 
     private void initImportView(boolean showToast) {
 
-        Button buttonNewBackup = (Button) findViewById(R.id.new_backup);
+        final View newBackupView = findViewById(R.id.new_backup);
+        final Button buttonNewBackup = (Button) newBackupView;
         buttonNewBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, ActivityNewBackup.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(activity,
+                                    newBackupView,
+                                    getString(R.string.action_export));
+                    startActivity(new Intent(context, ActivityNewBackup.class), options.toBundle());
+                } else {
+                    startActivity(new Intent(context, ActivityNewBackup.class));
+                }
             }
         });
 

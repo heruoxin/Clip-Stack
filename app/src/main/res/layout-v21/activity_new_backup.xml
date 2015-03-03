@@ -107,6 +107,7 @@
 
             <Button
                 android:id="@+id/export_button"
+                android:transitionName="@string/action_export"
                 android:text="@string/action_export"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

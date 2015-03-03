@@ -58,6 +58,7 @@ public class ActivityMain extends MyActionBarActivity {
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private int isSnackbarShow = 0;
     private int isYHidden = -1;
+    private int isXHidden = -1;
     private boolean isRotating = false;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
