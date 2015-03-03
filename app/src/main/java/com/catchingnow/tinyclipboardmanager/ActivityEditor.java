@@ -1,10 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -22,6 +26,7 @@ public class ActivityEditor extends MyActionBarActivity {
     private boolean isStarred;
     private boolean textStatueHasChanged = false;
     private MenuItem starItem;
+    private ImageButton mFAB;
     private InputMethodManager inputMethodManager;
 
     @Override
@@ -36,6 +41,7 @@ public class ActivityEditor extends MyActionBarActivity {
         }
 
         editText = (EditText) findViewById(R.id.edit_text);
+        mFAB = (ImageButton) findViewById(R.id.main_fab);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -131,6 +137,20 @@ public class ActivityEditor extends MyActionBarActivity {
         } else {
             starItem.setIcon(R.drawable.ic_action_star_outline_white);
         }
+        mFAB.animate().scaleX(0).setDuration(300);
+        mFAB.animate().scaleY(0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isStarred) {
+                    mFAB.setImageResource(R.drawable.ic_action_star_white);
+                } else {
+                    mFAB.setImageResource(R.drawable.ic_action_copy);
+                }
+                mFAB.animate().scaleY(1);
+                mFAB.animate().scaleX(1);
+            }
+        }, 340);
     }
 
     private void deleteText() {

@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -31,6 +32,8 @@ import java.util.TimerTask;
 public class ActivityBackup extends MyActionBarActivity {
     private Context context;
     private Activity activity;
+    private View newBackupView;
+    private LinearLayout backupView;
 
     private AlertDialog alertDialog;
 
@@ -40,18 +43,9 @@ public class ActivityBackup extends MyActionBarActivity {
         context = this;
         activity = this;
         setContentView(R.layout.activity_backup);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initImportView(false);
-    }
-
-    private void initImportView(boolean showToast) {
-
-        final View newBackupView = findViewById(R.id.new_backup);
-        final Button buttonNewBackup = (Button) newBackupView;
+        newBackupView = findViewById(R.id.new_backup);
+        backupView = (LinearLayout) findViewById(R.id.backup_list);
+        Button buttonNewBackup = (Button) newBackupView;
         buttonNewBackup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +61,16 @@ public class ActivityBackup extends MyActionBarActivity {
             }
         });
 
-        LinearLayout backupView = (LinearLayout) findViewById(R.id.backup_list);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initImportView(false);
+    }
+
+    private void initImportView(boolean showToast) {
+
         backupView.removeAllViewsInLayout();
         LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
