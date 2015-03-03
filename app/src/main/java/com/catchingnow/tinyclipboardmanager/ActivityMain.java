@@ -57,6 +57,7 @@ public class ActivityMain extends MyActionBarActivity {
     private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private int isSnackbarShow = 0;
+    private int isYHidden = -1;
     private boolean isRotating = false;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
@@ -106,6 +107,66 @@ public class ActivityMain extends MyActionBarActivity {
                                 onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
                             }
                         });
+        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 60 && isYHidden == -1) {
+                    isYHidden = 0;
+                    mFAB.animate()
+                            .translationY(180)
+                            .setDuration(TRANSLATION_MOVE_TIME)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    isYHidden = 1;
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                } else if (dy < -60 && isYHidden == 1) {
+                    isYHidden = 0;
+                    mFAB.animate()
+                            .translationY(0)
+                            .setDuration(TRANSLATION_MOVE_TIME)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    isYHidden = -1;
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                }
+            }
+        };
+        mRecList.setOnScrollListener(scrollListener);
         mRecList.addOnItemTouchListener(touchListener);
 
         attachKeyboardListeners();
@@ -584,6 +645,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
         private void setAnimation(final View viewToAnimate, int position) {
+            //animate for list fade in
             if (!allowAnimate) {
                 return;
             }
@@ -609,7 +671,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public void run() {
                     viewToAnimate.startAnimation(animation);
                 }
-            }, position * 100);
+            }, (position+1) * 100);
         }
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {

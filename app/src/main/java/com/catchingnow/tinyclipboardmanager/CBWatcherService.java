@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static int JOB_ID = 1;
-    public int NUMBER_OF_CLIPS = 6; //3-6
+    public int NUMBER_OF_CLIPS = 5; //3-6
     protected boolean isStarred = false;
     private NotificationManager notificationManager;
     private SharedPreferences preference;
@@ -434,7 +435,8 @@ public class CBWatcherService extends Service {
             if (clipObject.getText().equals(getString(R.string.clip_notification_single_text))) {
                 //hide copy button for 'add'
                 theClipView.setImageViewResource(R.id.clip_copy_button, R.drawable.transparent);
-                theClipView.setTextViewText(R.id.clip_text, " ✍ " + s);
+                theClipView.setTextViewText(R.id.clip_text, "✍ " + s);
+                theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
             } else {
                 //add pIntent for copy
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)

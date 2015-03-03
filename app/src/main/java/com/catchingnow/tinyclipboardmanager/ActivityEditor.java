@@ -31,8 +31,7 @@ public class ActivityEditor extends MyActionBarActivity {
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
         isStarred = intent.getBooleanExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false);
-        if (oldText == null ||
-                (oldText.equals(getString(R.string.clip_notification_single_text)) && isStarred)) {
+        if (oldText == null || oldText.equals(getString(R.string.clip_notification_single_text))) {
             oldText = "";
         }
 

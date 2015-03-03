@@ -21,7 +21,7 @@
         android:layout_width="42dp"
         android:layout_below="@+id/main_view"
         android:layout_alignLeft="@+id/icon"
-        android:layout_marginTop="-38dp"
+        android:layout_marginTop="-42dp"
         android:layout_height="42dp"
         android:src="@drawable/ic_action_star_outline_grey600"/>
 
@@ -29,6 +29,7 @@
         android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="90dp"
         android:layout_toRightOf="@+id/icon"
         android:layout_marginLeft="-4dp"
         android:layout_marginTop="0.5dp"
