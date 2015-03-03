@@ -137,7 +137,7 @@ public class ActivityEditor extends MyActionBarActivity {
         } else {
             starItem.setIcon(R.drawable.ic_action_star_outline_white);
         }
-        mFAB.animate().scaleX(0).setDuration(300);
+        mFAB.animate().scaleX(0).setDuration(160);
         mFAB.animate().scaleY(0);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -150,7 +150,7 @@ public class ActivityEditor extends MyActionBarActivity {
                 mFAB.animate().scaleY(1);
                 mFAB.animate().scaleX(1);
             }
-        }, 340);
+        }, 220);
     }
 
     private void deleteText() {
