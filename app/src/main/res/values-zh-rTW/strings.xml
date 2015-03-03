@@ -45,7 +45,7 @@
     <string name="pref_service_summary">在後臺時仍記錄剪貼簿變化。</string>
     <string name="pref_service_title">後臺服務</string>
     <string name="pref_storage_dialog">將剪貼簿紀錄保存:</string>
-    <string name="pref_storage_summary">剪貼板紀錄保存多久？</string>
+    <string name="pref_storage_summary">設定剪貼板紀錄保存時限</string>
     <string name="pref_storage_summary_days">將剪貼簿保存 %d 天。</string>
     <string name="pref_storage_summary_infinite">永久儲存剪貼簿紀錄。</string>
     <string name="pref_storage_title">存儲</string>
