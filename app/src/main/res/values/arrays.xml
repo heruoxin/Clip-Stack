@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="pref_save_dates_descriptions">
         <item name="1">@string/arrays_one_day</item>
-        <item name="3">@string/arrays_three_days</item>
         <item name="7">@string/arrays_seven_days</item>
         <item name="30">@string/arrays_thirty_days</item>
         <item name="9999">@string/arrays_infinite</item>
     </string-array>
-    <string-array name="pref_save_dates_values">
+    <string-array
+        tools:ignore="MissingTranslation"
+        name="pref_save_dates_values">
         <item name="1">1</item>
-        <item name="1">3</item>
         <item name="7">7</item>
         <item name="30">30</item>
         <item name="9999">9999</item>

@@ -50,7 +50,6 @@
     <string name="first_launch_clipboards_3">%1$s Swipe to delete. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>
     <string name="action_add">Add</string>
-    <string name="toast_front_string">""</string>
     <string name="action_delete_all">Clear all</string>
     <string name="dialog_delete_all">Are you sure you want to clear all?\nStarred items will be retained.</string>
     <string name="dialog_ok">OK</string>
@@ -85,5 +84,6 @@
     <string name="arrays_infinite">infinite</string>
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
     <string name="pref_storage_summary">Set clipboard history limit.</string>
+    <string name="toast_front_string"></string>
 
 </resources>

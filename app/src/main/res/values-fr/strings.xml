@@ -56,7 +56,6 @@
     <string name="first_launch_clipboards_3">%1$s Swiper pour supprimer. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copier dans le presse-papier</string>
     <string name="action_add">Ajouter</string>
-    <string name="toast_front_string">""</string>
     <string name="action_delete_all">Supprimer tout</string>
     <string name="dialog_delete_all">Êtes vous sûr de vouloir supprimer tous les presse-papiers ?\nArticles étoilés seront conservés</string>
     <string name="dialog_ok">OK</string>
@@ -90,4 +89,5 @@
     <string name="arrays_infinite">infini</string>
     <string name="action_star">★</string>
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
+    <string name="toast_front_string"></string>
 </resources>

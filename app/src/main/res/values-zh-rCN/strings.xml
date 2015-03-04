@@ -49,11 +49,10 @@
     <string name="first_launch_clipboards_3">%1$s 滑动即可删除。%2$s</string>
     <string name="title_activity_activity_get_share_text">复制到剪贴板</string>
     <string name="action_add">添加</string>
-    <string name="toast_front_string">""</string>
     <string name="action_delete_all">清除全部</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
-    <string name="dialog_delete_all">（星标项目会被保留）</string>
+    <string name="dialog_delete_all">确定清除全部？\n（星标项目会被保留）</string>
     <string name="toast_undo">撤销</string>
     <string name="backup_file_name">剪纸堆备份</string>
     <string name="export_success">导出成功：</string>
@@ -85,5 +84,6 @@
     <string name="arrays_three_days">三天</string>
     <string name="action_star">星标</string>
     <string name="clip_notification_starred_single_text">没有加星标的项目。</string>
+    <string name="toast_front_string"></string>
 
 </resources>

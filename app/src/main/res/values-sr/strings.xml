@@ -51,7 +51,6 @@
     <string name="first_launch_clipboards_3">%1$s Померите да обришете. %2$s</string>
     <string name="title_activity_activity_get_share_text">Копирај на клипборд</string>
     <string name="action_add">Додај</string>
-    <string name="toast_front_string">""</string>
     <string name="action_delete_all">Очисти све</string>
     <string name="dialog_delete_all">Желите ли заиста да уклоните све ставке?\nСа звездицом ставке остају</string>
     <string name="dialog_ok">У реду</string>
@@ -85,5 +84,6 @@
     <string name="arrays_infinite">трајан</string>
     <string name="action_star">★</string>
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
+    <string name="toast_front_string"></string>
 
 </resources>
