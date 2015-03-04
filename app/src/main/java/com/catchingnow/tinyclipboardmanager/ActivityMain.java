@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private RecyclerView mRecList;
-    private View mRecLayout;
+    private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
     private ImageButton mFAB;
     private SearchView searchView;
@@ -61,8 +62,6 @@ public class ActivityMain extends MyActionBarActivity {
     private int isYHidden = -1;
     private int isXHidden = -1;
     private boolean isRotating = false;
-    private float defaultX;
-    private float defaultY;
 
     private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
@@ -80,112 +79,13 @@ public class ActivityMain extends MyActionBarActivity {
         db = Storage.getInstance(context);
         queryText = "";
 
-        //init View
         setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-        mRecList = (RecyclerView) findViewById(R.id.cardList);
-        mRecLayout = findViewById(R.id.recycler_layout);
-        mRecList.setHasFixedSize(true);
-        defaultX = mFAB.getX();
-        defaultY = mFAB.getY();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecList.setLayoutManager(linearLayoutManager);
-
-        SwipeableRecyclerViewTouchListener touchListener =
-                new SwipeableRecyclerViewTouchListener(
-                        mRecList,
-                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
-                            @Override
-                            public boolean canSwipe(int position) {
-                                return !clips.get(position).isStarred();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    clipCardAdapter.remove(position);
-                                }
-                                clipCardAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
-                            }
-                        });
-        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 20 && isYHidden == -1) {
-                    //hide FAB on Y
-                    if (isXHidden == 1) return;
-                    isYHidden = 0;
-                    mFabRotation(true);
-                    mFAB.animate()
-                            .translationY(DisplayUtil.dip2px(context, 90))
-                            .setDuration(TRANSLATION_MOVE_TIME)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = 1;
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                } else if (dy < -20 && isYHidden == 1) {
-                    //show FAB on Y
-                    if (isXHidden == 1) return;
-                    isYHidden = 0;
-                    mFabRotation(false);
-                    mFAB.animate()
-                            .translationY(0)
-                            .setDuration(TRANSLATION_MOVE_TIME)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = -1;
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-
-                                }
-                            });
-                }
-            }
-        };
-        mRecList.setOnScrollListener(scrollListener);
-        mRecList.addOnItemTouchListener(touchListener);
+        mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
+        initView();
 
         attachKeyboardListeners();
         onNewIntent(getIntent());
-
     }
 
     @Override
@@ -223,7 +123,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setX(mFAB.getX() + DisplayUtil.px2dip(context, 90));
+        mFAB.setTranslationX(DisplayUtil.dip2px(context, 90));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -282,6 +182,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onClose() {
                 searchItem.collapseActionView();
                 queryText = null;
+                initView();
                 setView();
                 return false;
             }
@@ -479,6 +380,111 @@ public class ActivityMain extends MyActionBarActivity {
         } else {
             mRecLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initView() {
+        //init View
+
+        LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View inflate = layoutInflater.inflate(R.layout.main_recycler_view, null);
+        mRecLayout.removeAllViewsInLayout();
+        mRecLayout.addView(inflate);
+        mRecList = (RecyclerView) findViewById(R.id.cardList);
+        mRecList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecList.setLayoutManager(linearLayoutManager);
+
+        SwipeableRecyclerViewTouchListener touchListener =
+                new SwipeableRecyclerViewTouchListener(
+                        mRecList,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return !clips.get(position).isStarred();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    showSnackbar(position, clips.get(position), clipCardAdapter);
+                                    clipCardAdapter.remove(position);
+                                }
+                                clipCardAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
+                            }
+                        });
+        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 20 && isYHidden == -1) {
+                    //hide FAB on Y
+                    if (isXHidden == 1) return;
+                    isYHidden = 0;
+                    mFabRotation(true);
+                    mFAB.animate()
+                            .translationY(DisplayUtil.dip2px(context, 90))
+                            .setDuration(TRANSLATION_MOVE_TIME)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    isYHidden = 1;
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                } else if (dy < -20 && isYHidden == 1) {
+                    //show FAB on Y
+                    if (isXHidden == 1) return;
+                    isYHidden = 0;
+                    mFabRotation(false);
+                    mFAB.animate()
+                            .translationY(0)
+                            .setDuration(TRANSLATION_MOVE_TIME)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    isYHidden = -1;
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                }
+            }
+        };
+        mRecList.setOnScrollListener(scrollListener);
+        mRecList.addOnItemTouchListener(touchListener);
     }
 
     private void setView() {

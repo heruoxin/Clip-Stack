@@ -27,17 +27,12 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/recycler_layout"
         android:layout_centerInParent="true"
         android:background="@color/background"
         android:layout_width="520dp"
         android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cardList"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
     </LinearLayout>
 
