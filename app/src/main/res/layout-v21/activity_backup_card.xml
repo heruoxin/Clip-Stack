@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/backup_content"
-        android:background="@drawable/background_backup_content"
+        android:background="@drawable/background_default_ripple_with_mask"
         android:focusable="true"
         android:clickable="true"
         android:orientation="vertical"
