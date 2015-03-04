@@ -58,7 +58,7 @@ public class ActivityMain extends MyActionBarActivity {
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private int isSnackbarShow = 0;
     private int isYHidden = -1;
-    private int isXHidden = -1;
+    private int isXHidden = 0;
     private boolean isRotating = false;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
@@ -209,9 +209,14 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setX(mFAB.getX()+260);
-        mFabRotation(false);
-        mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
+        mFAB.setX(mFAB.getX() + 180);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
+                mFabRotation(false);
+            }
+        }, 600);
     }
 
     @Override
@@ -298,6 +303,7 @@ public class ActivityMain extends MyActionBarActivity {
                 return super.onOptionsItemSelected(item);
             case R.id.action_star:
                 isStarred = !isStarred;
+                mFabRotation(isStarred);
                 setStarredIcon();
                 setView();
                 break;
@@ -313,7 +319,6 @@ public class ActivityMain extends MyActionBarActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
         }
-        mFabRotation(isStarred);
         clearDeleteQueue();
         return super.onOptionsItemSelected(item);
     }
@@ -327,21 +332,30 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onShowKeyboard(int keyboardHeight) {
+        if (isXHidden == 1) return;
+        isXHidden = 1;
         mFabRotation(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate().translationX(180).setDuration(TRANSLATION_MOVE_TIME);
+                mFAB.animate()
+                        .translationX(180)
+                        .setDuration(TRANSLATION_MOVE_TIME);
             }
         }, 200);
     }
 
     @Override
     protected void onHideKeyboard() {
+        Log.v(PACKAGE_NAME, "onHideKeyboard   "+ isXHidden);
+        if (isXHidden == -1) return;
+        isXHidden = -1;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate().translationX(0).setDuration(TRANSLATION_MOVE_TIME);
+                mFAB.animate()
+                        .translationX(0)
+                        .setDuration(TRANSLATION_MOVE_TIME);
                 mFabRotation(false);
             }
         }, 200);
@@ -672,7 +686,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public void run() {
                     viewToAnimate.startAnimation(animation);
                 }
-            }, (position+2) * 80);
+            }, (position+1) * 100);
         }
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {

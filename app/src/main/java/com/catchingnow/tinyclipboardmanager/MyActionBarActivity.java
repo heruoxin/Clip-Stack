@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -35,26 +36,25 @@ public class MyActionBarActivity extends ActionBarActivity {
 
     //check softKeyboard show or hide
     //http://stackoverflow.com/questions/25216749/softkeyboard-open-and-close-listener-in-an-activity-in-android
+    private boolean isKeyboardShow = false;
+
     private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
             int heightDiff = rootLayout.getRootView().getHeight() - rootLayout.getHeight();
             int contentViewTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getHeight();
 
-            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(MyActionBarActivity.this);
-
             if (heightDiff <= contentViewTop) {
+                if (!isKeyboardShow) return;
                 onHideKeyboard();
+                isKeyboardShow = false;
 
-                Intent intent = new Intent("KeyboardWillHide");
-                broadcastManager.sendBroadcast(intent);
             } else {
+                if (isKeyboardShow) return;
                 int keyboardHeight = heightDiff - contentViewTop;
                 onShowKeyboard(keyboardHeight);
+                isKeyboardShow = true;
 
-                Intent intent = new Intent("KeyboardWillShow");
-                intent.putExtra("KeyboardHeight", keyboardHeight);
-                broadcastManager.sendBroadcast(intent);
             }
         }
     };

@@ -79,6 +79,12 @@ public class ActivityEditor extends MyActionBarActivity {
         super.onResume();
         editText.requestFocus();
         CBWatcherService.startCBService(this, false, 1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setStarredIcon();
+            }
+        }, 600);
     }
 
     @Override
@@ -98,7 +104,6 @@ public class ActivityEditor extends MyActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         starItem = menu.findItem(R.id.action_star);
-        setStarredIcon();
         return super.onCreateOptionsMenu(menu);
     }
 
