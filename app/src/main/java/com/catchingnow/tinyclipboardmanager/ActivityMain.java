@@ -115,7 +115,7 @@ public class ActivityMain extends MyActionBarActivity {
                 if (dy > 60 && isYHidden == -1) {
                     isYHidden = 0;
                     mFAB.animate()
-                            .translationY(180)
+                            .translationY(DisplayUtil.dip2px(context, 90))
                             .setDuration(TRANSLATION_MOVE_TIME)
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
@@ -172,6 +172,7 @@ public class ActivityMain extends MyActionBarActivity {
 
         attachKeyboardListeners();
         onNewIntent(getIntent());
+
     }
 
     @Override
@@ -209,7 +210,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setX(mFAB.getX() + 180);
+        mFAB.setX(mFAB.getX() + DisplayUtil.px2dip(context, 90));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -217,6 +218,18 @@ public class ActivityMain extends MyActionBarActivity {
                 mFabRotation(false);
             }
         }, 600);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onShowKeyboard(0);
+            }
+        }, 6000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onHideKeyboard();
+            }
+        }, 10000);
     }
 
     @Override
@@ -339,7 +352,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.animate()
-                        .translationX(180)
+                        .translationX(DisplayUtil.dip2px(context, 90))
                         .setDuration(TRANSLATION_MOVE_TIME);
             }
         }, 200);
