@@ -26,8 +26,8 @@
     <string name="pref_about_title">オープンソース</string>
     <string name="pref_app_setting_category">書式設定</string>
     <string name="pref_notification_pin_summary_off">システムクリップボードの内容が変更される際のみ表示</string>
-    <string name="pref_notification_pin_summary_on">常にお知らせを表示</string>
-    <string name="pref_notification_pin_title">Pin Notification</string>
+    <string name="pref_notification_pin_summary_on">お知らせを常に表示</string>
+    <string name="pref_notification_pin_title">お知らせを表示</string>
     <string name="pref_service_summary">バックグラウンド中でもクリップボードに記録</string>
     <string name="pref_service_title">バックグラウンド操作</string>
     <string name="pref_storage_dialog">クリップボード履歴を保存:</string>
