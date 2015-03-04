@@ -508,6 +508,7 @@ public class ActivityMain extends MyActionBarActivity {
                         .eventListener(new EventListener() {
                             @Override
                             public void onShow(Snackbar snackbar) {
+                                mFabRotation(false);
                                 mFAB.animate().translationY(-snackbar.getHeight()).setDuration(TRANSLATION_MOVE_TIME);
                                 if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
                                     mRecList.animate().translationY(-snackbar.getHeight());
