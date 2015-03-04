@@ -56,10 +56,15 @@ public class ActivityMain extends MyActionBarActivity {
     private List<ClipObject> clips;
     private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
-    private int isSnackbarShow = 0;
+
+    //FAB
     private int isYHidden = -1;
-    private int isXHidden = 0;
+    private int isXHidden = -1;
     private boolean isRotating = false;
+    private float defaultX;
+    private float defaultY;
+
+    private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
     private String queryText = "";
@@ -81,6 +86,8 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList = (RecyclerView) findViewById(R.id.cardList);
         mRecLayout = findViewById(R.id.recycler_layout);
         mRecList.setHasFixedSize(true);
+        defaultX = mFAB.getX();
+        defaultY = mFAB.getY();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
@@ -112,8 +119,11 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 60 && isYHidden == -1) {
+                if (dy > 20 && isYHidden == -1) {
+                    //hide FAB on Y
+                    if (isXHidden == 1) return;
                     isYHidden = 0;
+                    mFabRotation(true);
                     mFAB.animate()
                             .translationY(DisplayUtil.dip2px(context, 90))
                             .setDuration(TRANSLATION_MOVE_TIME)
@@ -138,8 +148,11 @@ public class ActivityMain extends MyActionBarActivity {
 
                                 }
                             });
-                } else if (dy < -60 && isYHidden == 1) {
+                } else if (dy < -20 && isYHidden == 1) {
+                    //show FAB on Y
+                    if (isXHidden == 1) return;
                     isYHidden = 0;
+                    mFabRotation(false);
                     mFAB.animate()
                             .translationY(0)
                             .setDuration(TRANSLATION_MOVE_TIME)
@@ -218,18 +231,6 @@ public class ActivityMain extends MyActionBarActivity {
                 mFabRotation(false);
             }
         }, 600);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                onShowKeyboard(0);
-            }
-        }, 6000);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                onHideKeyboard();
-            }
-        }, 10000);
     }
 
     @Override
@@ -345,30 +346,76 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onShowKeyboard(int keyboardHeight) {
-        if (isXHidden == 1) return;
-        isXHidden = 1;
+        //hide FAB on X.
+        if (isXHidden != -1) return;
+        isXHidden = 0;
         mFabRotation(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mFAB.animate()
                         .translationX(DisplayUtil.dip2px(context, 90))
-                        .setDuration(TRANSLATION_MOVE_TIME);
+                        .setDuration(TRANSLATION_MOVE_TIME)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = 1;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
             }
         }, 200);
     }
 
     @Override
     protected void onHideKeyboard() {
-        Log.v(PACKAGE_NAME, "onHideKeyboard   "+ isXHidden);
-        if (isXHidden == -1) return;
-        isXHidden = -1;
+        //show FAB on X.
+        if (isXHidden != 1) return;
+        isXHidden = 0;
+        if (isYHidden == 1) {
+            mFAB.setTranslationY(0);
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mFAB.animate()
                         .translationX(0)
-                        .setDuration(TRANSLATION_MOVE_TIME);
+                        .setDuration(TRANSLATION_MOVE_TIME)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = -1;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
                 mFabRotation(false);
             }
         }, 200);
@@ -378,31 +425,16 @@ public class ActivityMain extends MyActionBarActivity {
         if (isRotating) return;
         mFAB.setRotation(0);
         float rotateDegree = (clockwise ? 360 : -360);
+        isRotating = true;
         mFAB.animate()
                 .rotation(rotateDegree)
-                .setDuration(1000)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        isRotating = true;
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mFAB.setRotation(0);
-                        isRotating = false;
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        isRotating = false;
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
+                .setDuration(1000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isRotating = false;
+            }
+        }, 600);
     }
 
     public void mFabOnClick(View view) {
@@ -679,7 +711,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
             viewToAnimate.setVisibility(View.INVISIBLE);
             final Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-            animation.setDuration(500);
+            animation.setDuration(400);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -699,7 +731,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public void run() {
                     viewToAnimate.startAnimation(animation);
                 }
-            }, (position+1) * 100);
+            }, (position+2) * 60);
         }
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {
