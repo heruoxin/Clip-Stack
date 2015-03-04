@@ -672,7 +672,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public void run() {
                     viewToAnimate.startAnimation(animation);
                 }
-            }, (position+1) * 100);
+            }, (position+2) * 80);
         }
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {
