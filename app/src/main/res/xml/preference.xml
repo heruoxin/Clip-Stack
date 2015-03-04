@@ -44,7 +44,7 @@
             android:summary="@string/pref_about_summary">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/heruoxin/TinyClipboards" />
+                android:data="https://github.com/heruoxin/Clip-Stack" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
