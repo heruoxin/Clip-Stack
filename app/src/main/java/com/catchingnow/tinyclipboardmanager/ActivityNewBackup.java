@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.Switch;
 
 import java.util.Calendar;
@@ -110,6 +112,14 @@ public class ActivityNewBackup extends MyActionBarActivity {
         }
         datePickerFrom.setMaxDate(dateTo.getTimeInMillis());
         datePickerTo.setMaxDate(dateTo.getTimeInMillis());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            HorizontalScrollView datePickersScrollView = (HorizontalScrollView) findViewById(R.id.date_pickers_scroll_view);
+            datePickersScrollView.smoothScrollTo(0, 0);
+        } else {
+            ScrollView datePickersScrollView = (ScrollView) findViewById(R.id.date_pickers_scroll_view);
+            datePickersScrollView.smoothScrollTo(0, 0);
+        }
 
     }
 

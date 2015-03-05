@@ -387,7 +387,7 @@ public class ActivityMain extends MyActionBarActivity {
 
         mRecLayout.removeAllViewsInLayout();
         LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.main_recycler_view, mRecLayout, true);
+        layoutInflater.inflate(R.layout.view_main_recycler, mRecLayout, true);
         mRecList = (RecyclerView) findViewById(R.id.cardList);
         mRecList.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
