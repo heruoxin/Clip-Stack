@@ -140,6 +140,7 @@ public class CBWatcherService extends Service {
             return;
         }
         if (clipString.trim().isEmpty()) return;
+        Log.v(PACKAGE_NAME, clipString);
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
         if (isMyActivitiesOnForeground <= 0) {
             db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW, isImportant);
@@ -221,7 +222,7 @@ public class CBWatcherService extends Service {
         boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.clip_notification_title) + thisClips.get(0).getText().trim()) //title
+                .setContentTitle(getString(R.string.clip_notification_title) + MyUtil.stringLengthCut(thisClips.get(0).getText())) //title
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
@@ -282,7 +283,7 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    currentClip = thisClip.toString().trim();
+                    currentClip = MyUtil.stringLengthCut(thisClip.toString());
                 }
             }
         }
@@ -408,21 +409,21 @@ public class CBWatcherService extends Service {
 
         public NotificationClipListAdapter addClips(ClipObject clipObject) {
             id += 1;
-            String s = clipObject.getText().trim();
+            //String s = clipObject.getText().trim();
             //Log.v(PACKAGE_NAME,"ID "+id);
             //Log.v(PACKAGE_NAME,s);
             //add view
             RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {
-                theClipView.setTextViewText(R.id.clip_text, "★ " + s);
+                theClipView.setTextViewText(R.id.clip_text, "★ " + MyUtil.stringLengthCut(clipObject.getText()));
             } else {
-                theClipView.setTextViewText(R.id.clip_text, s);
+                theClipView.setTextViewText(R.id.clip_text, MyUtil.stringLengthCut(clipObject.getText()));
             }
 
             //add pIntent for edit
 
             Intent openEditIntent = new Intent(context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, s)
+                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                     .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
@@ -435,12 +436,12 @@ public class CBWatcherService extends Service {
             if (clipObject.getText().equals(getString(R.string.clip_notification_single_text))) {
                 //hide copy button for 'add'
                 theClipView.setImageViewResource(R.id.clip_copy_button, R.drawable.transparent);
-                theClipView.setTextViewText(R.id.clip_text, "✍ " + s);
+                theClipView.setTextViewText(R.id.clip_text, "✍ " + getString(R.string.clip_notification_single_text));
                 theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
             } else {
                 //add pIntent for copy
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
-                        .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, s)
+                        .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                         .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, true)
                         .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_COPY);
                 PendingIntent pOpenCopyIntent = PendingIntent.getService(context,

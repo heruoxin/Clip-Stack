@@ -123,7 +123,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setTranslationX(DisplayUtil.dip2px(context, 90));
+        mFAB.setTranslationX(MyUtil.dip2px(context, 90));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -255,7 +255,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.animate()
-                        .translationX(DisplayUtil.dip2px(context, 90))
+                        .translationX(MyUtil.dip2px(context, 90))
                         .setDuration(TRANSLATION_MOVE_TIME)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -427,7 +427,7 @@ public class ActivityMain extends MyActionBarActivity {
                     isYHidden = 0;
                     mFabRotation(true);
                     mFAB.animate()
-                            .translationY(DisplayUtil.dip2px(context, 90))
+                            .translationY(MyUtil.dip2px(context, 90))
                             .setDuration(TRANSLATION_MOVE_TIME)
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
@@ -623,7 +623,7 @@ public class ActivityMain extends MyActionBarActivity {
             final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
             clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
-            clipCardViewHolder.vText.setText(clipObject.getText().trim());
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             clipCardViewHolder.vStarred.setImageResource(
                     clipObject.isStarred() ?
                             R.drawable.ic_action_star_yellow : R.drawable.ic_action_star_outline_grey600
