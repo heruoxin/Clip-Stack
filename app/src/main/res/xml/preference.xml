@@ -31,6 +31,11 @@
             android:summaryOff="@string/pref_notification_summary_off"
             android:defaultValue="true"/>
         <SwitchPreference
+            android:title="Notification Icon"
+            android:key="pref_notification_icon"
+            android:defaultValue="false"
+            android:dependency="pref_notification_show" />
+        <SwitchPreference
             android:title="@string/pref_notification_pin_title"
             android:key="pref_notification_pin"
             android:summaryOn="@string/pref_notification_pin_summary_on"

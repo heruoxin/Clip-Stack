@@ -16,6 +16,7 @@ public class ActivitySetting extends MyPreferenceActivity {
 
     public final static String PREF_NOTIFICATION_SHOW = "pref_notification_show";
     public final static String PREF_NOTIFICATION_PIN = "pref_notification_pin";
+    public final static String PREF_NOTIFICATION_ICON = "pref_notification_icon";
     public final static String PREF_START_SERVICE = "pref_start_service";
     public final static String PREF_SAVE_DATES = "pref_save_dates";
 //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
@@ -31,7 +32,8 @@ public class ActivitySetting extends MyPreferenceActivity {
                     case PREF_START_SERVICE:
                     case PREF_NOTIFICATION_SHOW:
                     case PREF_NOTIFICATION_PIN:
-                        Log.v(MyUtil.PACKAGE_NAME, "ActivitySetting NOTIFICATION or PREF_START_SERVICE");
+                    case PREF_NOTIFICATION_ICON:
+                        Log.v(MyUtil.PACKAGE_NAME, "ActivitySetting NOTIFICATION");
                         CBWatcherService.startCBService(context, true);
                         break;
                     case PREF_SAVE_DATES:

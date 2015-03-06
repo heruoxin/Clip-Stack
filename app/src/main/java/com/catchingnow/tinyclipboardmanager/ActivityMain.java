@@ -118,7 +118,7 @@ public class ActivityMain extends MyActionBarActivity {
                         .putBoolean(FIRST_LAUNCH, false)
                         .apply();
             } catch (InterruptedException e) {
-                Log.e(PACKAGE_NAME, "first launch error:");
+                Log.e(MyUtil.PACKAGE_NAME, "first launch error:");
                 e.printStackTrace();
             }
         }

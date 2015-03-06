@@ -39,6 +39,8 @@ public class CBWatcherService extends Service {
     private SharedPreferences preference;
     private Storage db;
     private boolean onListened = false;
+    private boolean showIcon = false;
+    private boolean pinOnTop = false;
     private int isMyActivitiesOnForeground = 0;
     private int pIntentId = -1;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
@@ -72,6 +74,8 @@ public class CBWatcherService extends Service {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+            showIcon = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_ICON, false);
+            pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
                 Log.v(MyUtil.PACKAGE_NAME, "onStartCommand cleanUpSqlite");
@@ -217,7 +221,6 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title) + MyUtil.stringLengthCut(thisClips.get(0).getText())) //title
@@ -246,7 +249,7 @@ public class CBWatcherService extends Service {
         } else {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
         }
-        if (pinOnTop) {
+        if (showIcon) {
             preBuildNotification
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         }
@@ -262,7 +265,9 @@ public class CBWatcherService extends Service {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             n.bigContentView = bigView.build();
         }
-        n.icon = R.drawable.ic_stat_icon;
+        if (showIcon) {
+            n.icon = R.drawable.ic_stat_icon;
+        }
 
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
@@ -285,8 +290,6 @@ public class CBWatcherService extends Service {
                 }
             }
         }
-
-        boolean pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
         Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_OPEN_MAIN);
@@ -323,13 +326,15 @@ public class CBWatcherService extends Service {
         } else {
             preBuildN.setSmallIcon(R.drawable.icon_shadow);
         }
-        if (pinOnTop) {
+        if (showIcon) {
             preBuildN
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         }
 
         Notification n = preBuildN.build();
-        n.icon = R.drawable.ic_stat_icon;
+        if (showIcon) {
+            n.icon = R.drawable.ic_stat_icon;
+        }
 
         notificationManager.cancel(0);
         notificationManager.notify(0, n);
