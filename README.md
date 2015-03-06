@@ -1,5 +1,7 @@
 # Clip-Stack
 
+
+
 ### A tiny clipboard history manager app.
 
 ![screenshot](http://ww4.sinaimg.cn/large/66cab368gw1ep3ki6o4yzj21eq0h67am.jpg)
@@ -64,6 +66,14 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 * [French: RyDroid](https://github.com/heruoxin/Clip-Stack/pull/10)
 * [Korean: 준모](https://twitter.com/cns_)
 * [Japanese: 厨二病少女699](http://weibo.com/ikaemon)
+
+###License
+
+This application is comprised of two parts:
+
+1. the Java code are licensed under the MIT license;
+2. All rights of other parts, but not limited to the icons, images, and UI designs are reserved.
+
 
 -----
 
