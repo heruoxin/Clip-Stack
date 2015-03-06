@@ -22,7 +22,6 @@ import java.util.List;
  * Created by heruoxin on 15/2/10.
  */
 public class BackupExport {
-    public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
 
     private static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
@@ -48,7 +47,7 @@ public class BackupExport {
 
 
     public static boolean makeExport(Context context, Date startDate, Date endDate, boolean reverse) {
-        Log.v(ActivityMain.PACKAGE_NAME, "EXPORT:"+startDate.toString()+endDate.toString());
+        Log.v(MyUtil.PACKAGE_NAME, "EXPORT:"+startDate.toString()+endDate.toString());
         if (startDate.after(endDate)) {
             Date tmpDate = startDate;
             startDate = endDate;
@@ -92,7 +91,7 @@ public class BackupExport {
             makeNotification(context, backupFile, true);
             return true;
         } catch (IOException e) {
-            Log.e(PACKAGE_NAME, "Backup error: \n" + e.toString());
+            Log.e(MyUtil.PACKAGE_NAME, "Backup error: \n" + e.toString());
             makeNotification(context, backupFile, false);
             return false;
         }

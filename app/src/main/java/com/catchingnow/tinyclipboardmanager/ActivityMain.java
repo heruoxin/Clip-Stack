@@ -42,7 +42,6 @@ import java.util.List;
 
 
 public class ActivityMain extends MyActionBarActivity {
-    public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";

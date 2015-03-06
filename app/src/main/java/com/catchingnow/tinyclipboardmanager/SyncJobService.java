@@ -15,7 +15,7 @@ public class SyncJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        Log.v(ActivityMain.PACKAGE_NAME, "Start Clean up...");
+        Log.v(MyUtil.PACKAGE_NAME, "Start Clean up...");
         CBWatcherService.startCBService(this, false, true);
         return true;
     }

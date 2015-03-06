@@ -18,7 +18,6 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    public final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static int NOTIFICATION_VIEW = 1;
     public final static int MAIN_ACTIVITY_VIEW = 2;
     public final static int SYSTEM_CLIPBOARD = 4;
@@ -294,7 +293,7 @@ public class Storage {
     }
 
     public void modifyClip(String oldClip, String newClip, int notUpdateWhich, int isImportant) {
-        Log.v(PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+", "+isImportant+")");
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+", "+isImportant+")");
         if (oldClip == null) {
             oldClip = "";
         }
@@ -377,7 +376,6 @@ public class Storage {
 
 
     public class StorageHelper extends SQLiteOpenHelper {
-        private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
         private static final int DATABASE_VERSION = 3;
         private static final String DATABASE_NAME = "clippingnow.db";
         private static final String TABLE_NAME = "cliphistory";
@@ -399,7 +397,7 @@ public class Storage {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.v(PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
+            Log.v(MyUtil.PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
             if (oldVersion <= 2) {
                 // add star option
                 db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+CLIP_IS_STAR+" BOOLEAN DEFAULT 0");

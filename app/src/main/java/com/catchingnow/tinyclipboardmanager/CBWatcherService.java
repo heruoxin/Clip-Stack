@@ -28,7 +28,6 @@ import java.util.List;
 
 public class CBWatcherService extends Service {
 
-    private final static String PACKAGE_NAME = "com.catchingnow.tinyclipboardmanager";
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
@@ -50,14 +49,14 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
-        Log.v(PACKAGE_NAME, "onCreate");
+        Log.v(MyUtil.PACKAGE_NAME, "onCreate");
         if (!onListened) {
             preference = PreferenceManager.getDefaultSharedPreferences(this);
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             db = Storage.getInstance(this.getBaseContext());
             ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                Log.w(PACKAGE_NAME, "Not support JobScheduler");
+                Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
             } else {
                 bindJobScheduler();
             }
@@ -68,24 +67,24 @@ public class CBWatcherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(PACKAGE_NAME, "onStartCommand");
+        Log.v(MyUtil.PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
-                Log.v(PACKAGE_NAME, "onStartCommand cleanUpSqlite");
+                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand cleanUpSqlite");
                 cleanUpSqlite();
             }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
-                Log.v(PACKAGE_NAME, "onStartCommand showNotification");
+                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
                 showNotification();
             }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
-                Log.v(PACKAGE_NAME, "onStartCommand changeStarStatues");
+                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand changeStarStatues");
                 isStarred = !isStarred;
                 showNotification();
             }
@@ -103,13 +102,13 @@ public class CBWatcherService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.v(PACKAGE_NAME, "onBind");
+        Log.v(MyUtil.PACKAGE_NAME, "onBind");
         return null;
     }
 
     @Override
     public void onDestroy() {
-        Log.v(PACKAGE_NAME, "onDes");
+        Log.v(MyUtil.PACKAGE_NAME, "onDes");
         notificationManager.cancel(0);
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
         onListened = false;
@@ -150,7 +149,7 @@ public class CBWatcherService extends Service {
 
     private void cleanUpSqlite() {
         float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
-        Log.v(PACKAGE_NAME,
+        Log.v(MyUtil.PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
         if (db == null) {
             db = Storage.getInstance(this.getBaseContext());
@@ -409,8 +408,8 @@ public class CBWatcherService extends Service {
         public NotificationClipListAdapter addClips(ClipObject clipObject) {
             id += 1;
             //String s = clipObject.getText().trim();
-            //Log.v(PACKAGE_NAME,"ID "+id);
-            //Log.v(PACKAGE_NAME,s);
+            //Log.v(MyUtil.PACKAGE_NAME,"ID "+id);
+            //Log.v(MyUtil.PACKAGE_NAME,s);
             //add view
             RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {

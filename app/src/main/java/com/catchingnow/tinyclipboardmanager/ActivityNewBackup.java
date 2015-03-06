@@ -59,7 +59,7 @@ public class ActivityNewBackup extends MyActionBarActivity {
         dateFrom.set(2015, 2, 1);
         try {
             long installedDate = this.getPackageManager()
-                    .getPackageInfo(ActivityMain.PACKAGE_NAME, 0)
+                    .getPackageInfo(MyUtil.PACKAGE_NAME, 0)
                     .firstInstallTime;
             dateFrom.setTimeInMillis(installedDate);
         } catch (PackageManager.NameNotFoundException e) {

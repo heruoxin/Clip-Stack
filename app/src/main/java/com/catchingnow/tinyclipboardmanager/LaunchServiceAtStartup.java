@@ -18,7 +18,7 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
 //            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
 //            boolean forceShowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 //            CBWatcherService.startCBService(context, forceShowNotification);
-            Log.v(ActivityMain.PACKAGE_NAME, "LaunchServiceAtStartup");
+            Log.v(MyUtil.PACKAGE_NAME, "LaunchServiceAtStartup");
             CBWatcherService.startCBService(context, true);
             Storage db = Storage.getInstance(context);
             List<ClipObject> clipObjects = db.getClipHistory();

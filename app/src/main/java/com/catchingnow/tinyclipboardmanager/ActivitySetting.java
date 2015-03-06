@@ -31,7 +31,7 @@ public class ActivitySetting extends MyPreferenceActivity {
                     case PREF_START_SERVICE:
                     case PREF_NOTIFICATION_SHOW:
                     case PREF_NOTIFICATION_PIN:
-                        Log.v(ActivityMain.PACKAGE_NAME, "ActivitySetting NOTIFICATION or PREF_START_SERVICE");
+                        Log.v(MyUtil.PACKAGE_NAME, "ActivitySetting NOTIFICATION or PREF_START_SERVICE");
                         CBWatcherService.startCBService(context, true);
                         break;
                     case PREF_SAVE_DATES:
@@ -55,7 +55,7 @@ public class ActivitySetting extends MyPreferenceActivity {
     }
 
     public static void requestBackup(Context context) {
-        Log.d(ActivityMain.PACKAGE_NAME, "requestBackup");
+        Log.d(MyUtil.PACKAGE_NAME, "requestBackup");
         BackupManager backupManager = new BackupManager(context);
         backupManager.dataChanged();
     }
