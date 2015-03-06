@@ -422,6 +422,7 @@ public class ActivityMain extends MyActionBarActivity {
                 if (dy > 20 && isYHidden == -1) {
                     //hide FAB on Y
                     if (isXHidden == 1) return;
+                    if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(true, TRANSLATION_FAST);
                     mFAB.animate()
@@ -450,6 +451,7 @@ public class ActivityMain extends MyActionBarActivity {
                 } else if (dy < -20 && isYHidden == 1) {
                     //show FAB on Y
                     if (isXHidden == 1) return;
+                    if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(false, TRANSLATION_FAST);
                     mFAB.animate()
@@ -560,9 +562,9 @@ public class ActivityMain extends MyActionBarActivity {
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
         BackupManager backupManager = new BackupManager(this);
         backupManager.requestRestore(new RestoreObserver() {
             @Override
