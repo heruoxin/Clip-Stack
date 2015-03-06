@@ -10,7 +10,7 @@
         app:actionViewClass="android.widget.SearchView" />
     <item
         android:id="@+id/action_star"
-        android:icon="@drawable/ic_action_star_outline_white"
+        android:icon="@drawable/ic_switch_star_off"
         android:title="@string/action_star"
         app:showAsAction="always" />
     <!--

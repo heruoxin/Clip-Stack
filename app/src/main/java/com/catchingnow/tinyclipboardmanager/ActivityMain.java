@@ -366,9 +366,9 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void setStarredIcon() {
         if (isStarred) {
-            starItem.setIcon(R.drawable.ic_action_star_white);
+            starItem.setIcon(R.drawable.ic_switch_star_on);
         } else {
-            starItem.setIcon(R.drawable.ic_action_star_outline_white);
+            starItem.setIcon(R.drawable.ic_switch_star_off);
         }
     }
 
