@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -48,11 +49,12 @@ public class Storage {
     }
 
     private String sqliteEscape(String keyWord) {
-        if ("".equals(keyWord) || keyWord == null) {
-            return keyWord;
-        }
-        return keyWord
-                .replace("'", "''")
+        return DatabaseUtils.sqlEscapeString(keyWord);
+//        if ("".equals(keyWord) || keyWord == null) {
+//            return keyWord;
+//        }
+//        return keyWord
+//                .replace("'", "''")
 //                .replace("/", "//")
 //                .replace("[", "/[")
 //                .replace("]", "/]")
@@ -61,7 +63,7 @@ public class Storage {
 //                .replace("_", "/_")
 //                .replace("(", "/(")
 //                .replace(")", "/)")
-                ;
+//                ;
     }
 
     private void open() {
@@ -214,7 +216,7 @@ public class Storage {
     }
 
     private boolean deleteClipHistory(String query) {
-        int row_id = db.delete(TABLE_NAME, CLIP_STRING + "='" + sqliteEscape(query) + "'", null);
+        int row_id = db.delete(TABLE_NAME, CLIP_STRING + "=" + sqliteEscape(query), null);
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
