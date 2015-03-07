@@ -217,10 +217,7 @@ public class ActivityMain extends MyActionBarActivity {
             case R.id.action_search:
                 return super.onOptionsItemSelected(item);
             case R.id.action_star:
-                isStarred = !isStarred;
-                mFabRotation(isStarred, TRANSLATION_SLOW);
-                setStarredIcon();
-                setView();
+                onStarredMenuClicked();
                 break;
 //            case R.id.action_refresh:
 //                setView(queryText);
@@ -318,6 +315,23 @@ public class ActivityMain extends MyActionBarActivity {
                 mFabRotation(false, TRANSLATION_SLOW);
             }
         }, 200);
+    }
+
+    private void onStarredMenuClicked() {
+        isStarred = !isStarred;
+        mFabRotation(isStarred, TRANSLATION_SLOW);
+        setStarredIcon();
+        setView();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFAB.setImageResource(isStarred ?
+                        R.drawable.ic_action_star_white
+                                :
+                        R.drawable.ic_action_add
+                );
+            }
+        }, TRANSLATION_SLOW / 3 * 2);
     }
 
     private void mFabRotation(boolean clockwise, long time) {

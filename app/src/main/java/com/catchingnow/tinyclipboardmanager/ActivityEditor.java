@@ -59,12 +59,13 @@ public class ActivityEditor extends MyActionBarActivity {
         }
 
         //set activity title and icon.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_action_edit);
         String titleText = getString(R.string.title_activity_activity_editor);
         if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-        getSupportActionBar().setTitle(titleText);
+        getSupportActionBar().setTitle("  "+titleText);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(
                     titleText,
