@@ -85,5 +85,7 @@
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
     <string name="pref_storage_summary">Set clipboard history limit.</string>
     <string name="toast_front_string"></string>
+    <string name="pref_rate_title">Rate me</string>
+    <string name="pref_rate_summary">Rate this app if you think it\'s useful.</string>
 
 </resources>

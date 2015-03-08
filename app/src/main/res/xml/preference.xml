@@ -52,8 +52,8 @@
                 android:data="https://github.com/heruoxin/Clip-Stack" />
         </Preference>
         <Preference
-            android:title="Rate me"
-            android:summary="Rate this app if you think it's useful.">
+            android:title="@string/pref_rate_title"
+            android:summary="@string/pref_rate_summary">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager" />
