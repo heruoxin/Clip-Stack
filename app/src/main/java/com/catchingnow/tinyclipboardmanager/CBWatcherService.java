@@ -39,8 +39,8 @@ public class CBWatcherService extends Service {
     private SharedPreferences preference;
     private Storage db;
     private boolean onListened = false;
-    private boolean showIcon = false;
     private boolean pinOnTop = false;
+    private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
     private int pIntentId = -1;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
@@ -74,7 +74,7 @@ public class CBWatcherService extends Service {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
-            showIcon = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_ICON, false);
+            notificationPriority = preference.getInt(ActivitySetting.PREF_NOTIFICATION_PRIORITY, 0);
             pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
@@ -234,8 +234,7 @@ public class CBWatcherService extends Service {
                 description = "★ " + description;
             }
             preBuildNotification
-                    .setContentText(description)
-                    .setPriority(NotificationCompat.PRIORITY_MIN);
+                    .setContentText(description);
         } else {
             preBuildNotification
                     .setContentText(getString(R.string.clip_notification_text_old));
@@ -249,9 +248,16 @@ public class CBWatcherService extends Service {
         } else {
             preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
         }
-        if (showIcon) {
-            preBuildNotification
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        switch (notificationPriority) {
+            case 0:
+                preBuildNotification.setPriority(NotificationCompat.PRIORITY_MIN);
+                break;
+            case 1:
+                preBuildNotification.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                break;
+            case 2:
+                preBuildNotification.setPriority(NotificationCompat.PRIORITY_HIGH);
+                break;
         }
 
         NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
@@ -265,7 +271,7 @@ public class CBWatcherService extends Service {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             n.bigContentView = bigView.build();
         }
-        if (showIcon) {
+        if (notificationPriority > 0) {
             n.icon = R.drawable.ic_stat_icon;
         }
 
@@ -314,10 +320,6 @@ public class CBWatcherService extends Service {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_single_text));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            preBuildN
-                    .setPriority(NotificationCompat.PRIORITY_MIN);
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             preBuildN
                     .setSmallIcon(R.drawable.icon)
@@ -326,13 +328,20 @@ public class CBWatcherService extends Service {
         } else {
             preBuildN.setSmallIcon(R.drawable.icon_shadow);
         }
-        if (showIcon) {
-            preBuildN
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        switch (notificationPriority) {
+            case 0:
+                preBuildN.setPriority(NotificationCompat.PRIORITY_MIN);
+                break;
+            case 1:
+                preBuildN.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                break;
+            case 2:
+                preBuildN.setPriority(NotificationCompat.PRIORITY_HIGH);
+                break;
         }
 
         Notification n = preBuildN.build();
-        if (showIcon) {
+        if (notificationPriority > 0) {
             n.icon = R.drawable.ic_stat_icon;
         }
 

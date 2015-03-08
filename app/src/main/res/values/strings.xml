@@ -87,5 +87,7 @@
     <string name="toast_front_string"></string>
     <string name="pref_rate_title">Rate me</string>
     <string name="pref_rate_summary">Rate this app if you think it\'s useful.</string>
+    <string name="pref_notification_priority_title">Notification Priority</string>
+    <string name="pref_notification_priority_summary">Set notification priority.</string>
 
 </resources>

@@ -4,7 +4,6 @@ import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,24 +15,23 @@ public class ActivitySetting extends MyPreferenceActivity {
 
     public final static String PREF_NOTIFICATION_SHOW = "pref_notification_show";
     public final static String PREF_NOTIFICATION_PIN = "pref_notification_pin";
-    public final static String PREF_NOTIFICATION_ICON = "pref_notification_icon";
+    public final static String PREF_NOTIFICATION_PRIORITY = "pref_notification_priority";
     public final static String PREF_START_SERVICE = "pref_start_service";
     public final static String PREF_SAVE_DATES = "pref_save_dates";
 //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
-    private SharedPreferences.OnSharedPreferenceChangeListener myPrefListener;
+    private SharedPreferences.OnSharedPreferenceChangeListener myPrefChangeListener;
     private Context context;
 
     public ActivitySetting() {
-        myPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        myPrefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                   String key) {
                 switch (key) {
                     case PREF_START_SERVICE:
                     case PREF_NOTIFICATION_SHOW:
+                    case PREF_NOTIFICATION_PRIORITY:
                     case PREF_NOTIFICATION_PIN:
-                    case PREF_NOTIFICATION_ICON:
-                        Log.v(MyUtil.PACKAGE_NAME, "ActivitySetting NOTIFICATION");
                         CBWatcherService.startCBService(context, true);
                         break;
                     case PREF_SAVE_DATES:
@@ -50,8 +48,8 @@ public class ActivitySetting extends MyPreferenceActivity {
         };
     }
 
-    public void initSharedPrefListener(){
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefListener);
+    public void initSharedPrefListener() {
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefChangeListener);
 //        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
 //        preference.edit().putLong(PREF_LAST_ACTIVE_THIS, new Date().getTime()).commit();
     }

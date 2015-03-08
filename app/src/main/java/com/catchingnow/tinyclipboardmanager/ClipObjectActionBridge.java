@@ -48,13 +48,13 @@ public class ClipObjectActionBridge extends IntentService {
                 break;
             case ACTION_COPY:
                 copyText(clips);
-                break;
+                return;
             case ACTION_SHARE:
                 shareText(clips);
-                break;
+                return;
             case ACTION_EDIT:
                 editText(clips);
-                break;
+                return;
             case  ACTION_OPEN_MAIN:
                 openMainActivity();
         }
