@@ -388,9 +388,13 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void setItemsVisibility() {
         if (clipCardAdapter.getItemCount() == 0) {
-            mRecLayout.setVisibility(View.INVISIBLE);
+            //mRecLayout.setVisibility(View.INVISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+            mRecLayout.setAnimation(animation);
         } else {
-            mRecLayout.setVisibility(View.VISIBLE);
+            //mRecLayout.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            mRecLayout.setAnimation(animation);
         }
     }
 
