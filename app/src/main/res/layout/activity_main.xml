@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:animateLayoutChanges="true"
     tools:context=".MyActivity">
     <!--
     android:paddingLeft="@dimen/activity_horizontal_margin"
