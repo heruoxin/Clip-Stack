@@ -14,4 +14,16 @@
         <item name="30">30</item>
         <item name="9999">9999</item>
     </string-array>
+    <string-array name="pref_notification_priority_descriptions">
+        <item name="low">Low</item>
+        <item name="middle">Middle</item>
+        <item name="high">High</item>
+    </string-array>
+    <string-array
+        tools:ignore="MissingTranslation"
+        name="pref_notification_priority_values">
+        <item name="low">0</item>
+        <item name="middle">1</item>
+        <item name="high">2</item>
+    </string-array>
 </resources>

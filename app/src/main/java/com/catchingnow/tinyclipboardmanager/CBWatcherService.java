@@ -74,7 +74,7 @@ public class CBWatcherService extends Service {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
-            notificationPriority = preference.getInt(ActivitySetting.PREF_NOTIFICATION_PRIORITY, 0);
+            notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
             pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
 
             if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {

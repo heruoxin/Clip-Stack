@@ -30,13 +30,14 @@
             android:summaryOn="@string/pref_notification_summary_on"
             android:summaryOff="@string/pref_notification_summary_off"
             android:defaultValue="true"/>
-        <Preference
+        <ListPreference
             android:title="@string/pref_notification_priority_title"
             android:summary="@string/pref_notification_priority_summary"
-            android:dependency="pref_notification_show">
-            <intent
-                android:action=".ClipObjectActionBridge"/>
-            </Preference>
+            android:key="pref_notification_priority"
+            android:dialogTitle="@string/pref_notification_priority_title"
+            android:entries="@array/pref_notification_priority_descriptions"
+            android:entryValues="@array/pref_notification_priority_values"
+            android:dependency="pref_notification_show" />
         <SwitchPreference
             android:title="@string/pref_notification_pin_title"
             android:key="pref_notification_pin"
