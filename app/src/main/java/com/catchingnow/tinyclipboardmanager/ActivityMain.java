@@ -583,13 +583,13 @@ public class ActivityMain extends MyActionBarActivity {
         db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
-        BackupManager backupManager = new BackupManager(this);
-        backupManager.requestRestore(new RestoreObserver() {
-            @Override
-            public void restoreFinished(int error) {
-                super.restoreFinished(error);
-            }
-        });
+//        BackupManager backupManager = new BackupManager(this);
+//        backupManager.requestRestore(new RestoreObserver() {
+//            @Override
+//            public void restoreFinished(int error) {
+//                super.restoreFinished(error);
+//            }
+//        });
     }
 
     private void clearAll() {
