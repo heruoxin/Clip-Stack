@@ -90,7 +90,11 @@
     <string name="pref_notification_priority_title">Notification Priority</string>
     <string name="pref_notification_priority_summary">Set notification priority.</string>
     <string name="pref_click_title">Click Action</string>
-    <string name="pref_click_behavior_summary_false">Click to edit. Long click to copy.</string>
-    <string name="pref_click_behavior_summary_true">Click to copy. Long click to edit.</string>
+    <string name="pref_click_summary">Set click &amp; long click actions.</string>
+    <string name="pref_click_summary_false">Click to edit. Long click to copy.</string>
+    <string name="pref_click_summary_true">Click to copy. Long click to edit.</string>
+    <string name="pref_notification_priority_low">\nLow - without status bar icon.\nAt the end of notifications.\n</string>
+    <string name="pref_notification_priority_middle">Middle - with status bar icon.\nAt the middle of notifications.</string>
+    <string name="pref_notification_priority_high">\nHigh - with status bar icon.\nAt the top of notifications.\n</string>
 
 </resources>

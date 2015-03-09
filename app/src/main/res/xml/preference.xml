@@ -18,12 +18,15 @@
             android:summary="@string/pref_storage_summary"
             android:key="pref_save_dates"
             android:dialogTitle="@string/pref_storage_dialog"
+            android:defaultValue="9999"
             android:entries="@array/pref_save_dates_descriptions"
             android:entryValues="@array/pref_save_dates_values" />
         <ListPreference
             android:title="@string/pref_click_title"
+            android:summary="@string/pref_click_summary"
             android:key="pref_long_click_behavior"
             android:dialogTitle="@string/pref_click_title"
+            android:defaultValue="0"
             android:entries="@array/pref_click_behavior_descriptions"
             android:entryValues="@array/pref_click_behavior_values" />
     </PreferenceCategory>
@@ -41,6 +44,7 @@
             android:summary="@string/pref_notification_priority_summary"
             android:key="pref_notification_priority"
             android:dialogTitle="@string/pref_notification_priority_title"
+            android:defaultValue="0"
             android:entries="@array/pref_notification_priority_descriptions"
             android:entryValues="@array/pref_notification_priority_values"
             android:dependency="pref_notification_show" />

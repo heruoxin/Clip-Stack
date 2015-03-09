@@ -44,7 +44,6 @@ public class ActivitySetting extends MyPreferenceActivity {
                         }
                         break;
                     case PREF_LONG_CLICK_BEHAVIOR:
-                        //findPreference(key).setSummary(getString(R.string.));
                         break;
                 }
                 requestBackup(context);

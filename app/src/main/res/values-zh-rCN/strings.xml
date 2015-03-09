@@ -85,5 +85,16 @@
     <string name="action_star">星标</string>
     <string name="clip_notification_starred_single_text">没有加星标的项目。</string>
     <string name="toast_front_string"></string>
+    <string name="pref_click_summary_false">点按编辑，长按复制。</string>
+    <string name="pref_click_summary_true">点按复制，长按编辑。</string>
+    <string name="pref_click_title">点击行为</string>
+    <string name="pref_notification_priority_summary">设置通知优先级</string>
+    <string name="pref_notification_priority_title">通知优先级</string>
+    <string name="pref_rate_summary">如果您觉得此 App 有用，请为我评分！谢谢。</string>
+    <string name="pref_rate_title">评分</string>
+    <string name="pref_notification_priority_high">高 - 有状态栏图标。\n显示在通知栏顶部。</string>
+    <string name="pref_notification_priority_low">低 - 无状态栏图标。\n显示在通知栏末尾。</string>
+    <string name="pref_notification_priority_middle">中 - 有状态栏图标。\n显示在通知栏中部。</string>
+    <string name="pref_click_summary">设置点按和长按的动作。</string>
 
 </resources>

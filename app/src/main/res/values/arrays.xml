@@ -17,21 +17,21 @@
     </string-array>
     <!-- notification priority -->
     <string-array name="pref_notification_priority_descriptions">
-        <item name="low">Low</item>
-        <item name="middle">Middle</item>
-        <item name="high">High</item>
+        <item name="high">@string/pref_notification_priority_high</item>
+        <item name="middle">@string/pref_notification_priority_middle</item>
+        <item name="low">@string/pref_notification_priority_low</item>
     </string-array>
     <string-array
         tools:ignore="MissingTranslation"
         name="pref_notification_priority_values">
-        <item name="low">0</item>
-        <item name="middle">1</item>
         <item name="high">2</item>
+        <item name="middle">1</item>
+        <item name="low">0</item>
     </string-array>
     <!-- press behavior -->
     <string-array name="pref_click_behavior_descriptions">
-        <item name="false">@string/pref_click_behavior_summary_false</item>
-        <item name="true">@string/pref_click_behavior_summary_true</item>
+        <item name="false">@string/pref_click_summary_false</item>
+        <item name="true">@string/pref_click_summary_true</item>
     </string-array>
     <string-array
         tools:ignore="MissingTranslation"
