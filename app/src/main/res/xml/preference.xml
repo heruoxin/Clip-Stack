@@ -20,6 +20,12 @@
             android:dialogTitle="@string/pref_storage_dialog"
             android:entries="@array/pref_save_dates_descriptions"
             android:entryValues="@array/pref_save_dates_values" />
+        <ListPreference
+            android:title="@string/pref_click_title"
+            android:key="pref_long_click_behavior"
+            android:dialogTitle="@string/pref_click_title"
+            android:entries="@array/pref_click_behavior_descriptions"
+            android:entryValues="@array/pref_click_behavior_values" />
     </PreferenceCategory>
     <PreferenceCategory
         android:dependency="pref_start_service"

@@ -62,6 +62,7 @@ public class ActivityMain extends MyActionBarActivity {
     private int isXHidden = -1;
     private boolean isRotating = false;
 
+    private boolean clickToCopy = true;
     private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
@@ -108,9 +109,12 @@ public class ActivityMain extends MyActionBarActivity {
     protected void onResume() {
         CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
+
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
+
         setView();
         //check if first launch
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         if (preference.getBoolean(FIRST_LAUNCH, true)) {
             try {
                 firstLaunch();
@@ -646,8 +650,14 @@ public class ActivityMain extends MyActionBarActivity {
                             R.drawable.ic_action_star_yellow : R.drawable.ic_action_star_outline_grey600
             );
 
-            addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
-            addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+            if (clickToCopy) {
+                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
+            } else {
+                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
+                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+
+            }
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {

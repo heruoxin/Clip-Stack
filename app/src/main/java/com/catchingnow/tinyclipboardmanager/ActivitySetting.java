@@ -17,6 +17,7 @@ public class ActivitySetting extends MyPreferenceActivity {
     public final static String PREF_NOTIFICATION_PIN = "pref_notification_pin";
     public final static String PREF_NOTIFICATION_PRIORITY = "pref_notification_priority";
     public final static String PREF_START_SERVICE = "pref_start_service";
+    public final static String PREF_LONG_CLICK_BEHAVIOR = "pref_long_click_behavior";
     public final static String PREF_SAVE_DATES = "pref_save_dates";
 //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
@@ -41,6 +42,9 @@ public class ActivitySetting extends MyPreferenceActivity {
                         } else {
                             findPreference(key).setSummary(String.format(getString(R.string.pref_storage_summary_days), i));
                         }
+                        break;
+                    case PREF_LONG_CLICK_BEHAVIOR:
+                        //findPreference(key).setSummary(getString(R.string.));
                         break;
                 }
                 requestBackup(context);

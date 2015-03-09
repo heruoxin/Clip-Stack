@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <!-- storage -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="pref_save_dates_descriptions">
         <item name="1">@string/arrays_one_day</item>
@@ -14,6 +15,7 @@
         <item name="30">30</item>
         <item name="9999">9999</item>
     </string-array>
+    <!-- notification priority -->
     <string-array name="pref_notification_priority_descriptions">
         <item name="low">Low</item>
         <item name="middle">Middle</item>
@@ -25,5 +27,16 @@
         <item name="low">0</item>
         <item name="middle">1</item>
         <item name="high">2</item>
+    </string-array>
+    <!-- press behavior -->
+    <string-array name="pref_click_behavior_descriptions">
+        <item name="false">@string/pref_click_behavior_summary_false</item>
+        <item name="true">@string/pref_click_behavior_summary_true</item>
+    </string-array>
+    <string-array
+        tools:ignore="MissingTranslation"
+        name="pref_click_behavior_values">
+        <item name="false">0</item>
+        <item name="true">1</item>
     </string-array>
 </resources>
