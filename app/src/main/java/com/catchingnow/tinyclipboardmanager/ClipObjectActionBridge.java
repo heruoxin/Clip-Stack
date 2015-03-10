@@ -84,7 +84,7 @@ public class ClipObjectActionBridge extends IntentService {
                     toastClips = clips.substring(0, 15) + "…";
                 }
                 Toast.makeText(ClipObjectActionBridge.this,
-                        getString(R.string.toast_front_string)+toastClips+"\n"+getString(R.string.toast_end_string),
+                        getString(R.string.toast_end_string, toastClips+"\n"),
                         Toast.LENGTH_SHORT
                 ).show();
 

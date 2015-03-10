@@ -7,7 +7,7 @@
     <string name="clip_notification_share_button">Подели </string>
     <string name="clip_notification_big_title">Недавне ставке</string>
     <string name="clip_notification_big_summary_text"></string>
-    <string name="toast_end_string">копирано</string>
+    <string name="toast_end_string">%1$s копирано</string>
     <string name="clip_notification_text">Проширите за још приказа.</string>
     <string name="clip_notification_single_text">Кликните да додате текст.</string>
     <string name="share_clipboard_to">Делите текст преко…</string>
@@ -84,6 +84,5 @@
     <string name="arrays_infinite">трајан</string>
     <string name="action_star">★</string>
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
-    <string name="toast_front_string"></string>
 
 </resources>

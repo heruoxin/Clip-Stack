@@ -7,7 +7,7 @@
     <string name="clip_notification_share_button">分享</string>
     <string name="clip_notification_big_title">剪贴板历史</string>
     <string name="clip_notification_big_summary_text"></string>
-    <string name="toast_end_string">已复制</string>
+    <string name="toast_end_string">%1$s 已复制</string>
     <string name="clip_notification_text">展开此通知以查看更多。</string>
     <string name="clip_notification_single_text">点击添加文本。</string>
     <string name="share_clipboard_to">分享文本至：</string>
@@ -84,7 +84,6 @@
     <string name="arrays_three_days">三天</string>
     <string name="action_star">星标</string>
     <string name="clip_notification_starred_single_text">没有加星标的项目。</string>
-    <string name="toast_front_string"></string>
     <string name="pref_click_summary_false">点按编辑，长按复制。</string>
     <string name="pref_click_summary_true">点按复制，长按编辑。</string>
     <string name="pref_click_title">点击行为</string>

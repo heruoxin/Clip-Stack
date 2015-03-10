@@ -59,8 +59,7 @@
     <string name="title_activity_editor">新建剪貼簿</string>
     <string name="title_activity_main">"剪紙堆"</string>
     <string name="toast_deleted">已刪除</string>
-    <string name="toast_end_string">已複製</string>
-    <string name="toast_front_string" />
+    <string name="toast_end_string">%1$s 已複製</string>
     <string name="toast_no_saved">未保存</string>
     <string name="toast_saved">已保存</string>
     <string name="toast_undo">還原</string>
