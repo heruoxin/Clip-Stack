@@ -83,5 +83,16 @@
     <string name="arrays_thirty_days">30일</string>
     <string name="arrays_infinite">무제한</string>
     <string name="clip_notification_starred_single_text">There is no starred items.</string>
+    <string name="pref_rate_title">평가</string>
+    <string name="pref_rate_summary">이 어플이 유용하다고 느끼셨으면, 평가해주세요!</string>
+    <string name="pref_notification_priority_title">노티피케이션 우선순위</string>
+    <string name="pref_notification_priority_summary">노티피케이션 우선순위 설정</string>
+    <string name="pref_click_title">눌렀을때 동작</string>
+    <string name="pref_click_summary">짧게 눌렀을때와 길게 눌렀을때의 동작 설정</string>
+    <string name="pref_click_summary_false">짧게눌러 편집, 길게눌러 복사</string>
+    <string name="pref_click_summary_true">짧게눌러 복사, 길게눌러 편집</string>
+    <string name="pref_notification_priority_low">\n 낮음 - 아이콘 없이 맨 아래에 위치</string>
+    <string name="pref_notification_priority_middle">보통 - 아이콘 띄움, 노티바 적당한곳에 유동적으로 위치</string>
+    <string name="pref_notification_priority_high">\n 높음 - 아이콘 띄움, 노티바 최상단에 위치</string>
 
 </resources>
