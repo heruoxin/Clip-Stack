@@ -92,8 +92,8 @@
     <string name="pref_notification_priority_title">通知优先级</string>
     <string name="pref_rate_summary">如果您觉得此 App 有用，请为我评分！谢谢。</string>
     <string name="pref_rate_title">评分</string>
-    <string name="pref_notification_priority_high">高 - 有状态栏图标。\n显示在通知栏顶部。</string>
-    <string name="pref_notification_priority_low">低 - 无状态栏图标。\n显示在通知栏末尾。</string>
+    <string name="pref_notification_priority_high">\n高 - 有状态栏图标。\n显示在通知栏顶部。\n</string>
+    <string name="pref_notification_priority_low">\n低 - 无状态栏图标。\n显示在通知栏末尾。\n</string>
     <string name="pref_notification_priority_middle">中 - 有状态栏图标。\n显示在通知栏中部。</string>
     <string name="pref_click_summary">设置点按和长按的动作。</string>
 
