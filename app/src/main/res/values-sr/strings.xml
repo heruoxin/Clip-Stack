@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">Клип стек</string>
+    <string name="app_name">Клип стек</string>
     <string name="clip_notification_title">%1$s</string>
     <string name="clip_notification_copy_button">Копирај </string>
     <string name="clip_notification_share_button">Подели </string>
     <string name="clip_notification_big_title">Недавне ставке</string>
-    <string name="toast_end_string">%1$s копирано</string>
+    <string name="toast_end_string">копирано</string>
     <string name="clip_notification_text">Проширите за још приказа.</string>
     <string name="clip_notification_single_text">Кликните да додате текст.</string>
     <string name="share_clipboard_to">Делите текст преко…</string>
     <string name="title_activity_main">"Клип стек"</string>
     <string name="hello_world">Здраво свете!</string>
     <string name="action_settings">Поставке</string>
-    <string name="action_search">Тражи</string>
+    <string name="action_search">Претрага</string>
     <string name="search_hint">Тражи…</string>
     <string name="title_activity_activity_setting">Поставке</string>
     <string name="date_format">EEE, dd MMM</string>
@@ -28,7 +28,6 @@
     <string name="toast_saved">Сачувано.</string>
     <string name="toast_no_saved">Није сачувано.</string>
     <string name="pref_storage_title">Складиште</string>
-    <string name="pref_storage_summary">Трајање ставки.</string>
     <string name="pref_storage_dialog">Сачувај ставке</string>
     <string name="pref_about_category">О програму</string>
     <string name="pref_about_title">Отворени код</string>
@@ -36,12 +35,12 @@
     <string name="pref_app_setting_category">Апликација</string>
     <string name="pref_service_title">Сервис</string>
     <string name="pref_service_summary">Слушај системски клипборд у позадини.</string>
-    <string name="pref_notification_title">Обавештење</string>
-    <string name="pref_notification_pin_title">Закачи обавештење</string>
-    <string name="pref_notification_pin_summary_on">Увек прикажи.</string>
-    <string name="pref_notification_pin_summary_off">Прикажи само кад је клипборд измењен.</string>
+    <string name="pref_notification_title">Обавештења</string>
+    <string name="pref_notification_pin_title">Закачи</string>
+    <string name="pref_notification_pin_summary_on">Увек приказуј.</string>
+    <string name="pref_notification_pin_summary_off">Приказуј само кад је клипборд измењен.</string>
     <string name="action_delete">Обриши</string>
-    <string name="pref_storage_summary_infinite">Сачувај све ставке.</string>
+    <string name="pref_storage_summary_infinite">Сачувај ставке трајно.</string>
     <string name="pref_storage_summary_days">Сачувај ставке %d дан(а).</string>
     <string name="title_activity_editor">Нова ставка</string>
     <string name="first_launch_clipboards_0">Добро дошли на Клип стек. %1$s</string>
@@ -51,7 +50,7 @@
     <string name="title_activity_activity_get_share_text">Копирај на клипборд</string>
     <string name="action_add">Додај</string>
     <string name="action_delete_all">Очисти све</string>
-    <string name="dialog_delete_all">Желите ли заиста да уклоните све ставке?\nСа звездицом ставке остају</string>
+    <string name="dialog_delete_all">Желите ли заиста да уклоните све ставке?\nСтавке са звездицом остају</string>
     <string name="dialog_ok">У реду</string>
     <string name="dialog_cancel">Одустани</string>
     <string name="toast_undo">Врати</string>
@@ -63,8 +62,8 @@
     <string name="export_failed">Извоз није успео. Можда немате СД картицу или је пуна.</string>
     <string name="dialog_date_piker_from">Од датума:</string>
     <string name="dialog_date_piker_to">До датума:</string>
-    <string name="pref_notification_summary_on">Прикажи обавештење.</string>
-    <string name="pref_notification_summary_off">Не приказуј обавештење.</string>
+    <string name="pref_notification_summary_on">Приказуј обавештења.</string>
+    <string name="pref_notification_summary_off">Не приказуј обавештења.</string>
     <string name="title_activity_backup">Резерва</string>
     <string name="switch_reverse_sort">Обрнуто ређање</string>
     <string name="action_backup">Резерва</string>
@@ -80,8 +79,20 @@
     <string name="arrays_three_days">3 дана</string>
     <string name="arrays_seven_days">7 дана</string>
     <string name="arrays_thirty_days">30 дана</string>
-    <string name="arrays_infinite">трајан</string>
-    <string name="action_star">★</string>
-    <string name="clip_notification_starred_single_text">There is no starred items.</string>
+    <string name="arrays_infinite">трајно</string>
+    <string name="clip_notification_starred_single_text">Нема ставки означених звездицом.</string>
+    <string name="pref_storage_summary">Ограничите историјат клипборда.</string>
+    <string name="pref_rate_title">Оцени ме</string>
+    <string name="pref_rate_summary">Оцените ову апликацију ако је сматрате корисном.</string>
+    <string name="pref_notification_priority_title">Приоритет</string>
+    <string name="pref_notification_priority_summary">Поставите приоритет обавештења.</string>
+    <string name="pref_click_title">Радња клика</string>
+    <string name="pref_click_summary">Поставите радње клика и дугог клика.</string>
+    <string name="pref_click_summary_false">Клик уређује. Дуги клик копира.</string>
+    <string name="pref_click_summary_true">Клик копира. Дуги клик уређује.</string>
+    <string name="pref_notification_priority_low">\nНиска — без иконе на траци стања.\nНа крају обавештења.\n</string>
+    <string name="pref_notification_priority_middle">Средња — са иконом на траци стања.\nУ средини обавештења.</string>
+    <string name="pref_notification_priority_high">\nВисока — са иконом на траци стања.\nНа врху обавештења.\n</string>
+    <string name="action_star">звезда</string>
 
 </resources>
