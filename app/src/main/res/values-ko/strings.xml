@@ -2,15 +2,14 @@
 <resources>
 
     <string name="app_name">클립 스택</string>
-    <string name="clip_notification_title"></string>
+    <string name="clip_notification_title">%1$s</string>
     <string name="clip_notification_copy_button">복사</string>
     <string name="clip_notification_share_button">공유</string>
     <string name="clip_notification_big_title">최근 클립보드</string>
-    <string name="clip_notification_big_summary_text"></string>
     <string name="toast_end_string">%1$s 복사되었습니다!</string>
     <string name="clip_notification_text">확장하여 더 보기.</string>
     <string name="clip_notification_single_text">눌러서 텍스트 추가.</string>
-    <string name="share_clipboard_to">공유하기...</string>
+    <string name="share_clipboard_to">공유하기…</string>
     <string name="title_activity_main">"클립 스택"</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">설정</string>

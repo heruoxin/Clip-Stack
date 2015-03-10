@@ -12,13 +12,12 @@
     <string name="action_share">分享</string>
     <string name="app_name">剪紙堆</string>
     <string name="backup_file_name">剪紙堆備份</string>
-    <string name="clip_notification_big_summary_text" />
     <string name="clip_notification_big_title">剪貼簿紀錄</string>
     <string name="clip_notification_copy_button">複製</string>
     <string name="clip_notification_share_button">分享</string>
     <string name="clip_notification_single_text">點擊增加文字。</string>
     <string name="clip_notification_text">展開此通知以查看更多。</string>
-    <string name="clip_notification_title" />
+    <string name="clip_notification_title" >%1$s</string>
     <string name="date_format">MMM dd，EEE</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_date_piker_from">從：</string>

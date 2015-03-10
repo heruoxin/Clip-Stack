@@ -78,8 +78,7 @@
     <string name="arrays_three_days">三日</string>
     <string name="action_star">星マーク</string>
     <string name="clip_notification_starred_single_text">星マークのついていない項目</string>
-    <string name="clip_notification_big_summary_text"></string>
-    <string name="clip_notification_title"></string>
+    <string name="clip_notification_title">%1$s</string>
     <string name="time_format">HH:mm</string>
     <string name="hello_world">Hello world!</string>
     <string name="date_format">EEE, MMM dd</string>

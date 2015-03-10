@@ -7,11 +7,10 @@
 	-->
 	
     <string name="app_name">Clip Stack</string>
-    <string name="clip_notification_title"></string>
+    <string name="clip_notification_title">%1$s</string>
     <string name="clip_notification_copy_button">Copier</string>
     <string name="clip_notification_share_button">Partager</string>
     <string name="clip_notification_big_title">Presse-papiers récents</string>
-    <string name="clip_notification_big_summary_text"></string>
     <string name="toast_end_string">%1$s a copié</string>
     <string name="clip_notification_text">Étendre pour en voir plus.</string>
     <string name="clip_notification_single_text">Cliquer pour ajouter du texte.</string>

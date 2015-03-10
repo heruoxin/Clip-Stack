@@ -2,11 +2,10 @@
 <resources>
 
     <string name="app_name">剪纸堆</string>
-    <string name="clip_notification_title"></string>
+    <string name="clip_notification_title">%1$s</string>
     <string name="clip_notification_copy_button">复制</string>
     <string name="clip_notification_share_button">分享</string>
     <string name="clip_notification_big_title">剪贴板历史</string>
-    <string name="clip_notification_big_summary_text"></string>
     <string name="toast_end_string">%1$s 已复制</string>
     <string name="clip_notification_text">展开此通知以查看更多。</string>
     <string name="clip_notification_single_text">点击添加文本。</string>
