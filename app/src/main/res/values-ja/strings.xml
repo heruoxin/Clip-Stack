@@ -5,8 +5,8 @@
     <string name="clip_notification_share_button">シェア</string>
     <string name="clip_notification_big_title">クリップボード履歴</string>
     <string name="toast_end_string">%1$s コピー済み</string>
-    <string name="clip_notification_text">お知らせをクリックして更に表示</string>
-    <string name="clip_notification_single_text">クリックしてテキストを入力</string>
+    <string name="clip_notification_text">お知らせをタッチして更に表示</string>
+    <string name="clip_notification_single_text">タッチしてテキストを入力</string>
     <string name="share_clipboard_to">テキストをシェア：</string>
     <string name="title_activity_main">切り取り箱</string>
     <string name="action_settings">設定</string>
@@ -39,7 +39,7 @@
     <string name="title_activity_editor">新しいクリップボード</string>
     <string name="first_launch_clipboards_0">切り取り箱へようこそ。 %1$s</string>
     <string name="first_launch_clipboards_1">クリップボードで記録され更にお知らせに表示。</string>
-    <string name="first_launch_clipboards_2">テキスト %1$s をクリックして編集</string>
+    <string name="first_launch_clipboards_2">テキスト %1$s をタッチして編集</string>
     <string name="first_launch_clipboards_3">%1$s スライドで削除。 %2$s</string>
     <string name="title_activity_activity_get_share_text">クリップボードにコピー</string>
     <string name="action_add">挿入</string>
@@ -70,7 +70,7 @@
     <string name="toast_find_backup">%1$s 条备份\n位于 %2$s</string>
     <string name="backup_file_name_old">Clip Stack Backup </string>
     <string name="time_format_with_second">HH:mm:ss</string>
-    <string name="clip_notification_text_old">クリックして更に表示</string>
+    <string name="clip_notification_text_old">タッチして更に表示</string>
     <string name="arrays_infinite">永久に</string>
     <string name="arrays_one_day">一日</string>
     <string name="arrays_seven_days">七日</string>
@@ -82,4 +82,15 @@
     <string name="time_format">HH:mm</string>
     <string name="hello_world">Hello world!</string>
     <string name="date_format">EEE, MMM dd</string>
+    <string name="pref_notification_priority_low">\n低-ステータスバーにアイコンを表示\nしない 通知バーの下部に表示\n</string>
+    <string name="pref_click_title">タッチ設定</string>
+    <string name="pref_click_summary_true">タッチしてコピー、長押しして編集。</string>
+    <string name="pref_click_summary_false">タッチして編集、長押ししてコピー。</string>
+    <string name="pref_click_summary">タッチ操作と長押し操作を設定</string>
+    <string name="pref_notification_priority_summary">通知優先度を設定</string>
+    <string name="pref_notification_priority_title">通知優先度</string>
+    <string name="pref_notification_priority_middle">中-ステータスバーにアイコンを表示\n通知バーの中部に表示</string>
+    <string name="pref_notification_priority_high">\n高-ステータスバーにアイコンを表示\n通知バーの上部に表示\n</string>
+    <string name="pref_rate_summary">宜しければ、GooglePlayまでこのアプリをご評価願います！ありがとうございます！</string>
+    <string name="pref_rate_title">評価</string>
 </resources>
