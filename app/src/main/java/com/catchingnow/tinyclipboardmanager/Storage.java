@@ -303,17 +303,17 @@ public class Storage {
             newClip = "";
         }
 
-        if (newClip.equals(oldClip)) {
-            if (isImportant !=0) {
-                ClipObject oldClipObject = getClipObjectFromString(oldClip);
-                oldClipObject.setStarred((isImportant == 1));
-                starredClip(oldClipObject);
-            }
-            return;
-        }
-        if (newClip.equals(topClipInStack)) {
-            return;
-        }
+//        if (newClip.equals(oldClip)) {
+//            if (isImportant !=0) {
+//                ClipObject oldClipObject = getClipObjectFromString(oldClip);
+//                oldClipObject.setStarred((isImportant == 1));
+//                starredClip(oldClipObject);
+//            }
+//            return;
+//        }
+//        if (newClip.equals(topClipInStack)) {
+//            return;
+//        }
 
         boolean isStarred = isClipObjectStarred(oldClip);
 

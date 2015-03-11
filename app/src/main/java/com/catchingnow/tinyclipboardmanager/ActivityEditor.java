@@ -1,13 +1,11 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.animation.Animator;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -24,7 +21,6 @@ public class ActivityEditor extends MyActionBarActivity {
     private String oldText;
     private EditText editText;
     private boolean isStarred;
-    private boolean textStatueHasChanged = false;
     private MenuItem starItem;
     private ImageButton mFAB;
     private InputMethodManager inputMethodManager;
@@ -119,9 +115,8 @@ public class ActivityEditor extends MyActionBarActivity {
                 shareText();
                 break;
             case (R.id.action_star):
-                isStarred = !isStarred;
                 //Once click will change it. Twice won't change it.
-                textStatueHasChanged = !textStatueHasChanged;
+                isStarred = !isStarred;
                 setStarredIcon();
                 break;
 //            case (R.id.action_save):
@@ -176,17 +171,10 @@ public class ActivityEditor extends MyActionBarActivity {
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage;
-        if (!oldText.equals(newText)) {
-            textStatueHasChanged = true;
-        }
-        if (!textStatueHasChanged) {
-            finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
-            return;
-        }
         Storage db = Storage.getInstance(this);
         db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred? 1:-1));
         if (newText != null && !newText.isEmpty()) {
-            toastMessage = getString(R.string.toast_saved);
+            toastMessage = getString(R.string.toast_copied, newText+"\n");
         } else {
             toastMessage = getString(R.string.toast_deleted);
         }

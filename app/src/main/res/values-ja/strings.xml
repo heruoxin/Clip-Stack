@@ -4,7 +4,7 @@
     <string name="clip_notification_copy_button">コピー</string>
     <string name="clip_notification_share_button">シェア</string>
     <string name="clip_notification_big_title">クリップボード履歴</string>
-    <string name="toast_end_string">%1$s コピー済み</string>
+    <string name="toast_copied">%1$s コピー済み</string>
     <string name="clip_notification_text">お知らせをタッチして更に表示</string>
     <string name="clip_notification_single_text">タッチしてテキストを入力</string>
     <string name="share_clipboard_to">テキストをシェア：</string>

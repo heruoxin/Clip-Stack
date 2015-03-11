@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 
@@ -84,7 +83,7 @@ public class ClipObjectActionBridge extends IntentService {
                     toastClips = clips.substring(0, 15) + "…";
                 }
                 Toast.makeText(ClipObjectActionBridge.this,
-                        getString(R.string.toast_end_string, toastClips+"\n"),
+                        getString(R.string.toast_copied, toastClips+"\n"),
                         Toast.LENGTH_SHORT
                 ).show();
 
