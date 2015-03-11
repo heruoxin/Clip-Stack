@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_dark">#2E7D32</color>
-    <color name="primary">#40a33c</color>
+    <color name="primary">#43A047</color>
     <color name="accent">#66BB6A</color>
     <color name="primary_light">#A5D6A7</color>
     <color name="primary_background">#E8F5E9</color>
@@ -14,5 +14,8 @@
     <color name="shadow">#88555555</color>
     <color name="ripple_primary">@color/primary_light</color>
     <color name="ripple_high_light">#FFF59D</color>
+    <!--
     <color name="fab">#fca503</color>
+    -->
+    <color name="fab">@color/accent</color>
 </resources>

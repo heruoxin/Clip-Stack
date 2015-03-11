@@ -309,7 +309,7 @@ public class CBWatcherService extends Service {
 
         NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
                 .setContentIntent(resultPendingIntent)
-                .setContentTitle(getString(R.string.clip_notification_title) + currentClip)
+                .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
                 .setAutoCancel(!pinOnTop);
         if (isStarred) {

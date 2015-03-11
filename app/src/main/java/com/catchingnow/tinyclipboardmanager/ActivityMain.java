@@ -270,7 +270,7 @@ public class ActivityMain extends MyActionBarActivity {
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-
+                                isXHidden = 1;
                             }
 
                             @Override
@@ -308,7 +308,7 @@ public class ActivityMain extends MyActionBarActivity {
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
-
+                                isXHidden = -1;
                             }
 
                             @Override
@@ -443,7 +443,7 @@ public class ActivityMain extends MyActionBarActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 20 && isYHidden == -1) {
                     //hide FAB on Y
-                    if (isXHidden == 1) return;
+                    if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(true, TRANSLATION_FAST);
@@ -462,7 +462,7 @@ public class ActivityMain extends MyActionBarActivity {
 
                                 @Override
                                 public void onAnimationCancel(Animator animation) {
-
+                                    isYHidden = 1;
                                 }
 
                                 @Override
@@ -472,7 +472,7 @@ public class ActivityMain extends MyActionBarActivity {
                             });
                 } else if (dy < -20 && isYHidden == 1) {
                     //show FAB on Y
-                    if (isXHidden == 1) return;
+                    if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(false, TRANSLATION_FAST);
@@ -491,7 +491,7 @@ public class ActivityMain extends MyActionBarActivity {
 
                                 @Override
                                 public void onAnimationCancel(Animator animation) {
-
+                                    isYHidden = -1;
                                 }
 
                                 @Override
