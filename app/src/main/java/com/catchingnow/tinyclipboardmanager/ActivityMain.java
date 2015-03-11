@@ -134,7 +134,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onResume() {
-        CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
+        CBWatcherService.startCBService(context, true, 1);
         super.onResume();
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -392,7 +392,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
-            db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+            db.modifyClip(clipObject.getText(), null);
         }
         deleteQueue.clear();
     }
@@ -578,7 +578,7 @@ public class ActivityMain extends MyActionBarActivity {
                                 isSnackbarShow -= 1;
                                 if (!isUndo[0]) {
                                     deleteQueue.remove(clipObject);
-                                    db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+                                    db.modifyClip(clipObject.getText(), null);
                                 }
                             }
 
@@ -607,13 +607,13 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void firstLaunch() throws InterruptedException {
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"));
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), 1);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), 1);
 //        BackupManager backupManager = new BackupManager(this);
 //        backupManager.requestRestore(new RestoreObserver() {
 //            @Override

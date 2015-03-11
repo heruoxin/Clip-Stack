@@ -146,11 +146,7 @@ public class CBWatcherService extends Service {
         }
         if (clipString.trim().isEmpty()) return;
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
-        if (isMyActivitiesOnForeground <= 0) {
-            db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW, isImportant);
-        } else {
-            db.modifyClip(null, clipString, 0, isImportant);
-        }
+        db.modifyClip(null, clipString, isImportant);
     }
 
     private void cleanUpSqlite() {

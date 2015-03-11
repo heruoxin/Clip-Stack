@@ -19,9 +19,6 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    public final static int NOTIFICATION_VIEW = 1;
-    public final static int MAIN_ACTIVITY_VIEW = 2;
-    public final static int SYSTEM_CLIPBOARD = 4;
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -192,7 +189,7 @@ public class Storage {
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteAllClipHistory.");
         }
-        refreshAllTypeOfList(0);
+        refreshAllTypeOfList();
         refreshTopClipInStack();
         cb.setText(topClipInStack);
     }
@@ -282,7 +279,7 @@ public class Storage {
         close();
         isClipsInMemoryChanged = true;
         lastChangeDate = new Date().getTime();
-        refreshAllTypeOfList(MAIN_ACTIVITY_VIEW);
+        refreshAllTypeOfList();
     }
 
     public void importClips(ArrayList<ClipObject> clipObjects) {
@@ -293,19 +290,15 @@ public class Storage {
         close();
         isClipsInMemoryChanged = true;
         lastChangeDate = new Date().getTime();
-        refreshAllTypeOfList(0);
+        refreshAllTypeOfList();
     }
 
     public void modifyClip(String oldClip, String newClip) {
         modifyClip(oldClip, newClip, 0);
     }
 
-    public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
-        modifyClip(oldClip, newClip, notUpdateWhich, 0);
-    }
-
-    public void modifyClip(String oldClip, String newClip, int notUpdateWhich, int isImportant) {
-        Log.v(MyUtil.PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+", "+isImportant+")");
+    public void modifyClip(String oldClip, String newClip, int isImportant) {
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+isImportant+")");
         if (oldClip == null) {
             oldClip = "";
         }
@@ -350,7 +343,7 @@ public class Storage {
         lastChangeDate = new Date().getTime();
 
         refreshTopClipInStack();
-        refreshAllTypeOfList(notUpdateWhich);
+        refreshAllTypeOfList();
 
     }
 
@@ -372,7 +365,7 @@ public class Storage {
         return false;
     }
 
-    private void refreshAllTypeOfList(int notUpdateWhich) {
+    private void refreshAllTypeOfList() {
 //        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
 //            CBWatcherService.startCBService(context, true);
 //        } else if (notUpdateWhich == NOTIFICATION_VIEW) {

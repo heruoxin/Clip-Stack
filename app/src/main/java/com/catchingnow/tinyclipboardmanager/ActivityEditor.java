@@ -157,7 +157,7 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void deleteText() {
-        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
+        db.modifyClip(oldText, null);
         finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
     }
 
@@ -172,7 +172,7 @@ public class ActivityEditor extends MyActionBarActivity {
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage;
-        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred ? 1 : -1));
+        db.modifyClip(oldText, newText, (isStarred ? 1 : -1));
         if (newText != null && !newText.isEmpty()) {
             toastMessage = getString(R.string.toast_copied, newText + "\n");
         } else {
