@@ -24,6 +24,7 @@ public class ActivityEditor extends MyActionBarActivity {
     private MenuItem starItem;
     private ImageButton mFAB;
     private InputMethodManager inputMethodManager;
+    private Storage db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class ActivityEditor extends MyActionBarActivity {
             }
         });
 
+        db = Storage.getInstance(this);
         // if is copied form other application.
         if (Intent.ACTION_SEND.equals(intent.getAction()) && "text/plain".equals(intent.getType())) {
             oldText = "";
@@ -61,10 +63,10 @@ public class ActivityEditor extends MyActionBarActivity {
         if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-        getSupportActionBar().setTitle("  "+titleText);
+        getSupportActionBar().setTitle("  " + titleText);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(
-                    titleText+": "+ MyUtil.stringLengthCut(oldText, 4),
+                    titleText + ": " + MyUtil.stringLengthCut(oldText, 4),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_edit),
                     getResources().getColor(R.color.primary)
             ));
@@ -155,7 +157,6 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void deleteText() {
-        Storage db = Storage.getInstance(this);
         db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
         finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
     }
@@ -171,10 +172,9 @@ public class ActivityEditor extends MyActionBarActivity {
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage;
-        Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred? 1:-1));
+        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred ? 1 : -1));
         if (newText != null && !newText.isEmpty()) {
-            toastMessage = getString(R.string.toast_copied, newText+"\n");
+            toastMessage = getString(R.string.toast_copied, newText + "\n");
         } else {
             toastMessage = getString(R.string.toast_deleted);
         }
@@ -186,9 +186,14 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void finishAndRemoveTaskWithToast(String toastMessage) {
-        Toast.makeText(this,
-                toastMessage,
-                Toast.LENGTH_SHORT).show();
+        Toast
+                .makeText(
+                        this,
+                        toastMessage,
+                        Toast.LENGTH_SHORT
+                )
+                .show();
+        db.updateSystemClipboard();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             finish();
         } else {

@@ -33,9 +33,11 @@ public class Storage {
     private ClipboardManager cb;
     private List<ClipObject> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
+    private long lastChangeDate;
     private String topClipInStack = "";
 
     private Storage(Context context) {
+        lastChangeDate = new Date().getTime();
         this.context = context;
         this.cb = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
         this.dbHelper = new StorageHelper(this.context);
@@ -46,6 +48,10 @@ public class Storage {
             mInstance = new Storage(context.getApplicationContext());
         }
         return mInstance;
+    }
+
+    public long getLastChangeDate() {
+        return lastChangeDate;
     }
 
     private String sqliteEscape(String keyWord) {
@@ -175,6 +181,7 @@ public class Storage {
     public void deleteAllClipHistory() {
         //for ActivityMain Clear All
         isClipsInMemoryChanged = true;
+        lastChangeDate = new Date().getTime();
         open();
         int row_id = db.delete(
                 TABLE_NAME,
@@ -193,6 +200,7 @@ public class Storage {
     public boolean deleteClipHistoryBefore(float days) {
         //for bindJobScheduler
         isClipsInMemoryChanged = true;
+        lastChangeDate = new Date().getTime();
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
@@ -273,6 +281,7 @@ public class Storage {
         addClipHistory(clipObject);
         close();
         isClipsInMemoryChanged = true;
+        lastChangeDate = new Date().getTime();
         refreshAllTypeOfList(MAIN_ACTIVITY_VIEW);
     }
 
@@ -283,6 +292,7 @@ public class Storage {
         }
         close();
         isClipsInMemoryChanged = true;
+        lastChangeDate = new Date().getTime();
         refreshAllTypeOfList(0);
     }
 
@@ -337,13 +347,14 @@ public class Storage {
         }
         close();
         isClipsInMemoryChanged = true;
+        lastChangeDate = new Date().getTime();
 
         refreshTopClipInStack();
         refreshAllTypeOfList(notUpdateWhich);
 
     }
 
-    private void updateSystemClipboard() {
+    public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.
         if (cb.hasPrimaryClip()) {
@@ -353,15 +364,16 @@ public class Storage {
                 if (thisClip != null) {
                     if (!thisClip.toString().equals(topClipInStack)) {
                         cb.setText(topClipInStack);
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
         if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
-            updateSystemClipboard();
             CBWatcherService.startCBService(context, true);
         } else if (notUpdateWhich == NOTIFICATION_VIEW) {
             updateSystemClipboard();

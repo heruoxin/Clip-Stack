@@ -53,6 +53,7 @@ public class ActivityMain extends MyActionBarActivity {
     private MenuItem searchItem;
     private MenuItem starItem;
     private Storage db;
+    private long lastChangeDate = 0;
     private List<ClipObject> clips;
     private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
@@ -102,6 +103,7 @@ public class ActivityMain extends MyActionBarActivity {
         super.onPause();
         isFromNotification = false;
         clearDeleteQueue();
+        db.updateSystemClipboard();
         CBWatcherService.startCBService(context, false, -1);
     }
 
@@ -113,7 +115,7 @@ public class ActivityMain extends MyActionBarActivity {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
 
-        setView();
+        setView(false);
         //check if first launch
         if (preference.getBoolean(FIRST_LAUNCH, true)) {
             try {
@@ -146,7 +148,7 @@ public class ActivityMain extends MyActionBarActivity {
                     queryText = s;
                 }
             }
-            setView();
+            setView(false);
         }
         if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
             isFromNotification = true;
@@ -169,7 +171,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
-                setView();
+                setView(true);
                 return true;
             }
 
@@ -177,7 +179,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
-                setView();
+                setView(true);
                 return true;
             }
         });
@@ -187,7 +189,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchItem.collapseActionView();
                 queryText = null;
                 initView();
-                setView();
+                setView(true);
                 return false;
             }
         });
@@ -201,7 +203,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryText = newText;
-                setView();
+                setView(true);
                 return true;
             }
         });
@@ -325,7 +327,7 @@ public class ActivityMain extends MyActionBarActivity {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
         setStarredIcon();
-        setView();
+        setView(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -506,7 +508,11 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList.addOnItemTouchListener(touchListener);
     }
 
-    private void setView() {
+    private void setView(boolean force) {
+        if (!force) {
+            if (lastChangeDate == db.getLastChangeDate()) return;
+        }
+        lastChangeDate = db.getLastChangeDate();
         //get clips
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
