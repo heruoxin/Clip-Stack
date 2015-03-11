@@ -68,8 +68,8 @@ public class ActivityEditor extends MyActionBarActivity {
         getSupportActionBar().setTitle("  "+titleText);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(
-                    titleText,
-                    BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+                    titleText+": "+ MyUtil.stringLengthCut(oldText, 4),
+                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_edit),
                     getResources().getColor(R.color.primary)
             ));
         }

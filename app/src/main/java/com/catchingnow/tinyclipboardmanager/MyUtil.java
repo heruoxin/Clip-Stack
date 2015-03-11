@@ -25,7 +25,7 @@ public class MyUtil {
 
     public static String stringLengthCut(String string, int length) {
         return  (string.length() > length) ?
-                string.substring(0, length - 1).trim()
+                string.substring(0, length - 2).trim()+"…"
                 : string.trim();
     }
 }
