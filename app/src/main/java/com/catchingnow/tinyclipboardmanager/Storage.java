@@ -373,19 +373,21 @@ public class Storage {
     }
 
     private void refreshAllTypeOfList(int notUpdateWhich) {
-        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
-            CBWatcherService.startCBService(context, true);
-        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
-            updateSystemClipboard();
+//        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
+//            CBWatcherService.startCBService(context, true);
+//        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
+//            updateSystemClipboard();
+//            ActivityMain.refreshMainView(context, "");
+//        } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
+//            ActivityMain.refreshMainView(context, "");
+//            CBWatcherService.startCBService(context, true);
+//        } else {
+//            updateSystemClipboard();
+//            CBWatcherService.startCBService(context, true);
+//            ActivityMain.refreshMainView(context, "");
+//        }
             ActivityMain.refreshMainView(context, "");
-        } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
-            ActivityMain.refreshMainView(context, "");
             CBWatcherService.startCBService(context, true);
-        } else {
-            updateSystemClipboard();
-            CBWatcherService.startCBService(context, true);
-            ActivityMain.refreshMainView(context, "");
-        }
     }
 
 

@@ -6,13 +6,16 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.app.backup.BackupManager;
 import android.app.backup.RestoreObserver;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,6 +74,8 @@ public class ActivityMain extends MyActionBarActivity {
     private static int TRANSLATION_FAST = 400;
     private static int TRANSLATION_SLOW = 1000;
 
+    private BroadcastReceiver mMessageReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +92,27 @@ public class ActivityMain extends MyActionBarActivity {
         initView();
 
         attachKeyboardListeners();
-        onNewIntent(getIntent());
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
+                    String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
+                    if (s != null) {
+                        if (!s.isEmpty()) {
+                            queryText = s;
+                        }
+                    }
+                    setView(false);
+                }
+                if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
+                    isFromNotification = true;
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(EXTRA_QUERY_TEXT));
+
     }
 
     @Override
@@ -140,19 +165,14 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
+
+    @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
-            String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
-            if (s != null) {
-                if (!s.isEmpty()) {
-                    queryText = s;
-                }
-            }
-            setView(false);
-        }
-        if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
-            isFromNotification = true;
-        }
         super.onNewIntent(intent);
     }
 
@@ -332,9 +352,9 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.setImageResource(isStarred ?
-                        R.drawable.ic_action_star_white
+                                R.drawable.ic_action_star_white
                                 :
-                        R.drawable.ic_action_add
+                                R.drawable.ic_action_add
                 );
             }
         }, TRANSLATION_SLOW / 3 * 2);
@@ -378,10 +398,11 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     public static void refreshMainView(Context context, String query) {
-        Intent intent = new Intent(context, ActivityMain.class)
-                .putExtra(EXTRA_QUERY_TEXT, query)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        Intent intent = new Intent(EXTRA_QUERY_TEXT)
+                .putExtra(EXTRA_QUERY_TEXT, query);
+        //context.startActivity(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Log.e(MyUtil.PACKAGE_NAME, "refreshMainView");
     }
 
     private void setStarredIcon() {
