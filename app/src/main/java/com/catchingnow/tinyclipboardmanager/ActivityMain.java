@@ -45,7 +45,6 @@ import java.util.List;
 
 
 public class ActivityMain extends MyActionBarActivity {
-    public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     private RecyclerView mRecList;
@@ -96,22 +95,20 @@ public class ActivityMain extends MyActionBarActivity {
         mMessageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
-                    String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
+                    String s = intent.getStringExtra(Intent.EXTRA_TEXT);
                     if (s != null) {
                         if (!s.isEmpty()) {
                             queryText = s;
                         }
                     }
-                    setView(false);
-                }
+                setView(false);
                 if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
                     isFromNotification = true;
                 }
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter(EXTRA_QUERY_TEXT));
+                new IntentFilter(Storage.UPDATE_DB));
 
     }
 
@@ -395,14 +392,6 @@ public class ActivityMain extends MyActionBarActivity {
             db.modifyClip(clipObject.getText(), null);
         }
         deleteQueue.clear();
-    }
-
-    public static void refreshMainView(Context context, String query) {
-        Intent intent = new Intent(EXTRA_QUERY_TEXT)
-                .putExtra(EXTRA_QUERY_TEXT, query);
-        //context.startActivity(intent);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        Log.e(MyUtil.PACKAGE_NAME, "refreshMainView");
     }
 
     private void setStarredIcon() {

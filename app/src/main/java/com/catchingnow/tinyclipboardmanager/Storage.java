@@ -5,10 +5,12 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
+    public final static String UPDATE_DB = "updateDB";
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -379,10 +382,17 @@ public class Storage {
 //            CBWatcherService.startCBService(context, true);
 //            ActivityMain.refreshMainView(context, "");
 //        }
-            ActivityMain.refreshMainView(context, "");
-            CBWatcherService.startCBService(context, true);
+        CBWatcherService.startCBService(context, true);
+        updateDbBroadcast(context, "");
     }
 
+
+    public static void updateDbBroadcast(Context context, String query) {
+        Intent intent = new Intent(UPDATE_DB)
+                .putExtra(Intent.EXTRA_TEXT, query);
+        //context.startActivity(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
 
     public class StorageHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 3;
