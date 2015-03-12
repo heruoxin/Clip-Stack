@@ -6,10 +6,12 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -192,7 +194,7 @@ public class Storage {
         cb.setText(topClipInStack);
     }
 
-    public boolean deleteClipHistoryBefore(float days) {
+    private boolean deleteClipHistoryBefore(float days) {
         //for bindJobScheduler
         isClipsInMemoryChanged = true;
         Date date = new Date();
@@ -211,6 +213,14 @@ public class Storage {
             return false;
         }
         return true;
+    }
+
+    public boolean cleanUp() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
+        Log.v(MyUtil.PACKAGE_NAME,
+                "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
+        return deleteClipHistoryBefore(days);
     }
 
     private boolean deleteClipHistory(ClipObject clipObject) {

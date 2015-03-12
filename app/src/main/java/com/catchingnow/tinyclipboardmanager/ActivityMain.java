@@ -111,7 +111,7 @@ public class ActivityMain extends MyActionBarActivity {
     @Override
     protected void onStop() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            CBWatcherService.startCBService(context, false, true);
+            db.cleanUp();
         }
         super.onStop();
     }

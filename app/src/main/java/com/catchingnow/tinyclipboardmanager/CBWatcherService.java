@@ -30,7 +30,6 @@ public class CBWatcherService extends Service {
 
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
-    public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
@@ -76,11 +75,6 @@ public class CBWatcherService extends Service {
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
             notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
             pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand cleanUpSqlite");
-                cleanUpSqlite();
-            }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
@@ -147,16 +141,6 @@ public class CBWatcherService extends Service {
         if (clipString.trim().isEmpty()) return;
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
         db.modifyClip(null, clipString, isImportant);
-    }
-
-    private void cleanUpSqlite() {
-        float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
-        Log.v(MyUtil.PACKAGE_NAME,
-                "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
-        if (db == null) {
-            db = Storage.getInstance(this.getBaseContext());
-        }
-        db.deleteClipHistoryBefore(days);
     }
 
     private boolean checkNotificationPermission() {
@@ -348,22 +332,13 @@ public class CBWatcherService extends Service {
     }
 
     public static void startCBService(Context context, boolean forceShowNotification) {
-        startCBService(context, forceShowNotification, 0, false);
-    }
-
-    public static void startCBService(Context context, boolean forceShowNotification, boolean doCleanUp) {
-        startCBService(context, forceShowNotification, 0, doCleanUp);
+        startCBService(context, forceShowNotification, 0);
     }
 
     public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
-        startCBService(context, forceShowNotification, myActivitiesOnForegroundMessage, false);
-    }
-
-    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage, boolean doCleanUp) {
         Intent intent = new Intent(context, CBWatcherService.class)
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
-                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage)
-                .putExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, doCleanUp);
+                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
     }
 
