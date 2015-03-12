@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class Storage {
     public final static String UPDATE_DB = "updateDB";
+    public final static String UPDATE_DB_ADD = "updateDbAdd";
+    public final static String UPDATE_DB_DELETE = "updateDbDelete";
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -33,11 +35,9 @@ public class Storage {
     private ClipboardManager cb;
     private List<ClipObject> clipsInMemory;
     private boolean isClipsInMemoryChanged = true;
-    private long lastChangeDate;
     private String topClipInStack = "";
 
     private Storage(Context context) {
-        lastChangeDate = new Date().getTime();
         this.context = context;
         this.cb = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
         this.dbHelper = new StorageHelper(this.context);
@@ -48,10 +48,6 @@ public class Storage {
             mInstance = new Storage(context.getApplicationContext());
         }
         return mInstance;
-    }
-
-    public long getLastChangeDate() {
-        return lastChangeDate;
     }
 
     private String sqliteEscape(String keyWord) {
@@ -181,7 +177,6 @@ public class Storage {
     public void deleteAllClipHistory() {
         //for ActivityMain Clear All
         isClipsInMemoryChanged = true;
-        lastChangeDate = new Date().getTime();
         open();
         int row_id = db.delete(
                 TABLE_NAME,
@@ -192,7 +187,7 @@ public class Storage {
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteAllClipHistory.");
         }
-        refreshAllTypeOfList();
+        refreshAllTypeOfList(true, null);
         refreshTopClipInStack();
         cb.setText(topClipInStack);
     }
@@ -200,7 +195,6 @@ public class Storage {
     public boolean deleteClipHistoryBefore(float days) {
         //for bindJobScheduler
         isClipsInMemoryChanged = true;
-        lastChangeDate = new Date().getTime();
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
@@ -281,8 +275,7 @@ public class Storage {
         addClipHistory(clipObject);
         close();
         isClipsInMemoryChanged = true;
-        lastChangeDate = new Date().getTime();
-        refreshAllTypeOfList();
+        refreshAllTypeOfList(false, null);
     }
 
     public void importClips(ArrayList<ClipObject> clipObjects) {
@@ -292,8 +285,7 @@ public class Storage {
         }
         close();
         isClipsInMemoryChanged = true;
-        lastChangeDate = new Date().getTime();
-        refreshAllTypeOfList();
+        refreshAllTypeOfList(true, null);
     }
 
     public void modifyClip(String oldClip, String newClip) {
@@ -343,10 +335,9 @@ public class Storage {
         }
         close();
         isClipsInMemoryChanged = true;
-        lastChangeDate = new Date().getTime();
 
         refreshTopClipInStack();
-        refreshAllTypeOfList();
+        refreshAllTypeOfList(!newClip.isEmpty(), oldClip);
 
     }
 
@@ -368,7 +359,7 @@ public class Storage {
         return false;
     }
 
-    private void refreshAllTypeOfList() {
+    private void refreshAllTypeOfList(Boolean added, String deletedString) {
 //        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
 //            CBWatcherService.startCBService(context, true);
 //        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
@@ -383,14 +374,20 @@ public class Storage {
 //            ActivityMain.refreshMainView(context, "");
 //        }
         CBWatcherService.startCBService(context, true);
-        updateDbBroadcast(context, "");
+        updateDbBroadcast(context, added, deletedString);
     }
 
 
-    public static void updateDbBroadcast(Context context, String query) {
-        Intent intent = new Intent(UPDATE_DB)
-                .putExtra(Intent.EXTRA_TEXT, query);
-        //context.startActivity(intent);
+    public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
+        Intent intent = new Intent(UPDATE_DB);
+        if (added) {
+            intent.putExtra(UPDATE_DB_ADD, true);
+        }
+        if (deletedString != null) {
+            if (!deletedString.isEmpty()) {
+                intent.putExtra(UPDATE_DB_DELETE, deletedString);
+            }
+        }
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

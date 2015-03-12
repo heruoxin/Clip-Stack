@@ -55,7 +55,6 @@ public class ActivityMain extends MyActionBarActivity {
     private MenuItem searchItem;
     private MenuItem starItem;
     private Storage db;
-    private long lastChangeDate = 0;
     private List<ClipObject> clips;
     private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
@@ -95,21 +94,18 @@ public class ActivityMain extends MyActionBarActivity {
         mMessageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                    String s = intent.getStringExtra(Intent.EXTRA_TEXT);
-                    if (s != null) {
-                        if (!s.isEmpty()) {
-                            queryText = s;
-                        }
-                    }
-                setView(false);
-                if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
-                    isFromNotification = true;
+                if (intent.getBooleanExtra(Storage.UPDATE_DB_ADD, false)) {
+                    setView();
+                } else {
+                    clipCardAdapter.remove(intent.getStringExtra(Storage.UPDATE_DB_DELETE));
                 }
+
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Storage.UPDATE_DB));
 
+        onNewIntent(getIntent());
     }
 
     @Override
@@ -137,7 +133,7 @@ public class ActivityMain extends MyActionBarActivity {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
 
-        setView(false);
+        setView();
         //check if first launch
         if (preference.getBoolean(FIRST_LAUNCH, true)) {
             try {
@@ -170,6 +166,9 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
+            isFromNotification = true;
+        }
         super.onNewIntent(intent);
     }
 
@@ -188,7 +187,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
-                setView(true);
+                setView();
                 return true;
             }
 
@@ -196,7 +195,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
-                setView(true);
+                setView();
                 return true;
             }
         });
@@ -206,7 +205,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchItem.collapseActionView();
                 queryText = null;
                 initView();
-                setView(true);
+                setView();
                 return false;
             }
         });
@@ -220,7 +219,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryText = newText;
-                setView(true);
+                setView();
                 return true;
             }
         });
@@ -344,7 +343,7 @@ public class ActivityMain extends MyActionBarActivity {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
         setStarredIcon();
-        setView(true);
+        setView();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -518,11 +517,7 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList.addOnItemTouchListener(touchListener);
     }
 
-    private void setView(boolean force) {
-        if (!force) {
-            if (lastChangeDate == db.getLastChangeDate()) return;
-        }
-        lastChangeDate = db.getLastChangeDate();
+    private void setView() {
         //get clips
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
@@ -714,7 +709,17 @@ public class ActivityMain extends MyActionBarActivity {
 
         public void remove(ClipObject clipObject) {
             int position = clipObjectList.indexOf(clipObject);
+            if (position == -1) return;
             remove(position);
+        }
+
+        public void remove(String clipString) {
+            for (ClipObject clipObject: clipObjectList) {
+                if (clipObject.getText().equals(clipString)) {
+                    remove(clipObject);
+                    return;
+                }
+            }
         }
 
         public void remove(int position) {
