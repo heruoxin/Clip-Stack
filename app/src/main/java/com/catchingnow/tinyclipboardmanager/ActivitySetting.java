@@ -77,14 +77,12 @@ public class ActivitySetting extends MyPreferenceActivity {
     protected void onResume() {
         super.onResume();
         initSharedPrefListener();
-        CBWatcherService.startCBService(this, false, 1);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         initSharedPrefListener();
-        CBWatcherService.startCBService(this, false, -1);
 
     }
 

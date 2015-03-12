@@ -387,7 +387,6 @@ public class Storage {
         updateDbBroadcast(context, added, deletedString);
     }
 
-
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
         Intent intent = new Intent(UPDATE_DB);
         if (added) {

@@ -77,7 +77,6 @@ public class ActivityEditor extends MyActionBarActivity {
     protected void onResume() {
         super.onResume();
         editText.requestFocus();
-        CBWatcherService.startCBService(this, false, 1);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -91,7 +90,6 @@ public class ActivityEditor extends MyActionBarActivity {
         super.onPause();
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        CBWatcherService.startCBService(this, false, -1);
     }
 
     @Override

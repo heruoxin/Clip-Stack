@@ -122,12 +122,10 @@ public class ActivityMain extends MyActionBarActivity {
         isFromNotification = false;
         clearDeleteQueue();
         db.updateSystemClipboard();
-        CBWatcherService.startCBService(context, false, -1);
     }
 
     @Override
     protected void onResume() {
-        CBWatcherService.startCBService(context, true, 1);
         super.onResume();
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);

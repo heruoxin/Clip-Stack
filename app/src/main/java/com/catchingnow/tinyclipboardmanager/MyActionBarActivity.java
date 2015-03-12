@@ -87,4 +87,16 @@ public class MyActionBarActivity extends ActionBarActivity {
             rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(keyboardLayoutListener);
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        CBWatcherService.startCBService(this, -1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CBWatcherService.startCBService(this, 1);
+    }
 }

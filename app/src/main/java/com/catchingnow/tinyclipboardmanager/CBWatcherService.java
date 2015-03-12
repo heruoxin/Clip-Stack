@@ -331,11 +331,15 @@ public class CBWatcherService extends Service {
         notificationManager.notify(0, n);
     }
 
-    public static void startCBService(Context context, boolean forceShowNotification) {
-        startCBService(context, forceShowNotification, 0);
+    public static void startCBService(Context context, boolean refreshNotification) {
+        startCBService(context, refreshNotification, 0);
     }
 
-    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
+    public static void startCBService(Context context, int myActivitiesOnForegroundMessage) {
+        startCBService(context, false, myActivitiesOnForegroundMessage);
+    }
+
+    private static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
         Intent intent = new Intent(context, CBWatcherService.class)
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
                 .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
