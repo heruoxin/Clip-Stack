@@ -35,6 +35,7 @@ public class CBWatcherService extends Service {
     public int NUMBER_OF_CLIPS = 5; //3-6
     protected boolean isStarred = false;
     private NotificationManager notificationManager;
+    private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
     private boolean onListened = false;
@@ -55,7 +56,8 @@ public class CBWatcherService extends Service {
             preference = PreferenceManager.getDefaultSharedPreferences(this);
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             db = Storage.getInstance(this.getBaseContext());
-            ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
+            clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            clipboardManager.addPrimaryClipChangedListener(listener);
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
             } else {
@@ -68,7 +70,6 @@ public class CBWatcherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(MyUtil.PACKAGE_NAME, "onStartCommand");
         if (intent != null) {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
@@ -128,12 +129,11 @@ public class CBWatcherService extends Service {
     }
 
     private void performClipboardCheck() {
-        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (!cb.hasPrimaryClip()) return;
+        if (!clipboardManager.hasPrimaryClip()) return;
         String clipString;
         try {
             //Don't use CharSequence .toString()!
-            CharSequence charSequence = cb.getPrimaryClip().getItemAt(0).getText();
+            CharSequence charSequence = clipboardManager.getPrimaryClip().getItemAt(0).getText();
             clipString = String.valueOf(charSequence);
         } catch (Error ignored) {
             return;
