@@ -129,6 +129,7 @@ public class CBWatcherService extends Service {
     }
 
     private void performClipboardCheck() {
+        Log.v(MyUtil.PACKAGE_NAME, "performClipboardCheck");
         if (!clipboardManager.hasPrimaryClip()) return;
         String clipString;
         try {
@@ -139,6 +140,7 @@ public class CBWatcherService extends Service {
             return;
         }
         if (clipString.trim().isEmpty()) return;
+        if (clipString.equals(db.getClipHistory().get(0).getText())) return;
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
         db.modifyClip(null, clipString, isImportant);
     }
