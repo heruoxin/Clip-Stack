@@ -91,7 +91,7 @@
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
         </activity>
         <activity
-            android:name=".ActivityNewBackup"
+            android:name=".ActivityBackupNew"
             android:label="@string/title_activity_new_backup"
             android:parentActivityName=".ActivityBackup" >
             <meta-data

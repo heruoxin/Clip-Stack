@@ -1,10 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +14,10 @@ import android.widget.Switch;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
-public class ActivityNewBackup extends MyActionBarActivity {
+public class ActivityBackupNew extends MyActionBarActivity {
     private boolean isReverseSort = false;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
@@ -55,16 +53,13 @@ public class ActivityNewBackup extends MyActionBarActivity {
     }
 
     private void initExportView() {
-        //get installed date
-        dateFrom.set(2015, 2, 1);
-        try {
-            long installedDate = this.getPackageManager()
-                    .getPackageInfo(MyUtil.PACKAGE_NAME, 0)
-                    .firstInstallTime;
-            dateFrom.setTimeInMillis(installedDate);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        //get started date
+        long startedDate = dateFrom.getTimeInMillis();
+        List<ClipObject> clipObjects = Storage.getInstance(this).getClipHistory();
+        if (clipObjects.size() > 0) {
+            startedDate = clipObjects.get(clipObjects.size() - 1).getDate().getTime();
         }
+        dateFrom.setTimeInMillis(startedDate);
 
         while (dateFrom.after(dateTo)) {
             dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 70000000);

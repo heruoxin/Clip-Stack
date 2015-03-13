@@ -7,10 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,9 +52,9 @@ public class ActivityBackup extends MyActionBarActivity {
                             .makeSceneTransitionAnimation(activity,
                                     newBackupView,
                                     getString(R.string.action_export));
-                    startActivity(new Intent(context, ActivityNewBackup.class), options.toBundle());
+                    startActivity(new Intent(context, ActivityBackupNew.class), options.toBundle());
                 } else {
-                    startActivity(new Intent(context, ActivityNewBackup.class));
+                    startActivity(new Intent(context, ActivityBackupNew.class));
                 }
             }
         });
