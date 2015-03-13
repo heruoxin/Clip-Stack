@@ -94,5 +94,7 @@
     <string name="pref_notification_priority_low">\nLow - without status bar icon.\nAt the end of notifications.\n</string>
     <string name="pref_notification_priority_middle">Middle - with status bar icon.\nAt the middle of notifications.</string>
     <string name="pref_notification_priority_high">\nHigh - with status bar icon.\nAt the top of notifications.\n</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
