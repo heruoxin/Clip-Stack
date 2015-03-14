@@ -33,6 +33,7 @@
             android:id="@+id/widget_title_add"
             android:src="@drawable/ic_action_add"
             android:background="@color/primary"
+            android:layout_marginRight="@dimen/widget_margin"
             android:layout_width="@dimen/abc_action_button_min_width_material"
             android:layout_height="@dimen/abc_action_button_min_height_material"
             android:contentDescription="@string/action_add" />
