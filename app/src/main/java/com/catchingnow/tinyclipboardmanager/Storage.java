@@ -1,6 +1,5 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -98,11 +97,11 @@ public class Storage {
         return queryClips;
     }
 
-    public List<ClipObject> getClipHistory(int n) {
+    public List<ClipObject> getClipHistory(int size) {
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> queryClips = new ArrayList<>();
-        n = (n > allClips.size() ? allClips.size() : n);
-        for (int i = 0; i < n; i++) {
+        size = (size > allClips.size() ? allClips.size() : size);
+        for (int i = 0; i < size; i++) {
             queryClips.add(allClips.get(i));
         }
         return queryClips;
@@ -144,12 +143,12 @@ public class Storage {
         return starredClips;
     }
 
-    public List<ClipObject> getStarredClipHistory(int n) {
+    public List<ClipObject> getStarredClipHistory(int size) {
         List<ClipObject> starredClips = getStarredClipHistory();
-        if (n > starredClips.size()) {
-            n = starredClips.size();
+        if (size > starredClips.size()) {
+            size = starredClips.size();
         }
-        return starredClips.subList(0, n);
+        return starredClips.subList(0, size);
     }
 
     public List<ClipObject> getStarredClipHistory(String queryString) {
@@ -385,6 +384,9 @@ public class Storage {
 //        }
         CBWatcherService.startCBService(context, true);
         updateDbBroadcast(context, added, deletedString);
+        context.startService(new Intent(context, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
+        );
     }
 
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {

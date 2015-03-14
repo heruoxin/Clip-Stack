@@ -163,7 +163,7 @@ public class ActivityEditor extends MyActionBarActivity {
         String text = editText.getText().toString();
         Intent openIntent = new Intent(this, ClipObjectActionBridge.class);
         openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, text);
-        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_SHARE);
+        openIntent.putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
         startService(openIntent);
     }
 
