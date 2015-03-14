@@ -16,23 +16,24 @@
             android:text="@string/app_name"
             android:textSize="@dimen/abc_text_size_title_material_toolbar"
             android:textColor="@color/set_off"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:background="@drawable/background_default_ripple_with_mask"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/abc_action_button_min_height_material" />
         <ImageButton
             android:id="@+id/widget_title_star"
             android:src="@drawable/ic_action_star_white"
-            android:background="@color/primary"
+            android:background="@drawable/background_default_ripple"
             android:layout_width="@dimen/abc_action_button_min_width_material"
             android:layout_height="@dimen/abc_action_button_min_height_material"
             android:contentDescription="@string/action_star" />
         <ImageButton
             android:id="@+id/widget_title_add"
             android:src="@drawable/ic_action_add"
-            android:background="@color/primary"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/background_default_ripple"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_width="@dimen/abc_action_button_min_width_material"
             android:layout_height="@dimen/abc_action_button_min_height_material"
             android:contentDescription="@string/action_add" />
