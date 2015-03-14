@@ -15,12 +15,15 @@
         <TextView
             android:id="@+id/clip_text"
             android:gravity="center_vertical|start"
-            android:layout_marginStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp"
             android:ellipsize="end"
             android:lines="1"
             android:text="text test test"
             android:textSize="14sp"
             style="@android:style/TextAppearance.Material.Notification.Line2"
+            android:background="@drawable/background_default_ripple_with_mask"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -28,7 +31,7 @@
 
         <ImageButton
             android:id="@+id/clip_copy_button"
-            android:background="#00000000"
+            android:background="@drawable/background_default_ripple_with_mask"
             android:src="@drawable/ic_notification_action_copy"
             android:padding="4dp"
             android:layout_gravity="center"
