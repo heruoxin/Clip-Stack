@@ -22,7 +22,6 @@
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
         <ImageButton
-            android:visibility="gone"
             android:id="@+id/widget_title_star"
             android:src="@drawable/ic_action_star_white"
             android:background="@color/primary"

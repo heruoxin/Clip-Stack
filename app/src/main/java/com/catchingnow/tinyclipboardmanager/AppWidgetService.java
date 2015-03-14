@@ -3,7 +3,10 @@ package com.catchingnow.tinyclipboardmanager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -19,6 +22,7 @@ import java.util.List;
 public class AppWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        Log.v(MyUtil.PACKAGE_NAME, "onGetViewFactory");
         return new AppWidgetRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 }
@@ -28,20 +32,22 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     private int mAppWidgetId;
     private Storage db;
     private List<ClipObject> clipObjects;
+    private boolean mIsStarred;
     private DateFormat dateFormat;
     private DateFormat timeFormat;
 
     public AppWidgetRemoteViewsFactory(Context context, Intent intent) {
+        Log.v(MyUtil.PACKAGE_NAME, "AppWidgetRemoteViewsFactory");
         mContext = context;
         dateFormat = new SimpleDateFormat(mContext.getString(R.string.date_format));
         timeFormat = new SimpleDateFormat(mContext.getString(R.string.time_format));
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
+        mIsStarred = intent.getBooleanExtra(AppWidget.WIDGET_IS_STARRED, false);
+
     }
 
     public void onCreate() {
-        // Since we reload the cursor in onDataSetChanged() which gets called immediately after
-        // onCreate(), we do nothing here.
         db = Storage.getInstance(mContext);
     }
 
@@ -55,7 +61,6 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     public RemoteViews getViewAt(int position) {
         ClipObject clip = clipObjects.get(position);
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_card);
-
 
         remoteViews.setTextViewText(R.id.widget_card_date, dateFormat.format(clip.getDate()));
         remoteViews.setTextViewText(R.id.widget_card_time, timeFormat.format(clip.getDate()));
@@ -94,10 +99,16 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     }
 
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
     public void onDataSetChanged() {
-        clipObjects = db.getClipHistory();
+        Log.v(MyUtil.PACKAGE_NAME, "onDataSetChanged");
+        clipObjects = null;
+        if (mIsStarred) {
+            clipObjects = db.getStarredClipHistory();
+        } else {
+            clipObjects = db.getClipHistory();
+        }
     }
 }

@@ -4,8 +4,6 @@ import android.animation.Animator;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.app.backup.BackupManager;
-import android.app.backup.RestoreObserver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -733,7 +731,7 @@ public class ActivityMain extends MyActionBarActivity {
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
                             .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);
                 }
             });
@@ -746,7 +744,7 @@ public class ActivityMain extends MyActionBarActivity {
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
                             .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);
                     if (isFromNotification) {
                         moveTaskToBack(true);

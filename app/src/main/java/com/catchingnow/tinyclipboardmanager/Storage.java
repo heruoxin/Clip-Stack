@@ -384,6 +384,9 @@ public class Storage {
 //        }
         CBWatcherService.startCBService(context, true);
         updateDbBroadcast(context, added, deletedString);
+        context.startService(new Intent(context, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
+        );
     }
 
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {

@@ -196,7 +196,7 @@ public class CBWatcherService extends Service {
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
         Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
         PendingIntent resultPendingIntent =
                 PendingIntent.getService(
                         this,
@@ -282,7 +282,7 @@ public class CBWatcherService extends Service {
         }
 
         Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
         PendingIntent resultPendingIntent =
                 PendingIntent.getService(
                         this,
@@ -364,7 +364,7 @@ public class CBWatcherService extends Service {
             //add pIntent for share
             Intent openShareIntent = new Intent(this.context, ClipObjectActionBridge.class)
                     .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_SHARE);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
             PendingIntent pOpenShareIntent = PendingIntent.getService(this.context,
                     buttonNumber++,
                     openShareIntent,
@@ -374,7 +374,7 @@ public class CBWatcherService extends Service {
             Intent openEditIntent = new Intent(this.context, ClipObjectActionBridge.class)
                     .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     this.context,
                     buttonNumber++,
@@ -416,7 +416,7 @@ public class CBWatcherService extends Service {
             Intent openEditIntent = new Intent(context, ClipObjectActionBridge.class)
                     .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     context,
                     buttonNumber++,
@@ -434,7 +434,7 @@ public class CBWatcherService extends Service {
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
                         .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
                         .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, true)
-                        .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_COPY);
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COPY);
                 PendingIntent pOpenCopyIntent = PendingIntent.getService(context,
                         buttonNumber++,
                         openCopyIntent,

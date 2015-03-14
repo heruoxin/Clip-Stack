@@ -3,9 +3,13 @@ package com.catchingnow.tinyclipboardmanager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RemoteViews;
@@ -17,6 +21,7 @@ import java.util.Date;
  * Implementation of App Widget functionality.
  */
 public class AppWidget extends AppWidgetProvider {
+    public static final String WIDGET_IS_STARRED = "widget_is_starred";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -38,10 +43,21 @@ public class AppWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        int appWidgetId) {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isStarred = preference.getBoolean(WIDGET_IS_STARRED, false);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
+
+        //set title
+        views.setImageViewResource(
+                R.id.widget_title_star,
+                isStarred ?
+                        R.drawable.ic_action_star_white
+                        :
+                        R.drawable.ic_action_star_outline_white
+        );
 
         //bind title
         PendingIntent pMainIntent = PendingIntent.getActivity(
@@ -52,16 +68,31 @@ public class AppWidget extends AppWidgetProvider {
         );
         views.setOnClickPendingIntent(R.id.widget_title_text, pMainIntent);
 
-        views.setOnClickPendingIntent(R.id.widget_title_add,
-                openEditorPendingIntent(
-                        context,
-                        new ClipObject("", new Date()),
-                        1
-                ));
+        PendingIntent pStarIntent = PendingIntent.getService(
+                context,
+                1,
+                new Intent(context, ClipObjectActionBridge.class)
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE,
+                                ClipObjectActionBridge.ACTION_CHANGE_WIDGET_STAR),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        views.setOnClickPendingIntent(R.id.widget_title_star, pStarIntent);
+
+        PendingIntent pAddIntent = PendingIntent.getActivity(
+                context,
+                2,
+                new Intent(context, ActivityEditor.class)
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false)
+                        .putExtra(Intent.EXTRA_TEXT, ""),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        views.setOnClickPendingIntent(R.id.widget_title_add, pAddIntent);
 
         //set main view
-        Intent intent = new Intent(context, AppWidgetService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        Intent intent = new Intent(context, AppWidgetService.class)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                .putExtra(WIDGET_IS_STARRED, isStarred)
+                .putExtra("TIME", new Date().getTime());
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         views.setRemoteAdapter(R.id.widget_main_view, intent);
         views.setEmptyView(R.id.widget_main_view, R.layout.app_widget_card_empty);
@@ -69,7 +100,7 @@ public class AppWidget extends AppWidgetProvider {
                 R.id.widget_main_view,
                 PendingIntent.getActivity(
                         context,
-                        3,
+                        8,
                         new Intent(context, ActivityEditor.class),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ));
@@ -78,17 +109,12 @@ public class AppWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private static PendingIntent openEditorPendingIntent(Context context, ClipObject clip, int id) {
-        return PendingIntent.getActivity(
-                context,
-                id,
-                new Intent(context, ActivityEditor.class)
-                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clip.isStarred())
-                        .putExtra(Intent.EXTRA_TEXT, clip.getText()),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
+    public static void updateAllAppWidget(Context context) {
+        int ids[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, AppWidget.class));
+        for (int id : ids) {
+            AppWidget.updateAppWidget(context, AppWidgetManager.getInstance(context), id);
+        }
     }
 
 }
-
 
