@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -49,6 +50,7 @@ public class ClipObjectActionBridge extends IntentService {
 
         String clips = intent.getStringExtra(CLIPBOARD_STRING);
         int actionCode = intent.getIntExtra(ACTION_CODE, 0);
+        Log.v(MyUtil.PACKAGE_NAME, "ACTION_CODE: " + actionCode);
         switch (actionCode) {
             case 0:
                 break;

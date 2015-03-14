@@ -350,11 +350,10 @@ public class CBWatcherService extends Service {
 
     private class NotificationClipListAdapter {
 
-        private int buttonNumber = 0;
+        private int buttonNumber = 9999;
 
         private RemoteViews expandedView;
         private Context context;
-        private int id = 0;
 
         public NotificationClipListAdapter(Context context, ClipObject clipObject) {
             this.context = context;
@@ -399,7 +398,6 @@ public class CBWatcherService extends Service {
         }
 
         public NotificationClipListAdapter addClips(ClipObject clipObject) {
-            id += 1;
             //String s = clipObject.getText().trim();
             //Log.v(MyUtil.PACKAGE_NAME,"ID "+id);
             //Log.v(MyUtil.PACKAGE_NAME,s);
