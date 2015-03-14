@@ -137,6 +137,7 @@ public class ActivityBackup extends MyActionBarActivity {
             backupContent.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    v.playSoundEffect(0);
                     backupObject.openInEditor();
                     return true;
                 }
