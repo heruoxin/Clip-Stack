@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 
 import java.util.Date;

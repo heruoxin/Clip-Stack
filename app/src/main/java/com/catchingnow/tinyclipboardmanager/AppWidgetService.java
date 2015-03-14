@@ -3,10 +3,7 @@ package com.catchingnow.tinyclipboardmanager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -22,7 +19,6 @@ import java.util.List;
 public class AppWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.v(MyUtil.PACKAGE_NAME, "onGetViewFactory");
         return new AppWidgetRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 }
@@ -37,7 +33,6 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     private DateFormat timeFormat;
 
     public AppWidgetRemoteViewsFactory(Context context, Intent intent) {
-        Log.v(MyUtil.PACKAGE_NAME, "AppWidgetRemoteViewsFactory");
         mContext = context;
         dateFormat = new SimpleDateFormat(mContext.getString(R.string.date_format));
         timeFormat = new SimpleDateFormat(mContext.getString(R.string.time_format));
@@ -103,7 +98,6 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     }
 
     public void onDataSetChanged() {
-        Log.v(MyUtil.PACKAGE_NAME, "onDataSetChanged");
         clipObjects = null;
         if (mIsStarred) {
             clipObjects = db.getStarredClipHistory();
