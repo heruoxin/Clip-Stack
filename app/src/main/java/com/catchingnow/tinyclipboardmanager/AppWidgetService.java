@@ -3,11 +3,12 @@ package com.catchingnow.tinyclipboardmanager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -27,9 +28,11 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     private int mAppWidgetId;
     private Storage db;
     private List<ClipObject> clipObjects;
+    DateFormat timeFormat;
 
     public AppWidgetRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
+        timeFormat = new SimpleDateFormat(mContext.getString(R.string.time_format));
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
     }
@@ -51,15 +54,16 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         ClipObject clip = clipObjects.get(position);
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_card);
 
-        remoteViews.setTextViewText(R.id.widget_card_text, clip.getText());
-        remoteViews.setTextViewText(R.id.widget_card_time, clip.getDate().toLocaleString());
+
+        remoteViews.setTextViewText(R.id.widget_card_time, timeFormat.format(clip.getDate()));
+        remoteViews.setTextViewText(R.id.widget_card_text, MyUtil.stringLengthCut(clip.getText()).trim());
         Intent fillInIntent = new Intent();
         final Bundle extras = new Bundle();
         extras.putBoolean(ClipObjectActionBridge.STATUE_IS_STARRED, clip.isStarred());
         extras.putString(Intent.EXTRA_TEXT, clip.getText());
         fillInIntent.putExtras(extras);
         remoteViews.setOnClickFillInIntent(
-                R.id.widget_card_text,
+                R.id.widget_card,
                 fillInIntent
         );
 
