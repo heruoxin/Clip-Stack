@@ -25,7 +25,6 @@ public class ClipObjectActionBridge extends IntentService {
     public final static int ACTION_CHANGE_WIDGET_STAR = 6;
     public final static String ACTION_CODE = "com.catchingnow.tinyclipboardmanager.actionCode";
     public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
-    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
 
 
     public Handler mHandler;
@@ -48,7 +47,7 @@ public class ClipObjectActionBridge extends IntentService {
 
         this.intent = intent;
 
-        String clips = intent.getStringExtra(CLIPBOARD_STRING);
+        String clips = intent.getStringExtra(Intent.EXTRA_TEXT);
         int actionCode = intent.getIntExtra(ACTION_CODE, 0);
         Log.v(MyUtil.PACKAGE_NAME, "ACTION_CODE: " + actionCode);
         switch (actionCode) {

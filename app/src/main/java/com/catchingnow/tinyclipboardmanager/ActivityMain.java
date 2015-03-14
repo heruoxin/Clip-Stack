@@ -729,7 +729,7 @@ public class ActivityMain extends MyActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                             .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);
@@ -743,7 +743,7 @@ public class ActivityMain extends MyActionBarActivity {
                 public boolean onLongClick(View v) {
                     v.playSoundEffect(0);
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                             .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);

@@ -362,7 +362,7 @@ public class CBWatcherService extends Service {
             expandedView.setTextViewText(R.id.current_clip, currentClip);
             //add pIntent for share
             Intent openShareIntent = new Intent(this.context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
+                    .putExtra(Intent.EXTRA_TEXT, currentClip)
                     .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
             PendingIntent pOpenShareIntent = PendingIntent.getService(this.context,
                     buttonNumber++,
@@ -371,7 +371,7 @@ public class CBWatcherService extends Service {
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
             //add pIntent for edit
             Intent openEditIntent = new Intent(this.context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
+                    .putExtra(Intent.EXTRA_TEXT, currentClip)
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                     .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
@@ -412,7 +412,7 @@ public class CBWatcherService extends Service {
             //add pIntent for edit
 
             Intent openEditIntent = new Intent(context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                    .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                     .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
@@ -430,7 +430,7 @@ public class CBWatcherService extends Service {
             } else {
                 //add pIntent for copy
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
-                        .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                         .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, true)
                         .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COPY);
                 PendingIntent pOpenCopyIntent = PendingIntent.getService(context,

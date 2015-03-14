@@ -162,7 +162,7 @@ public class ActivityEditor extends MyActionBarActivity {
     private void shareText() {
         String text = editText.getText().toString();
         Intent openIntent = new Intent(this, ClipObjectActionBridge.class);
-        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, text);
+        openIntent.putExtra(Intent.EXTRA_TEXT, text);
         openIntent.putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
         startService(openIntent);
     }
