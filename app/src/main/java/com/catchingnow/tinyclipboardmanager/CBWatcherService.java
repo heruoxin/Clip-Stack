@@ -208,12 +208,19 @@ public class CBWatcherService extends Service {
 
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title, MyUtil.stringLengthCut(thisClips.get(0).getText()))) //title
+                .setSmallIcon(R.drawable.ic_stat_icon_colorful)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setColor(getResources().getColor(R.color.primary_light))
                 .setContentIntent(pOpenMainIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
                 .setGroup(NOTIFICATION_GROUP)
                 .setGroupSummary(true);
 
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            // 5.1 icon tmp fix
+            preBuildNotification.setSmallIcon(R.drawable.ic_stat_icon);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
@@ -227,14 +234,6 @@ public class CBWatcherService extends Service {
                     .setContentText(getString(R.string.clip_notification_text_old));
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            preBuildNotification
-                    .setSmallIcon(R.drawable.icon)
-                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                    .setColor(getResources().getColor(R.color.primary_light));
-        } else {
-            preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
-        }
         switch (notificationPriority) {
             case 0:
                 preBuildNotification.setPriority(NotificationCompat.PRIORITY_MIN);
@@ -306,7 +305,16 @@ public class CBWatcherService extends Service {
                 .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
+                .setSmallIcon(R.drawable.ic_stat_icon_colorful)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setColor(getResources().getColor(R.color.primary_light))
                 .addAction(R.drawable.ic_action_add, getString(R.string.action_add), pOpenEditorIntent);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            // 5.1 icon tmp fix
+            preBuildN.setSmallIcon(R.drawable.ic_stat_icon);
+        }
+
         if (isStarred) {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_starred_single_text));
@@ -315,14 +323,7 @@ public class CBWatcherService extends Service {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_single_text));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            preBuildN
-                    .setSmallIcon(R.drawable.icon)
-                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                    .setColor(getResources().getColor(R.color.primary_light));
-        } else {
-            preBuildN.setSmallIcon(R.drawable.icon_shadow);
-        }
+
         switch (notificationPriority) {
             case 0:
                 preBuildN.setPriority(NotificationCompat.PRIORITY_MIN);
@@ -368,7 +369,7 @@ public class CBWatcherService extends Service {
             String currentClip = clipObject.getText();
             clips = new ArrayList<>();
             clips.add(clipObject);
-            expandedView = new RemoteViews(this.context.getPackageName(), R.layout.notification_clip_list);
+            expandedView = new RemoteViews(this.context.getPackageName(), R.layout.notification_clip);
             expandedView.setTextViewText(R.id.current_clip, MyUtil.stringLengthCut(currentClip));
             //add pIntent for share
             Intent openShareIntent = new Intent(this.context, ClipObjectActionBridge.class)
@@ -475,7 +476,7 @@ public class CBWatcherService extends Service {
                                         +MyUtil.getFormatTimeWithSecond(context, clip.getDate())
                         )
                         .setContentText(MyUtil.stringLengthCut(clip.getText(), 1000))
-                        .setSmallIcon(R.drawable.icon)
+                        .setSmallIcon(R.drawable.ic_stat_icon_colorful)
                         .setGroup(NOTIFICATION_GROUP)
                         .addAction(R.drawable.ic_stat_icon, getString(R.string.app_name), pOpenMainIntent)
                         .build());
