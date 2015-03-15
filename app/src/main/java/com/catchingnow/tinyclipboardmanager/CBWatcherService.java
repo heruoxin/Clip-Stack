@@ -14,6 +14,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.CursorJoiner;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,11 +35,15 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
-    protected boolean isStarred = false;
+    private final static String NOTIFICATION_GROUP = "notification_group";
+    private Context mContext;
     private NotificationManagerCompat notificationManager;
     private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
+    boolean allowService;
+    boolean allowNotification;
+    protected boolean isStarred = false;
     private boolean onListened = false;
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
@@ -52,6 +58,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         Log.v(MyUtil.PACKAGE_NAME, "onCreate");
+        mContext = this;
         if (!onListened) {
             preference = PreferenceManager.getDefaultSharedPreferences(this);
             notificationManager = NotificationManagerCompat.from(this);
@@ -74,8 +81,12 @@ public class CBWatcherService extends Service {
 
             int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
             isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
-            notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
-            pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
+            if (myActivitiesOnForegroundMessage == -1) {
+                notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
+                allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
+                allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
+                pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
+            }
 
             if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
                 Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
@@ -108,7 +119,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onDestroy() {
         Log.v(MyUtil.PACKAGE_NAME, "onDes");
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
         onListened = false;
         super.onDestroy();
@@ -148,16 +159,15 @@ public class CBWatcherService extends Service {
     }
 
     private boolean checkNotificationPermission() {
-        boolean allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
-        boolean allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
         if (allowNotification && allowService) {
             return true;
         }
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         return false;
     }
 
     private void showNotification() {
+        int notificationID = 1;
 
         if (!checkNotificationPermission()) {
             return;
@@ -212,7 +222,9 @@ public class CBWatcherService extends Service {
                 .setContentTitle(getString(R.string.clip_notification_title, MyUtil.stringLengthCut(thisClips.get(0).getText()))) //title
                 .setContentIntent(resultPendingIntent)
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop);
+                .setAutoCancel(false)
+                .setGroup(NOTIFICATION_GROUP)
+                .setGroupSummary(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
@@ -246,23 +258,26 @@ public class CBWatcherService extends Service {
                 break;
         }
 
-        NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
+        NotificationClipListAdapter notificationClipListAdapter = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
 
         for (int i = 1; i < length; i++) {
-            bigView.addClips(thisClips.get(i));
+            notificationClipListAdapter.addClips(thisClips.get(i));
         }
 
         Notification n = preBuildNotification.build();
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-            n.bigContentView = bigView.build();
+            n.bigContentView = notificationClipListAdapter.build();
         }
         if (notificationPriority > 0) {
             n.icon = R.drawable.ic_stat_icon;
         }
 
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         notificationManager.notify(0, n);
+        for (Notification notification: notificationClipListAdapter.getWearNotifications()) {
+            notificationManager.notify(notificationID++, notification);
+        }
     }
 
     private void showSingleNotification() {
@@ -304,7 +319,7 @@ public class CBWatcherService extends Service {
                 .setContentIntent(pOpenMainIntent)
                 .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop)
+                .setAutoCancel(false)
                 .addAction(R.drawable.ic_action_add, getString(R.string.action_add), pOpenEditorIntent);
         if (isStarred) {
             preBuildN
@@ -339,7 +354,7 @@ public class CBWatcherService extends Service {
             n.icon = R.drawable.ic_stat_icon;
         }
 
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         notificationManager.notify(0, n);
     }
 
@@ -361,15 +376,17 @@ public class CBWatcherService extends Service {
     private class NotificationClipListAdapter {
 
         private int buttonNumber = 9999;
-
         private RemoteViews expandedView;
+        private List<ClipObject> clips;
         private Context context;
 
         public NotificationClipListAdapter(Context context, ClipObject clipObject) {
             this.context = context;
-            String currentClip = clipObject.getText().trim();
+            String currentClip = clipObject.getText();
+            clips = new ArrayList<>();
+            clips.add(clipObject);
             expandedView = new RemoteViews(this.context.getPackageName(), R.layout.notification_clip_list);
-            expandedView.setTextViewText(R.id.current_clip, currentClip);
+            expandedView.setTextViewText(R.id.current_clip, MyUtil.stringLengthCut(currentClip));
             //add pIntent for share
             Intent openShareIntent = new Intent(this.context, ClipObjectActionBridge.class)
                     .putExtra(Intent.EXTRA_TEXT, currentClip)
@@ -408,10 +425,7 @@ public class CBWatcherService extends Service {
         }
 
         public NotificationClipListAdapter addClips(ClipObject clipObject) {
-            //String s = clipObject.getText().trim();
-            //Log.v(MyUtil.PACKAGE_NAME,"ID "+id);
-            //Log.v(MyUtil.PACKAGE_NAME,s);
-            //add view
+
             RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {
                 theClipView.setTextViewText(R.id.clip_text, "★ " + MyUtil.stringLengthCut(clipObject.getText()));
@@ -438,6 +452,7 @@ public class CBWatcherService extends Service {
                 theClipView.setTextViewText(R.id.clip_text, "✍ " + getString(R.string.clip_notification_single_text));
                 theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
             } else {
+                clips.add(clipObject);
                 //add pIntent for copy
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
                         .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
@@ -452,6 +467,36 @@ public class CBWatcherService extends Service {
 
             expandedView.addView(R.id.main_view, theClipView);
             return this;
+        }
+
+        public List<Notification> getWearNotifications() {
+
+            List<Notification> notifications = new ArrayList<>();
+
+            for (ClipObject clip : clips) {
+                NotificationCompat.BigTextStyle wearPageStyle = new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(getString(R.string.app_name))
+                        .bigText(
+                                (clip.isStarred() ?
+                                        ""
+                                        :
+                                        "★ ")
+                                        +
+                                        MyUtil.stringLengthCut(clip.getText())
+                        );
+                notifications.add(new NotificationCompat.Builder(mContext)
+                        //.setStyle(wearPageStyle)
+                        .setContentTitle(clip.getDate().toString())
+                        .setContentText(MyUtil.stringLengthCut(clip.getText()))
+                        .setSmallIcon(R.drawable.icon)
+                        .setGroup(NOTIFICATION_GROUP)
+                        .build());
+            }
+            if (notifications.size() >= 4) {
+                return notifications.subList(0, 3);
+            }
+            return notifications;
+
         }
 
         public RemoteViews build() {
