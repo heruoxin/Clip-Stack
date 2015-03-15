@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -29,13 +27,9 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
     private Storage db;
     private List<ClipObject> clipObjects;
     private boolean mIsStarred;
-    private DateFormat dateFormat;
-    private DateFormat timeFormat;
 
     public AppWidgetRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
-        dateFormat = new SimpleDateFormat(mContext.getString(R.string.date_format));
-        timeFormat = new SimpleDateFormat(mContext.getString(R.string.time_format));
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         mIsStarred = intent.getBooleanExtra(AppWidget.WIDGET_IS_STARRED, false);
@@ -57,8 +51,8 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         ClipObject clip = clipObjects.get(position);
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.app_widget_card);
 
-        remoteViews.setTextViewText(R.id.widget_card_date, dateFormat.format(clip.getDate()));
-        remoteViews.setTextViewText(R.id.widget_card_time, timeFormat.format(clip.getDate()));
+        remoteViews.setTextViewText(R.id.widget_card_date, MyUtil.getFormatDate(mContext, clip.getDate()));
+        remoteViews.setTextViewText(R.id.widget_card_time, MyUtil.getFormatTime(mContext, clip.getDate()));
         remoteViews.setTextViewText(R.id.widget_card_text, MyUtil.stringLengthCut(clip.getText()));
         remoteViews.setImageViewResource(
                 R.id.widget_card_star,

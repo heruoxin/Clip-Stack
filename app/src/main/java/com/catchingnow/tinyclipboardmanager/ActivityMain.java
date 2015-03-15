@@ -37,7 +37,6 @@ import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -622,15 +621,11 @@ public class ActivityMain extends MyActionBarActivity {
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
-        public SimpleDateFormat sdfDate;
-        public SimpleDateFormat sdfTime;
         private boolean allowAnimate = true;
 
         public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
             this.context = context;
             this.clipObjectList = clipObjectList;
-            sdfDate = new SimpleDateFormat(context.getString(R.string.date_format));
-            sdfTime = new SimpleDateFormat(context.getString(R.string.time_format));
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             new Handler().postDelayed(new Runnable() {
@@ -649,8 +644,8 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
-            clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
-            clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
+            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
+            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             clipCardViewHolder.vStarred.setImageResource(
                     clipObject.isStarred() ?

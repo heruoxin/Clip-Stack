@@ -14,7 +14,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.CursorJoiner;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -42,10 +41,9 @@ public class CBWatcherService extends Service {
     private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
-    boolean allowService;
-    boolean allowNotification;
+    boolean allowService = true;
+    boolean allowNotification = true;
     protected boolean isStarred = false;
-    private boolean onListened = false;
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
@@ -60,54 +58,48 @@ public class CBWatcherService extends Service {
     public void onCreate() {
         Log.v(MyUtil.PACKAGE_NAME, "onCreate");
         mContext = this;
-        if (!onListened) {
-            preference = PreferenceManager.getDefaultSharedPreferences(this);
-            notificationManager = NotificationManagerCompat.from(this);
-            db = Storage.getInstance(this.getBaseContext());
-            clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            clipboardManager.addPrimaryClipChangedListener(listener);
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
-            } else {
-                bindJobScheduler();
-            }
-            onListened = true;
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        readPreference();
+        notificationManager = NotificationManagerCompat.from(this);
+        db = Storage.getInstance(this.getBaseContext());
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        clipboardManager.addPrimaryClipChangedListener(listener);
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
+        } else {
+            bindJobScheduler();
         }
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
+        int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
+        if (myActivitiesOnForegroundMessage == -1) {
+            readPreference();
+        }
+        isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
 
-            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
-            isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
-            if (myActivitiesOnForegroundMessage == -1) {
-                notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
-                allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
-                allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
-                pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
-            }
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
-                showNotification();
-            }
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand changeStarStatues");
-                isStarred = !isStarred;
-                showNotification();
-            }
-
-            if (!preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true)) {
-                if (isMyActivitiesOnForeground <= 0) {
-                    stopSelf();
-                    isMyActivitiesOnForeground = 0;
-                    return Service.START_NOT_STICKY;
-                }
+        if (!allowService) {
+            if (isMyActivitiesOnForeground <= 0) {
+                stopSelf();
+                isMyActivitiesOnForeground = 0;
+                return Service.START_NOT_STICKY;
             }
         }
+
+        if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
+            Log.v(MyUtil.PACKAGE_NAME, "onStartCommand changeStarStatues");
+            isStarred = !isStarred;
+            showNotification();
+            return START_STICKY;
+        }
+        if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
+            Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
+            showNotification();
+            return START_STICKY;
+        }
+
         return START_STICKY;
     }
 
@@ -122,7 +114,6 @@ public class CBWatcherService extends Service {
         Log.v(MyUtil.PACKAGE_NAME, "onDes");
         notificationManager.cancelAll();
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
-        onListened = false;
         super.onDestroy();
     }
 
@@ -138,6 +129,13 @@ public class CBWatcherService extends Service {
                 .build();
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         jobScheduler.schedule(job);
+    }
+
+    private void readPreference() {
+        allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
+        allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
+        notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
+        pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
     }
 
     private void performClipboardCheck() {
@@ -174,9 +172,6 @@ public class CBWatcherService extends Service {
             return;
         }
 
-        if (db == null) {
-            db = Storage.getInstance(this.getBaseContext());
-        }
         List<ClipObject> thisClips;
         if (isStarred) {
             thisClips = db.getStarredClipHistory(NUMBER_OF_CLIPS);
@@ -208,24 +203,24 @@ public class CBWatcherService extends Service {
 
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
-        Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
+        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent resultPendingIntent =
+        PendingIntent pOpenMainIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        resultIntent,
+                        openMainIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title, MyUtil.stringLengthCut(thisClips.get(0).getText()))) //title
-                .setContentIntent(resultPendingIntent)
+                .setContentIntent(pOpenMainIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
                 .setGroup(NOTIFICATION_GROUP)
                 .setGroupSummary(true);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
@@ -276,7 +271,7 @@ public class CBWatcherService extends Service {
 
         notificationManager.cancelAll();
         notificationManager.notify(0, n);
-        for (Notification notification: notificationClipListAdapter.getWearNotifications()) {
+        for (Notification notification : notificationClipListAdapter.getWearNotifications()) {
             notificationManager.notify(notificationID++, notification);
         }
     }
@@ -487,7 +482,10 @@ public class CBWatcherService extends Service {
                         );
                 notifications.add(new NotificationCompat.Builder(mContext)
                         //.setStyle(wearPageStyle)
-                        .setContentTitle(clip.getDate().toString())
+                        .setContentTitle(
+                                MyUtil.getFormatDate(context, clip.getDate())
+                                        +MyUtil.getFormatTimeWithSecond(context, clip.getDate())
+                        )
                         .setContentText(MyUtil.stringLengthCut(clip.getText()))
                         .setSmallIcon(R.drawable.icon)
                         .setGroup(NOTIFICATION_GROUP)
