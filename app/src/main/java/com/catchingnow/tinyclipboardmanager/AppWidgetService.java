@@ -59,7 +59,7 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
 
         remoteViews.setTextViewText(R.id.widget_card_date, dateFormat.format(clip.getDate()));
         remoteViews.setTextViewText(R.id.widget_card_time, timeFormat.format(clip.getDate()));
-        remoteViews.setTextViewText(R.id.widget_card_text, MyUtil.stringLengthCut(clip.getText()).trim());
+        remoteViews.setTextViewText(R.id.widget_card_text, MyUtil.stringLengthCut(clip.getText()));
         remoteViews.setImageViewResource(
                 R.id.widget_card_star,
                 clip.isStarred() ?

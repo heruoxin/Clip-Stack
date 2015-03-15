@@ -267,10 +267,6 @@ public class CBWatcherService extends Service {
 
     private void showSingleNotification() {
 
-        if (!checkNotificationPermission()) {
-            return;
-        }
-
         String currentClip = "Clipboard is empty.";
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
