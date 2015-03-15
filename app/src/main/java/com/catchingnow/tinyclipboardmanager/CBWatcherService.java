@@ -2,7 +2,6 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.job.JobInfo;
@@ -43,7 +42,7 @@ public class CBWatcherService extends Service {
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
-    private int pIntentId = -1;
+    private int pIntentId = -999;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -141,7 +140,9 @@ public class CBWatcherService extends Service {
             return;
         }
         if (clipString.trim().isEmpty()) return;
-        if (clipString.equals(db.getClipHistory().get(0).getText())) return;
+        if (db.getClipHistory().size() > 0) {
+            if (clipString.equals(db.getClipHistory().get(0).getText())) return;
+        }
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
         db.modifyClip(null, clipString, isImportant);
     }
@@ -277,26 +278,38 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    currentClip = MyUtil.stringLengthCut(thisClip.toString());
+                    if (!thisClip.toString().isEmpty()) {
+                        currentClip = MyUtil.stringLengthCut(thisClip.toString());
+                    }
                 }
             }
         }
 
-        Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
+        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent resultPendingIntent =
+        PendingIntent pOpenMainIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        resultIntent,
+                        openMainIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        Intent openEditorIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
+        PendingIntent pOpenEditorIntent =
+                PendingIntent.getService(
+                        this,
+                        pIntentId--,
+                        openEditorIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
         NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
-                .setContentIntent(resultPendingIntent)
+                .setContentIntent(pOpenMainIntent)
                 .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop);
+                .setAutoCancel(!pinOnTop)
+                .addAction(R.drawable.ic_action_add, getString(R.string.action_add), pOpenEditorIntent);
         if (isStarred) {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_starred_single_text));
