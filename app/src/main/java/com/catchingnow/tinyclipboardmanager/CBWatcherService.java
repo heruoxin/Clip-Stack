@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -492,9 +493,11 @@ public class CBWatcherService extends Service {
                         .setGroup(NOTIFICATION_GROUP)
                         .build());
             }
-            if (notifications.size() >= 4) {
-                return notifications.subList(0, 3);
+            int size = notifications.size();
+            if (size >= 4) {
+                notifications = notifications.subList(0, 3);
             }
+            Collections.reverse(notifications);
             return notifications;
 
         }
