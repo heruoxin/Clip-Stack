@@ -34,17 +34,17 @@ public class MyUtil {
     }
 
     public static String getFormatDate(Context context, Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.date_format));
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.date_format));
         return dateFormat.format(date);
     }
 
     public static String getFormatTime(Context context, Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format));
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format));
         return dateFormat.format(date);
     }
 
     public static String getFormatTimeWithSecond(Context context, Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format_with_second));
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format_with_second));
         return dateFormat.format(date);
     }
 

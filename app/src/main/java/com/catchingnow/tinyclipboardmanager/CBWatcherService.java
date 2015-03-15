@@ -75,10 +75,8 @@ public class CBWatcherService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
-        if (myActivitiesOnForegroundMessage == -1) {
-            readPreference();
-        }
         isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+        readPreference();
 
         if (!allowService) {
             if (isMyActivitiesOnForeground <= 0) {
@@ -213,12 +211,18 @@ public class CBWatcherService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
+        NotificationCompat.Action wearOpenMainAction =
+                new NotificationCompat.Action.Builder(R.drawable.ic_stat_icon,
+                        getString(R.string.app_name), pOpenMainIntent)
+                        .build();
+
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title, MyUtil.stringLengthCut(thisClips.get(0).getText()))) //title
                 .setContentIntent(pOpenMainIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
                 .setGroup(NOTIFICATION_GROUP)
+                .extend(new NotificationCompat.WearableExtender().addAction(wearOpenMainAction))
                 .setGroupSummary(true);
 
 
@@ -265,9 +269,7 @@ public class CBWatcherService extends Service {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             n.bigContentView = notificationClipListAdapter.build();
         }
-        if (notificationPriority > 0) {
-            n.icon = R.drawable.ic_stat_icon;
-        }
+        n.icon = R.drawable.ic_stat_icon;
 
         notificationManager.cancelAll();
         notificationManager.notify(0, n);
@@ -346,9 +348,7 @@ public class CBWatcherService extends Service {
         }
 
         Notification n = preBuildN.build();
-        if (notificationPriority > 0) {
-            n.icon = R.drawable.ic_stat_icon;
-        }
+        n.icon = R.drawable.ic_stat_icon;
 
         notificationManager.cancelAll();
         notificationManager.notify(0, n);
@@ -469,32 +469,31 @@ public class CBWatcherService extends Service {
 
             List<Notification> notifications = new ArrayList<>();
 
+            Intent openMainIntent = new Intent(context, ClipObjectActionBridge.class)
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+            PendingIntent pOpenMainIntent =
+                    PendingIntent.getService(
+                            context,
+                            pIntentId--,
+                            openMainIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
             for (ClipObject clip : clips) {
-                NotificationCompat.BigTextStyle wearPageStyle = new NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(getString(R.string.app_name))
-                        .bigText(
-                                (clip.isStarred() ?
-                                        ""
-                                        :
-                                        "★ ")
-                                        +
-                                        MyUtil.stringLengthCut(clip.getText())
-                        );
                 notifications.add(new NotificationCompat.Builder(mContext)
                         //.setStyle(wearPageStyle)
                         .setContentTitle(
                                 MyUtil.getFormatDate(context, clip.getDate())
+                                        +"  "
                                         +MyUtil.getFormatTimeWithSecond(context, clip.getDate())
                         )
-                        .setContentText(MyUtil.stringLengthCut(clip.getText()))
+                        .setContentText(MyUtil.stringLengthCut(clip.getText(), 1000))
                         .setSmallIcon(R.drawable.icon)
                         .setGroup(NOTIFICATION_GROUP)
+                        .addAction(R.drawable.ic_stat_icon, getString(R.string.app_name), pOpenMainIntent)
                         .build());
             }
             int size = notifications.size();
-            if (size >= 4) {
-                notifications = notifications.subList(0, 3);
-            }
             Collections.reverse(notifications);
             return notifications;
 
