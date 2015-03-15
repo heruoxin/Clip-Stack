@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -34,7 +35,7 @@ public class CBWatcherService extends Service {
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
     protected boolean isStarred = false;
-    private NotificationManager notificationManager;
+    private NotificationManagerCompat notificationManager;
     private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
@@ -54,7 +55,7 @@ public class CBWatcherService extends Service {
         Log.v(MyUtil.PACKAGE_NAME, "onCreate");
         if (!onListened) {
             preference = PreferenceManager.getDefaultSharedPreferences(this);
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager = NotificationManagerCompat.from(this);
             db = Storage.getInstance(this.getBaseContext());
             clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             clipboardManager.addPrimaryClipChangedListener(listener);
