@@ -1,10 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.content.Intent;
 import android.os.Build;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -97,6 +94,6 @@ public class MyActionBarActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        CBWatcherService.startCBService(this, 1);
+        CBWatcherService.startCBService(this,true , 1);
     }
 }

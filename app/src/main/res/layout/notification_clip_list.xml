@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -11,7 +10,7 @@
         android:layout_margin="10dp"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:src="@drawable/icon"/>
+        android:src="@drawable/icon" />
 
 
     <ImageView
@@ -21,7 +20,7 @@
         android:layout_alignLeft="@+id/icon"
         android:layout_marginTop="-42dp"
         android:layout_height="42dp"
-        android:src="@drawable/ic_action_star_outline_grey600"/>
+        android:src="@drawable/ic_action_star_outline_grey600" />
 
     <LinearLayout
         android:id="@+id/main_view"
@@ -50,7 +49,7 @@
                 style="@android:style/TextAppearance.StatusBar.EventContent.Title"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <ImageButton
                 android:id="@+id/clip_share_button"
@@ -61,14 +60,22 @@
                 android:layout_height="36dp"
                 android:layout_gravity="end"
                 android:scaleType="fitCenter"
-                android:contentDescription="@string/clip_notification_share_button"/>
+                android:contentDescription="@string/clip_notification_share_button" />
 
         </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#B6B6B6"/>
+            android:background="#B6B6B6" />
+
+        <LinearLayout
+            android:id="@+id/notification_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>
