@@ -34,6 +34,7 @@ public class Storage {
     private Context context;
     private ClipboardManager clipboardManager;
     private List<ClipObject> clipsInMemory;
+    private Date latsUpdate = new Date();
     private boolean isClipsInMemoryChanged = true;
 
     private Storage(Context context) {
@@ -167,6 +168,7 @@ public class Storage {
 
     public void deleteAllClipHistory() {
         //for ActivityMain Clear All
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         open();
         int row_id = db.delete(
@@ -183,6 +185,7 @@ public class Storage {
 
     private boolean deleteClipHistoryBefore(float days) {
         //for bindJobScheduler
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
@@ -270,6 +273,7 @@ public class Storage {
         deleteClipHistory(clipObject);
         addClipHistory(clipObject);
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         refreshAllTypeOfList(false, null);
     }
@@ -280,6 +284,7 @@ public class Storage {
             addClipHistory(clipObject);
         }
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         refreshAllTypeOfList(true, null);
     }
@@ -330,6 +335,7 @@ public class Storage {
             ));
         }
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
 
         refreshAllTypeOfList(!newClip.isEmpty(), oldClip);
@@ -400,6 +406,10 @@ public class Storage {
             }
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public Date getLatsUpdateDate() {
+        return latsUpdate;
     }
 
     public class StorageHelper extends SQLiteOpenHelper {

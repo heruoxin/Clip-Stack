@@ -38,6 +38,7 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,6 +53,7 @@ public class ActivityMain extends MyActionBarActivity {
     private MenuItem searchItem;
     private MenuItem starItem;
     private Storage db;
+    private Date lastStorageUpdate = null;
     private List<ClipObject> clips;
     private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
@@ -182,6 +184,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }
@@ -190,6 +193,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }
@@ -200,6 +204,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchItem.collapseActionView();
                 queryText = null;
                 initView();
+                lastStorageUpdate = null;
                 setView();
                 return false;
             }
@@ -338,6 +343,7 @@ public class ActivityMain extends MyActionBarActivity {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
         setStarredIcon();
+        lastStorageUpdate = null;
         setView();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -513,6 +519,10 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void setView() {
+
+        if (db.getLatsUpdateDate() == lastStorageUpdate) return;
+        lastStorageUpdate = db.getLatsUpdateDate();
+
         //get clips
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
