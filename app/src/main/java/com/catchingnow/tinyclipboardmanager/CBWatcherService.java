@@ -47,7 +47,7 @@ public class CBWatcherService extends Service {
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
-    private int pIntentId = -999;
+    private int pIntentId = 999;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();

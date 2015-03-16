@@ -102,6 +102,14 @@
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/switch_all_items"
+                android:checked="true"
+                android:textSize="@dimen/abc_text_size_body_1_material"
+                android:id="@+id/switch_only_starred_items" />
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/switch_reverse_sort"
                 android:textSize="@dimen/abc_text_size_body_1_material"
                 android:id="@+id/switch_reverse_sort" />

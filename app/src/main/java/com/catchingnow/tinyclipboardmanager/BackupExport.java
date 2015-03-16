@@ -46,7 +46,7 @@ public class BackupExport {
     }
 
 
-    public static boolean makeExport(Context context, Date startDate, Date endDate, boolean reverse) {
+    public static boolean makeExport(Context context, Date startDate, Date endDate, boolean reverse, boolean allItems) {
         Log.v(MyUtil.PACKAGE_NAME, "EXPORT:"+startDate.toString()+endDate.toString());
         if (startDate.after(endDate)) {
             Date tmpDate = startDate;
@@ -56,7 +56,12 @@ public class BackupExport {
         if (!isExternalStorageWritable()) {
             return false;
         }
-        List<ClipObject> clipObjects = Storage.getInstance(context).getClipHistory();
+        List<ClipObject> clipObjects;
+        if (allItems) {
+            clipObjects = Storage.getInstance(context).getClipHistory();
+        } else {
+            clipObjects = Storage.getInstance(context).getStarredClipHistory();
+        }
 
         List<String> backupStringList = new ArrayList<>();
         for (ClipObject clipObject : clipObjects) { //delete out of date clips

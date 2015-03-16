@@ -19,6 +19,7 @@ import java.util.List;
 
 public class ActivityBackupNew extends MyActionBarActivity {
     private boolean isReverseSort = false;
+    private boolean allItems = true;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
     private DatePicker datePickerFrom;
@@ -78,6 +79,7 @@ public class ActivityBackupNew extends MyActionBarActivity {
 
         Button buttonExport = (Button) findViewById(R.id.export_button);
         Switch switchReverseSort = (Switch) findViewById(R.id.switch_reverse_sort);
+        final Switch switchOnlyStarredItems = (Switch) findViewById(R.id.switch_only_starred_items);
         datePickerFrom = (DatePicker) findViewById(R.id.date_picker_from);
         datePickerTo = (DatePicker) findViewById(R.id.date_picker_to);
         buttonExport.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +92,18 @@ public class ActivityBackupNew extends MyActionBarActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isReverseSort = isChecked;
+            }
+        });
+        switchOnlyStarredItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                allItems = isChecked;
+                switchOnlyStarredItems.setText(
+                        allItems ?
+                                getString(R.string.switch_all_items)
+                                :
+                                getString(R.string.switch_only_starred_items)
+                );
             }
         });
         datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
@@ -124,7 +138,8 @@ public class ActivityBackupNew extends MyActionBarActivity {
                 this,
                 new Date(datePickerFrom.getYear() - 1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
                 new Date(datePickerTo.getYear() - 1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth() + 1),
-                isReverseSort
+                isReverseSort,
+                allItems
         )) {
             finish();
         }
