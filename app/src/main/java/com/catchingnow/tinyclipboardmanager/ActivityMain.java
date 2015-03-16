@@ -20,9 +20,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -426,7 +428,7 @@ public class ActivityMain extends MyActionBarActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
 
-        SwipeableRecyclerViewTouchListener touchListener =
+        SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
                         mRecList,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -513,9 +515,23 @@ public class ActivityMain extends MyActionBarActivity {
                             });
                 }
             }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState){
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return;
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        getSupportActionBar().setElevation(16);
+                        break;
+                    default:
+                        getSupportActionBar().setElevation(22);
+                        break;
+                }
+            }
+
         };
         mRecList.setOnScrollListener(scrollListener);
-        mRecList.addOnItemTouchListener(touchListener);
+        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
     }
 
     private void setView() {
