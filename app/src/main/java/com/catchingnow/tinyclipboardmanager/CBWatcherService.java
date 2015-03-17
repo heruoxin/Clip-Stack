@@ -143,6 +143,7 @@ public class CBWatcherService extends Service {
             return;
         }
         if (clipString.trim().isEmpty()) return;
+        if (clipString.equals("null")) return;
         if (db.getClipHistory().size() > 0) {
             if (clipString.equals(db.getClipHistory().get(0).getText())) return;
         }
@@ -260,8 +261,10 @@ public class CBWatcherService extends Service {
         n.icon = R.drawable.ic_stat_icon;
 
         notificationManager.notify(0, n);
-        for (Notification notification : notificationClipListAdapter.getWearNotifications()) {
-            notificationManager.notify(notificationID++, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            for (Notification notification : notificationClipListAdapter.getWearNotifications()) {
+                notificationManager.notify(notificationID++, notification);
+            }
         }
     }
 
@@ -472,10 +475,10 @@ public class CBWatcherService extends Service {
                         //.setStyle(wearPageStyle)
                         .setContentTitle(
                                 MyUtil.getFormatDate(context, clip.getDate())
-                                        +"  "
-                                        +MyUtil.getFormatTimeWithSecond(context, clip.getDate())
+                                        +" "
+                                        +MyUtil.getFormatTime(context, clip.getDate())
                         )
-                        .setContentText(MyUtil.stringLengthCut(clip.getText(), 1000))
+                        .setContentText(MyUtil.stringLengthCut(clip.getText(), 300))
                         .setSmallIcon(R.drawable.ic_stat_icon_colorful)
                         .setGroup(NOTIFICATION_GROUP)
                         .addAction(R.drawable.ic_stat_icon, getString(R.string.app_name), pOpenMainIntent)

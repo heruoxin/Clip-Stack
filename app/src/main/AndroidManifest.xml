@@ -73,7 +73,7 @@
             android:name=".ActivityEditor"
             android:documentLaunchMode="intoExisting"
             android:label="@string/title_activity_activity_get_share_text"
-            android:maxRecents="1" >
+            android:maxRecents="2" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
