@@ -37,10 +37,10 @@ public class ActivityBackup extends MyActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_backup);
         super.onCreate(savedInstanceState);
         context = this;
         activity = this;
-        setContentView(R.layout.activity_backup);
         newBackupView = findViewById(R.id.new_backup);
         backupView = (LinearLayout) findViewById(R.id.backup_list);
         Button buttonNewBackup = (Button) newBackupView;

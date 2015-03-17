@@ -75,6 +75,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.icon_shadow);
@@ -83,7 +84,6 @@ public class ActivityMain extends MyActionBarActivity {
         db = Storage.getInstance(context);
         queryText = "";
 
-        setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         initView();
