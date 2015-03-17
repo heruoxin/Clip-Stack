@@ -17,12 +17,13 @@ import android.widget.Toast;
  * a service on a separate handler thread.
  */
 public class ClipObjectActionBridge extends IntentService {
-    public final static int ACTION_COPY  = 1;
+    public final static int ACTION_COPY = 1;
     public final static int ACTION_SHARE = 2;
-    public final static int ACTION_EDIT  = 3;
-    public final static int ACTION_OPEN_MAIN  = 4;
-    public final static int ACTION_REFRESH_WIDGET = 5;
-    public final static int ACTION_CHANGE_WIDGET_STAR = 6;
+    public final static int ACTION_EDIT = 3;
+    public final static int ACTION_STAR = 4;
+    public final static int ACTION_OPEN_MAIN  = 5;
+    public final static int ACTION_REFRESH_WIDGET = 6;
+    public final static int ACTION_CHANGE_WIDGET_STAR = 7;
     public final static String ACTION_CODE = "com.catchingnow.tinyclipboardmanager.actionCode";
     public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
 
@@ -61,6 +62,9 @@ public class ClipObjectActionBridge extends IntentService {
                 return;
             case ACTION_EDIT:
                 editText(clips);
+                return;
+            case ACTION_STAR:
+                starText(clips);
                 return;
             case ACTION_OPEN_MAIN:
                 openMainActivity();
@@ -115,6 +119,11 @@ public class ClipObjectActionBridge extends IntentService {
                         )
                 .putExtra(Intent.EXTRA_TEXT, clips);
         startActivity(i);
+    }
+
+    private void starText(final String clips) {
+        Storage db = Storage.getInstance(this);
+        db.changeClipStarStatus(clips);
     }
 
     private void openMainActivity() {

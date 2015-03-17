@@ -20,11 +20,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -691,8 +689,8 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clipObject.setStarred(!clipObject.isStarred());
-                    db.starredClip(clipObject);
+                    db.changeClipStarStatus(clipObject);
+                    //clipObject.setStarred(!clipObject.isStarred());
                     if (clipObject.isStarred()) {
                         clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                     } else {

@@ -95,10 +95,10 @@ public class AppWidget extends AppWidgetProvider {
         views.setEmptyView(R.id.widget_main_view, R.layout.app_widget_card_empty);
         views.setPendingIntentTemplate(
                 R.id.widget_main_view,
-                PendingIntent.getActivity(
+                PendingIntent.getService(
                         context,
                         8,
-                        new Intent(context, ActivityEditor.class),
+                        new Intent(context, ClipObjectActionBridge.class),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ));
 

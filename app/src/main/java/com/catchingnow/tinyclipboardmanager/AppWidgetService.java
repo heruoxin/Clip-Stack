@@ -61,16 +61,26 @@ class AppWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
                         :
                         R.drawable.ic_action_star_outline_grey600
                 );
-        Intent fillInIntent = new Intent();
-        final Bundle extras = new Bundle();
-        extras.putBoolean(ClipObjectActionBridge.STATUE_IS_STARRED, clip.isStarred());
-        extras.putString(Intent.EXTRA_TEXT, clip.getText());
-        fillInIntent.putExtras(extras);
+        Intent fillInEditorIntent = new Intent();
+        final Bundle editorExtras = new Bundle();
+        editorExtras.putInt(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
+        editorExtras.putBoolean(ClipObjectActionBridge.STATUE_IS_STARRED, clip.isStarred());
+        editorExtras.putString(Intent.EXTRA_TEXT, clip.getText());
+        fillInEditorIntent.putExtras(editorExtras);
         remoteViews.setOnClickFillInIntent(
-                R.id.widget_card,
-                fillInIntent
+                R.id.widget_card_click_edit,
+                fillInEditorIntent
         );
-
+        Intent fillInStarIntent = new Intent();
+        final Bundle starExtras = new Bundle();
+        starExtras.putInt(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_STAR);
+        starExtras.putBoolean(ClipObjectActionBridge.STATUE_IS_STARRED, clip.isStarred());
+        starExtras.putString(Intent.EXTRA_TEXT, clip.getText());
+        fillInStarIntent.putExtras(starExtras);
+        remoteViews.setOnClickFillInIntent(
+                R.id.widget_card_click_star,
+                fillInStarIntent
+        );
         return remoteViews;
     }
 

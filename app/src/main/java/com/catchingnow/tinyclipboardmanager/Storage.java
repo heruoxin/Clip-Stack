@@ -268,14 +268,19 @@ public class Storage {
         return false;
     }
 
-    public void starredClip(ClipObject clipObject) {
+    public void changeClipStarStatus(String clip) {
+        changeClipStarStatus(getClipObjectFromString(clip));
+    }
+
+    public ClipObject changeClipStarStatus(ClipObject clipObject) {
         open();
         deleteClipHistory(clipObject);
-        addClipHistory(clipObject);
+        addClipHistory(clipObject.setStarred(!clipObject.isStarred()));
         close();
         latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         refreshAllTypeOfList(false, null);
+        return clipObject;
     }
 
     public void importClips(ArrayList<ClipObject> clipObjects) {
@@ -306,7 +311,7 @@ public class Storage {
 //            if (isImportant !=0) {
 //                ClipObject oldClipObject = getClipObjectFromString(oldClip);
 //                oldClipObject.setStarred((isImportant == 1));
-//                starredClip(oldClipObject);
+//                changeClipStarStatus(oldClipObject);
 //            }
 //            return;
 //        }
