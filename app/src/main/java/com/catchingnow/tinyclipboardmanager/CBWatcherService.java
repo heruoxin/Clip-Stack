@@ -460,6 +460,14 @@ public class CBWatcherService extends Service {
 
             List<Notification> notifications = new ArrayList<>();
 
+            Intent openStarIntent = new Intent(this.context, CBWatcherService.class)
+                    .putExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, true);
+            PendingIntent pOpenStarIntent = PendingIntent.getService(
+                    this.context,
+                    buttonNumber++,
+                    openStarIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
             Intent openMainIntent = new Intent(context, ClipObjectActionBridge.class)
                     .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
             PendingIntent pOpenMainIntent =
@@ -475,12 +483,23 @@ public class CBWatcherService extends Service {
                         //.setStyle(wearPageStyle)
                         .setContentTitle(
                                 MyUtil.getFormatDate(context, clip.getDate())
-                                        +" "
-                                        +MyUtil.getFormatTime(context, clip.getDate())
+                                        + " "
+                                        + MyUtil.getFormatTime(context, clip.getDate())
                         )
                         .setContentText(MyUtil.stringLengthCut(clip.getText(), 300))
                         .setSmallIcon(R.drawable.ic_stat_icon_colorful)
                         .setGroup(NOTIFICATION_GROUP)
+                        .addAction(
+                                isStarred ?
+                                        R.drawable.ic_action_star_outline_white
+                                        :
+                                        R.drawable.ic_action_star_white,
+                                isStarred ?
+                                        getString(R.string.switch_all_items)
+                                        :
+                                        getString(R.string.switch_only_starred_items),
+                                pOpenStarIntent
+                        )
                         .addAction(R.drawable.ic_stat_icon, getString(R.string.app_name), pOpenMainIntent)
                         .build());
             }
