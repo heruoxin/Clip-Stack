@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -8,20 +7,24 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_margin="10dp"
+        android:src="@drawable/icon_notification"
+        android:background="@drawable/background_default_ripple"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
         android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:src="@drawable/icon"/>
+        android:layout_height="42dp" />
 
 
     <ImageView
         android:id="@+id/star"
         android:layout_width="42dp"
+        android:background="@drawable/background_default_ripple"
         android:layout_below="@+id/main_view"
         android:layout_alignLeft="@+id/icon"
         android:layout_marginTop="-42dp"
         android:layout_height="42dp"
-        android:src="@drawable/ic_action_star_outline_grey600"/>
+        android:src="@drawable/ic_action_star_outline_grey600" />
 
     <LinearLayout
         android:id="@+id/main_view"
@@ -41,34 +44,44 @@
 
             <TextView
                 android:id="@+id/current_clip"
-                android:layout_marginLeft="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:textSize="16sp"
                 android:text="Title test test"
                 android:layout_gravity="center"
                 android:lines="1"
                 android:ellipsize="end"
-                style="@android:style/TextAppearance.StatusBar.EventContent.Title"
+                style="@android:style/TextAppearance.Material.Notification.Title"
+                android:background="@drawable/background_default_ripple_with_mask"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <ImageButton
                 android:id="@+id/clip_share_button"
-                android:background="#00000000"
+                android:background="@drawable/background_default_ripple_with_mask"
                 android:padding="2dp"
                 android:src="@drawable/ic_notification_action_share"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="end"
                 android:scaleType="fitCenter"
-                android:contentDescription="@string/clip_notification_share_button"/>
+                android:contentDescription="@string/clip_notification_share_button" />
 
         </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#B6B6B6"/>
+            android:background="#B6B6B6" />
 
+        <LinearLayout
+            android:id="@+id/notification_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

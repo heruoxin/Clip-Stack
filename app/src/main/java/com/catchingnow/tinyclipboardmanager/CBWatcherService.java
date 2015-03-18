@@ -2,7 +2,6 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.job.JobInfo;
@@ -19,10 +18,13 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -30,19 +32,22 @@ public class CBWatcherService extends Service {
 
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
-    public final static String INTENT_EXTRA_CLEAN_UP_SQLITE = "com.catchingnow.tinyclipboardmanager.EXTRA.CLEAN_UP_SQLITE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
-    protected boolean isStarred = false;
-    private NotificationManager notificationManager;
+    private final static String NOTIFICATION_GROUP = "notification_group";
+    private Context mContext;
+    private NotificationManagerCompat notificationManager;
+    private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
-    private boolean onListened = false;
+    boolean allowService = true;
+    boolean allowNotification = true;
+    protected boolean isStarred = false;
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
-    private int pIntentId = -1;
+    private int pIntentId = 999;
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -51,71 +56,60 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
-        Log.v(MyUtil.PACKAGE_NAME, "onCreate");
-        if (!onListened) {
-            preference = PreferenceManager.getDefaultSharedPreferences(this);
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            db = Storage.getInstance(this.getBaseContext());
-            ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
-            } else {
-                bindJobScheduler();
-            }
-            onListened = true;
+        mContext = this;
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        readPreference();
+        notificationManager = NotificationManagerCompat.from(this);
+        db = Storage.getInstance(this.getBaseContext());
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        clipboardManager.addPrimaryClipChangedListener(listener);
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Log.w(MyUtil.PACKAGE_NAME, "Not support JobScheduler");
+        } else {
+            bindJobScheduler();
         }
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(MyUtil.PACKAGE_NAME, "onStartCommand");
-        if (intent != null) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
+        isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
+        readPreference();
 
-            int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
-            isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
-            notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
-            pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand cleanUpSqlite");
-                cleanUpSqlite();
-            }
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand showNotification");
-                showNotification();
-            }
-
-            if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
-                Log.v(MyUtil.PACKAGE_NAME, "onStartCommand changeStarStatues");
-                isStarred = !isStarred;
-                showNotification();
-            }
-
-            if (!preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true)) {
-                if (isMyActivitiesOnForeground <= 0) {
-                    stopSelf();
-                    isMyActivitiesOnForeground = 0;
-                    return Service.START_NOT_STICKY;
-                }
+        if (!allowService) {
+            if (isMyActivitiesOnForeground <= 0) {
+                stopSelf();
+                isMyActivitiesOnForeground = 0;
+                return Service.START_NOT_STICKY;
             }
         }
+
+        if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
+            isStarred = !isStarred;
+            showNotification();
+            return START_STICKY;
+        }
+        if (intent.getBooleanExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, false)) {
+            showNotification();
+            return START_STICKY;
+        }
+
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.v(MyUtil.PACKAGE_NAME, "onBind");
         return null;
     }
 
     @Override
     public void onDestroy() {
-        Log.v(MyUtil.PACKAGE_NAME, "onDes");
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
-        onListened = false;
         super.onDestroy();
     }
 
@@ -124,6 +118,8 @@ public class CBWatcherService extends Service {
         // JobScheduler for auto clean sqlite
         JobInfo job = new JobInfo.Builder(JOB_ID, new ComponentName(this, SyncJobService.class))
                 .setRequiresCharging(true)
+                .setRequiresDeviceIdle(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
                 .setPeriodic(480000)
                 .setPersisted(true)
                 .build();
@@ -131,58 +127,51 @@ public class CBWatcherService extends Service {
         jobScheduler.schedule(job);
     }
 
+    private void readPreference() {
+        allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
+        allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
+        notificationPriority = Integer.parseInt(preference.getString(ActivitySetting.PREF_NOTIFICATION_PRIORITY, "0"));
+        pinOnTop = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_PIN, false);
+    }
+
     private void performClipboardCheck() {
-        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (!cb.hasPrimaryClip()) return;
+        Log.v(MyUtil.PACKAGE_NAME, "performClipboardCheck");
+        if (!clipboardManager.hasPrimaryClip()) return;
         String clipString;
         try {
             //Don't use CharSequence .toString()!
-            CharSequence charSequence = cb.getPrimaryClip().getItemAt(0).getText();
+            CharSequence charSequence = clipboardManager.getPrimaryClip().getItemAt(0).getText();
             clipString = String.valueOf(charSequence);
         } catch (Error ignored) {
             return;
         }
         if (clipString.trim().isEmpty()) return;
+        if (clipString.equals("null")) return;
+        if (db.getClipHistory().size() > 0) {
+            if (clipString.equals(db.getClipHistory().get(0).getText())) return;
+        }
         int isImportant = db.isClipObjectStarred(clipString) ? 1 : 0;
-        if (isMyActivitiesOnForeground <= 0) {
-            db.modifyClip(null, clipString, Storage.MAIN_ACTIVITY_VIEW, isImportant);
-        } else {
-            db.modifyClip(null, clipString, 0, isImportant);
-        }
-    }
-
-    private void cleanUpSqlite() {
-        float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
-        Log.v(MyUtil.PACKAGE_NAME,
-                "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
-        if (db == null) {
-            db = Storage.getInstance(this.getBaseContext());
-        }
-        db.deleteClipHistoryBefore(days);
+        db.modifyClip(null, clipString, isImportant);
     }
 
     private boolean checkNotificationPermission() {
-        boolean allowNotification = preference.getBoolean(ActivitySetting.PREF_NOTIFICATION_SHOW, true);
-        boolean allowService = preference.getBoolean(ActivitySetting.PREF_START_SERVICE, true);
         if (allowNotification && allowService) {
             return true;
         }
-        notificationManager.cancel(0);
+        notificationManager.cancelAll();
         return false;
     }
 
     private void showNotification() {
+        int notificationID = 1;
 
         if (!checkNotificationPermission()) {
             return;
         }
 
-        if (db == null) {
-            db = Storage.getInstance(this.getBaseContext());
-        }
         List<ClipObject> thisClips;
         if (isStarred) {
-            thisClips = db.getStarredClipHistory(NUMBER_OF_CLIPS);
+            thisClips = db.getStarredClipHistory(NUMBER_OF_CLIPS - 1);
             if (db.getClipHistory().size() == 0) {
                 showSingleNotification();
                 return;
@@ -211,22 +200,31 @@ public class CBWatcherService extends Service {
 
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
-        Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent resultPendingIntent =
+        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+        PendingIntent pOpenMainIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        resultIntent,
+                        openMainIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-
         NotificationCompat.Builder preBuildNotification = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.clip_notification_title, MyUtil.stringLengthCut(thisClips.get(0).getText()))) //title
-                .setContentIntent(resultPendingIntent)
+                .setSmallIcon(R.drawable.ic_stat_icon_colorful)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setColor(getResources().getColor(R.color.primary_light))
+                .setContentIntent(pOpenMainIntent)
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop);
+                .setAutoCancel(false)
+                .setGroup(NOTIFICATION_GROUP)
+                .setGroupSummary(true);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            // 5.1 icon tmp fix
+            preBuildNotification.setSmallIcon(R.drawable.ic_stat_icon);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description = getString(R.string.clip_notification_text);
@@ -240,14 +238,6 @@ public class CBWatcherService extends Service {
                     .setContentText(getString(R.string.clip_notification_text_old));
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            preBuildNotification
-                    .setSmallIcon(R.drawable.icon)
-                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                    .setColor(getResources().getColor(R.color.primary_light));
-        } else {
-            preBuildNotification.setSmallIcon(R.drawable.icon_shadow);
-        }
         switch (notificationPriority) {
             case 0:
                 preBuildNotification.setPriority(NotificationCompat.PRIORITY_MIN);
@@ -260,30 +250,28 @@ public class CBWatcherService extends Service {
                 break;
         }
 
-        NotificationClipListAdapter bigView = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
+        NotificationClipListAdapter notificationClipListAdapter = new NotificationClipListAdapter(this.getBaseContext(), thisClips.get(0));
 
         for (int i = 1; i < length; i++) {
-            bigView.addClips(thisClips.get(i));
+            notificationClipListAdapter.addClips(thisClips.get(i));
         }
 
         Notification n = preBuildNotification.build();
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-            n.bigContentView = bigView.build();
+            n.bigContentView = notificationClipListAdapter.build();
         }
-        if (notificationPriority > 0) {
-            n.icon = R.drawable.ic_stat_icon;
-        }
+        n.icon = R.drawable.ic_stat_icon;
 
-        notificationManager.cancel(0);
         notificationManager.notify(0, n);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            for (Notification notification : notificationClipListAdapter.getWearNotifications()) {
+                notificationManager.notify(notificationID++, notification);
+            }
+        }
     }
 
     private void showSingleNotification() {
-
-        if (!checkNotificationPermission()) {
-            return;
-        }
 
         String currentClip = "Clipboard is empty.";
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -292,26 +280,47 @@ public class CBWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 CharSequence thisClip = cd.getItemAt(0).getText();
                 if (thisClip != null) {
-                    currentClip = MyUtil.stringLengthCut(thisClip.toString());
+                    if (!thisClip.toString().isEmpty()) {
+                        currentClip = MyUtil.stringLengthCut(thisClip.toString());
+                    }
                 }
             }
         }
 
-        Intent resultIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent resultPendingIntent =
+        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+        PendingIntent pOpenMainIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        resultIntent,
+                        openMainIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        Intent openEditorIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
+        PendingIntent pOpenEditorIntent =
+                PendingIntent.getService(
+                        this,
+                        pIntentId--,
+                        openEditorIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
         NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
-                .setContentIntent(resultPendingIntent)
+                .setContentIntent(pOpenMainIntent)
                 .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
-                .setAutoCancel(!pinOnTop);
+                .setAutoCancel(false)
+                .setSmallIcon(R.drawable.ic_stat_icon_colorful)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setColor(getResources().getColor(R.color.primary_light))
+                .addAction(R.drawable.ic_action_add, getString(R.string.action_add), pOpenEditorIntent);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            // 5.1 icon tmp fix
+            preBuildN.setSmallIcon(R.drawable.ic_stat_icon);
+        }
+
         if (isStarred) {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_starred_single_text));
@@ -320,14 +329,7 @@ public class CBWatcherService extends Service {
             preBuildN
                     .setContentText(getString(R.string.clip_notification_single_text));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            preBuildN
-                    .setSmallIcon(R.drawable.icon)
-                    .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                    .setColor(getResources().getColor(R.color.primary_light));
-        } else {
-            preBuildN.setSmallIcon(R.drawable.icon_shadow);
-        }
+
         switch (notificationPriority) {
             case 0:
                 preBuildN.setPriority(NotificationCompat.PRIORITY_MIN);
@@ -341,51 +343,44 @@ public class CBWatcherService extends Service {
         }
 
         Notification n = preBuildN.build();
-        if (notificationPriority > 0) {
-            n.icon = R.drawable.ic_stat_icon;
-        }
+        n.icon = R.drawable.ic_stat_icon;
 
-        notificationManager.cancel(0);
         notificationManager.notify(0, n);
     }
 
-    public static void startCBService(Context context, boolean forceShowNotification) {
-        startCBService(context, forceShowNotification, 0, false);
+    public static void startCBService(Context context, boolean refreshNotification) {
+        startCBService(context, refreshNotification, 0);
     }
 
-    public static void startCBService(Context context, boolean forceShowNotification, boolean doCleanUp) {
-        startCBService(context, forceShowNotification, 0, doCleanUp);
+    public static void startCBService(Context context, int myActivitiesOnForegroundMessage) {
+        startCBService(context, false, myActivitiesOnForegroundMessage);
     }
 
     public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
-        startCBService(context, forceShowNotification, myActivitiesOnForegroundMessage, false);
-    }
-
-    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage, boolean doCleanUp) {
         Intent intent = new Intent(context, CBWatcherService.class)
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
-                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage)
-                .putExtra(INTENT_EXTRA_CLEAN_UP_SQLITE, doCleanUp);
+                .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
     }
 
     private class NotificationClipListAdapter {
 
-        private int buttonNumber = 0;
-
+        private int buttonNumber = 9999;
         private RemoteViews expandedView;
+        private List<ClipObject> clips;
         private Context context;
-        private int id = 0;
 
         public NotificationClipListAdapter(Context context, ClipObject clipObject) {
             this.context = context;
-            String currentClip = clipObject.getText().trim();
-            expandedView = new RemoteViews(this.context.getPackageName(), R.layout.notification_clip_list);
-            expandedView.setTextViewText(R.id.current_clip, currentClip);
+            String currentClip = clipObject.getText();
+            clips = new ArrayList<>();
+            clips.add(clipObject);
+            expandedView = new RemoteViews(this.context.getPackageName(), R.layout.notification_clip);
+            expandedView.setTextViewText(R.id.current_clip, MyUtil.stringLengthCut(currentClip));
             //add pIntent for share
             Intent openShareIntent = new Intent(this.context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_SHARE);
+                    .putExtra(Intent.EXTRA_TEXT, currentClip)
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
             PendingIntent pOpenShareIntent = PendingIntent.getService(this.context,
                     buttonNumber++,
                     openShareIntent,
@@ -393,9 +388,9 @@ public class CBWatcherService extends Service {
             expandedView.setOnClickPendingIntent(R.id.clip_share_button, pOpenShareIntent);
             //add pIntent for edit
             Intent openEditIntent = new Intent(this.context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, currentClip)
+                    .putExtra(Intent.EXTRA_TEXT, currentClip)
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     this.context,
                     buttonNumber++,
@@ -417,14 +412,11 @@ public class CBWatcherService extends Service {
             } else {
                 expandedView.setImageViewResource(R.id.star, R.drawable.ic_action_star_outline_grey600);
             }
+            expandedView.removeAllViews(R.id.notification_list);
         }
 
-        public NotificationClipListAdapter addClips(ClipObject clipObject) {
-            id += 1;
-            //String s = clipObject.getText().trim();
-            //Log.v(MyUtil.PACKAGE_NAME,"ID "+id);
-            //Log.v(MyUtil.PACKAGE_NAME,s);
-            //add view
+        public void addClips(ClipObject clipObject) {
+
             RemoteViews theClipView = new RemoteViews(context.getPackageName(), R.layout.notification_clip_card);
             if (clipObject.isStarred()) {
                 theClipView.setTextViewText(R.id.clip_text, "★ " + MyUtil.stringLengthCut(clipObject.getText()));
@@ -435,9 +427,9 @@ public class CBWatcherService extends Service {
             //add pIntent for edit
 
             Intent openEditIntent = new Intent(context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                    .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                     .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                    .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_EDIT);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
             PendingIntent pOpenEditIntent = PendingIntent.getService(
                     context,
                     buttonNumber++,
@@ -451,11 +443,12 @@ public class CBWatcherService extends Service {
                 theClipView.setTextViewText(R.id.clip_text, "✍ " + getString(R.string.clip_notification_single_text));
                 theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
             } else {
+                clips.add(clipObject);
                 //add pIntent for copy
                 Intent openCopyIntent = new Intent(context, ClipObjectActionBridge.class)
-                        .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                         .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, true)
-                        .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_COPY);
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COPY);
                 PendingIntent pOpenCopyIntent = PendingIntent.getService(context,
                         buttonNumber++,
                         openCopyIntent,
@@ -463,8 +456,63 @@ public class CBWatcherService extends Service {
                 theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pOpenCopyIntent);
             }
 
-            expandedView.addView(R.id.main_view, theClipView);
-            return this;
+            expandedView.addView(R.id.notification_list, theClipView);
+        }
+
+        public List<Notification> getWearNotifications() {
+
+            List<Notification> notifications = new ArrayList<>();
+
+            Intent openStarIntent = new Intent(this.context, CBWatcherService.class)
+                    .putExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, true);
+            PendingIntent pOpenStarIntent = PendingIntent.getService(
+                    this.context,
+                    buttonNumber++,
+                    openStarIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent openMainIntent = new Intent(context, ClipObjectActionBridge.class)
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+            PendingIntent pOpenMainIntent =
+                    PendingIntent.getService(
+                            context,
+                            pIntentId--,
+                            openMainIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+            for (ClipObject clip : clips) {
+                notifications.add(new NotificationCompat.Builder(mContext)
+                        //.setStyle(wearPageStyle)
+                        .setContentTitle(
+                                MyUtil.getFormatDate(context, clip.getDate())
+                                        + " "
+                                        + MyUtil.getFormatTime(context, clip.getDate())
+                        )
+                        .setContentText(MyUtil.stringLengthCut(clip.getText(), 300))
+                        .setSmallIcon(R.drawable.ic_stat_icon_colorful)
+                        .setGroup(NOTIFICATION_GROUP)
+                        .addAction(
+                                isStarred ?
+                                        R.drawable.ic_action_star_outline_white
+                                        :
+                                        R.drawable.ic_action_star_white,
+                                isStarred ?
+                                        getString(R.string.switch_all_items)
+                                        :
+                                        getString(R.string.switch_only_starred_items),
+                                pOpenStarIntent
+                        )
+                        .addAction(R.drawable.ic_stat_icon, getString(R.string.app_name), pOpenMainIntent)
+                        .build());
+            }
+            int size = notifications.size();
+            if (size > 4) {
+                notifications = notifications.subList(0, 4);
+            }
+            Collections.reverse(notifications);
+            return notifications;
+
         }
 
         public RemoteViews build() {

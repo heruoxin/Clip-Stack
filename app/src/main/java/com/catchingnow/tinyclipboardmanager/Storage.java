@@ -1,14 +1,16 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -19,9 +21,9 @@ import java.util.List;
  * Created by heruoxin on 14/12/9.
  */
 public class Storage {
-    public final static int NOTIFICATION_VIEW = 1;
-    public final static int MAIN_ACTIVITY_VIEW = 2;
-    public final static int SYSTEM_CLIPBOARD = 4;
+    public final static String UPDATE_DB = "updateDB";
+    public final static String UPDATE_DB_ADD = "updateDbAdd";
+    public final static String UPDATE_DB_DELETE = "updateDbDelete";
     private static final String TABLE_NAME = "clipHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
@@ -30,14 +32,14 @@ public class Storage {
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
     private Context context;
-    private ClipboardManager cb;
+    private ClipboardManager clipboardManager;
     private List<ClipObject> clipsInMemory;
+    private Date latsUpdate = new Date();
     private boolean isClipsInMemoryChanged = true;
-    private String topClipInStack = "";
 
     private Storage(Context context) {
         this.context = context;
-        this.cb = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
+        this.clipboardManager = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
         this.dbHelper = new StorageHelper(this.context);
     }
 
@@ -88,19 +90,19 @@ public class Storage {
         if ("".equals(queryString) || queryString == null) {
             return allClips;
         }
-        for (ClipObject clip:allClips) {
-            if(clip.getText().contains(queryString)) {
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(queryString)) {
                 queryClips.add(clip);
             }
         }
         return queryClips;
     }
 
-    public List<ClipObject> getClipHistory(int n) {
+    public List<ClipObject> getClipHistory(int size) {
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> queryClips = new ArrayList<>();
-        n = (n > allClips.size() ? allClips.size() : n);
-        for (int i = 0; i < n; i++) {
+        size = (size > allClips.size() ? allClips.size() : size);
+        for (int i = 0; i < size; i++) {
             queryClips.add(allClips.get(i));
         }
         return queryClips;
@@ -134,7 +136,7 @@ public class Storage {
     public List<ClipObject> getStarredClipHistory() {
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> starredClips = new ArrayList<>();
-        for (ClipObject clipObject: allClips) {
+        for (ClipObject clipObject : allClips) {
             if (clipObject.isStarred()) {
                 starredClips.add(clipObject);
             }
@@ -142,12 +144,12 @@ public class Storage {
         return starredClips;
     }
 
-    public List<ClipObject> getStarredClipHistory(int n) {
+    public List<ClipObject> getStarredClipHistory(int size) {
         List<ClipObject> starredClips = getStarredClipHistory();
-        if (n > starredClips.size()) {
-            n = starredClips.size();
+        if (size > starredClips.size()) {
+            size = starredClips.size();
         }
-        return starredClips.subList(0, n);
+        return starredClips.subList(0, size);
     }
 
     public List<ClipObject> getStarredClipHistory(String queryString) {
@@ -156,7 +158,7 @@ public class Storage {
         if ("".equals(queryString) || queryString == null) {
             return allStarredClips;
         }
-        for (ClipObject clipObject: allStarredClips) {
+        for (ClipObject clipObject : allStarredClips) {
             if (clipObject.getText().contains(queryString)) {
                 queryClips.add(clipObject);
             }
@@ -164,16 +166,9 @@ public class Storage {
         return queryClips;
     }
 
-    private void refreshTopClipInStack() {
-        if (getClipHistory().size() > 0) {
-            topClipInStack = getClipHistory().get(0).getText();
-        } else {
-            topClipInStack = "";
-        }
-    }
-
     public void deleteAllClipHistory() {
         //for ActivityMain Clear All
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         open();
         int row_id = db.delete(
@@ -185,30 +180,36 @@ public class Storage {
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteAllClipHistory.");
         }
-        refreshAllTypeOfList(0);
-        refreshTopClipInStack();
-        cb.setText(topClipInStack);
+        refreshAllTypeOfList(true, null);
     }
 
-    public boolean deleteClipHistoryBefore(float days) {
+    private boolean deleteClipHistoryBefore(float days) {
         //for bindJobScheduler
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
         Date date = new Date();
         long timeStamp = (long) (date.getTime() - days * 86400000);
         open();
         int row_id = db.delete(
                 TABLE_NAME,
-                CLIP_DATE + "<'" + timeStamp + "'"+" AND "+CLIP_IS_STAR + "='" + 0 + "'",
+                CLIP_DATE + "<'" + timeStamp + "'" + " AND " + CLIP_IS_STAR + "='" + 0 + "'",
                 null
         );
         close();
         //refreshAllTypeOfList(Storage.MAIN_ACTIVITY_VIEW);
-        refreshTopClipInStack();
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteClipHistoryBefore " + days);
             return false;
         }
         return true;
+    }
+
+    public boolean cleanUp() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
+        Log.v(MyUtil.PACKAGE_NAME,
+                "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
+        return deleteClipHistoryBefore(days);
     }
 
     private boolean deleteClipHistory(ClipObject clipObject) {
@@ -226,7 +227,7 @@ public class Storage {
 
     private ClipObject getClipObjectFromString(String string) {
         List<ClipObject> clipObjects = getClipHistory();
-        for (ClipObject clipObject: clipObjects) {
+        for (ClipObject clipObject : clipObjects) {
             if (clipObject.getText().equals(string)) {
                 return clipObject;
             }
@@ -259,7 +260,7 @@ public class Storage {
 
     public boolean isClipObjectStarred(String string) {
         List<ClipObject> allClips = getClipHistory();
-        for (ClipObject clipObject: allClips) {
+        for (ClipObject clipObject : allClips) {
             if (clipObject.getText().equals(string)) {
                 return clipObject.isStarred();
             }
@@ -267,35 +268,38 @@ public class Storage {
         return false;
     }
 
-    public void starredClip(ClipObject clipObject) {
+    public void changeClipStarStatus(String clip) {
+        changeClipStarStatus(getClipObjectFromString(clip));
+    }
+
+    public ClipObject changeClipStarStatus(ClipObject clipObject) {
         open();
         deleteClipHistory(clipObject);
-        addClipHistory(clipObject);
+        addClipHistory(clipObject.setStarred(!clipObject.isStarred()));
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
-        refreshAllTypeOfList(MAIN_ACTIVITY_VIEW);
+        refreshAllTypeOfList(false, null);
+        return clipObject;
     }
 
     public void importClips(ArrayList<ClipObject> clipObjects) {
         open();
-        for (ClipObject clipObject: clipObjects) {
+        for (ClipObject clipObject : clipObjects) {
             addClipHistory(clipObject);
         }
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
-        refreshAllTypeOfList(0);
+        refreshAllTypeOfList(true, null);
     }
 
     public void modifyClip(String oldClip, String newClip) {
         modifyClip(oldClip, newClip, 0);
     }
 
-    public void modifyClip(String oldClip, String newClip, int notUpdateWhich) {
-        modifyClip(oldClip, newClip, notUpdateWhich, 0);
-    }
-
-    public void modifyClip(String oldClip, String newClip, int notUpdateWhich, int isImportant) {
-        Log.v(MyUtil.PACKAGE_NAME, "modifyClip("+oldClip+", "+newClip+", "+notUpdateWhich+", "+isImportant+")");
+    public void modifyClip(String oldClip, String newClip, int isImportant) {
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newClip + ", " + isImportant + ")");
         if (oldClip == null) {
             oldClip = "";
         }
@@ -303,17 +307,17 @@ public class Storage {
             newClip = "";
         }
 
-        if (newClip.equals(oldClip)) {
-            if (isImportant !=0) {
-                ClipObject oldClipObject = getClipObjectFromString(oldClip);
-                oldClipObject.setStarred((isImportant == 1));
-                starredClip(oldClipObject);
-            }
-            return;
-        }
-        if (newClip.equals(topClipInStack)) {
-            return;
-        }
+//        if (newClip.equals(oldClip)) {
+//            if (isImportant !=0) {
+//                ClipObject oldClipObject = getClipObjectFromString(oldClip);
+//                oldClipObject.setStarred((isImportant == 1));
+//                changeClipStarStatus(oldClipObject);
+//            }
+//            return;
+//        }
+//        if (newClip.equals(topClipInStack)) {
+//            return;
+//        }
 
         boolean isStarred = isClipObjectStarred(oldClip);
 
@@ -336,46 +340,82 @@ public class Storage {
             ));
         }
         close();
+        latsUpdate = new Date();
         isClipsInMemoryChanged = true;
 
-        refreshTopClipInStack();
-        refreshAllTypeOfList(notUpdateWhich);
+        refreshAllTypeOfList(!newClip.isEmpty(), oldClip);
 
     }
 
-    private void updateSystemClipboard() {
+    public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.
-        if (cb.hasPrimaryClip()) {
-            ClipData cd = cb.getPrimaryClip();
-            if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                CharSequence thisClip = cd.getItemAt(0).getText();
-                if (thisClip != null) {
-                    if (!thisClip.toString().equals(topClipInStack)) {
-                        cb.setText(topClipInStack);
-                    }
-                }
+
+        String topClipInStack;
+        if (getClipHistory().size() > 0) {
+            topClipInStack = getClipHistory().get(0).getText();
+        } else {
+            topClipInStack = "";
+        }
+
+        String clipString;
+        if (!clipboardManager.hasPrimaryClip()) {
+            clipboardManager.setText(topClipInStack);
+            return true;
+        }
+        try {
+            //Don't use CharSequence .toString()!
+            CharSequence charSequence = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+            clipString = String.valueOf(charSequence);
+        } catch (Error ignored) {
+            clipboardManager.setText(topClipInStack);
+            return true;
+        }
+
+        if (!topClipInStack.equals(clipString)) {
+            clipboardManager.setText(topClipInStack);
+            return true;
+        }
+        return false;
+    }
+
+    private void refreshAllTypeOfList(Boolean added, String deletedString) {
+//        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
+//            CBWatcherService.startCBService(context, true);
+//        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
+//            updateSystemClipboard();
+//            ActivityMain.refreshMainView(context, "");
+//        } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
+//            ActivityMain.refreshMainView(context, "");
+//            CBWatcherService.startCBService(context, true);
+//        } else {
+//            updateSystemClipboard();
+//            CBWatcherService.startCBService(context, true);
+//            ActivityMain.refreshMainView(context, "");
+//        }
+        CBWatcherService.startCBService(context, true);
+        updateDbBroadcast(context, added, deletedString);
+        context.startService(new Intent(context, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
+        );
+    }
+
+    public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
+        Intent intent = new Intent(UPDATE_DB);
+        if (added) {
+            intent.putExtra(UPDATE_DB_ADD, true);
+        }
+        if (deletedString != null) {
+            if (!deletedString.isEmpty()) {
+                intent.putExtra(UPDATE_DB_DELETE, deletedString);
             }
         }
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void refreshAllTypeOfList(int notUpdateWhich) {
-        if (notUpdateWhich == MAIN_ACTIVITY_VIEW) {
-            updateSystemClipboard();
-            CBWatcherService.startCBService(context, true);
-        } else if (notUpdateWhich == NOTIFICATION_VIEW) {
-            updateSystemClipboard();
-            ActivityMain.refreshMainView(context, "");
-        } else if (notUpdateWhich == SYSTEM_CLIPBOARD) {
-            ActivityMain.refreshMainView(context, "");
-            CBWatcherService.startCBService(context, true);
-        } else {
-            updateSystemClipboard();
-            CBWatcherService.startCBService(context, true);
-            ActivityMain.refreshMainView(context, "");
-        }
+    public Date getLatsUpdateDate() {
+        return latsUpdate;
     }
-
 
     public class StorageHelper extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 3;
@@ -384,8 +424,8 @@ public class Storage {
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
-                        CLIP_STRING + " TEXT, "+
-                        CLIP_IS_STAR + " BOOLEAN"+
+                        CLIP_STRING + " TEXT, " +
+                        CLIP_IS_STAR + " BOOLEAN" +
                         ");";
 
         public StorageHelper(Context context) {
@@ -402,17 +442,9 @@ public class Storage {
             Log.v(MyUtil.PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
             if (oldVersion <= 2) {
                 // add star option
-                db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+CLIP_IS_STAR+" BOOLEAN DEFAULT 0");
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + CLIP_IS_STAR + " BOOLEAN DEFAULT 0");
             }
         }
     }
-
-
-//    public void printClips(int n) {
-//        for (int i=0; i<n; i++){
-//            String s = getClipHistory(n);
-//            Log.v("printClips", s);
-//        }
-//    }
 
 }

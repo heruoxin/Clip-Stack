@@ -1,17 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.catchingnow.tinyclipboardmanager.ActivityEditor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:windowSoftInputMode="adjustResize"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@color/background"
-    tools:context="com.catchingnow.tinyclipboardmanager.ActivityEditor">
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize" />
 
     <ScrollView
+        android:windowSoftInputMode="adjustResize"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/background"
         android:fillViewport="true"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -61,4 +70,4 @@
 
         </RelativeLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>

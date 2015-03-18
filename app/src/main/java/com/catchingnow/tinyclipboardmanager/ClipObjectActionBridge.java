@@ -1,9 +1,13 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.app.IntentService;
+import android.appwidget.AppWidgetManager;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,13 +17,16 @@ import android.widget.Toast;
  * a service on a separate handler thread.
  */
 public class ClipObjectActionBridge extends IntentService {
-    public final static int ACTION_COPY  = 1;
+    public final static int ACTION_COPY = 1;
     public final static int ACTION_SHARE = 2;
-    public final static int ACTION_EDIT  = 3;
-    public final static int ACTION_OPEN_MAIN  = 4;
+    public final static int ACTION_EDIT = 3;
+    public final static int ACTION_STAR = 4;
+    public final static int ACTION_OPEN_MAIN  = 5;
+    public final static int ACTION_REFRESH_WIDGET = 6;
+    public final static int ACTION_CHANGE_WIDGET_STAR = 7;
+    public final static String ACTION_CODE = "com.catchingnow.tinyclipboardmanager.actionCode";
     public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
-    public final static String CLIPBOARD_STRING = "com.catchingnow.tinyclipboardmanager.clipboardString";
-    public final static String CLIPBOARD_ACTION = "com.catchingnow.tinyclipboardmanager.clipboarAction";
+
 
     public Handler mHandler;
     public ClipObjectActionBridge() {
@@ -41,8 +48,9 @@ public class ClipObjectActionBridge extends IntentService {
 
         this.intent = intent;
 
-        String clips = intent.getStringExtra(CLIPBOARD_STRING);
-        int actionCode = intent.getIntExtra(CLIPBOARD_ACTION, 0);
+        String clips = intent.getStringExtra(Intent.EXTRA_TEXT);
+        int actionCode = intent.getIntExtra(ACTION_CODE, 0);
+        Log.v(MyUtil.PACKAGE_NAME, "ACTION_CODE: " + actionCode);
         switch (actionCode) {
             case 0:
                 break;
@@ -55,8 +63,18 @@ public class ClipObjectActionBridge extends IntentService {
             case ACTION_EDIT:
                 editText(clips);
                 return;
-            case  ACTION_OPEN_MAIN:
+            case ACTION_STAR:
+                starText(clips);
+                return;
+            case ACTION_OPEN_MAIN:
                 openMainActivity();
+                return;
+            case ACTION_REFRESH_WIDGET:
+                AppWidget.updateAllAppWidget(this);
+                return;
+            case ACTION_CHANGE_WIDGET_STAR:
+                changeWidgetStarredStatus();
+                return;
         }
     }
 
@@ -84,7 +102,7 @@ public class ClipObjectActionBridge extends IntentService {
                     toastClips = clips.substring(0, 15) + "…";
                 }
                 Toast.makeText(ClipObjectActionBridge.this,
-                        getString(R.string.toast_end_string, toastClips+"\n"),
+                        getString(R.string.toast_copied, toastClips+"\n"),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -103,6 +121,11 @@ public class ClipObjectActionBridge extends IntentService {
         startActivity(i);
     }
 
+    private void starText(final String clips) {
+        Storage db = Storage.getInstance(this);
+        db.changeClipStarStatus(clips);
+    }
+
     private void openMainActivity() {
         //open by this will be auto closed when copy.
         Intent i = new Intent(this, ActivityMain.class)
@@ -110,4 +133,15 @@ public class ClipObjectActionBridge extends IntentService {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+
+    private void changeWidgetStarredStatus() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isStarred = preference.getBoolean(AppWidget.WIDGET_IS_STARRED, false);
+        preference.edit()
+                .putBoolean(AppWidget.WIDGET_IS_STARRED, !isStarred)
+                .apply();
+
+        AppWidget.updateAllAppWidget(this);
+    }
+
 }

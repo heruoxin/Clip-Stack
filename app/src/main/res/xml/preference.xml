@@ -62,14 +62,14 @@
             android:summary="@string/pref_about_summary">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/heruoxin/Clip-Stack" />
+                android:data="http://goo.gl/dpwozO" />
         </Preference>
         <Preference
             android:title="@string/pref_rate_title"
             android:summary="@string/pref_rate_summary">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager" />
+                android:data="http://goo.gl/1KigA6" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

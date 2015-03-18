@@ -1,22 +1,24 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.app.backup.BackupManager;
-import android.app.backup.RestoreObserver;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.nispok.snackbar.Snackbar;
@@ -36,26 +37,31 @@ import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.listeners.ActionClickListener;
 import com.nispok.snackbar.listeners.EventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 public class ActivityMain extends MyActionBarActivity {
-    public final static String EXTRA_QUERY_TEXT = "com.catchingnow.tinyclipboard.EXTRA.queryText";
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
+    private static int TRANSLATION_FAST = 400;
+    private static int TRANSLATION_SLOW = 1000;
+
     private RecyclerView mRecList;
     private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
+    private Toolbar mToolbar;
     private ImageButton mFAB;
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
+
+    private Context context;
     private Storage db;
     private List<ClipObject> clips;
-    private Context context;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
+    private BroadcastReceiver mMessageReceiver;
 
     //FAB
     private int isYHidden = -1;
@@ -66,33 +72,64 @@ public class ActivityMain extends MyActionBarActivity {
     private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
+    private Date lastStorageUpdate = null;
     private String queryText = "";
-    private static int TRANSLATION_FAST = 400;
-    private static int TRANSLATION_SLOW = 1000;
+
+    private int tooYoungTooSimple = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.icon_shadow);
-        getSupportActionBar().setTitle(" " + getString(R.string.title_activity_main));
         context = this.getBaseContext();
         db = Storage.getInstance(context);
         queryText = "";
 
-        setContentView(R.layout.activity_main);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolbar.setTitle(getString(R.string.title_activity_main));
+        mToolbar.setNavigationIcon(R.drawable.icon_shadow);
         initView();
 
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tooYoungTooSimple < 10) {
+                    tooYoungTooSimple += 1;
+                } else {
+                    tooYoungTooSimple = 0;
+                    db.modifyClip(
+                            null,
+                            " _(: 3 」∠)_ "
+                            );
+                }
+            }
+        });
+
         attachKeyboardListeners();
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra(Storage.UPDATE_DB_ADD, false)) {
+                    setView();
+                } else {
+                    clipCardAdapter.remove(intent.getStringExtra(Storage.UPDATE_DB_DELETE));
+                }
+
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(Storage.UPDATE_DB));
+
         onNewIntent(getIntent());
     }
 
     @Override
     protected void onStop() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            CBWatcherService.startCBService(context, false, true);
+            db.cleanUp();
         }
         super.onStop();
     }
@@ -102,12 +139,11 @@ public class ActivityMain extends MyActionBarActivity {
         super.onPause();
         isFromNotification = false;
         clearDeleteQueue();
-        CBWatcherService.startCBService(context, false, -1);
+        db.updateSystemClipboard();
     }
 
     @Override
     protected void onResume() {
-        CBWatcherService.startCBService(context, true, Storage.NOTIFICATION_VIEW);
         super.onResume();
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -138,16 +174,14 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
+
+    @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.hasExtra(EXTRA_QUERY_TEXT)) {
-            String s = intent.getStringExtra(EXTRA_QUERY_TEXT);
-            if (s != null) {
-                if (!s.isEmpty()) {
-                    queryText = s;
-                }
-            }
-            setView();
-        }
         if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
             isFromNotification = true;
         }
@@ -169,6 +203,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }
@@ -177,6 +212,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.clearFocus();
                 queryText = null;
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }
@@ -187,6 +223,7 @@ public class ActivityMain extends MyActionBarActivity {
                 searchItem.collapseActionView();
                 queryText = null;
                 initView();
+                lastStorageUpdate = null;
                 setView();
                 return false;
             }
@@ -201,6 +238,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryText = newText;
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }
@@ -325,14 +363,15 @@ public class ActivityMain extends MyActionBarActivity {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
         setStarredIcon();
+        lastStorageUpdate = null;
         setView();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mFAB.setImageResource(isStarred ?
-                        R.drawable.ic_action_star_white
+                                R.drawable.ic_action_star_white
                                 :
-                        R.drawable.ic_action_add
+                                R.drawable.ic_action_add
                 );
             }
         }, TRANSLATION_SLOW / 3 * 2);
@@ -359,8 +398,8 @@ public class ActivityMain extends MyActionBarActivity {
         final Intent intent = new Intent(this, ActivityEditor.class)
                 .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
+            //ActivityOptions options = ActivityOptions
+            //        .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
             //startActivity(intent, options.toBundle());
             startActivity(intent);
         } else {
@@ -370,16 +409,9 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
-            db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+            db.modifyClip(clipObject.getText(), null);
         }
         deleteQueue.clear();
-    }
-
-    public static void refreshMainView(Context context, String query) {
-        Intent intent = new Intent(context, ActivityMain.class)
-                .putExtra(EXTRA_QUERY_TEXT, query)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
     }
 
     private void setStarredIcon() {
@@ -414,7 +446,7 @@ public class ActivityMain extends MyActionBarActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
 
-        SwipeableRecyclerViewTouchListener touchListener =
+        SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
                         mRecList,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -501,12 +533,33 @@ public class ActivityMain extends MyActionBarActivity {
                             });
                 }
             }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    switch (newState) {
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            mToolbar.animate().translationZ(0);
+                            mFAB.animate().translationZ(0);
+                            break;
+                        default:
+                            mToolbar.animate().translationZ(14);
+                            mFAB.animate().translationZ(14);
+                            break;
+                    }
+                }
+            }
+
         };
         mRecList.setOnScrollListener(scrollListener);
-        mRecList.addOnItemTouchListener(touchListener);
+        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
     }
 
     private void setView() {
+
+        if (db.getLatsUpdateDate() == lastStorageUpdate) return;
+        lastStorageUpdate = db.getLatsUpdateDate();
+
         //get clips
         if (isStarred) {
             clips = db.getStarredClipHistory(queryText);
@@ -551,7 +604,7 @@ public class ActivityMain extends MyActionBarActivity {
                                 isSnackbarShow -= 1;
                                 if (!isUndo[0]) {
                                     deleteQueue.remove(clipObject);
-                                    db.modifyClip(clipObject.getText(), null, Storage.MAIN_ACTIVITY_VIEW);
+                                    db.modifyClip(clipObject.getText(), null);
                                 }
                             }
 
@@ -580,13 +633,13 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void firstLaunch() throws InterruptedException {
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"), Storage.SYSTEM_CLIPBOARD);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"));
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_1, "😄"), 1);
         Thread.sleep(50);
-        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), Storage.SYSTEM_CLIPBOARD, 1);
+        db.modifyClip(null, getString(R.string.first_launch_clipboards_0, "😄"), 1);
 //        BackupManager backupManager = new BackupManager(this);
 //        backupManager.requestRestore(new RestoreObserver() {
 //            @Override
@@ -615,15 +668,11 @@ public class ActivityMain extends MyActionBarActivity {
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
-        public SimpleDateFormat sdfDate;
-        public SimpleDateFormat sdfTime;
         private boolean allowAnimate = true;
 
         public ClipCardAdapter(List<ClipObject> clipObjectList, Context context) {
             this.context = context;
             this.clipObjectList = clipObjectList;
-            sdfDate = new SimpleDateFormat(context.getString(R.string.date_format));
-            sdfTime = new SimpleDateFormat(context.getString(R.string.time_format));
             DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             new Handler().postDelayed(new Runnable() {
@@ -642,8 +691,8 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
-            clipCardViewHolder.vDate.setText(sdfDate.format(clipObject.getDate()));
-            clipCardViewHolder.vTime.setText(sdfTime.format(clipObject.getDate()));
+            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
+            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             clipCardViewHolder.vStarred.setImageResource(
                     clipObject.isStarred() ?
@@ -663,8 +712,8 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clipObject.setStarred(!clipObject.isStarred());
-                    db.starredClip(clipObject);
+                    db.changeClipStarStatus(clipObject);
+                    //clipObject.setStarred(!clipObject.isStarred());
                     if (clipObject.isStarred()) {
                         clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                     } else {
@@ -698,7 +747,17 @@ public class ActivityMain extends MyActionBarActivity {
 
         public void remove(ClipObject clipObject) {
             int position = clipObjectList.indexOf(clipObject);
+            if (position == -1) return;
             remove(position);
+        }
+
+        public void remove(String clipString) {
+            for (ClipObject clipObject: clipObjectList) {
+                if (clipObject.getText().equals(clipString)) {
+                    remove(clipObject);
+                    return;
+                }
+            }
         }
 
         public void remove(int position) {
@@ -712,9 +771,9 @@ public class ActivityMain extends MyActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);
                 }
             });
@@ -724,10 +783,11 @@ public class ActivityMain extends MyActionBarActivity {
             button.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    v.playSoundEffect(0);
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, clipObject.getText())
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, actionCode);
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
                     context.startService(openIntent);
                     if (isFromNotification) {
                         moveTaskToBack(true);

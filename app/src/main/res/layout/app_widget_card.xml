@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/widget_card_click_edit"
+        android:clickable="true"
+        android:background="@android:color/white"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textIsSelectable="false"
+            android:id="@+id/widget_card_date"
+            android:textSize="12sp"
+            android:textColor="@color/accent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:textIsSelectable="false"
+            android:id="@+id/widget_card_text"
+            android:gravity="center_vertical|start"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textColor="@color/secondary_text_default_material_light"
+            android:layout_below="@id/widget_card_date"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/widget_card_click_star"
+        android:clickable="true"
+        android:background="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textIsSelectable="false"
+            android:id="@+id/widget_card_time"
+            android:textSize="12sp"
+            android:textColor="@color/accent"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/widget_card_star"
+            android:contentDescription="@string/action_star"
+            android:src="@drawable/ic_action_star_outline_grey600"
+            android:layout_below="@id/widget_card_time"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter" />
+    </RelativeLayout>
+
+</LinearLayout>

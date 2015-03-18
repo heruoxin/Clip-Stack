@@ -1,21 +1,19 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.animation.Animator;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -24,15 +22,16 @@ public class ActivityEditor extends MyActionBarActivity {
     private String oldText;
     private EditText editText;
     private boolean isStarred;
-    private boolean textStatueHasChanged = false;
     private MenuItem starItem;
     private ImageButton mFAB;
+    private Toolbar mToolbar;
     private InputMethodManager inputMethodManager;
+    private Storage db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
         isStarred = intent.getBooleanExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false);
@@ -42,6 +41,7 @@ public class ActivityEditor extends MyActionBarActivity {
 
         editText = (EditText) findViewById(R.id.edit_text);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -53,23 +53,23 @@ public class ActivityEditor extends MyActionBarActivity {
             }
         });
 
+        db = Storage.getInstance(this);
         // if is copied form other application.
         if (Intent.ACTION_SEND.equals(intent.getAction()) && "text/plain".equals(intent.getType())) {
             oldText = "";
         }
 
-        //set activity title and icon.
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_action_edit);
         String titleText = getString(R.string.title_activity_activity_editor);
         if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-        getSupportActionBar().setTitle("  "+titleText);
+        mToolbar.setLogo(R.drawable.ic_action_edit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setTitle(titleText);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(
-                    titleText,
-                    BitmapFactory.decodeResource(getResources(), R.drawable.icon),
+                    titleText + ": " + MyUtil.stringLengthCut(oldText, 4),
+                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_edit),
                     getResources().getColor(R.color.primary)
             ));
         }
@@ -79,7 +79,6 @@ public class ActivityEditor extends MyActionBarActivity {
     protected void onResume() {
         super.onResume();
         editText.requestFocus();
-        CBWatcherService.startCBService(this, false, 1);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -93,7 +92,6 @@ public class ActivityEditor extends MyActionBarActivity {
         super.onPause();
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        CBWatcherService.startCBService(this, false, -1);
     }
 
     @Override
@@ -119,9 +117,8 @@ public class ActivityEditor extends MyActionBarActivity {
                 shareText();
                 break;
             case (R.id.action_star):
-                isStarred = !isStarred;
                 //Once click will change it. Twice won't change it.
-                textStatueHasChanged = !textStatueHasChanged;
+                isStarred = !isStarred;
                 setStarredIcon();
                 break;
 //            case (R.id.action_save):
@@ -160,33 +157,24 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void deleteText() {
-        Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, null, Storage.MAIN_ACTIVITY_VIEW);
+        db.modifyClip(oldText, null);
         finishAndRemoveTaskWithToast(getString(R.string.toast_deleted));
     }
 
     private void shareText() {
         String text = editText.getText().toString();
         Intent openIntent = new Intent(this, ClipObjectActionBridge.class);
-        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_STRING, text);
-        openIntent.putExtra(ClipObjectActionBridge.CLIPBOARD_ACTION, ClipObjectActionBridge.ACTION_SHARE);
+        openIntent.putExtra(Intent.EXTRA_TEXT, text);
+        openIntent.putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_SHARE);
         startService(openIntent);
     }
 
     private void saveText() {
         String newText = editText.getText().toString();
         String toastMessage;
-        if (!oldText.equals(newText)) {
-            textStatueHasChanged = true;
-        }
-        if (!textStatueHasChanged) {
-            finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
-            return;
-        }
-        Storage db = Storage.getInstance(this);
-        db.modifyClip(oldText, newText, Storage.MAIN_ACTIVITY_VIEW, (isStarred? 1:-1));
+        db.modifyClip(oldText, newText, (isStarred ? 1 : -1));
         if (newText != null && !newText.isEmpty()) {
-            toastMessage = getString(R.string.toast_saved);
+            toastMessage = getString(R.string.toast_copied, newText + "\n");
         } else {
             toastMessage = getString(R.string.toast_deleted);
         }
@@ -198,9 +186,14 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void finishAndRemoveTaskWithToast(String toastMessage) {
-        Toast.makeText(this,
-                toastMessage,
-                Toast.LENGTH_SHORT).show();
+        Toast
+                .makeText(
+                        this,
+                        toastMessage,
+                        Toast.LENGTH_SHORT
+                )
+                .show();
+        db.updateSystemClipboard();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             finish();
         } else {

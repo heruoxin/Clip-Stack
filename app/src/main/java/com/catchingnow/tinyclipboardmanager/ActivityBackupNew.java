@@ -1,10 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +14,12 @@ import android.widget.Switch;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
-public class ActivityNewBackup extends MyActionBarActivity {
+public class ActivityBackupNew extends MyActionBarActivity {
     private boolean isReverseSort = false;
+    private boolean allItems = true;
     private Calendar dateFrom = Calendar.getInstance();
     private Calendar dateTo = Calendar.getInstance();
     private DatePicker datePickerFrom;
@@ -28,8 +27,8 @@ public class ActivityNewBackup extends MyActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_backup);
+        super.onCreate(savedInstanceState);
         initExportView();
     }
 
@@ -55,16 +54,13 @@ public class ActivityNewBackup extends MyActionBarActivity {
     }
 
     private void initExportView() {
-        //get installed date
-        dateFrom.set(2015, 2, 1);
-        try {
-            long installedDate = this.getPackageManager()
-                    .getPackageInfo(MyUtil.PACKAGE_NAME, 0)
-                    .firstInstallTime;
-            dateFrom.setTimeInMillis(installedDate);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        //get started date
+        long startedDate = dateFrom.getTimeInMillis();
+        List<ClipObject> clipObjects = Storage.getInstance(this).getClipHistory();
+        if (clipObjects.size() > 0) {
+            startedDate = clipObjects.get(clipObjects.size() - 1).getDate().getTime();
         }
+        dateFrom.setTimeInMillis(startedDate);
 
         while (dateFrom.after(dateTo)) {
             dateFrom.setTimeInMillis(dateFrom.getTimeInMillis() - 70000000);
@@ -83,6 +79,7 @@ public class ActivityNewBackup extends MyActionBarActivity {
 
         Button buttonExport = (Button) findViewById(R.id.export_button);
         Switch switchReverseSort = (Switch) findViewById(R.id.switch_reverse_sort);
+        final Switch switchOnlyStarredItems = (Switch) findViewById(R.id.switch_only_starred_items);
         datePickerFrom = (DatePicker) findViewById(R.id.date_picker_from);
         datePickerTo = (DatePicker) findViewById(R.id.date_picker_to);
         buttonExport.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +92,18 @@ public class ActivityNewBackup extends MyActionBarActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isReverseSort = isChecked;
+            }
+        });
+        switchOnlyStarredItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                allItems = isChecked;
+                switchOnlyStarredItems.setText(
+                        allItems ?
+                                getString(R.string.switch_all_items)
+                                :
+                                getString(R.string.switch_only_starred_items)
+                );
             }
         });
         datePickerFrom.init(dateFrom.get(Calendar.YEAR), dateFrom.get(Calendar.MONTH), dateFrom.get(Calendar.DAY_OF_MONTH), null);
@@ -129,7 +138,8 @@ public class ActivityNewBackup extends MyActionBarActivity {
                 this,
                 new Date(datePickerFrom.getYear() - 1900, datePickerFrom.getMonth(), datePickerFrom.getDayOfMonth()),
                 new Date(datePickerTo.getYear() - 1900, datePickerTo.getMonth(), datePickerTo.getDayOfMonth() + 1),
-                isReverseSort
+                isReverseSort,
+                allItems
         )) {
             finish();
         }

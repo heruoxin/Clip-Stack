@@ -2,6 +2,9 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by heruoxin on 15/3/4.
  */
@@ -24,8 +27,25 @@ public class MyUtil {
     }
 
     public static String stringLengthCut(String string, int length) {
+        string = string.trim();
         return  (string.length() > length) ?
-                string.substring(0, length - 1).trim()
+                string.substring(0, length - 2).trim()+"…"
                 : string.trim();
     }
+
+    public static String getFormatDate(Context context, Date date) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.date_format));
+        return dateFormat.format(date);
+    }
+
+    public static String getFormatTime(Context context, Date date) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format));
+        return dateFormat.format(date);
+    }
+
+    public static String getFormatTimeWithSecond(Context context, Date date) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.time_format_with_second));
+        return dateFormat.format(date);
+    }
+
 }
