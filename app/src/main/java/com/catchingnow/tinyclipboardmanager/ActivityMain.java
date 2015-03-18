@@ -1,7 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -19,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +48,7 @@ public class ActivityMain extends MyActionBarActivity {
     private RecyclerView mRecList;
     private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
+    private Toolbar mToolbar;
     private ImageButton mFAB;
     private SearchView searchView;
     private MenuItem searchItem;
@@ -86,6 +87,7 @@ public class ActivityMain extends MyActionBarActivity {
 
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         initView();
 
         attachKeyboardListeners();
@@ -379,8 +381,8 @@ public class ActivityMain extends MyActionBarActivity {
         final Intent intent = new Intent(this, ActivityEditor.class)
                 .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
+            //ActivityOptions options = ActivityOptions
+            //        .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
             //startActivity(intent, options.toBundle());
             startActivity(intent);
         } else {
@@ -517,14 +519,15 @@ public class ActivityMain extends MyActionBarActivity {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState){
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return;
-                switch (newState) {
-                    case RecyclerView.SCROLL_STATE_IDLE:
-                        getSupportActionBar().setElevation(16);
-                        break;
-                    default:
-                        getSupportActionBar().setElevation(22);
-                        break;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    switch (newState) {
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            mToolbar.animate().translationZ(0);
+                            break;
+                        default:
+                            mToolbar.animate().translationZ(14);
+                            break;
+                    }
                 }
             }
 
