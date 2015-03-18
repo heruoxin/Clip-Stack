@@ -3,6 +3,7 @@ package com.catchingnow.tinyclipboardmanager;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -75,6 +76,16 @@ public class ActivitySetting extends MyPreferenceActivity {
 
     @Override
     protected void onResume() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mActionBar.setElevation(16);
+        } else {
+            View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
+            if (mToolbarShadow != null) {
+                mToolbarShadow.setVisibility(View.VISIBLE);
+            }
+        }
+
         super.onResume();
         initSharedPrefListener();
     }
@@ -91,7 +102,7 @@ public class ActivitySetting extends MyPreferenceActivity {
         ViewGroup contentView = (ViewGroup) LayoutInflater.from(this).inflate(
                 R.layout.activity_setting, new LinearLayout(this), false);
 
-        mActionBar = (Toolbar) contentView.findViewById(R.id.action_bar);
+        mActionBar = (Toolbar) contentView.findViewById(R.id.my_toolbar);
         mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

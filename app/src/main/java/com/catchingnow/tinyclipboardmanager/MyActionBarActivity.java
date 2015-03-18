@@ -1,8 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -74,6 +78,21 @@ public class MyActionBarActivity extends ActionBarActivity {
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
 
         keyboardListenersAttached = true;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mToolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbar.setElevation(16);
+        } else {
+            View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
+            if (mToolbarShadow != null) {
+                mToolbarShadow.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
