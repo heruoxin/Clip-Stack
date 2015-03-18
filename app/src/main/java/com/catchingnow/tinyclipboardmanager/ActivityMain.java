@@ -78,9 +78,6 @@ public class ActivityMain extends MyActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.icon_shadow);
-        getSupportActionBar().setTitle(" " + getString(R.string.title_activity_main));
         context = this.getBaseContext();
         db = Storage.getInstance(context);
         queryText = "";
@@ -88,6 +85,8 @@ public class ActivityMain extends MyActionBarActivity {
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolbar.setTitle(getString(R.string.title_activity_main));
+        mToolbar.setNavigationIcon(R.drawable.icon_shadow);
         initView();
 
         attachKeyboardListeners();

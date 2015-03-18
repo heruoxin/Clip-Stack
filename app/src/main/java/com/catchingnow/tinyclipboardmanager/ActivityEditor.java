@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ public class ActivityEditor extends MyActionBarActivity {
     private boolean isStarred;
     private MenuItem starItem;
     private ImageButton mFAB;
+    private Toolbar mToolbar;
     private InputMethodManager inputMethodManager;
     private Storage db;
 
@@ -39,6 +41,7 @@ public class ActivityEditor extends MyActionBarActivity {
 
         editText = (EditText) findViewById(R.id.edit_text);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -56,14 +59,13 @@ public class ActivityEditor extends MyActionBarActivity {
             oldText = "";
         }
 
-        //set activity title and icon.
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_action_edit);
         String titleText = getString(R.string.title_activity_activity_editor);
         if (oldText.isEmpty()) {
             titleText = getString(R.string.title_activity_editor);
         }
-        getSupportActionBar().setTitle("  " + titleText);
+        mToolbar.setLogo(R.drawable.ic_action_edit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setTitle(titleText);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setTaskDescription(new ActivityManager.TaskDescription(
                     titleText + ": " + MyUtil.stringLengthCut(oldText, 4),
