@@ -522,9 +522,11 @@ public class ActivityMain extends MyActionBarActivity {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_IDLE:
                             mToolbar.animate().translationZ(0);
+                            mFAB.animate().translationZ(0);
                             break;
                         default:
                             mToolbar.animate().translationZ(14);
+                            mFAB.animate().translationZ(14);
                             break;
                     }
                 }
