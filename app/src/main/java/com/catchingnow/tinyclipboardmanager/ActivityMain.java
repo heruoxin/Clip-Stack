@@ -18,6 +18,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +30,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.nispok.snackbar.Snackbar;
@@ -219,6 +219,7 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 queryText = newText;
+                lastStorageUpdate = null;
                 setView();
                 return true;
             }

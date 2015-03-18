@@ -18,8 +18,7 @@
         android:id="@+id/my_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        android:minHeight="?attr/actionBarSize" />
 
     <RelativeLayout
         android:id="@+id/background_view"

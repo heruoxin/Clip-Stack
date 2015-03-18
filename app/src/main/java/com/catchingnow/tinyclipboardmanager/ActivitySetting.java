@@ -91,7 +91,7 @@ public class ActivitySetting extends MyPreferenceActivity {
         ViewGroup contentView = (ViewGroup) LayoutInflater.from(this).inflate(
                 R.layout.activity_setting, new LinearLayout(this), false);
 
-        mActionBar = (Toolbar) contentView.findViewById(R.id.action_bar);
+        mActionBar = (Toolbar) contentView.findViewById(R.id.my_toolbar);
         mActionBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
