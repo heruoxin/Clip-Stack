@@ -11,7 +11,6 @@
     <color name="background">#EEEEEE</color>
     <color name="set_off">#FFFFFF</color>
 
-    <color name="shadow">#88555555</color>
     <color name="ripple_primary">@color/primary_light</color>
     <color name="ripple_high_light">#FFF59D</color>
     <!--

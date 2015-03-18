@@ -66,4 +66,13 @@
             android:onClick="mFabOnClick" />
 
     </RelativeLayout>
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/my_toolbar_shadow"
+        android:layout_below="@id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/toolbar_drop_shadow" />
+
 </RelativeLayout>

@@ -73,6 +73,9 @@ public class CBWatcherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            intent = new Intent();
+        }
         int myActivitiesOnForegroundMessage = intent.getIntExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, 0);
         isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
         readPreference();

@@ -5,7 +5,7 @@
             <gradient
                 android:type="radial"
                 android:gradientRadius="44"
-                android:startColor="@color/shadow"
+                android:startColor="@color/divider"
                 android:endColor="@android:color/transparent"
                 />
             <padding
