@@ -45,6 +45,9 @@ import java.util.List;
 public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
+    private static int TRANSLATION_FAST = 400;
+    private static int TRANSLATION_SLOW = 1000;
+
     private RecyclerView mRecList;
     private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
@@ -53,11 +56,12 @@ public class ActivityMain extends MyActionBarActivity {
     private SearchView searchView;
     private MenuItem searchItem;
     private MenuItem starItem;
-    private Storage db;
-    private Date lastStorageUpdate = null;
-    private List<ClipObject> clips;
+
     private Context context;
+    private Storage db;
+    private List<ClipObject> clips;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
+    private BroadcastReceiver mMessageReceiver;
 
     //FAB
     private int isYHidden = -1;
@@ -68,11 +72,10 @@ public class ActivityMain extends MyActionBarActivity {
     private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
     private boolean isStarred = false;
+    private Date lastStorageUpdate = null;
     private String queryText = "";
-    private static int TRANSLATION_FAST = 400;
-    private static int TRANSLATION_SLOW = 1000;
 
-    private BroadcastReceiver mMessageReceiver;
+    private int tooYoungTooSimple = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,21 @@ public class ActivityMain extends MyActionBarActivity {
         mToolbar.setTitle(getString(R.string.title_activity_main));
         mToolbar.setNavigationIcon(R.drawable.icon_shadow);
         initView();
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tooYoungTooSimple < 10) {
+                    tooYoungTooSimple += 1;
+                } else {
+                    tooYoungTooSimple = 0;
+                    db.modifyClip(
+                            null,
+                            " _(: 3 」∠)_ "
+                            );
+                }
+            }
+        });
 
         attachKeyboardListeners();
 
