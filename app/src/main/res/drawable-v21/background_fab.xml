@@ -1,6 +1,6 @@
 <transition xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        <ripple
             android:color="?android:colorControlHighlight">
             <item>
                 <shape android:shape="oval">
@@ -13,7 +13,7 @@
     </item>
 
     <item>
-        <ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        <ripple
             android:color="?android:colorControlHighlight">
             <item>
                 <shape android:shape="oval">
