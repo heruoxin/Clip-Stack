@@ -1,8 +1,27 @@
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?android:colorControlHighlight">
+<transition xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="oval">
-            <solid android:color="@color/fab" />
-        </shape>
+        <ripple
+            android:color="?android:colorControlHighlight">
+            <item>
+                <shape android:shape="oval">
+                    <solid
+                        android:id="@+id/fab_color"
+                        android:color="@color/fab" />
+                </shape>
+            </item>
+        </ripple>
     </item>
-</ripple>
+
+    <item>
+        <ripple
+            android:color="?android:colorControlHighlight">
+            <item>
+                <shape android:shape="oval">
+                    <solid
+                        android:id="@+id/fab_color"
+                        android:color="@color/fab_starred" />
+                </shape>
+            </item>
+        </ripple>
+    </item>
+</transition>

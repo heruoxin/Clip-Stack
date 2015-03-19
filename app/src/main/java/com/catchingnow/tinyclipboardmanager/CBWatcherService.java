@@ -223,7 +223,9 @@ public class CBWatcherService extends Service {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             // 5.1 icon tmp fix
-            preBuildNotification.setSmallIcon(R.drawable.ic_stat_icon);
+            preBuildNotification
+                    .setSmallIcon(R.drawable.ic_stat_icon)
+                    .setColor(getResources().getColor(R.color.accent));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
