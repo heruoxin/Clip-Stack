@@ -1,23 +1,53 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<transition xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape
-            android:shape="oval">
-            <gradient
-                android:type="radial"
-                android:gradientRadius="44"
-                android:startColor="@color/divider"
-                android:endColor="@android:color/transparent"
-                />
-            <padding
-                android:left="4dp"
-                android:top="4dp"
-                android:right="4dp"
-                android:bottom="4dp"/>
-        </shape>
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <gradient
+                        android:type="radial"
+                        android:gradientRadius="44"
+                        android:startColor="@color/divider"
+                        android:endColor="@android:color/transparent" />
+                    <padding
+                        android:left="4dp"
+                        android:top="4dp"
+                        android:right="4dp"
+                        android:bottom="4dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="oval">
+                    <solid
+                        android:id="@+id/fab_color"
+                        android:color="@color/fab" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
+
     <item>
-        <shape android:shape="oval">
-            <solid android:color="@color/fab" />
-        </shape>
+        <layer-list>
+            <item>
+                <shape android:shape="oval">
+                    <gradient
+                        android:type="radial"
+                        android:gradientRadius="44"
+                        android:startColor="@color/divider"
+                        android:endColor="@android:color/transparent" />
+                    <padding
+                        android:left="4dp"
+                        android:top="4dp"
+                        android:right="4dp"
+                        android:bottom="4dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="oval">
+                    <solid
+                        android:id="@+id/fab_color"
+                        android:color="@color/fab_starred" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
-</layer-list>
+</transition>

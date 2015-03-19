@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -365,6 +366,12 @@ public class ActivityMain extends MyActionBarActivity {
         setStarredIcon();
         lastStorageUpdate = null;
         setView();
+        final TransitionDrawable mFabBackground = (TransitionDrawable) mFAB.getBackground();
+        if (isStarred) {
+            mFabBackground.startTransition((int) mFAB.animate().getDuration());
+        } else {
+            mFabBackground.reverseTransition((int) mFAB.animate().getDuration());
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

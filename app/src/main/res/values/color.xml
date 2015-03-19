@@ -13,8 +13,7 @@
 
     <color name="ripple_primary">@color/primary_light</color>
     <color name="ripple_high_light">#FFF59D</color>
-    <!--
-    <color name="fab">#fca503</color>
-    -->
+
+    <color name="fab_starred">#fca503</color>
     <color name="fab">@color/accent</color>
 </resources>
