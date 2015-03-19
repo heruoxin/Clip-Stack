@@ -1,5 +1,6 @@
 <transition xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
+        <!--
         <layer-list>
             <item>
                 <shape android:shape="oval">
@@ -16,16 +17,20 @@
                 </shape>
             </item>
             <item>
-                <shape android:shape="oval">
-                    <solid
-                        android:id="@+id/fab_color"
-                        android:color="@color/fab" />
-                </shape>
+        -->
+        <shape android:shape="oval">
+            <solid
+                android:id="@+id/fab_color"
+                android:color="@color/fab" />
+        </shape>
+        <!--
             </item>
         </layer-list>
+        -->
     </item>
 
     <item>
+        <!--
         <layer-list>
             <item>
                 <shape android:shape="oval">
@@ -42,12 +47,15 @@
                 </shape>
             </item>
             <item>
-                <shape android:shape="oval">
-                    <solid
-                        android:id="@+id/fab_color"
-                        android:color="@color/fab_starred" />
-                </shape>
+        -->
+        <shape android:shape="oval">
+            <solid
+                android:id="@+id/fab_color"
+                android:color="@color/fab_starred" />
+        </shape>
+        <!--
             </item>
         </layer-list>
+        -->
     </item>
 </transition>
