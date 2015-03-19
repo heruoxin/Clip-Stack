@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
@@ -135,6 +136,7 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void setStarredIcon() {
+        final TransitionDrawable mFabBackground = (TransitionDrawable) mFAB.getBackground();
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_action_star_white);
         } else {
@@ -147,11 +149,13 @@ public class ActivityEditor extends MyActionBarActivity {
             public void run() {
                 if (isStarred) {
                     mFAB.setImageResource(R.drawable.ic_action_star_white);
+                    mFabBackground.startTransition((int) mFAB.animate().getDuration());
                 } else {
                     mFAB.setImageResource(R.drawable.ic_action_copy);
+                    mFabBackground.resetTransition();
                 }
-                mFAB.animate().scaleY(1);
                 mFAB.animate().scaleX(1);
+                mFAB.animate().scaleY(1);
             }
         }, 220);
     }
