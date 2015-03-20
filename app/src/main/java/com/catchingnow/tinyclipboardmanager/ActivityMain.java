@@ -100,7 +100,7 @@ public class ActivityMain extends MyActionBarActivity {
             public void onClick(View v) {
                 tooYoungTooSimple += 1;
                 switch (tooYoungTooSimple) {
-                    case 5:
+                    case 3:
                         db.modifyClip(
                                 null,
                                 "　 ∧_∧\n" +
@@ -111,7 +111,7 @@ public class ActivityMain extends MyActionBarActivity {
                                         "Are you clicking me ?"
                         );
                         break;
-                    case 6:
+                    case 4:
                         db.modifyClip(
                                 null,
                                 "　＜⌒／ヽ-_＿\n" +
@@ -120,14 +120,14 @@ public class ActivityMain extends MyActionBarActivity {
                                         "I want to sleep..."
                         );
                         break;
-                    case 7:
+                    case 5:
                         db.modifyClip(
                                 null,
                                 "╮(╯_╰)╭\n" +
                                         "Well..."
                         );
                         break;
-                    case 8:
+                    case 6:
                         Intent browserIntent = new Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
@@ -141,11 +141,16 @@ public class ActivityMain extends MyActionBarActivity {
                                         getString(R.string.pref_rate_summary),
                                 Toast.LENGTH_LONG
                         ).show();
-                        db.modifyClip(
-                                null,
-                                "(́^ _ ^)~♥\n" +
-                                        "Thank you!"
-                        );
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                db.modifyClip(
+                                        null,
+                                        "(́^ _ ^)~♥\n" +
+                                                "Thank you!"
+                                );
+                            }
+                        }, 500);
                         tooYoungTooSimple = 0;
                         break;
                 }
