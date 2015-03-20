@@ -94,5 +94,7 @@
     <string name="pref_notification_priority_low">\n低 - 无状态栏图标。\n显示在通知栏末尾。\n</string>
     <string name="pref_notification_priority_middle">中 - 有状态栏图标。\n显示在通知栏中部。</string>
     <string name="pref_click_summary">设置点按和长按的动作</string>
+    <string name="switch_all_items">所有剪贴板</string>
+    <string name="switch_only_starred_items">仅带星标的</string>
 
 </resources>

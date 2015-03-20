@@ -93,4 +93,6 @@
     <string name="pref_notification_priority_title">通知優先級</string>
     <string name="pref_rate_summary">如果覺得好用，請至 Google Play 為我評分！謝謝。</string>
     <string name="pref_rate_title">評分</string>
+    <string name="switch_all_items">所有剪貼簿</string>
+    <string name="switch_only_starred_items">帶星標的</string>
 </resources>
