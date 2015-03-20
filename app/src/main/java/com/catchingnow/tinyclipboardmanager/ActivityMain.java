@@ -124,9 +124,6 @@ public class ActivityMain extends MyActionBarActivity {
                         db.modifyClip(
                                 null,
                                 "╮(╯_╰)╭\n" +
-                                        "    ｜     ｜\n" +
-                                        "    //  ...  \\\\\n" +
-                                        "\n" +
                                         "Well..."
                         );
                         break;
