@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.TransitionDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -32,6 +33,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
@@ -96,14 +98,59 @@ public class ActivityMain extends MyActionBarActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tooYoungTooSimple < 10) {
-                    tooYoungTooSimple += 1;
-                } else {
-                    tooYoungTooSimple = 0;
-                    db.modifyClip(
-                            null,
-                            " _(: 3 」∠)_ "
-                            );
+                tooYoungTooSimple += 1;
+                switch (tooYoungTooSimple) {
+                    case 5:
+                        db.modifyClip(
+                                null,
+                                "　 ∧_∧\n" +
+                                        "　(  ❜ω❜ )\n" +
+                                        "　｜つ／(＿＿＿\n" +
+                                        "／└-(＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "Are you clicking me ?"
+                        );
+                        break;
+                    case 6:
+                        db.modifyClip(
+                                null,
+                                "　＜⌒／ヽ-_＿\n" +
+                                        "／＜_/＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "I want to sleep..."
+                        );
+                        break;
+                    case 7:
+                        db.modifyClip(
+                                null,
+                                "╮(╯_╰)╭\n" +
+                                        "    ｜     ｜\n" +
+                                        "    //  ...  \\\\\n" +
+                                        "\n" +
+                                        "Well..."
+                        );
+                        break;
+                    case 8:
+                        Intent browserIntent = new Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
+                        );
+                        startActivity(browserIntent);
+                        Toast.makeText(
+                                context,
+                                getString(R.string.pref_rate_title) +
+                                        " ★★★★★\n" +
+                                        "ヽ(́◕◞౪◟◕‵)ﾉ\n" +
+                                        getString(R.string.pref_rate_summary),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        db.modifyClip(
+                                null,
+                                "(́^ _ ^)~♥\n" +
+                                        "Thank you!"
+                        );
+                        tooYoungTooSimple = 0;
+                        break;
                 }
             }
         });
@@ -542,7 +589,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
 
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState){
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_IDLE:
@@ -759,7 +806,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
         public void remove(String clipString) {
-            for (ClipObject clipObject: clipObjectList) {
+            for (ClipObject clipObject : clipObjectList) {
                 if (clipObject.getText().equals(clipString)) {
                     remove(clipObject);
                     return;
