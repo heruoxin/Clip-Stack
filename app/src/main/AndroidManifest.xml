@@ -71,9 +71,9 @@
         </activity>
         <activity
             android:name=".ActivityEditor"
-            android:documentLaunchMode="intoExisting"
+            android:documentLaunchMode="always"
             android:label="@string/title_activity_activity_get_share_text"
-            android:maxRecents="2" >
+            android:maxRecents="1" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
