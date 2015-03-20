@@ -34,12 +34,14 @@
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:text="Test text text"
-                android:gravity="center_vertical"
                 android:minLines="3"
+                android:paddingTop="10dp"
                 android:paddingBottom="40dp"
+                android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+                android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
                 android:id="@+id/edit_text"
-                android:layout_centerInParent="true"
                 android:background="@null"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
             <View
