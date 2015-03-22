@@ -9,6 +9,8 @@
     <LinearLayout
         android:background="@color/primary"
         android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -18,7 +20,6 @@
             android:textColor="@color/set_off"
             android:background="@drawable/background_default_ripple_with_mask"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="@dimen/abc_action_button_min_height_material" />
@@ -33,7 +34,6 @@
             android:id="@+id/widget_title_add"
             android:src="@drawable/ic_action_add"
             android:background="@drawable/background_default_ripple"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_width="@dimen/abc_action_button_min_width_material"
             android:layout_height="@dimen/abc_action_button_min_height_material"
             android:contentDescription="@string/action_add" />
