@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -78,6 +79,24 @@ public class MyActionBarActivity extends ActionBarActivity {
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
 
         keyboardListenersAttached = true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    public Intent getIntent() {
+        Intent intent = super.getIntent();
+        if (intent == null) {
+            return new Intent();
+        } else {
+            return intent;
+        }
     }
 
     @Override

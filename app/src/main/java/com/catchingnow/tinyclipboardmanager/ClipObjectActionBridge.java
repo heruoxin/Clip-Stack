@@ -48,6 +48,8 @@ public class ClipObjectActionBridge extends IntentService {
 
         this.intent = intent;
 
+        if (intent == null) return;
+
         String clips = intent.getStringExtra(Intent.EXTRA_TEXT);
         int actionCode = intent.getIntExtra(ACTION_CODE, 0);
         Log.v(MyUtil.PACKAGE_NAME, "ACTION_CODE: " + actionCode);
