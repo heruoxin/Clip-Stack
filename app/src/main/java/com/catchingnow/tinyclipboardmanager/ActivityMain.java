@@ -54,6 +54,7 @@ public class ActivityMain extends MyActionBarActivity {
     private RecyclerView mRecList;
     private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
+    private LinearLayoutManager linearLayoutManager;
     private Toolbar mToolbar;
     private ImageButton mFAB;
     private SearchView searchView;
@@ -498,7 +499,7 @@ public class ActivityMain extends MyActionBarActivity {
         layoutInflater.inflate(R.layout.view_main_recycler, mRecLayout, true);
         mRecList = (RecyclerView) findViewById(R.id.cardList);
         mRecList.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
 
@@ -682,6 +683,7 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onActionClicked(Snackbar snackbar) {
                                 isUndo[0] = true;
                                 clipCardAdapter.add(position, clipObject);
+                                linearLayoutManager.scrollToPosition(position);
                             }
                         })
                 , this);
