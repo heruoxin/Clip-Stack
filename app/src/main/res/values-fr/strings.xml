@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--
+		License Creative Commons 0 (like the public domain)
+		This file is provided with no warranty.
+		Names of contributors must not be used to endorse or promote products derived from this software without specific prior written permission.
+		Done by Spanti Nicola (RyDroid) in 2015
+	-->
+	
+    <string name="app_name">Clip Stack</string>
+    <string name="clip_notification_copy_button">Copier</string>
+    <string name="clip_notification_share_button">Partager</string>
+    <string name="clip_notification_big_title">Presse-papiers récents</string>
+    <string name="clip_notification_text">Étendre pour en voir plus.</string>
+    <string name="clip_notification_single_text">Cliquer pour ajouter du texte.</string>
+    <string name="share_clipboard_to">Partager le texte avec…</string>
+    <string name="title_activity_main">"Clip Stack"</string>
+    <string name="hello_world">Bonjour le monde !</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_search">Rechercher</string>
+    <string name="search_hint">Rechercher…</string>
+    <string name="title_activity_activity_setting">Paramètres</string>
+    <string name="date_format">EEE, MMM dd</string>
+    <string name="time_format">HH:mm</string>
+    <string name="time_format_with_second">HH:mm:ss</string>
+    <string name="title_activity_activity_editor">Éditer</string>
+    <string name="action_share">Partager</string>
+    <string name="action_save">Sauvegarder</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="toast_deleted">Supprimé.</string>
+    <string name="action_refresh">Rafraichir</string>
+    <string name="toast_saved">Sauvegardé.</string>
+    <string name="toast_no_saved">Pas sauvegardé.</string>
+    <string name="pref_storage_title">Stockage</string>
+    <string name="pref_storage_summary">Nombre de jours de conservation des presse-papiers.</string>
+    <string name="pref_storage_dialog">Conserver les presse-papiers pendant</string>
+    <string name="pref_about_category">À propos</string>
+    <string name="pref_about_title">Open Source</string>
+    <string name="pref_about_summary">Voir le code source sur GitHub.</string>
+    <string name="pref_app_setting_category">Paramètres de l\'app</string>
+    <string name="pref_service_title">Service</string>
+    <string name="pref_service_summary">Écoute le presse-papier système en tâche de fond.</string>
+    <string name="pref_notification_title">Notification</string>
+    <string name="pref_notification_pin_title">Persistence de la notification</string>
+    <string name="pref_notification_pin_summary_on">Toujours montrer.</string>
+    <string name="pref_notification_pin_summary_off">Montrer uniquement quand le presse-papier change.</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="pref_storage_summary_infinite">Conserver tous les presse-papiers.</string>
+    <string name="pref_storage_summary_days">Conserver les presse-papiers pendant %d jours.</string>
+    <string name="title_activity_editor">Nouveau presse-papier</string>
+    <string name="first_launch_clipboards_0">Bienvenue dans Clip Stack. %1$s</string>
+    <string name="first_launch_clipboards_1">Cette app peut montrer l\'historique du presse-papier dans une notification.</string>
+    <string name="first_launch_clipboards_2">Cliquez içi %1$s pour éditer.</string>
+    <string name="first_launch_clipboards_3">%1$s Swiper pour supprimer. %2$s</string>
+    <string name="title_activity_activity_get_share_text">Copier dans le presse-papier</string>
+    <string name="action_add">Ajouter</string>
+    <string name="action_delete_all">Supprimer tout</string>
+    <string name="dialog_delete_all">Êtes vous sûr de vouloir supprimer tous les presse-papiers ?\nArticles étoilés seront conservés</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Annuler</string>
+    <string name="toast_undo">Annuler</string>
+    <string name="backup_file_name">"Clip Stack Backup "</string>
+    <string name="backup_file_name_old">"Clipping Now Backup "</string>
+    <string name="action_export">Exporter</string>
+    <string name="action_import">Importer</string>
+    <string name="export_success">Succès de l\'export : </string>
+    <string name="export_failed">Échec de l\'export. Il n\'y a peut être pas de carte SD ou elle est pleine.</string>
+    <string name="dialog_date_piker_from">Depuis :</string>
+    <string name="dialog_date_piker_to">Jusqu\'à :</string>
+    <string name="pref_notification_summary_on">Afficher une notification.</string>
+    <string name="pref_notification_summary_off">N\'afficher aucune notification.</string>
+    <string name="title_activity_backup">Backup</string>
+    <string name="switch_reverse_sort">Tri inverse</string>
+    <string name="action_backup">Backup</string>
+    <string name="dialog_description_are_you_sure">Êtes vous sûr ?</string>
+    <string name="progress_importing">Importation…</string>
+    <string name="title_activity_new_backup">Nouveau backup</string>
+    <string name="title_backups">Backups</string>
+    <string name="action_new_backup">Nouveau backup</string>
+    <string name="empty_card">Pas de backup</string>
+    <string name="toast_find_backup">%1$s backups\ndans %2$s</string>
+    <string name="clip_notification_text_old">Cliquer pour en voir plus.</string>
+    <string name="arrays_one_day">1 jour</string>
+    <string name="arrays_seven_days">7 jours</string>
+    <string name="arrays_three_days">3 jours</string>
+    <string name="arrays_thirty_days">30 jours</string>
+    <string name="arrays_infinite">infini</string>
+    <string name="action_star">★</string>
+    <string name="clip_notification_starred_single_text">Il y a aucun élément favori.</string>
+    <string name="pref_rate_title">Notez moi</string>
+    <string name="pref_rate_summary">Notez cette app si vous la pensez utile.</string>
+    <string name="pref_notification_priority_title">Priorité des notifications</string>
+    <string name="pref_notification_priority_summary">Définir la priorité des notifications.</string>
+    <string name="pref_click_title">Action du clic</string>
+    <string name="pref_click_summary">Définir les actions pour clic court et long.</string>
+    <string name="pref_click_summary_false">Cliquer pour éditer. Long clic pour copier.</string>
+    <string name="pref_click_summary_true">Cliquer pour copier. Long clic pour éditer.</string>
+    <string name="pref_notification_priority_low">\nBas - sans icône dans la barre de statut.\nÀ la fin des notifications.\n</string>
+    <string name="pref_notification_priority_middle">Moyen - avec l\'icône dans la barre de statut.\nAu milieu des notifications.</string>
+    <string name="pref_notification_priority_high">\nÉlevé - avec l\'icône dans la barre de statut.\nEn haut des notifications.\n</string>
+    <string name="clip_notification_title">%1$s</string>
+    <string name="toast_copied">%1$s a copié</string>
+</resources>
