@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Клип стек</string>
     <string name="clip_notification_title">%1$s</string>
@@ -30,8 +30,8 @@
     <string name="pref_storage_title">Складиште</string>
     <string name="pref_storage_dialog">Сачувај ставке</string>
     <string name="pref_about_category">О програму</string>
-    <string name="pref_about_title">Отворени код</string>
-    <string name="pref_about_summary">Прикажи изворни код на Гитхабу.</string>
+    <string name="pref_about_title">Отворени кôд</string>
+    <string name="pref_about_summary">Прикажи изворни кôд на Гитхабу.</string>
     <string name="pref_app_setting_category">Апликација</string>
     <string name="pref_service_title">Сервис</string>
     <string name="pref_service_summary">Слушај системски клипборд у позадини.</string>
@@ -75,6 +75,7 @@
     <string name="empty_card">Нема резерви</string>
     <string name="toast_find_backup">%1$s резерви\nу %2$s</string>
     <string name="clip_notification_text_old">Кликните за још.</string>
+    <string name="action_star">Са звездицом</string>
     <string name="arrays_one_day">1 дан</string>
     <string name="arrays_three_days">3 дана</string>
     <string name="arrays_seven_days">7 дана</string>
@@ -93,6 +94,7 @@
     <string name="pref_notification_priority_low">\nНиска — без иконе на траци стања.\nНа крају обавештења.\n</string>
     <string name="pref_notification_priority_middle">Средња — са иконом на траци стања.\nУ средини обавештења.</string>
     <string name="pref_notification_priority_high">\nВисока — са иконом на траци стања.\nНа врху обавештења.\n</string>
-    <string name="action_star">звезда</string>
+    <string name="switch_only_starred_items">Само ставке означене звездицом</string>
+    <string name="switch_all_items">Све ставке</string>
 
 </resources>
