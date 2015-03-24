@@ -2,7 +2,8 @@
 <resources>
 	<!--
 		License Creative Commons 0 (like the public domain)
-		This file is provided with no warranty
+		This file is provided with no warranty.
+		Names of contributors must not be used to endorse or promote products derived from this software without specific prior written permission.
 		Done by Spanti Nicola (RyDroid) in 2015
 	-->
 	
@@ -88,6 +89,17 @@
     <string name="arrays_thirty_days">30 jours</string>
     <string name="arrays_infinite">infini</string>
     <string name="action_star">★</string>
-    <string name="clip_notification_starred_single_text">There is no starred items.</string>
+    <string name="clip_notification_starred_single_text">Il y a aucun élément favori.</string>
     <string name="toast_front_string"></string>
+    <string name="pref_rate_title">Notez moi</string>
+    <string name="pref_rate_summary">Notez cette app si vous la pensez utile.</string>
+    <string name="pref_notification_priority_title">Priorité des notifications</string>
+    <string name="pref_notification_priority_summary">Définir la priorité des notifications.</string>
+    <string name="pref_click_title">Action du clic</string>
+    <string name="pref_click_summary">Définir les actions pour clic court et long.</string>
+    <string name="pref_click_summary_false">Cliquer pour éditer. Long clic pour copier.</string>
+    <string name="pref_click_summary_true">Cliquer pour copier. Long clic pour éditer.</string>
+    <string name="pref_notification_priority_low">\nBas - sans icône dans la barre de statut.\nÀ la fin des notifications.\n</string>
+    <string name="pref_notification_priority_middle">Moyen - avec l\'icône dans la barre de statut.\nAu milieu des notifications.</string>
+    <string name="pref_notification_priority_high">\nÉlevé - avec l\'icône dans la barre de statut.\nEn haut des notifications.\n</string>
 </resources>
