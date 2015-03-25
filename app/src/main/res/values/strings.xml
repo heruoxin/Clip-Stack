@@ -96,7 +96,7 @@
     <string name="pref_notification_priority_high">\nHigh - with status bar icon.\nAt the top of notifications.\n</string>
     <string name="switch_only_starred_items">Only starred clipboards</string>
     <string name="switch_all_items">All clipboards</string>
-    <string name="toast_service_temproray_stop">Temporary stopped</string>
-    <string name="toast_service_temproray_resume">Resumed</string>
+    <string name="toast_service_temporary_stop">Service stopped temporarily.</string>
+    <string name="toast_service_temporary_resume">Service resumed.</string>
 
 </resources>

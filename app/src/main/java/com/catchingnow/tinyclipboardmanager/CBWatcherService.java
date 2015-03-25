@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -22,6 +23,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,7 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_FORCE_SHOW_NOTIFICATION = "com.catchingnow.tinyclipboardmanager.EXTRA.FORCE_SHOW_NOTIFICATION";
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
+    public final static String INTENT_EXTRA_TEMPORARY_STOP = "com.catchingnow.tinyclipboardmanager.EXTRA.TEMPORARY_STOP";
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
     private final static String NOTIFICATION_GROUP = "notification_group";
@@ -41,9 +44,12 @@ public class CBWatcherService extends Service {
     private ClipboardManager clipboardManager;
     private SharedPreferences preference;
     private Storage db;
+    private Handler mHandler;
+
     boolean allowService = true;
     boolean allowNotification = true;
     protected boolean isStarred = false;
+    protected boolean temporaryStop = false;
     private boolean pinOnTop = false;
     private int notificationPriority = 0;
     private int isMyActivitiesOnForeground = 0;
@@ -57,6 +63,7 @@ public class CBWatcherService extends Service {
     @Override
     public void onCreate() {
         mContext = this;
+        mHandler = new Handler();
         preference = PreferenceManager.getDefaultSharedPreferences(this);
         readPreference();
         notificationManager = NotificationManagerCompat.from(this);
@@ -73,6 +80,7 @@ public class CBWatcherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean beforeTemporaryStop = temporaryStop;
         if (intent == null) {
             intent = new Intent();
         }
@@ -80,12 +88,36 @@ public class CBWatcherService extends Service {
         isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
         readPreference();
 
+
         if (!allowService) {
             if (isMyActivitiesOnForeground <= 0) {
                 stopSelf();
                 isMyActivitiesOnForeground = 0;
                 return Service.START_NOT_STICKY;
             }
+        }
+
+        temporaryStop = intent.getBooleanExtra(INTENT_EXTRA_TEMPORARY_STOP, false);
+        if (temporaryStop != beforeTemporaryStop) {
+            showNotification();
+
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            sendBroadcast(it);
+
+            final String toastText = temporaryStop ?
+                    getString(R.string.toast_service_temporary_stop)
+                    :
+                    getString(R.string.toast_service_temporary_resume);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(
+                            mContext,
+                            toastText,
+                            Toast.LENGTH_SHORT
+                            ).show();
+                }
+            });
         }
 
         if (intent.getBooleanExtra(INTENT_EXTRA_CHANGE_STAR_STATUES, false)) {
@@ -136,6 +168,7 @@ public class CBWatcherService extends Service {
 
     private void performClipboardCheck() {
         Log.v(MyUtil.PACKAGE_NAME, "performClipboardCheck");
+        if (temporaryStop) return;
         if (!clipboardManager.hasPrimaryClip()) return;
         String clipString;
         try {
@@ -441,9 +474,22 @@ public class CBWatcherService extends Service {
 
             if (clipObject.getText().equals(getString(R.string.clip_notification_single_text))) {
                 //hide copy button for 'add'
-                theClipView.setImageViewResource(R.id.clip_copy_button, R.drawable.transparent);
                 theClipView.setTextViewText(R.id.clip_text, "✍ " + getString(R.string.clip_notification_single_text));
                 theClipView.setViewVisibility(R.id.notification_item_down_line, View.GONE);
+                theClipView.setImageViewResource(R.id.clip_copy_button,
+                        temporaryStop ?
+                                R.drawable.ic_notification_action_play
+                                :
+                                R.drawable.ic_notification_action_pause
+                        );
+                Intent pauseIntent = new Intent(context, CBWatcherService.class)
+                        .putExtra(INTENT_EXTRA_TEMPORARY_STOP, !temporaryStop);
+                PendingIntent pPauseIntent = PendingIntent.getService(context,
+                        buttonNumber++,
+                        pauseIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                theClipView.setOnClickPendingIntent(R.id.clip_copy_button, pPauseIntent);
             } else {
                 clips.add(clipObject);
                 //add pIntent for copy
