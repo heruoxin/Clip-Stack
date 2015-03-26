@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.catchingnow.tinyclipboardmanager.ActivityMain">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/action_search"
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/action_star"
+        android:icon="@drawable/ic_switch_star_off"
+        android:title="@string/action_star"
+        app:showAsAction="always" />
+    <!--
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        app:showAsAction="never" />
+        -->
+    <item
+        android:id="@+id/action_delete_all"
+        android:title="@string/action_delete_all"
+        android:icon="@drawable/ic_action_delete"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_export"
+        android:title="@string/action_backup"
+        android:icon="@drawable/ic_action_import_export"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+</menu>

@@ -93,8 +93,11 @@ public class ActivityMain extends MyActionBarActivity {
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        mToolbar.setTitle(getString(R.string.title_activity_main));
-        mToolbar.setNavigationIcon(R.drawable.icon_shadow);
+        if (getString(R.string.screen_type).contains("phone")) {
+            mToolbar.setNavigationIcon(R.drawable.icon_shadow);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.ic_stat_icon);
+        }
         initView();
 
         //tablet layout
