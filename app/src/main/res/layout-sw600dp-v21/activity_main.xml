@@ -34,6 +34,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize" />
@@ -43,7 +44,8 @@
         android:elevation="@dimen/cardview_default_elevation"
         android:background="@color/set_off"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_below="@id/my_toolbar"
+        android:layout_marginTop="-4dp"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
         android:paddingTop="40dp"

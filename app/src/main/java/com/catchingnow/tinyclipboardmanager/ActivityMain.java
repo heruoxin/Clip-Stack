@@ -17,12 +17,14 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -305,6 +307,12 @@ public class ActivityMain extends MyActionBarActivity {
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                if (getString(R.string.screen_type).contains("tablet")) {
+                    MyUtil.ResizeWidthAnimation resizeWidthAnimation =
+                            new MyUtil.ResizeWidthAnimation(mToolbar, (20 + getScreenWidthPixels() * 2 / 3));
+                    resizeWidthAnimation.setDuration(TRANSLATION_FAST);
+                    mToolbar.startAnimation(resizeWidthAnimation);
+                }
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
@@ -315,6 +323,12 @@ public class ActivityMain extends MyActionBarActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (getString(R.string.screen_type).contains("tablet")) {
+                    MyUtil.ResizeWidthAnimation resizeWidthAnimation =
+                            new MyUtil.ResizeWidthAnimation(mToolbar, getScreenWidthPixels());
+                    resizeWidthAnimation.setDuration(TRANSLATION_FAST);
+                    mToolbar.startAnimation(resizeWidthAnimation);
+                }
                 searchView.clearFocus();
                 queryText = null;
                 lastStorageUpdate = null;
@@ -673,7 +687,7 @@ public class ActivityMain extends MyActionBarActivity {
                             if (getString(R.string.screen_type).contains("phone")) {
                                 mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
                             }
-                            mFAB.animate().translationZ(MyUtil.dip2px(context, 8));
+                            mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
                             break;
                     }
                 }
