@@ -7,6 +7,7 @@
     <LinearLayout
         android:id="@+id/backup_content"
         android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical"
         android:layout_weight="1"
         android:layout_width="0dp"

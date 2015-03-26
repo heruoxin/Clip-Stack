@@ -609,7 +609,7 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
-                    mFabRotation(true, TRANSLATION_SLOW);
+                    mFabRotation(true, TRANSLATION_FAST);
                     if (getString(R.string.screen_type).contains("phone")) {
                         mFabRotation(true, TRANSLATION_FAST);
                         mFAB.animate()
@@ -642,7 +642,7 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
-                    mFabRotation(false, TRANSLATION_SLOW);
+                    mFabRotation(false, TRANSLATION_FAST);
                     if (getString(R.string.screen_type).contains("phone")) {
                         mFabRotation(false, TRANSLATION_FAST);
                         mFAB.animate()
