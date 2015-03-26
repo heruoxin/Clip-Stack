@@ -1,10 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -138,4 +140,17 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onResume();
         CBWatcherService.startCBService(this,true , 1);
     }
+
+    public int getScreenWidthPixels() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.widthPixels;
+    }
+
+    public int getScreenHeightPixels() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.heightPixels;
+    }
+
 }

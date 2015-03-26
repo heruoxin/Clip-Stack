@@ -47,7 +47,7 @@
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
         android:paddingTop="40dp"
-        android:layout_width="520dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent">
 
         <RelativeLayout

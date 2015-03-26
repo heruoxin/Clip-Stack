@@ -32,6 +32,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +96,18 @@ public class ActivityMain extends MyActionBarActivity {
         mToolbar.setTitle(getString(R.string.title_activity_main));
         mToolbar.setNavigationIcon(R.drawable.icon_shadow);
         initView();
+
+        //tablet layout
+        if (getString(R.string.screen_type).contains("tablet")) {
+            RelativeLayout tabletMain = (RelativeLayout) findViewById(R.id.tablet_main);
+            if (tabletMain != null) {
+                ViewGroup.LayoutParams tabletMainLayoutParams = tabletMain.getLayoutParams();
+                tabletMainLayoutParams.width =
+                        (getScreenWidthPixels() * 2/3);
+                tabletMain.setLayoutParams(tabletMainLayoutParams);
+            }
+        }
+
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

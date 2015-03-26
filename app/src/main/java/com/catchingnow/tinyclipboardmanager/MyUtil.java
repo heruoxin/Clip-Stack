@@ -1,6 +1,8 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.DisplayMetrics;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
