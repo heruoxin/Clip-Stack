@@ -1,10 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -104,12 +106,16 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbar.setElevation(16);
-        } else {
-            View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
-            if (mToolbarShadow != null) {
-                mToolbarShadow.setVisibility(View.VISIBLE);
+
+        //set toolbar shadow for phone.
+        if (getString(R.string.screen_type).contains("phone")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mToolbar.setElevation(MyUtil.dip2px(this, 4));
+            } else {
+                View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
+                if (mToolbarShadow != null) {
+                    mToolbarShadow.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -134,4 +140,17 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onResume();
         CBWatcherService.startCBService(this,true , 1);
     }
+
+    public int getScreenWidthPixels() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.widthPixels;
+    }
+
+    public int getScreenHeightPixels() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        return displaymetrics.heightPixels;
+    }
+
 }

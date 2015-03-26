@@ -17,12 +17,14 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,9 +95,24 @@ public class ActivityMain extends MyActionBarActivity {
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        mToolbar.setTitle(getString(R.string.title_activity_main));
-        mToolbar.setNavigationIcon(R.drawable.icon_shadow);
+        if (getString(R.string.screen_type).contains("phone")) {
+            mToolbar.setNavigationIcon(R.drawable.icon_shadow);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.ic_stat_icon);
+        }
         initView();
+
+        //tablet layout
+        if (getString(R.string.screen_type).contains("tablet")) {
+            RelativeLayout tabletMain = (RelativeLayout) findViewById(R.id.tablet_main);
+            if (tabletMain != null) {
+                ViewGroup.LayoutParams tabletMainLayoutParams = tabletMain.getLayoutParams();
+                tabletMainLayoutParams.width =
+                        (getScreenWidthPixels() * 2/3);
+                tabletMain.setLayoutParams(tabletMainLayoutParams);
+            }
+        }
+
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +206,30 @@ public class ActivityMain extends MyActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (getString(R.string.screen_type).contains("phone")) {
+            //phone
+            mFAB.setTranslationX(0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().translationX(MyUtil.dip2px(context, 90));
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        } else {
+            //tablet
+            mFAB.setScaleX(1);
+            mFAB.setScaleY(1);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().scaleX(0).scaleY(0);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        }
+
         isFromNotification = false;
         clearDeleteQueue();
         db.updateSystemClipboard();
@@ -214,14 +256,28 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setTranslationX(MyUtil.dip2px(context, 90));
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mFAB.animate().translationX(0);
-                mFabRotation(false, 600);
-            }
-        }, 600);
+        if (getString(R.string.screen_type).contains("phone")) {
+            //phone
+            mFAB.setTranslationX(MyUtil.dip2px(context, 90));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().translationX(0);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        } else {
+            //tablet
+            mFAB.setScaleX(0);
+            mFAB.setScaleY(0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().scaleX(1).scaleY(1);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        }
     }
 
     @Override
@@ -251,6 +307,12 @@ public class ActivityMain extends MyActionBarActivity {
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                if (getString(R.string.screen_type).contains("tablet")) {
+                    MyUtil.ResizeWidthAnimation resizeWidthAnimation =
+                            new MyUtil.ResizeWidthAnimation(mToolbar, (20 + getScreenWidthPixels() * 2 / 3));
+                    resizeWidthAnimation.setDuration(TRANSLATION_FAST);
+                    mToolbar.startAnimation(resizeWidthAnimation);
+                }
                 searchView.setIconified(false);
                 searchView.requestFocus();
                 queryText = searchView.getQuery().toString();
@@ -261,6 +323,12 @@ public class ActivityMain extends MyActionBarActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (getString(R.string.screen_type).contains("tablet")) {
+                    MyUtil.ResizeWidthAnimation resizeWidthAnimation =
+                            new MyUtil.ResizeWidthAnimation(mToolbar, getScreenWidthPixels());
+                    resizeWidthAnimation.setDuration(TRANSLATION_FAST);
+                    mToolbar.startAnimation(resizeWidthAnimation);
+                }
                 searchView.clearFocus();
                 queryText = null;
                 lastStorageUpdate = null;
@@ -344,9 +412,12 @@ public class ActivityMain extends MyActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate()
-                        .translationX(MyUtil.dip2px(context, 90))
-                        .setListener(new Animator.AnimatorListener() {
+                if (getString(R.string.screen_type).contains("phone")) {
+                    mFAB.animate().translationX(MyUtil.dip2px(context, 90));
+                } else {
+                    mFAB.animate().scaleX(0).scaleY(0);
+                }
+                mFAB.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -382,9 +453,12 @@ public class ActivityMain extends MyActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate()
-                        .translationX(0)
-                        .setListener(new Animator.AnimatorListener() {
+                if (getString(R.string.screen_type).contains("phone")) {
+                    mFAB.animate().translationX(0);
+                } else {
+                    mFAB.animate().scaleX(1).scaleY(1);
+                }
+                mFAB.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -536,8 +610,12 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(true, TRANSLATION_FAST);
+                    if (getString(R.string.screen_type).contains("phone")) {
+                        mFabRotation(true, TRANSLATION_FAST);
+                        mFAB.animate()
+                                .translationY(MyUtil.dip2px(context, 90));
+                    }
                     mFAB.animate()
-                            .translationY(MyUtil.dip2px(context, 90))
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -565,8 +643,12 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
                     mFabRotation(false, TRANSLATION_FAST);
+                    if (getString(R.string.screen_type).contains("phone")) {
+                        mFabRotation(false, TRANSLATION_FAST);
+                        mFAB.animate()
+                                .translationY(0);
+                    }
                     mFAB.animate()
-                            .translationY(0)
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -596,12 +678,16 @@ public class ActivityMain extends MyActionBarActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_IDLE:
-                            mToolbar.animate().translationZ(0);
+                            if (getString(R.string.screen_type).contains("phone")) {
+                                mToolbar.animate().translationZ(0);
+                            }
                             mFAB.animate().translationZ(0);
                             break;
                         default:
-                            mToolbar.animate().translationZ(14);
-                            mFAB.animate().translationZ(14);
+                            if (getString(R.string.screen_type).contains("phone")) {
+                                mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
+                            }
+                            mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
                             break;
                     }
                 }
@@ -644,10 +730,11 @@ public class ActivityMain extends MyActionBarActivity {
                             @Override
                             public void onShow(Snackbar snackbar) {
                                 mFabRotation(false, TRANSLATION_FAST);
-                                mFAB.animate()
-                                        .translationY(-snackbar.getHeight());
-                                if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
-                                    mRecList.animate().translationY(-snackbar.getHeight());
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mFAB.animate().translationY(-snackbar.getHeight());
+                                    if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
+                                        mRecList.animate().translationY(-snackbar.getHeight());
+                                    }
                                 }
                             }
 
@@ -669,8 +756,10 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onDismissed(Snackbar snackbar) {
                                 if (isSnackbarShow <= 0) {
                                     isSnackbarShow = 0;
-                                    mFAB.animate().translationY(0);
-                                    mRecList.animate().translationY(0);
+                                    if (getString(R.string.screen_type).contains("phone")) {
+                                        mFAB.animate().translationY(0);
+                                        mRecList.animate().translationY(0);
+                                    }
                                     mFabRotation(true, TRANSLATION_SLOW);
                                 }
                                 //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {

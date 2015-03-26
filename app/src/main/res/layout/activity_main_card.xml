@@ -42,7 +42,7 @@
                     android:id="@+id/activity_main_card_star_button"
                     android:contentDescription="@string/action_star"
                     android:src="@drawable/ic_action_star_outline_grey600"
-                    android:background="@android:color/transparent"
+                    android:background="?android:attr/selectableItemBackground"
                     android:layout_gravity="center"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
@@ -83,7 +83,7 @@
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
-                android:background="@android:color/transparent"
+                android:background="?android:attr/selectableItemBackground"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_notification_action_share"
                 android:layout_below="@id/activity_main_card_time"
