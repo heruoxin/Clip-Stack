@@ -204,6 +204,30 @@ public class ActivityMain extends MyActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (getString(R.string.screen_type).contains("phone")) {
+            //phone
+            mFAB.setTranslationX(0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().translationX(MyUtil.dip2px(context, 90));
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        } else {
+            //tablet
+            mFAB.setScaleX(1);
+            mFAB.setScaleY(1);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().scaleX(0).scaleY(0);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        }
+
         isFromNotification = false;
         clearDeleteQueue();
         db.updateSystemClipboard();
@@ -230,14 +254,28 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-        mFAB.setTranslationX(MyUtil.dip2px(context, 90));
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mFAB.animate().translationX(0);
-                mFabRotation(false, 600);
-            }
-        }, 600);
+        if (getString(R.string.screen_type).contains("phone")) {
+            //phone
+            mFAB.setTranslationX(MyUtil.dip2px(context, 90));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().translationX(0);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        } else {
+            //tablet
+            mFAB.setScaleX(0);
+            mFAB.setScaleY(0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFAB.animate().scaleX(1).scaleY(1);
+                    mFabRotation(false, 600);
+                }
+            }, 600);
+        }
     }
 
     @Override
@@ -360,9 +398,12 @@ public class ActivityMain extends MyActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate()
-                        .translationX(MyUtil.dip2px(context, 90))
-                        .setListener(new Animator.AnimatorListener() {
+                if (getString(R.string.screen_type).contains("phone")) {
+                    mFAB.animate().translationX(MyUtil.dip2px(context, 90));
+                } else {
+                    mFAB.animate().scaleX(0).scaleY(0);
+                }
+                mFAB.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -398,9 +439,12 @@ public class ActivityMain extends MyActionBarActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mFAB.animate()
-                        .translationX(0)
-                        .setListener(new Animator.AnimatorListener() {
+                if (getString(R.string.screen_type).contains("phone")) {
+                    mFAB.animate().translationX(0);
+                } else {
+                    mFAB.animate().scaleX(1).scaleY(1);
+                }
+                mFAB.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
