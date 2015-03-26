@@ -29,5 +29,8 @@
         <item name="toolbarStyle">@style/Widget.Toolbar</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/change_elements_transform</item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_elements_transform</item>
     </style>
 </resources>

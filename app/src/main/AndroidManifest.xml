@@ -55,7 +55,7 @@
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppDialogTheme" >
 
             <!-- android:documentLaunchMode="intoExisting" -->
             <!-- android:parentActivityName=".ActivityMain" -->
@@ -86,7 +86,8 @@
         <activity
             android:name=".ActivityBackup"
             android:label="@string/title_activity_backup"
-            android:parentActivityName=".ActivityMain" >
+            android:parentActivityName=".ActivityMain"
+            android:theme="@style/AppDialogTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
@@ -94,7 +95,8 @@
         <activity
             android:name=".ActivityBackupNew"
             android:label="@string/title_activity_new_backup"
-            android:parentActivityName=".ActivityBackup" >
+            android:parentActivityName=".ActivityBackup"
+            android:theme="@style/AppDialogTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
