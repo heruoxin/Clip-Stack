@@ -595,9 +595,13 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
-                    mFabRotation(true, TRANSLATION_FAST);
+                    mFabRotation(true, TRANSLATION_SLOW);
+                    if (getString(R.string.screen_type).contains("phone")) {
+                        mFabRotation(true, TRANSLATION_FAST);
+                        mFAB.animate()
+                                .translationY(MyUtil.dip2px(context, 90));
+                    }
                     mFAB.animate()
-                            .translationY(MyUtil.dip2px(context, 90))
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -624,9 +628,13 @@ public class ActivityMain extends MyActionBarActivity {
                     if (isXHidden != -1) return;
                     if (isSnackbarShow > 0) return;
                     isYHidden = 0;
-                    mFabRotation(false, TRANSLATION_FAST);
+                    mFabRotation(false, TRANSLATION_SLOW);
+                    if (getString(R.string.screen_type).contains("phone")) {
+                        mFabRotation(false, TRANSLATION_FAST);
+                        mFAB.animate()
+                                .translationY(0);
+                    }
                     mFAB.animate()
-                            .translationY(0)
                             .setListener(new Animator.AnimatorListener() {
                                 @Override
                                 public void onAnimationStart(Animator animation) {
@@ -663,9 +671,9 @@ public class ActivityMain extends MyActionBarActivity {
                             break;
                         default:
                             if (getString(R.string.screen_type).contains("phone")) {
-                                mToolbar.animate().translationZ(14);
+                                mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
                             }
-                            mFAB.animate().translationZ(14);
+                            mFAB.animate().translationZ(MyUtil.dip2px(context, 8));
                             break;
                     }
                 }
@@ -708,10 +716,11 @@ public class ActivityMain extends MyActionBarActivity {
                             @Override
                             public void onShow(Snackbar snackbar) {
                                 mFabRotation(false, TRANSLATION_FAST);
-                                mFAB.animate()
-                                        .translationY(-snackbar.getHeight());
-                                if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
-                                    mRecList.animate().translationY(-snackbar.getHeight());
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mFAB.animate().translationY(-snackbar.getHeight());
+                                    if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
+                                        mRecList.animate().translationY(-snackbar.getHeight());
+                                    }
                                 }
                             }
 
@@ -733,8 +742,10 @@ public class ActivityMain extends MyActionBarActivity {
                             public void onDismissed(Snackbar snackbar) {
                                 if (isSnackbarShow <= 0) {
                                     isSnackbarShow = 0;
-                                    mFAB.animate().translationY(0);
-                                    mRecList.animate().translationY(0);
+                                    if (getString(R.string.screen_type).contains("phone")) {
+                                        mFAB.animate().translationY(0);
+                                        mRecList.animate().translationY(0);
+                                    }
                                     mFabRotation(true, TRANSLATION_SLOW);
                                 }
                                 //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {

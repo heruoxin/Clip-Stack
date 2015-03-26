@@ -110,7 +110,7 @@ public class MyActionBarActivity extends ActionBarActivity {
         //set toolbar shadow for phone.
         if (getString(R.string.screen_type).contains("phone")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mToolbar.setElevation(16);
+                mToolbar.setElevation(MyUtil.dip2px(this, 4));
             } else {
                 View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
                 if (mToolbarShadow != null) {

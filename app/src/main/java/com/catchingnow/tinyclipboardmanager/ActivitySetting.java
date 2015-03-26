@@ -78,7 +78,7 @@ public class ActivitySetting extends MyPreferenceActivity {
     protected void onResume() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mActionBar.setElevation(16);
+            mActionBar.setElevation(MyUtil.dip2px(context, 4));
         } else {
             View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
             if (mToolbarShadow != null) {
