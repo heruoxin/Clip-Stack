@@ -73,7 +73,8 @@
             android:name=".ActivityEditor"
             android:documentLaunchMode="always"
             android:label="@string/title_activity_activity_get_share_text"
-            android:maxRecents="1" >
+            android:maxRecents="1"
+            android:theme="@style/AppDialogTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
