@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+    <string name="screen_type">7-inch-tablet</string>
+</resources>

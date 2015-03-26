@@ -104,12 +104,16 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mToolbar.setElevation(16);
-        } else {
-            View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
-            if (mToolbarShadow != null) {
-                mToolbarShadow.setVisibility(View.VISIBLE);
+
+        //set toolbar shadow for phone.
+        if (getString(R.string.screen_type).contains("phone")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mToolbar.setElevation(16);
+            } else {
+                View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
+                if (mToolbarShadow != null) {
+                    mToolbarShadow.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
