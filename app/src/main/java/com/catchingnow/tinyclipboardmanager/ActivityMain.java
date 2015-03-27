@@ -58,13 +58,13 @@ public class ActivityMain extends MyActionBarActivity {
     private LinearLayout mRecLayout;
     private ClipCardAdapter clipCardAdapter;
     private LinearLayoutManager linearLayoutManager;
-    private Toolbar mToolbar;
+    protected Toolbar mToolbar;
     private ImageButton mFAB;
     private SearchView searchView;
     private MenuItem searchItem;
-    private MenuItem starItem;
+    protected MenuItem starItem;
 
-    private Context context;
+    protected Context context;
     private Storage db;
     private List<ClipObject> clips;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
@@ -75,10 +75,10 @@ public class ActivityMain extends MyActionBarActivity {
     private int isXHidden = -1;
     private boolean isRotating = false;
 
+    protected boolean isStarred = false;
     private boolean clickToCopy = true;
     private int isSnackbarShow = 0;
     private boolean isFromNotification = false;
-    private boolean isStarred = false;
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
@@ -300,6 +300,7 @@ public class ActivityMain extends MyActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         starItem = menu.findItem(R.id.action_star);
+        setStarredIcon();
         searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) searchItem.getActionView();
@@ -545,7 +546,7 @@ public class ActivityMain extends MyActionBarActivity {
         deleteQueue.clear();
     }
 
-    private void setStarredIcon() {
+    protected void setStarredIcon() {
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_switch_star_on);
         } else {

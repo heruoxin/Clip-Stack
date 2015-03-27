@@ -1,9 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.app.IntentService;
-import android.appwidget.AppWidgetManager;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -21,7 +19,7 @@ public class ClipObjectActionBridge extends IntentService {
     public final static int ACTION_SHARE = 2;
     public final static int ACTION_EDIT = 3;
     public final static int ACTION_STAR = 4;
-    public final static int ACTION_OPEN_MAIN  = 5;
+    public final static int ACTION_OPEN_MAIN_DIALOG = 5;
     public final static int ACTION_REFRESH_WIDGET = 6;
     public final static int ACTION_CHANGE_WIDGET_STAR = 7;
     public final static String ACTION_CODE = "com.catchingnow.tinyclipboardmanager.actionCode";
@@ -68,8 +66,8 @@ public class ClipObjectActionBridge extends IntentService {
             case ACTION_STAR:
                 starText(clips);
                 return;
-            case ACTION_OPEN_MAIN:
-                openMainActivity();
+            case ACTION_OPEN_MAIN_DIALOG:
+                openMainDialogActivity();
                 return;
             case ACTION_REFRESH_WIDGET:
                 AppWidget.updateAllAppWidget(this);
@@ -128,9 +126,9 @@ public class ClipObjectActionBridge extends IntentService {
         db.changeClipStarStatus(clips);
     }
 
-    private void openMainActivity() {
+    private void openMainDialogActivity() {
         //open by this will be auto closed when copy.
-        Intent i = new Intent(this, ActivityMain.class)
+        Intent i = new Intent(this, ActivityMainDialog.class)
                 .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
