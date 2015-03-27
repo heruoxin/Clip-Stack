@@ -130,6 +130,7 @@ public class ClipObjectActionBridge extends IntentService {
         //open by this will be auto closed when copy.
         Intent i = new Intent(this, ActivityMainDialog.class)
                 .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
