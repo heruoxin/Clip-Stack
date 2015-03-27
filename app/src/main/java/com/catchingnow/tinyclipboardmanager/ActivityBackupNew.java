@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -122,7 +123,8 @@ public class ActivityBackupNew extends MyActionBarActivity {
         datePickerFrom.setMaxDate(dateTo.getTimeInMillis());
         datePickerTo.setMaxDate(dateTo.getTimeInMillis());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             HorizontalScrollView datePickersScrollView = (HorizontalScrollView) findViewById(R.id.date_pickers_scroll_view);
             datePickersScrollView.smoothScrollTo(0, 0);
         } else {

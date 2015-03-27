@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -151,6 +152,21 @@ public class MyActionBarActivity extends ActionBarActivity {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         return displaymetrics.heightPixels;
+    }
+
+    public int getScreenOrientation() {
+        int width = getScreenWidthPixels();
+        int height = getScreenHeightPixels();
+        if(width > height) {
+            Log.v(MyUtil.PACKAGE_NAME, "ORIENTATION_LANDSCAPE");
+            return Configuration.ORIENTATION_LANDSCAPE;
+        }
+        if (width < height) {
+            Log.v(MyUtil.PACKAGE_NAME, "ORIENTATION_PORTRAIT");
+            return Configuration.ORIENTATION_PORTRAIT;
+        }
+        Log.v(MyUtil.PACKAGE_NAME, "ORIENTATION_SQUARE");
+        return Configuration.ORIENTATION_SQUARE;
     }
 
 }

@@ -1,8 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
