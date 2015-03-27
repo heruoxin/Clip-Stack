@@ -79,7 +79,7 @@ public class AppWidget extends AppWidgetProvider {
                 context,
                 2,
                 new Intent(context, ActivityEditor.class)
-                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false)
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred)
                         .putExtra(Intent.EXTRA_TEXT, ""),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
