@@ -233,13 +233,13 @@ public class CBWatcherService extends Service {
 
         length = (length > (NUMBER_OF_CLIPS + 1)) ? (NUMBER_OF_CLIPS + 1) : length;
 
-        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent pOpenMainIntent =
+        Intent openMainDialogIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN_DIALOG);
+        PendingIntent pOpenMainDialogIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        openMainIntent,
+                        openMainDialogIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
@@ -248,7 +248,7 @@ public class CBWatcherService extends Service {
                 .setSmallIcon(R.drawable.ic_stat_icon_colorful)
                 .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                 .setColor(getResources().getColor(R.color.primary_light))
-                .setContentIntent(pOpenMainIntent)
+                .setContentIntent(pOpenMainDialogIntent)
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
                 .setGroup(NOTIFICATION_GROUP)
@@ -322,13 +322,13 @@ public class CBWatcherService extends Service {
             }
         }
 
-        Intent openMainIntent = new Intent(this, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
-        PendingIntent pOpenMainIntent =
+        Intent openMainDialogIntent = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN_DIALOG);
+        PendingIntent pOpenMainDialogIntent =
                 PendingIntent.getService(
                         this,
                         pIntentId--,
-                        openMainIntent,
+                        openMainDialogIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         Intent openEditorIntent = new Intent(this, ClipObjectActionBridge.class)
@@ -342,7 +342,7 @@ public class CBWatcherService extends Service {
                 );
 
         NotificationCompat.Builder preBuildN = new NotificationCompat.Builder(this)
-                .setContentIntent(pOpenMainIntent)
+                .setContentIntent(pOpenMainDialogIntent)
                 .setContentTitle(getString(R.string.clip_notification_title, currentClip))
                 .setOngoing(pinOnTop)
                 .setAutoCancel(false)
@@ -520,7 +520,7 @@ public class CBWatcherService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent openMainIntent = new Intent(context, ClipObjectActionBridge.class)
-                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN);
+                    .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN_DIALOG);
             PendingIntent pOpenMainIntent =
                     PendingIntent.getService(
                             context,

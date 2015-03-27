@@ -20,7 +20,7 @@
         <item name="navigationIcon">?attr/homeAsUpIndicator</item>
     </style>
 
-    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
+    <style name="AppDialogWhenLargeTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
         <item name="android:colorControlHighlight">@color/ripple_primary</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -33,4 +33,19 @@
         <item name="android:windowSharedElementEnterTransition">@transition/change_elements_transform</item>
         <item name="android:windowSharedElementExitTransition">@transition/change_elements_transform</item>
     </style>
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorControlHighlight">@color/ripple_primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorEdgeEffect">@color/primary</item>
+        <item name="toolbarStyle">@style/Widget.Toolbar</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/change_elements_transform</item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_elements_transform</item>
+    </style>
+
 </resources>

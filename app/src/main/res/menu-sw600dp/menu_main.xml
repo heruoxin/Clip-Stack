@@ -20,20 +20,22 @@
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="never" />
         -->
-    <item
-        android:id="@+id/action_delete_all"
-        android:title="@string/action_delete_all"
-        android:icon="@drawable/ic_action_delete"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_export"
-        android:title="@string/action_backup"
-        android:icon="@drawable/ic_action_import_export"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+    <group android:id="@+id/menu_group">
+        <item
+            android:id="@+id/action_delete_all"
+            android:title="@string/action_delete_all"
+            android:icon="@drawable/ic_action_delete"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_export"
+            android:title="@string/action_backup"
+            android:icon="@drawable/ic_action_import_export"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_settings"
+            android:title="@string/action_settings"
+            android:icon="@drawable/ic_action_settings"
+            android:orderInCategory="100"
+            app:showAsAction="never" />
+    </group>
 </menu>

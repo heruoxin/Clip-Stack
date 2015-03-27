@@ -52,10 +52,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".ActivityMainDialog"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppDialogTheme"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop" >
+        </activity>
+
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
-            android:theme="@style/AppDialogTheme" >
+            android:theme="@style/AppDialogWhenLargeTheme" >
 
             <!-- android:documentLaunchMode="intoExisting" -->
             <!-- android:parentActivityName=".ActivityMain" -->
@@ -74,7 +84,7 @@
             android:documentLaunchMode="always"
             android:label="@string/title_activity_activity_get_share_text"
             android:maxRecents="1"
-            android:theme="@style/AppDialogTheme">
+            android:theme="@style/AppDialogWhenLargeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -87,7 +97,7 @@
             android:name=".ActivityBackup"
             android:label="@string/title_activity_backup"
             android:parentActivityName=".ActivityMain"
-            android:theme="@style/AppDialogTheme">
+            android:theme="@style/AppDialogWhenLargeTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
@@ -96,7 +106,7 @@
             android:name=".ActivityBackupNew"
             android:label="@string/title_activity_new_backup"
             android:parentActivityName=".ActivityBackup"
-            android:theme="@style/AppDialogTheme">
+            android:theme="@style/AppDialogWhenLargeTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
