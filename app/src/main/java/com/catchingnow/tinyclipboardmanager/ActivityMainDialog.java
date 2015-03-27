@@ -26,6 +26,7 @@ public class ActivityMainDialog extends ActivityMain {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, ActivityMain.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 );
             }
@@ -42,12 +43,12 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void onPause() {
         super.onPause();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                    finish();
-            }
-        }, 400);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                    finish();
+//            }
+//        }, 200);
     }
 
     @Override
