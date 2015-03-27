@@ -309,7 +309,7 @@ public class ActivityMain extends MyActionBarActivity {
             public boolean onMenuItemActionExpand(MenuItem item) {
                 if (getString(R.string.screen_type).contains("tablet")) {
                     MyUtil.ResizeWidthAnimation resizeWidthAnimation =
-                            new MyUtil.ResizeWidthAnimation(mToolbar, (20 + getScreenWidthPixels() * 2 / 3));
+                            new MyUtil.ResizeWidthAnimation(mToolbar, (getScreenWidthPixels() * 2 / 3));
                     resizeWidthAnimation.setDuration(TRANSLATION_FAST);
                     mToolbar.startAnimation(resizeWidthAnimation);
                 }

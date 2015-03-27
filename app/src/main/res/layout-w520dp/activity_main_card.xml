@@ -1,62 +1,62 @@
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:id="@+id/main_view"
         android:orientation="horizontal"
+        android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false">
 
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-            android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:layout_marginRight="16sp"
             android:layout_weight="10"
-            android:layout_width="0dp"
+            android:layout_width="0sp"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/activity_main_card_date"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="20sp"
                 android:text="Sun Jan 22"
                 android:textColor="@color/accent"
                 android:gravity="center_vertical"
                 android:textSize="12sp" />
 
+
             <LinearLayout
                 android:layout_below="@id/activity_main_card_date"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/abc_action_bar_stacked_max_height">
+                android:layout_height="50sp">
 
                 <ImageButton
                     android:id="@+id/activity_main_card_star_button"
                     android:contentDescription="@string/action_star"
                     android:src="@drawable/ic_action_star_outline_grey600"
-                    android:background="@drawable/background_star"
+                    android:background="?android:attr/selectableItemBackground"
                     android:layout_gravity="center"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:padding="4dp"
+                    android:layout_width="42sp"
+                    android:layout_height="42sp"
+                    android:padding="4sp"
                     android:scaleType="fitCenter" />
 
                 <TextView
                     android:id="@+id/activity_main_card_text"
                     android:gravity="center_vertical|start"
-                    android:layout_below="@id/activity_main_card_date"
-                    android:background="@drawable/background_default_ripple_with_mask"
+                    android:background="?android:attr/selectableItemBackground"
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:lineSpacingMultiplier="1.3"
                     android:text="hello, this is a text test aaaaaaaadac \n dawdasddddsadwaf fefwada wddwdafa awd"
-                    android:textSize="@dimen/abc_text_size_body_1_material"
+                    android:textSize="16sp"
                     android:textColor="@color/secondary_text_default_material_light"
-                    android:layout_height="@dimen/abc_action_bar_stacked_max_height"
+                    android:layout_height="50sp"
                     android:layout_width="match_parent" />
             </LinearLayout>
 
@@ -64,29 +64,31 @@
 
         <RelativeLayout
             android:layout_gravity="top"
-            android:layout_margin="6dp"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="9sp"
+            android:layout_marginLeft="6sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/activity_main_card_time"
+                android:layout_marginBottom="2sp"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="20sp"
                 android:text="13:23"
                 android:textColor="@color/accent"
-                android:gravity="center"
                 android:textSize="12sp" />
 
             <ImageButton
                 android:id="@+id/activity_main_card_share_button"
-                android:background="@drawable/background_default_ripple"
-                android:layout_marginTop="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginTop="2sp"
                 android:src="@drawable/ic_notification_action_share"
                 android:layout_below="@id/activity_main_card_time"
                 android:layout_gravity="center"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:padding="4dp"
+                android:layout_width="38sp"
+                android:layout_height="38sp"
+                android:padding="8sp"
                 android:scaleType="fitCenter"
                 android:contentDescription="@string/clip_notification_share_button" />
         </RelativeLayout>
@@ -95,9 +97,17 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1px"
+        android:layout_height="0.5dp"
         android:layout_below="@id/main_view"
-        android:background="#B6B6B6" />
+        android:layout_marginRight="8sp"
+        android:background="@color/divider" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/main_view"
+        android:layout_marginRight="8sp"
+        android:background="@color/divider" />
 
 </RelativeLayout>
 

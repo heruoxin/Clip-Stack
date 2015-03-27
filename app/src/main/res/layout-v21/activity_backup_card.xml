@@ -36,7 +36,7 @@
         android:scaleType="centerInside"
         android:background="@drawable/background_delete"
         android:stateListAnimator="@animator/anim"
-        android:layout_width="46dp"
-        android:layout_height="52dp" />
+        android:layout_width="46sp"
+        android:layout_height="52sp" />
 
 </LinearLayout>

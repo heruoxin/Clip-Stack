@@ -34,7 +34,7 @@
         android:src="@drawable/ic_action_delete"
         android:scaleType="centerInside"
         android:background="@color/divider"
-        android:layout_width="46dp"
-        android:layout_height="52dp" />
+        android:layout_width="46sp"
+        android:layout_height="52sp" />
 
 </LinearLayout>
