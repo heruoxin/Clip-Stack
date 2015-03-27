@@ -64,6 +64,7 @@ public class ActivityMain extends MyActionBarActivity {
     private MenuItem searchItem;
     protected MenuItem starItem;
 
+    protected SharedPreferences preference;
     protected Context context;
     private Storage db;
     private List<ClipObject> clips;
@@ -239,8 +240,9 @@ public class ActivityMain extends MyActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
         clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
+        isStarred = preference.getBoolean(AppWidget.WIDGET_IS_STARRED, false);
 
         setView();
         //check if first launch
@@ -419,26 +421,26 @@ public class ActivityMain extends MyActionBarActivity {
                     mFAB.animate().scaleX(0).scaleY(0);
                 }
                 mFAB.animate().setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                isXHidden = 1;
-                            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = 1;
+                    }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                isXHidden = 1;
-                            }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        isXHidden = 1;
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
+                    }
+                });
             }
         }, 200);
     }
@@ -460,26 +462,26 @@ public class ActivityMain extends MyActionBarActivity {
                     mFAB.animate().scaleX(1).scaleY(1);
                 }
                 mFAB.animate().setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                isXHidden = -1;
-                            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = -1;
+                    }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                isXHidden = -1;
-                            }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        isXHidden = -1;
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
+                    }
+                });
                 mFabRotation(false, TRANSLATION_SLOW);
             }
         }, 200);
@@ -552,6 +554,12 @@ public class ActivityMain extends MyActionBarActivity {
         } else {
             starItem.setIcon(R.drawable.ic_switch_star_off);
         }
+        //Only save this setting in MainActivity.
+        //Dialog mode wont do this.
+        preference.edit()
+                .putBoolean(AppWidget.WIDGET_IS_STARRED, isStarred)
+                .apply();
+        AppWidget.updateAllAppWidget(context);
     }
 
     private void setItemsVisibility() {
@@ -699,7 +707,7 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
     }
 
-    private void setView() {
+    protected void setView() {
 
         if (db.getLatsUpdateDate() == lastStorageUpdate) return;
         lastStorageUpdate = db.getLatsUpdateDate();

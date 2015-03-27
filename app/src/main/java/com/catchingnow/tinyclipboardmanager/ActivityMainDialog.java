@@ -51,6 +51,13 @@ public class ActivityMainDialog extends ActivityMain {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        isStarred = false;
+        setView();
+    }
+
+    @Override
     protected void setStarredIcon() {
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_action_star_white);
