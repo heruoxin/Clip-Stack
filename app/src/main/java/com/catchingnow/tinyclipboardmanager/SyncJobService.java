@@ -16,7 +16,7 @@ public class SyncJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Log.v(MyUtil.PACKAGE_NAME, "Start Clean up...");
-        return Storage.getInstance(this).cleanUp();
+        return Storage.getInstance(this).cleanUpAndRequestBackup();
     }
 
     @Override

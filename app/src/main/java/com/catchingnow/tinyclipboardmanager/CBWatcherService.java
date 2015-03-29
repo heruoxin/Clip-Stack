@@ -152,10 +152,11 @@ public class CBWatcherService extends Service {
                 .setRequiresCharging(true)
                 .setRequiresDeviceIdle(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPeriodic(480000)
+                .setPeriodic(3*60*60*1000)
                 .setPersisted(true)
                 .build();
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.cancel(JOB_ID);
         jobScheduler.schedule(job);
     }
 

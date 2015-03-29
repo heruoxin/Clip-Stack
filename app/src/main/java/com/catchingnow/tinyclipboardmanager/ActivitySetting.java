@@ -47,7 +47,6 @@ public class ActivitySetting extends MyPreferenceActivity {
                     case PREF_LONG_CLICK_BEHAVIOR:
                         break;
                 }
-                requestBackup(context);
             }
         };
     }
@@ -56,12 +55,6 @@ public class ActivitySetting extends MyPreferenceActivity {
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(myPrefChangeListener);
 //        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
 //        preference.edit().putLong(PREF_LAST_ACTIVE_THIS, new Date().getTime()).commit();
-    }
-
-    public static void requestBackup(Context context) {
-        Log.d(MyUtil.PACKAGE_NAME, "requestBackup");
-        BackupManager backupManager = new BackupManager(context);
-        backupManager.dataChanged();
     }
 
     @Override

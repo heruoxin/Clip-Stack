@@ -1,6 +1,8 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -51,8 +53,7 @@ public class MyUtil {
         return dateFormat.format(date);
     }
 
-    public static class ResizeWidthAnimation extends Animation
-    {
+    public static class ResizeWidthAnimation extends Animation {
         private int mWidth;
         private int mStartWidth;
         private View mView;
@@ -84,6 +85,12 @@ public class MyUtil {
         {
             return true;
         }
+    }
+
+    public static void requestBackup(Context context) {
+        Log.d(MyUtil.PACKAGE_NAME, "requestBackup");
+        BackupManager backupManager = new BackupManager(context);
+        backupManager.dataChanged();
     }
 
 }

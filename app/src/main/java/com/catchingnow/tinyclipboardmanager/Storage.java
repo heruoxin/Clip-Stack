@@ -204,12 +204,14 @@ public class Storage {
         return true;
     }
 
-    public boolean cleanUp() {
+    public boolean cleanUpAndRequestBackup() {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         float days = (float) Integer.parseInt(preference.getString(ActivitySetting.PREF_SAVE_DATES, "9999"));
         Log.v(MyUtil.PACKAGE_NAME,
                 "Start clean up SQLite at " + new Date().toString() + ", clean clips before " + days + " days");
-        return deleteClipHistoryBefore(days);
+        boolean boolReturn = deleteClipHistoryBefore(days);
+        MyUtil.requestBackup(context);
+        return boolReturn;
     }
 
     private boolean deleteClipHistory(ClipObject clipObject) {
