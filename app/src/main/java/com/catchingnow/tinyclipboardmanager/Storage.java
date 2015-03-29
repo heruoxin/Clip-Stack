@@ -420,8 +420,8 @@ public class Storage {
     }
 
     public class StorageHelper extends SQLiteOpenHelper {
+        public static final String DATABASE_NAME = "clippingnow.db";
         private static final int DATABASE_VERSION = 3;
-        private static final String DATABASE_NAME = "clippingnow.db";
         private static final String TABLE_NAME = "cliphistory";
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
