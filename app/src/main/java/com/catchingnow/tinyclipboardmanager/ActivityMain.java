@@ -17,14 +17,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,7 +107,7 @@ public class ActivityMain extends MyActionBarActivity {
             if (tabletMain != null) {
                 ViewGroup.LayoutParams tabletMainLayoutParams = tabletMain.getLayoutParams();
                 tabletMainLayoutParams.width =
-                        (getScreenWidthPixels() * 2/3);
+                        (getScreenWidthPixels() * 2 / 3);
                 tabletMain.setLayoutParams(tabletMainLayoutParams);
             }
         }
@@ -609,102 +607,101 @@ public class ActivityMain extends MyActionBarActivity {
                                 onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
                             }
                         });
-        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 20 && isYHidden == -1) {
-                    //hide FAB on Y
-                    if (isXHidden != -1) return;
-                    if (isSnackbarShow > 0) return;
-                    isYHidden = 0;
-                    mFabRotation(true, TRANSLATION_FAST);
-                    if (getString(R.string.screen_type).contains("phone")) {
+        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
+        if (getString(R.string.screen_type).contains("phone")) {
+            // hide FAB when list scroll on phone
+            RecyclerView.OnScrollListener scrollFabAnimateListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 20 && isYHidden == -1) {
+                        //hide FAB on Y
+                        if (isXHidden != -1) return;
+                        if (isSnackbarShow > 0) return;
+                        isYHidden = 0;
+                        mFabRotation(true, TRANSLATION_FAST);
                         mFabRotation(true, TRANSLATION_FAST);
                         mFAB.animate()
                                 .translationY(MyUtil.dip2px(context, 90));
-                    }
-                    mFAB.animate()
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
+                        mFAB.animate()
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = 1;
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        isYHidden = 1;
+                                    }
 
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    isYHidden = 1;
-                                }
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                        isYHidden = 1;
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
 
-                                }
-                            });
-                } else if (dy < -20 && isYHidden == 1) {
-                    //show FAB on Y
-                    if (isXHidden != -1) return;
-                    if (isSnackbarShow > 0) return;
-                    isYHidden = 0;
-                    mFabRotation(false, TRANSLATION_FAST);
-                    if (getString(R.string.screen_type).contains("phone")) {
+                                    }
+                                });
+                    } else if (dy < -20 && isYHidden == 1) {
+                        //show FAB on Y
+                        if (isXHidden != -1) return;
+                        if (isSnackbarShow > 0) return;
+                        isYHidden = 0;
+                        mFabRotation(false, TRANSLATION_FAST);
                         mFabRotation(false, TRANSLATION_FAST);
                         mFAB.animate()
                                 .translationY(0);
-                    }
-                    mFAB.animate()
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
+                        mFAB.animate()
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = -1;
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        isYHidden = -1;
+                                    }
 
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    isYHidden = -1;
-                                }
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                        isYHidden = -1;
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
 
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    switch (newState) {
-                        case RecyclerView.SCROLL_STATE_IDLE:
-                            if (getString(R.string.screen_type).contains("phone")) {
-                                mToolbar.animate().translationZ(0);
-                            }
-                            mFAB.animate().translationZ(0);
-                            break;
-                        default:
-                            if (getString(R.string.screen_type).contains("phone")) {
-                                mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
-                            }
-                            mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
-                            break;
+                                    }
+                                });
                     }
                 }
-            }
 
-        };
-        mRecList.setOnScrollListener(scrollListener);
-        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        switch (newState) {
+                            case RecyclerView.SCROLL_STATE_IDLE:
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mToolbar.animate().translationZ(0);
+                                }
+                                mFAB.animate().translationZ(0);
+                                break;
+                            default:
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
+                                }
+                                mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
+                                break;
+                        }
+                    }
+                }
+
+            };
+            mRecList.setOnScrollListener(scrollFabAnimateListener);
+        }
     }
 
     protected void setView() {

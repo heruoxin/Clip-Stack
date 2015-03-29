@@ -18,11 +18,13 @@
             android:icon="@drawable/ic_action_copy"
             android:title="@string/clip_notification_copy_button"
             app:showAsAction="never|withText" />
+        <!--
         <item
             android:id="@+id/action_cancel"
             android:icon="@drawable/ic_action_undo"
             android:title="@string/action_cancel"
             app:showAsAction="never|withText" />
+            -->
         <item
             android:id="@+id/action_delete"
             android:icon="@drawable/ic_action_delete"
