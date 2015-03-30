@@ -17,7 +17,7 @@
         android:layout_weight="1">
 
         <View
-            android:id="@id/my_toolbar_shadow"
+            android:id="@+id/my_toolbar_shadow"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="6dp"

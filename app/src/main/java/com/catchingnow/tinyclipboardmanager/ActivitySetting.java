@@ -64,7 +64,6 @@ public class ActivitySetting extends MyPreferenceActivity {
         context = this.getBaseContext();
         addPreferencesFromResource(R.xml.preference);
         mActionBar.setTitle(getTitle());
-        initSharedPrefListener();
     }
 
     @Override
@@ -86,7 +85,6 @@ public class ActivitySetting extends MyPreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        initSharedPrefListener();
 
     }
 
