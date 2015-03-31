@@ -33,7 +33,7 @@ public class FloatingWindowService extends Service {
     private View floatingView;
     private WindowManager.LayoutParams params;
 
-    private boolean isFloatingWindowShow = false;
+    private int foregroundActivityCount = 0;
 
     private boolean checkPermission() {
          return (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false));
@@ -47,12 +47,10 @@ public class FloatingWindowService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!checkPermission()) {
-            Log.v(MyUtil.PACKAGE_NAME, "checkPermission stopped");
             stopSelf();
-        } else {
-            Log.v(MyUtil.PACKAGE_NAME, "checkPermission OK");
+            return START_NOT_STICKY;
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
@@ -85,35 +83,18 @@ public class FloatingWindowService extends Service {
         params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
 
         windowManager.addView(floatingView, params);
-        isFloatingWindowShow = true;
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
                                       public void onReceive(final Context context, Intent intent) {
-                                          if (!isFloatingWindowShow) {
-                                              floatingView.animate().scaleX(1).scaleY(1)
-                                              .setListener(new Animator.AnimatorListener() {
-                                                  @Override
-                                                  public void onAnimationStart(Animator animation) {
-
-                                                  }
-
-                                                  @Override
-                                                  public void onAnimationEnd(Animator animation) {
-                                                      isFloatingWindowShow = true;
-                                                  }
-
-                                                  @Override
-                                                  public void onAnimationCancel(Animator animation) {
-
-                                                  }
-
-                                                  @Override
-                                                  public void onAnimationRepeat(Animator animation) {
-
-                                                  }
-                                              });
+                                          foregroundActivityCount -=1;
+                                          if (foregroundActivityCount < 0) foregroundActivityCount = 0;
+                                          if (foregroundActivityCount == 0) {
+                                              floatingView.animate().scaleX(1).scaleY(1);
+                                              params.x = preference.getInt(FLOATING_WINDOW_X, 120);
+                                              params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
+                                              windowManager.updateViewLayout(floatingView, params);
                                           }
                                       }
                                   },
@@ -123,29 +104,23 @@ public class FloatingWindowService extends Service {
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
                                       public void onReceive(final Context context, Intent intent) {
-                                          if (isFloatingWindowShow) {
-                                              floatingView.animate().scaleX(0).scaleY(0)
-                                                      .setListener(new Animator.AnimatorListener() {
-                                                          @Override
-                                                          public void onAnimationStart(Animator animation) {
+                                          foregroundActivityCount += 1;
+                                          if (foregroundActivityCount > 0) {
+                                              floatingView.animate().scaleX(0).scaleY(0);
 
-                                                          }
+                                              WindowManager.LayoutParams tmpParams = new WindowManager.LayoutParams(
+                                                      WindowManager.LayoutParams.WRAP_CONTENT,
+                                                      WindowManager.LayoutParams.WRAP_CONTENT,
+                                                      WindowManager.LayoutParams.TYPE_PHONE,
+                                                      WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                                      PixelFormat.TRANSLUCENT);
 
-                                                          @Override
-                                                          public void onAnimationEnd(Animator animation) {
-                                                              isFloatingWindowShow = false;
-                                                          }
+                                              tmpParams.gravity = Gravity.TOP | Gravity.LEFT;
+                                              tmpParams.x = preference.getInt(FLOATING_WINDOW_X, 120);
+                                              tmpParams.y = preference.getInt(FLOATING_WINDOW_Y, 120);
+                                              tmpParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
 
-                                                          @Override
-                                                          public void onAnimationCancel(Animator animation) {
-
-                                                          }
-
-                                                          @Override
-                                                          public void onAnimationRepeat(Animator animation) {
-
-                                                          }
-                                                      });
+                                              windowManager.updateViewLayout(floatingView, tmpParams);
                                           }
                                       }
                                   },
