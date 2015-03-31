@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 
@@ -10,6 +11,9 @@ import android.view.View;
  */
 
 public class ActivityMainDialog extends ActivityMain {
+    public static final String DIALOG_CLOSED = "dialog_closed";
+    public static final String DIALOG_OPENED = "dialog_opened";
+
     @Override
     public void setContentView(int layoutResID) {
         if (layoutResID == R.layout.activity_main) {
@@ -46,6 +50,7 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(DIALOG_CLOSED));
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -57,6 +62,7 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(DIALOG_OPENED));
         isStarred = false;
         setView();
     }

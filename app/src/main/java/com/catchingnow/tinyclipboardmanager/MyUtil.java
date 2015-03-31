@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.app.backup.BackupManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -93,4 +94,8 @@ public class MyUtil {
         backupManager.dataChanged();
     }
 
+    public static SharedPreferences getLocalSharedPreferences(Context context) {
+        //return PreferenceManager.getDefaultSharedPreferences(context);
+        return context.getSharedPreferences("LocalSharedPreference", Context.MODE_PRIVATE);
+    }
 }
