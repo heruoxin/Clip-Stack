@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.graphics.PixelFormat;
 import android.preference.PreferenceManager;
@@ -16,10 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 //https://github.com/EatHeat/FloatingExample
 
@@ -34,6 +32,7 @@ public class FloatingWindowService extends Service {
     private WindowManager.LayoutParams params;
 
     private int foregroundActivityCount = 0;
+    private boolean isAttached = false;
 
     private boolean checkPermission() {
          return (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false));
@@ -83,6 +82,8 @@ public class FloatingWindowService extends Service {
         params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
 
         windowManager.addView(floatingView, params);
+        isAttached = true;
+
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
@@ -91,14 +92,22 @@ public class FloatingWindowService extends Service {
                                           foregroundActivityCount -=1;
                                           if (foregroundActivityCount < 0) foregroundActivityCount = 0;
                                           if (foregroundActivityCount == 0) {
-                                              floatingView.animate().scaleX(1).scaleY(1);
+                                              if (!isAttached) return;
                                               params.x = preference.getInt(FLOATING_WINDOW_X, 120);
                                               params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
+                                              params.width = MyUtil.dip2px(context, 52);
+                                              params.height = MyUtil.dip2px(context, 52);
                                               windowManager.updateViewLayout(floatingView, params);
+                                              new Handler().postDelayed(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      floatingView.animate().scaleX(1).scaleY(1);
+                                                  }
+                                              }, 800);
                                           }
                                       }
                                   },
-                        new IntentFilter(MyActionBarActivity.DIALOG_CLOSED));
+                        new IntentFilter(MyActionBarActivity.ACTIVITY_CLOSED));
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
@@ -107,24 +116,21 @@ public class FloatingWindowService extends Service {
                                           foregroundActivityCount += 1;
                                           if (foregroundActivityCount > 0) {
                                               floatingView.animate().scaleX(0).scaleY(0);
-
-                                              WindowManager.LayoutParams tmpParams = new WindowManager.LayoutParams(
-                                                      WindowManager.LayoutParams.WRAP_CONTENT,
-                                                      WindowManager.LayoutParams.WRAP_CONTENT,
-                                                      WindowManager.LayoutParams.TYPE_PHONE,
-                                                      WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                                                      PixelFormat.TRANSLUCENT);
-
-                                              tmpParams.gravity = Gravity.TOP | Gravity.LEFT;
-                                              tmpParams.x = preference.getInt(FLOATING_WINDOW_X, 120);
-                                              tmpParams.y = preference.getInt(FLOATING_WINDOW_Y, 120);
-                                              tmpParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-
-                                              windowManager.updateViewLayout(floatingView, tmpParams);
+                                              new Handler().postDelayed(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      if (!isAttached) return;
+                                                      params.x = 0;
+                                                      params.y = 0;
+                                                      params.width = 0;
+                                                      params.height = 0;
+                                                      windowManager.updateViewLayout(floatingView, params);
+                                                  }
+                                              }, 800);
                                           }
                                       }
                                   },
-                        new IntentFilter(MyActionBarActivity.DIALOG_OPENED));
+                        new IntentFilter(MyActionBarActivity.ACTIVITY_OPENED));
 
         try {
             floatingView.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +140,6 @@ public class FloatingWindowService extends Service {
                 }
             });
             floatingView.setOnTouchListener(new View.OnTouchListener() {
-                private WindowManager.LayoutParams paramsF = params;
                 private int initialX;
                 private int initialY;
                 private float initialTouchX;
@@ -147,21 +152,21 @@ public class FloatingWindowService extends Service {
 
                             // Get current time in nano seconds.
 
-                            initialX = paramsF.x;
-                            initialY = paramsF.y;
+                            initialX = params.x;
+                            initialY = params.y;
                             initialTouchX = event.getRawX();
                             initialTouchY = event.getRawY();
                             break;
                         case MotionEvent.ACTION_UP:
                             preference.edit()
-                                    .putInt(FLOATING_WINDOW_X, paramsF.x)
-                                    .putInt(FLOATING_WINDOW_Y, paramsF.y)
+                                    .putInt(FLOATING_WINDOW_X, params.x)
+                                    .putInt(FLOATING_WINDOW_Y, params.y)
                                     .apply();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            paramsF.x = initialX + (int) (event.getRawX() - initialTouchX);
-                            paramsF.y = initialY + (int) (event.getRawY() - initialTouchY);
-                            windowManager.updateViewLayout(floatingView, paramsF);
+                            params.x = initialX + (int) (event.getRawX() - initialTouchX);
+                            params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                            windowManager.updateViewLayout(floatingView, params);
                             break;
                     }
                     return false;
@@ -175,7 +180,7 @@ public class FloatingWindowService extends Service {
 
     @Override
     public void onDestroy() {
-        if (floatingView != null) windowManager.removeView(floatingView);
+        if (!isAttached) windowManager.removeView(floatingView);
         super.onDestroy();
     }
 

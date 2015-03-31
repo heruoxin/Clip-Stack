@@ -32,13 +32,13 @@ public class MyPreferenceActivity extends PreferenceActivity {
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.DIALOG_CLOSED));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.ACTIVITY_CLOSED));
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.DIALOG_OPENED));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.ACTIVITY_OPENED));
         super.onResume();
     }
 }
