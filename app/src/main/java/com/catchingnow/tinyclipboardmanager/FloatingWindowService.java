@@ -95,8 +95,8 @@ public class FloatingWindowService extends Service {
                                               if (!isAttached) return;
                                               params.x = preference.getInt(FLOATING_WINDOW_X, 120);
                                               params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
-                                              params.width = MyUtil.dip2px(context, 52);
-                                              params.height = MyUtil.dip2px(context, 52);
+                                              params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+                                              params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
                                               windowManager.updateViewLayout(floatingView, params);
                                               new Handler().postDelayed(new Runnable() {
                                                   @Override
