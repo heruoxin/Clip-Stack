@@ -34,13 +34,29 @@ public class FloatingWindowService extends Service {
 
     private int foregroundActivityCount = 0;
 
+    private boolean checkPermission() {
+         return (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false));
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!checkPermission()) {
+            Log.v(MyUtil.PACKAGE_NAME, "checkPermission stopped");
+            stopSelf();
+        } else {
+            Log.v(MyUtil.PACKAGE_NAME, "checkPermission OK");
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public void onCreate() {
+
         super.onCreate();
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);

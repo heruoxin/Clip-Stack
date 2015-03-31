@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.app.backup.BackupManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class ActivitySetting extends MyPreferenceActivity {
     public final static String PREF_START_SERVICE = "pref_start_service";
     public final static String PREF_LONG_CLICK_BEHAVIOR = "pref_long_click_behavior";
     public final static String PREF_SAVE_DATES = "pref_save_dates";
+    public static final String PREF_FLOATING_BUTTON = "pref_floating_button_switch";
 //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefChangeListener;
@@ -35,6 +37,9 @@ public class ActivitySetting extends MyPreferenceActivity {
                     case PREF_NOTIFICATION_PRIORITY:
                     case PREF_NOTIFICATION_PIN:
                         CBWatcherService.startCBService(context, true);
+                        break;
+                    case PREF_FLOATING_BUTTON:
+                        startService(new Intent(context, FloatingWindowService.class));
                         break;
                     case PREF_SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
