@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/main_fab"
         android:contentDescription="@string/app_name"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:background="@drawable/background_fab"
         android:padding="8dp"
         android:src="@drawable/ic_stat_icon"
