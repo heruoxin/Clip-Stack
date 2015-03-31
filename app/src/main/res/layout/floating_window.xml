@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/main_fab"
         android:contentDescription="@string/app_name"
         android:layout_width="@dimen/fab_size"
@@ -13,7 +13,6 @@
         android:background="@drawable/background_fab"
         android:padding="8dp"
         android:src="@drawable/ic_stat_icon"
-        android:scaleType="centerInside"
-        android:onClick="" />
+        android:scaleType="centerInside" />
 
 </RelativeLayout>

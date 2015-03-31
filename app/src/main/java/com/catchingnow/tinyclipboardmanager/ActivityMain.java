@@ -86,6 +86,7 @@ public class ActivityMain extends MyActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
+        startService(new Intent(this, FloatingWindowService.class));
         super.onCreate(savedInstanceState);
         context = this.getBaseContext();
         db = Storage.getInstance(context);
