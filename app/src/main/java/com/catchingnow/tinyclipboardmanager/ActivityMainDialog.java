@@ -10,6 +10,10 @@ import android.view.View;
  */
 
 public class ActivityMainDialog extends ActivityMain {
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(R.layout.activity_main_dialog);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
