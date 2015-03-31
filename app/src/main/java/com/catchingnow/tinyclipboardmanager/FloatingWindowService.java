@@ -32,6 +32,8 @@ public class FloatingWindowService extends Service {
     private View floatingView;
     private WindowManager.LayoutParams params;
 
+    private int foregroundActivityCount = 0;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -62,7 +64,7 @@ public class FloatingWindowService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
-        params.x = preference.getInt(FLOATING_WINDOW_X, 0);
+        params.x = preference.getInt(FLOATING_WINDOW_X, 120);
         params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
 
         windowManager.addView(floatingView, params);
@@ -71,19 +73,26 @@ public class FloatingWindowService extends Service {
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
                                       public void onReceive(Context context, Intent intent) {
-                                          floatingView.animate().scaleX(1).scaleY(1);
+                                          foregroundActivityCount -= 1;
+                                          if (foregroundActivityCount <= 0) {
+                                              floatingView.animate().scaleX(1).scaleY(1);
+                                              foregroundActivityCount = 0;
+                                          }
                                       }
                                   },
-                        new IntentFilter(ActivityMainDialog.DIALOG_CLOSED));
+                        new IntentFilter(MyActionBarActivity.DIALOG_CLOSED));
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
                                       public void onReceive(Context context, Intent intent) {
-                                          floatingView.animate().scaleX(0).scaleY(0);
+                                          foregroundActivityCount += 1;
+                                          if (foregroundActivityCount > 0) {
+                                              floatingView.animate().scaleX(0).scaleY(0);
+                                          }
                                       }
                                   },
-                        new IntentFilter(ActivityMainDialog.DIALOG_OPENED));
+                        new IntentFilter(MyActionBarActivity.DIALOG_OPENED));
 
         try {
             floatingView.setOnClickListener(new View.OnClickListener() {

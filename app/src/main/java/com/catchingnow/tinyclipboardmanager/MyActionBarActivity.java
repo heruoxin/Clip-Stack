@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -19,6 +20,8 @@ import android.view.Window;
  * Created by heruoxin on 15/2/28.
  */
 public class MyActionBarActivity extends ActionBarActivity {
+    public static final String DIALOG_OPENED = "dialog_opened";
+    public static final String DIALOG_CLOSED = "dialog_closed";
 
     //Fix LG support V7 bug:
     //https://code.google.com/p/android/issues/detail?id=78154
@@ -133,12 +136,14 @@ public class MyActionBarActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DIALOG_CLOSED));
         CBWatcherService.startCBService(this, -1);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DIALOG_OPENED));
         CBWatcherService.startCBService(this,true , 1);
     }
 

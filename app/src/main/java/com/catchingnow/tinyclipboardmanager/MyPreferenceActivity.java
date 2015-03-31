@@ -1,7 +1,9 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 
 /**
@@ -26,5 +28,17 @@ public class MyPreferenceActivity extends PreferenceActivity {
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.DIALOG_CLOSED));
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MyActionBarActivity.DIALOG_OPENED));
+        super.onResume();
     }
 }
