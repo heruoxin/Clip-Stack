@@ -36,10 +36,8 @@ public class ActivitySetting extends MyPreferenceActivity {
                     case PREF_NOTIFICATION_SHOW:
                     case PREF_NOTIFICATION_PRIORITY:
                     case PREF_NOTIFICATION_PIN:
-                        CBWatcherService.startCBService(context, true);
-                        break;
                     case PREF_FLOATING_BUTTON:
-                        startService(new Intent(context, FloatingWindowService.class));
+                        CBWatcherService.startCBService(context, true);
                         break;
                     case PREF_SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));

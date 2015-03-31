@@ -397,6 +397,7 @@ public class CBWatcherService extends Service {
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
                 .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
+        context.startService(new Intent(context, FloatingWindowService.class));
     }
 
     private class NotificationClipListAdapter {

@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.animation.Animator;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,7 +33,7 @@ public class FloatingWindowService extends Service {
     private View floatingView;
     private WindowManager.LayoutParams params;
 
-    private int foregroundActivityCount = 0;
+    private boolean isFloatingWindowShow = false;
 
     private boolean checkPermission() {
          return (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false));
@@ -84,15 +85,35 @@ public class FloatingWindowService extends Service {
         params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
 
         windowManager.addView(floatingView, params);
+        isFloatingWindowShow = true;
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
-                                      public void onReceive(Context context, Intent intent) {
-                                          foregroundActivityCount -= 1;
-                                          if (foregroundActivityCount <= 0) {
-                                              floatingView.animate().scaleX(1).scaleY(1);
-                                              foregroundActivityCount = 0;
+                                      public void onReceive(final Context context, Intent intent) {
+                                          if (!isFloatingWindowShow) {
+                                              floatingView.animate().scaleX(1).scaleY(1)
+                                              .setListener(new Animator.AnimatorListener() {
+                                                  @Override
+                                                  public void onAnimationStart(Animator animation) {
+
+                                                  }
+
+                                                  @Override
+                                                  public void onAnimationEnd(Animator animation) {
+                                                      isFloatingWindowShow = true;
+                                                  }
+
+                                                  @Override
+                                                  public void onAnimationCancel(Animator animation) {
+
+                                                  }
+
+                                                  @Override
+                                                  public void onAnimationRepeat(Animator animation) {
+
+                                                  }
+                                              });
                                           }
                                       }
                                   },
@@ -101,10 +122,30 @@ public class FloatingWindowService extends Service {
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(new BroadcastReceiver() {
                                       @Override
-                                      public void onReceive(Context context, Intent intent) {
-                                          foregroundActivityCount += 1;
-                                          if (foregroundActivityCount > 0) {
-                                              floatingView.animate().scaleX(0).scaleY(0);
+                                      public void onReceive(final Context context, Intent intent) {
+                                          if (isFloatingWindowShow) {
+                                              floatingView.animate().scaleX(0).scaleY(0)
+                                                      .setListener(new Animator.AnimatorListener() {
+                                                          @Override
+                                                          public void onAnimationStart(Animator animation) {
+
+                                                          }
+
+                                                          @Override
+                                                          public void onAnimationEnd(Animator animation) {
+                                                              isFloatingWindowShow = false;
+                                                          }
+
+                                                          @Override
+                                                          public void onAnimationCancel(Animator animation) {
+
+                                                          }
+
+                                                          @Override
+                                                          public void onAnimationRepeat(Animator animation) {
+
+                                                          }
+                                                      });
                                           }
                                       }
                                   },
