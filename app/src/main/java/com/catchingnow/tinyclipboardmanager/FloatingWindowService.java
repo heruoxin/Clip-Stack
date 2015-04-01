@@ -26,20 +26,53 @@ public class FloatingWindowService extends Service {
     public static final String FLOATING_WINDOW_X = "floating_window_x";
     public static final String FLOATING_WINDOW_Y = "floating_window_y";
 
+    private final static int DURATION_TIME = 400;
+
     private SharedPreferences preference;
     private WindowManager windowManager;
     private View floatingView;
     private WindowManager.LayoutParams params;
     private Handler handler;
 
-    private final static int DURATION_TIME = 400;
-
-    private int foregroundActivityCount = 0;
-    private boolean onAnimate = false;
-    private boolean isAttached = false;
-
     private boolean checkPermission() {
-        return (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false));
+        return (
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false)
+                &&
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_START_SERVICE, true)
+        );
+    }
+
+    private void FWHideAnimate() {
+        Log.i(MyUtil.PACKAGE_NAME, "FWHideAnimate");
+        floatingView.animate().scaleX(0).scaleY(0).setDuration(DURATION_TIME);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                windowManager.removeView(floatingView);
+            }
+        }, DURATION_TIME);
+    }
+
+    private void FWShowAnimate() {
+        Log.i(MyUtil.PACKAGE_NAME, "FWShowAnimate");
+        params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        params.x = preference.getInt(FLOATING_WINDOW_X, 120);
+        params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
+        params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+        params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+        windowManager.addView(floatingView, params);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                floatingView.animate().scaleX(1).scaleY(1).setDuration(DURATION_TIME);
+            }
+        }, DURATION_TIME);
     }
 
     @Override
@@ -50,6 +83,7 @@ public class FloatingWindowService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!checkPermission()) {
+            Log.i(MyUtil.PACKAGE_NAME, "STOPPED");
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -66,146 +100,20 @@ public class FloatingWindowService extends Service {
         handler = new Handler();
         LayoutInflater layoutInflater =
                 (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final Intent i = new Intent(this, ActivityMainDialog.class)
-                .putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        final Intent i = new Intent(this, ClipObjectActionBridge.class)
+                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN_DIALOG);
 
         floatingView =
                 layoutInflater.inflate(R.layout.floating_window, null);
-
-        params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-
-        params.gravity = Gravity.TOP | Gravity.LEFT;
-        params.x = preference.getInt(FLOATING_WINDOW_X, 120);
-        params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
-
-        windowManager.addView(floatingView, params);
-        isAttached = true;
-
-
-        BroadcastReceiver onClosedReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(final Context context, Intent intent) {
-                foregroundActivityCount -= 1;
-                if (foregroundActivityCount < 0) foregroundActivityCount = 0;
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (foregroundActivityCount != 0) return;
-                        if (!isAttached) return;
-                        if (onAnimate) return;
-                        Log.i(MyUtil.PACKAGE_NAME, "onClosedReceiver");
-                        onAnimate = true;
-                        params.x = preference.getInt(FLOATING_WINDOW_X, 120);
-                        params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
-                        params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
-                        params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
-                        windowManager.updateViewLayout(floatingView, params);
-                        Log.i(MyUtil.PACKAGE_NAME, "onClosedReceiver updateViewLayout");
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                floatingView.animate().scaleX(1).scaleY(1).setDuration(DURATION_TIME)
-                                        .setListener(new Animator.AnimatorListener() {
-                                            @Override
-                                            public void onAnimationStart(Animator animation) {
-
-                                            }
-
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-                                                onAnimate = false;
-                                                Log.i(MyUtil.PACKAGE_NAME, "onClosedReceiver onAnimate false");
-                                            }
-
-                                            @Override
-                                            public void onAnimationCancel(Animator animation) {
-                                                onAnimate = false;
-                                                Log.i(MyUtil.PACKAGE_NAME, "onClosedReceiver onAnimate false");
-                                            }
-
-                                            @Override
-                                            public void onAnimationRepeat(Animator animation) {
-
-                                            }
-                                        });
-                                Log.i(MyUtil.PACKAGE_NAME, "onClosedReceiver scaleX");
-                            }
-                        }, DURATION_TIME);
-                    }
-                }, 100);
-            }
-        };
-
-        BroadcastReceiver onOpenedReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(final Context context, Intent intent) {
-                foregroundActivityCount += 1;
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (foregroundActivityCount <= 0) return;
-                        if (!isAttached) return;
-                        if (onAnimate) return;
-                        Log.i(MyUtil.PACKAGE_NAME, "onOpenedReceiver");
-                        onAnimate = true;
-                        floatingView.animate().scaleX(0).scaleY(0).setDuration(DURATION_TIME)
-                                .setListener(new Animator.AnimatorListener() {
-                                    @Override
-                                    public void onAnimationStart(Animator animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        if (!isAttached) return;
-                                        params.x = 0;
-                                        params.y = 0;
-                                        params.width = 0;
-                                        params.height = 0;
-                                        windowManager.updateViewLayout(floatingView, params);
-                                        Log.i(MyUtil.PACKAGE_NAME, "onOpenedReceiver updateViewLayout");
-                                        onAnimate = false;
-                                    }
-
-                                    @Override
-                                    public void onAnimationCancel(Animator animation) {
-                                        if (!isAttached) return;
-                                        params.x = 0;
-                                        params.y = 0;
-                                        params.width = 0;
-                                        params.height = 0;
-                                        windowManager.updateViewLayout(floatingView, params);
-                                        Log.i(MyUtil.PACKAGE_NAME, "onOpenedReceiver updateViewLayout");
-                                        onAnimate = false;
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animator animation) {
-
-                                    }
-                                });
-                        Log.i(MyUtil.PACKAGE_NAME, "onOpenedReceiver scaleX");
-                    }
-                }, 100);
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(onOpenedReceiver, new IntentFilter(MyActionBarActivity.ACTIVITY_OPENED));
-        LocalBroadcastManager.getInstance(this).registerReceiver(onClosedReceiver, new IntentFilter(MyActionBarActivity.ACTIVITY_CLOSED));
-
+        floatingView.setScaleX(0);
+        floatingView.setScaleY(0);
+        FWShowAnimate();
 
         try {
             floatingView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(i);
+                    startService(i);
                 }
             });
             floatingView.setOnTouchListener(new View.OnTouchListener() {
@@ -249,7 +157,8 @@ public class FloatingWindowService extends Service {
 
     @Override
     public void onDestroy() {
-        if (!isAttached) windowManager.removeView(floatingView);
+        Log.i(MyUtil.PACKAGE_NAME, "onDestroy");
+        FWHideAnimate();
         super.onDestroy();
     }
 

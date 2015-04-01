@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -135,8 +136,12 @@ public class MyActionBarActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i(MyUtil.PACKAGE_NAME, "sendBroadcast ACTIVITY_CLOSED");
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_CLOSED));
         CBWatcherService.startCBService(this, -1);
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false)) {
+            this.startService(new Intent(this, FloatingWindowService.class));
+        }
     }
 
     @Override
@@ -144,6 +149,7 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_OPENED));
         CBWatcherService.startCBService(this,true , 1);
+        this.stopService(new Intent(this, FloatingWindowService.class));
     }
 
     public int getScreenWidthPixels() {

@@ -62,6 +62,7 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
+        Log.v(MyUtil.PACKAGE_NAME, "onCreate CBService");
         mContext = this;
         mHandler = new Handler();
         preference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -397,7 +398,6 @@ public class CBWatcherService extends Service {
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
                 .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
-        context.startService(new Intent(context, FloatingWindowService.class));
     }
 
     private class NotificationClipListAdapter {

@@ -32,12 +32,19 @@ public class ActivitySetting extends MyPreferenceActivity {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                   String key) {
                 switch (key) {
-                    case PREF_START_SERVICE:
                     case PREF_NOTIFICATION_SHOW:
                     case PREF_NOTIFICATION_PRIORITY:
                     case PREF_NOTIFICATION_PIN:
-                    case PREF_FLOATING_BUTTON:
                         CBWatcherService.startCBService(context, true);
+                        break;
+                    case PREF_START_SERVICE:
+                        CBWatcherService.startCBService(context, true);
+                    case PREF_FLOATING_BUTTON:
+                        if (sharedPreferences.getBoolean(key, false)) {
+                            context.startService(new Intent(context, FloatingWindowService.class));
+                        } else {
+                            context.stopService(new Intent(context, FloatingWindowService.class));
+                        }
                         break;
                     case PREF_SAVE_DATES:
                         int i = Integer.parseInt(sharedPreferences.getString(key, "7"));
