@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.graphics.PixelFormat;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,12 +30,12 @@ public class FloatingWindowService extends Service {
     private Handler handler;
 
     private boolean openedSetting = false;
+    private boolean longClickAble = true;
 
     private boolean checkPermission() {
         return (
-                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true)
-                &&
-                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_START_SERVICE, true)
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true) &&
+                        PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_START_SERVICE, true)
         );
     }
 
@@ -113,6 +112,7 @@ public class FloatingWindowService extends Service {
             floatingView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    if (!longClickAble) return false;
                     startActivity(settingIntent);
                     MyUtil.vibrator(FloatingWindowService.this);
                     openedSetting = true;
@@ -124,6 +124,9 @@ public class FloatingWindowService extends Service {
                 private int initialY;
                 private float initialTouchX;
                 private float initialTouchY;
+                private int diffX;
+                private int diffY;
+                private int smallLength;
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -134,11 +137,12 @@ public class FloatingWindowService extends Service {
                             initialY = params.y;
                             initialTouchX = event.getRawX();
                             initialTouchY = event.getRawY();
+                            smallLength = MyUtil.dip2px(FloatingWindowService.this, 5);
+                            longClickAble = true;
                             break;
                         case MotionEvent.ACTION_UP:
-                            int diffX = Math.abs(params.x - preference.getInt(FLOATING_WINDOW_X, 120));
-                            int diffY = Math.abs(params.y - preference.getInt(FLOATING_WINDOW_Y, 120));
-                            int smallLength = MyUtil.dip2px(FloatingWindowService.this, 5);
+                            diffX = Math.abs(params.x - initialX);
+                            diffY = Math.abs(params.y - initialY);
                             if (diffX < smallLength && diffY < smallLength) {
                                 if (!openedSetting) {
                                     startService(dialogIntent);
@@ -156,6 +160,11 @@ public class FloatingWindowService extends Service {
                             params.x = initialX + (int) (event.getRawX() - initialTouchX);
                             params.y = initialY + (int) (event.getRawY() - initialTouchY);
                             windowManager.updateViewLayout(floatingView, params);
+                            diffX = Math.abs(params.x - initialX);
+                            diffY = Math.abs(params.y - initialY);
+                            if (diffX > smallLength || diffY > smallLength) {
+                                longClickAble = false;
+                            }
                             break;
                     }
                     return false;
