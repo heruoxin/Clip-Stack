@@ -139,7 +139,7 @@ public class MyActionBarActivity extends ActionBarActivity {
         Log.i(MyUtil.PACKAGE_NAME, "sendBroadcast ACTIVITY_CLOSED");
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_CLOSED));
         CBWatcherService.startCBService(this, -1);
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true)) {
             this.startService(new Intent(this, FloatingWindowService.class));
         }
     }

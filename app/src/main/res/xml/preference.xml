@@ -37,7 +37,7 @@
             android:title="@string/pref_floating_button"
             android:key="pref_floating_button_switch"
             android:summary="@string/pref_floating_button_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
     </PreferenceCategory>
     <PreferenceCategory
         android:dependency="pref_start_service"

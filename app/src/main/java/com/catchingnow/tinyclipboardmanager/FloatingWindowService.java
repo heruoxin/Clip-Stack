@@ -34,7 +34,7 @@ public class FloatingWindowService extends Service {
 
     private boolean checkPermission() {
         return (
-                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false)
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true)
                 &&
                 PreferenceManager.getDefaultSharedPreferences(this).getBoolean(ActivitySetting.PREF_START_SERVICE, true)
         );
