@@ -110,12 +110,6 @@ public class FloatingWindowService extends Service {
         FWShowAnimate();
 
         try {
-            floatingView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startService(i);
-                }
-            });
             floatingView.setOnTouchListener(new View.OnTouchListener() {
                 private int initialX;
                 private int initialY;
@@ -127,18 +121,23 @@ public class FloatingWindowService extends Service {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
 
-                            // Get current time in nano seconds.
-
                             initialX = params.x;
                             initialY = params.y;
                             initialTouchX = event.getRawX();
                             initialTouchY = event.getRawY();
                             break;
                         case MotionEvent.ACTION_UP:
-                            preference.edit()
-                                    .putInt(FLOATING_WINDOW_X, params.x)
-                                    .putInt(FLOATING_WINDOW_Y, params.y)
-                                    .apply();
+                            int diffX = Math.abs(params.x - preference.getInt(FLOATING_WINDOW_X, 120));
+                            int diffY = Math.abs(params.y - preference.getInt(FLOATING_WINDOW_Y, 120));
+                            int smallLength = MyUtil.dip2px(FloatingWindowService.this, 5);
+                            if (diffX < smallLength && diffY < smallLength) {
+                                startService(i);
+                            } else {
+                                preference.edit()
+                                        .putInt(FLOATING_WINDOW_X, params.x)
+                                        .putInt(FLOATING_WINDOW_Y, params.y)
+                                        .apply();
+                            }
                             break;
                         case MotionEvent.ACTION_MOVE:
                             params.x = initialX + (int) (event.getRawX() - initialTouchX);
