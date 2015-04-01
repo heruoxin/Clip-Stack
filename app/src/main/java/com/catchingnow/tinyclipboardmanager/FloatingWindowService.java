@@ -1,19 +1,15 @@
 package com.catchingnow.tinyclipboardmanager;
 
-import android.animation.Animator;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.graphics.PixelFormat;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +29,8 @@ public class FloatingWindowService extends Service {
     private View floatingView;
     private WindowManager.LayoutParams params;
     private Handler handler;
+
+    private boolean openedSetting = false;
 
     private boolean checkPermission() {
         return (
@@ -100,8 +98,10 @@ public class FloatingWindowService extends Service {
         handler = new Handler();
         LayoutInflater layoutInflater =
                 (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final Intent i = new Intent(this, ClipObjectActionBridge.class)
+        final Intent dialogIntent = new Intent(this, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_OPEN_MAIN_DIALOG);
+        final Intent settingIntent = new Intent(this, ActivitySetting.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         floatingView =
                 layoutInflater.inflate(R.layout.floating_window, null);
@@ -110,6 +110,15 @@ public class FloatingWindowService extends Service {
         FWShowAnimate();
 
         try {
+            floatingView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    startActivity(settingIntent);
+                    MyUtil.vibrator(FloatingWindowService.this);
+                    openedSetting = true;
+                    return true;
+                }
+            });
             floatingView.setOnTouchListener(new View.OnTouchListener() {
                 private int initialX;
                 private int initialY;
@@ -131,7 +140,11 @@ public class FloatingWindowService extends Service {
                             int diffY = Math.abs(params.y - preference.getInt(FLOATING_WINDOW_Y, 120));
                             int smallLength = MyUtil.dip2px(FloatingWindowService.this, 5);
                             if (diffX < smallLength && diffY < smallLength) {
-                                startService(i);
+                                if (!openedSetting) {
+                                    startService(dialogIntent);
+                                    MyUtil.vibrator(FloatingWindowService.this);
+                                }
+                                openedSetting = false;
                             } else {
                                 preference.edit()
                                         .putInt(FLOATING_WINDOW_X, params.x)

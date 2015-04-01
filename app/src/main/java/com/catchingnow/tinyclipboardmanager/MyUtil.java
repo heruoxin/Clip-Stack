@@ -1,8 +1,10 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Service;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -95,7 +97,13 @@ public class MyUtil {
     }
 
     public static SharedPreferences getLocalSharedPreferences(Context context) {
-        //return PreferenceManager.getDefaultSharedPreferences(context);
         return context.getSharedPreferences("LocalSharedPreference", Context.MODE_PRIVATE);
     }
+
+    public static void vibrator(Context context) {
+        //This need <uses-permission android:name="android.permission.VIBRATE" />
+        Vibrator vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(80);
+    }
+
 }
