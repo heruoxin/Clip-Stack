@@ -114,7 +114,8 @@ public class FloatingWindowService extends Service {
                 public boolean onLongClick(View v) {
                     if (!longClickAble) return false;
                     startActivity(settingIntent);
-                    MyUtil.vibrator(FloatingWindowService.this);
+                    floatingView.playSoundEffect(0);
+                    //MyUtil.vibrator(FloatingWindowService.this);
                     openedSetting = true;
                     return true;
                 }
@@ -146,7 +147,8 @@ public class FloatingWindowService extends Service {
                             if (diffX < smallLength && diffY < smallLength) {
                                 if (!openedSetting) {
                                     startService(dialogIntent);
-                                    MyUtil.vibrator(FloatingWindowService.this);
+                                    floatingView.playSoundEffect(0);
+                                    //MyUtil.vibrator(FloatingWindowService.this);
                                 }
                                 openedSetting = false;
                             } else {

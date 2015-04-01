@@ -103,7 +103,7 @@ public class MyUtil {
     public static void vibrator(Context context) {
         //This need <uses-permission android:name="android.permission.VIBRATE" />
         Vibrator vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
-        vib.vibrate(80);
+        vib.vibrate(20);
     }
 
 }
