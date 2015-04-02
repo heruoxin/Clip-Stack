@@ -1,5 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.app.backup.BackupManager;
 import android.content.Context;
@@ -98,6 +99,16 @@ public class MyUtil {
 
     public static SharedPreferences getLocalSharedPreferences(Context context) {
         return context.getSharedPreferences("LocalSharedPreference", Context.MODE_PRIVATE);
+    }
+
+    public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void vibrator(Context context) {
