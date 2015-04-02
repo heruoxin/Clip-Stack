@@ -51,20 +51,14 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        switch (event.getEventType()) {
-            case AccessibilityEvent.TYPE_VIEW_FOCUSED:
-                Log.i("AccessibilityEvent", "TYPE_VIEW_FOCUSED");
-                if (event.getSource() != null &&
-                        event.getSource().isEditable()) {
-                    startFloatingWindow();
-                } else {
-                    stopFloatingWindow();
-                }
-                break;
-            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                Log.i("AccessibilityEvent", "TYPE_WINDOW_STATE_CHANGED");
-                stopFloatingWindow();
-                break;
+        AccessibilityNodeInfo findFocus = findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
+        if (findFocus != null &&
+                findFocus.isEditable()) {
+            Log.i("AccessibilityNodeInfo", "true");
+            startFloatingWindow();
+        } else {
+            Log.i("AccessibilityNodeInfo", "false");
+            stopFloatingWindow();
         }
     }
 
