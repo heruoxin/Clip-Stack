@@ -41,7 +41,7 @@ public class ActivitySetting extends MyPreferenceActivity {
                         CBWatcherService.startCBService(context, true);
                     case PREF_FLOATING_BUTTON:
                         if (sharedPreferences.getBoolean(key, false)) {
-                            context.startService(new Intent(context, FloatingWindowService.class));
+                            //context.startService(new Intent(context, FloatingWindowService.class));
                         } else {
                             context.stopService(new Intent(context, FloatingWindowService.class));
                         }

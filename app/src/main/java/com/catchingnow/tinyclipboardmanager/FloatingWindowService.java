@@ -31,6 +31,7 @@ public class FloatingWindowService extends Service {
 
     private boolean openedSetting = false;
     private boolean longClickAble = true;
+    private int onStartCommandReturn;
 
     private boolean checkPermission() {
         return (
@@ -79,18 +80,20 @@ public class FloatingWindowService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!checkPermission()) {
-            Log.i(MyUtil.PACKAGE_NAME, "STOPPED");
-            stopSelf();
-            return START_NOT_STICKY;
-        }
-        return START_STICKY;
+        return onStartCommandReturn;
     }
 
     @Override
     public void onCreate() {
 
         super.onCreate();
+        if (checkPermission()) {
+            onStartCommandReturn = START_STICKY;
+        } else {
+            onStartCommandReturn = START_NOT_STICKY;
+            Log.i(MyUtil.PACKAGE_NAME, "STOPPED");
+            stopSelf();
+        }
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         preference = MyUtil.getLocalSharedPreferences(this);
