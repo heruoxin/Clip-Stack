@@ -36,7 +36,6 @@ public class ActivityMainDialog extends ActivityMain {
             public void onClick(View v) {
                 startActivity(new Intent(context, ActivityMain.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 );
             }
         });
@@ -52,7 +51,6 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void onPause() {
         super.onPause();
-        moveTaskToBack(true);
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -94,12 +92,12 @@ public class ActivityMainDialog extends ActivityMain {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onPause();
                     Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
                             .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
                             .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
                             .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COPY);
                     context.startService(openIntent);
+                    moveTaskToBack(true);
                 }
             });
         }
