@@ -100,7 +100,7 @@
     <string name="toast_service_temporary_resume">Service resumed.</string>
     <string name="pref_floating_button">Floating Button</string>
     <string name="pref_floating_button_summary">Show floating button on screen.</string>
-    <string name="accessibility_service_description" >Enable this service to get more feature:\n• Clip Stack will not be killed by system when RAM is not enough.\n• Show floating button of clipboards when typing on Android Lollipop +. (Not support browsers yet)\n• More features is coming soon.</string>
+    <string name="accessibility_service_description" >Enable this service to get more feature:\n\n• Clip Stack will not be killed by system when RAM is not enough.\n• Show floating button of clipboards when typing on Android Lollipop +. (Not support browsers yet)\n• More features are coming soon.</string>
     <string name="pref_ping_floating_button">When to Show</string>
     <string name="pref_ping_floating_button_summary_always">Always show on screen.</string>
     <string name="pref_ping_floating_button_summary_typing">Only show when typing. (Browser is not support yet)</string>
