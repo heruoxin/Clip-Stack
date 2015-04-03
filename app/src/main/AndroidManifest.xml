@@ -132,7 +132,7 @@
             android:exported="true" >
         </service>
         <service
-            android:name=".MyAccessibilityService"
+            android:name=".ExperienceEnhanceService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:enabled="true"
             android:exported="true" >

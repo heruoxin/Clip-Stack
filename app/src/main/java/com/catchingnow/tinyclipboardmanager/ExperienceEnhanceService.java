@@ -23,7 +23,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
 
-public class MyAccessibilityService extends AccessibilityService {
+public class ExperienceEnhanceService extends AccessibilityService {
 
     private Context context;
     private SharedPreferences preferences;
