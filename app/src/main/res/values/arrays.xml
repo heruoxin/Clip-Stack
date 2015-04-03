@@ -15,6 +15,17 @@
         <item name="30">30</item>
         <item name="9999">9999</item>
     </string-array>
+    <string-array name="pref_ping_floating_button_description">
+        <item name="always">@string/pref_ping_floating_button_summary_always</item>
+        <item name="typing">@string/pref_ping_floating_button_summary_typing</item>
+    </string-array>
+    <string-array
+        tools:ignore="MissingTranslation"
+        name="pref_ping_floating_button_values">
+        <item name="always">always</item>
+        <item name="typing">typing</item>
+    </string-array>
+    <!-- floating button -->
     <!-- notification priority -->
     <string-array name="pref_notification_priority_descriptions">
         <item name="high">@string/pref_notification_priority_high</item>

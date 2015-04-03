@@ -191,7 +191,9 @@ public class ActivityMain extends MyActionBarActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Storage.UPDATE_DB));
 
-        onNewIntent(getIntent());
+        if (getIntent().getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
+            isFromNotification = true;
+        }
     }
 
     @Override
@@ -285,7 +287,6 @@ public class ActivityMain extends MyActionBarActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {

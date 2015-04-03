@@ -58,6 +58,7 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 * [nispok/Snackbar](https://github.com/nispok/snackbar)
 * [brnunes/SwipeableRecyclerView](https://github.com/brnunes/SwipeableRecyclerView)
+* [EatHeat/FloatingExample](https://github.com/EatHeat/FloatingExample)
 
 ### Translate
 

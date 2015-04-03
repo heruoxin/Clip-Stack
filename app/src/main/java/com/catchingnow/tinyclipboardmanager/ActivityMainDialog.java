@@ -2,6 +2,8 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -10,9 +12,14 @@ import android.view.View;
  */
 
 public class ActivityMainDialog extends ActivityMain {
+
     @Override
     public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_main_dialog);
+        if (layoutResID == R.layout.activity_main) {
+            super.setContentView(R.layout.activity_main_dialog);
+        } else {
+            super.setContentView(layoutResID);
+        }
     }
 
     @Override

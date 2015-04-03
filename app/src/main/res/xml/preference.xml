@@ -32,13 +32,30 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:dependency="pref_start_service"
+        android:title="@string/pref_floating_button">
+        <SwitchPreference
+            android:title="@string/pref_floating_button"
+            android:key="pref_floating_button_switch"
+            android:summary="@string/pref_floating_button_summary"
+            android:defaultValue="true" />
+        <ListPreference
+            android:title="@string/pref_ping_floating_button"
+            android:key="pref_floating_button_always_show"
+            android:summary="@string/pref_ping_floating_button_summary"
+            android:entries="@array/pref_ping_floating_button_description"
+            android:entryValues="@array/pref_ping_floating_button_values"
+            android:defaultValue="always"
+            android:dependency="pref_floating_button_switch" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:dependency="pref_start_service"
         android:title="@string/pref_notification_title">
         <SwitchPreference
             android:title="@string/pref_notification_title"
             android:key="pref_notification_show"
             android:summaryOn="@string/pref_notification_summary_on"
             android:summaryOff="@string/pref_notification_summary_off"
-            android:defaultValue="true"/>
+            android:defaultValue="true" />
         <ListPreference
             android:title="@string/pref_notification_priority_title"
             android:summary="@string/pref_notification_priority_summary"
