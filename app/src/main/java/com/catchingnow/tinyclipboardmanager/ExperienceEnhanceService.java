@@ -1,7 +1,6 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,27 +9,20 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.accessibilityservice.AccessibilityServiceInfoCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.AccessibilityDelegateCompat;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeProviderCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import java.util.List;
 
 public class ExperienceEnhanceService extends AccessibilityService {
 
     private Context context;
     private SharedPreferences preferences;
     private Handler handler;
+    private BroadcastReceiver restartCBWatcherService;
 
     private boolean isFWRunning = false;
-    private boolean wakedUpCBService = false;
+    private boolean hasWakedUpCBService = false;
 
     private void startFloatingWindow() {
         if (isFWRunning) return;
@@ -57,18 +49,18 @@ public class ExperienceEnhanceService extends AccessibilityService {
         context = this;
         handler = new Handler();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        BroadcastReceiver restartCBWatcherService = new BroadcastReceiver() {
+        restartCBWatcherService = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (wakedUpCBService) return;
+                if (hasWakedUpCBService) return;
                 CBWatcherService.startCBService(context, false);
-                wakedUpCBService = true;
+                hasWakedUpCBService = true;
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        wakedUpCBService = false;
+                        hasWakedUpCBService = false;
                     }
-                }, 3*1000);
+                }, 2*1000);
             }
         };
         LocalBroadcastManager.getInstance(context).registerReceiver(
@@ -108,5 +100,11 @@ public class ExperienceEnhanceService extends AccessibilityService {
     @Override
     public void onInterrupt() {
         Log.i("ACCESSIBILITY", "onInterrupt");
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(restartCBWatcherService);
+        return super.onUnbind(intent);
     }
 }
