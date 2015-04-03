@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -77,7 +78,6 @@ public class ActivityMain extends MyActionBarActivity {
     protected boolean isStarred = false;
     private boolean clickToCopy = true;
     private int isSnackbarShow = 0;
-    private boolean isFromNotification = false;
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
@@ -191,9 +191,6 @@ public class ActivityMain extends MyActionBarActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Storage.UPDATE_DB));
 
-        if (getIntent().getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
-            isFromNotification = true;
-        }
     }
 
     @Override
@@ -231,7 +228,6 @@ public class ActivityMain extends MyActionBarActivity {
             }, 600);
         }
 
-        isFromNotification = false;
         clearDeleteQueue();
         db.updateSystemClipboard();
     }
@@ -290,9 +286,6 @@ public class ActivityMain extends MyActionBarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
-            isFromNotification = true;
-        }
         super.onNewIntent(intent);
     }
 
@@ -819,6 +812,41 @@ public class ActivityMain extends MyActionBarActivity {
                 .show();
     }
 
+    protected void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
+                context.startService(openIntent);
+            }
+        });
+    }
+
+    protected void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                v.playSoundEffect(0);
+                Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
+                context.startService(openIntent);
+//                if (isFromNotification) {
+//                    moveTaskToBack(true);
+//                }
+                return true;
+            }
+        });
+    }
+
+    protected void setActionIcon(ImageButton view) {
+        //for dialog layout.
+    }
+
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
@@ -862,6 +890,8 @@ public class ActivityMain extends MyActionBarActivity {
 
             }
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
+
+            setActionIcon(clipCardViewHolder.vShare);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -920,37 +950,6 @@ public class ActivityMain extends MyActionBarActivity {
             setItemsVisibility();
         }
 
-        public void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
-                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
-                    context.startService(openIntent);
-                }
-            });
-        }
-
-        public void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
-            button.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    v.playSoundEffect(0);
-                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
-                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
-                    context.startService(openIntent);
-                    if (isFromNotification) {
-                        moveTaskToBack(true);
-                    }
-                    return true;
-                }
-            });
-        }
-
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {
@@ -986,7 +985,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vDate;
             protected TextView vText;
             protected ImageButton vStarred;
-            protected View vShare;
+            protected ImageButton vShare;
             protected View vMain;
 
             public ClipCardViewHolder(View v) {
@@ -995,7 +994,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
-                vShare = v.findViewById(R.id.activity_main_card_share_button);
+                vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vMain = v;
             }
         }
