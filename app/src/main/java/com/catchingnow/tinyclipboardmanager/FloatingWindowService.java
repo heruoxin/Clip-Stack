@@ -60,8 +60,8 @@ public class FloatingWindowService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.x = preference.getInt(FLOATING_WINDOW_X, 120);
-        params.y = preference.getInt(FLOATING_WINDOW_Y, 120);
+        params.x = preference.getInt(FLOATING_WINDOW_X, 10);
+        params.y = preference.getInt(FLOATING_WINDOW_Y, 10);
         params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
         params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
         windowManager.addView(floatingView, params);

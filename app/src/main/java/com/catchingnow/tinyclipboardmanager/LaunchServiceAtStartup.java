@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 //import android.content.SharedPreferences;
 //import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -28,7 +29,10 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
                 ClipboardManager cb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 cb.setText(clips);
             }
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true)) {
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+            if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true) &&
+                    preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
+                    ) {
                 context.startService(new Intent(context, FloatingWindowService.class));
             }
         }

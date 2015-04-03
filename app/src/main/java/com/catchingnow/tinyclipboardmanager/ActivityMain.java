@@ -288,7 +288,6 @@ public class ActivityMain extends MyActionBarActivity {
         super.onDestroy();
     }
 
-
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {

@@ -1,16 +1,21 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.AlertDialog;
 import android.app.backup.BackupManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.LinearLayout;
 
 public class ActivitySetting extends MyPreferenceActivity {
@@ -22,9 +27,11 @@ public class ActivitySetting extends MyPreferenceActivity {
     public final static String PREF_LONG_CLICK_BEHAVIOR = "pref_long_click_behavior";
     public final static String PREF_SAVE_DATES = "pref_save_dates";
     public static final String PREF_FLOATING_BUTTON = "pref_floating_button_switch";
+    public static final String PREF_FLOATING_BUTTON_ALWAYS_SHOW = "pref_floating_button_always_show";
 //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefChangeListener;
+    private SharedPreferences preferences;
     private Context context;
 
     public ActivitySetting() {
@@ -41,8 +48,16 @@ public class ActivitySetting extends MyPreferenceActivity {
                         CBWatcherService.startCBService(context, true);
                     case PREF_FLOATING_BUTTON:
                         if (sharedPreferences.getBoolean(key, false)) {
-                            //context.startService(new Intent(context, FloatingWindowService.class));
+                            context.startService(new Intent(context, FloatingWindowService.class));
                         } else {
+                            context.stopService(new Intent(context, FloatingWindowService.class));
+                        }
+                        break;
+                    case PREF_FLOATING_BUTTON_ALWAYS_SHOW:
+                        if (sharedPreferences.getString(key, "0").equals("0")) {
+                            context.startService(new Intent(context, FloatingWindowService.class));
+                        } else {
+                            checkAccessibilityPermission();
                             context.stopService(new Intent(context, FloatingWindowService.class));
                         }
                         break;
@@ -67,6 +82,38 @@ public class ActivitySetting extends MyPreferenceActivity {
 //        preference.edit().putLong(PREF_LAST_ACTIVE_THIS, new Date().getTime()).commit();
     }
 
+    private boolean checkAccessibilityPermission() {
+        if (MyUtil.isAccessibilityEnabled(context, MyUtil.PACKAGE_NAME)) {
+            Log.i(MyUtil.PACKAGE_NAME, "checkAccessibilityPermission: true");
+            return true;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.accessibility_dialog_title))
+                .setMessage(getString(R.string.accessibility_dialog_summary))
+                .setPositiveButton(getString(R.string.accessibility_dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                                startActivityForResult(intent, 0);
+                            }
+                        }
+                )
+                .setNegativeButton(getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .edit()
+                                        .putString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always")
+                                        .apply();
+                            }
+                        }
+                )
+                .setCancelable(false)
+                .create()
+                .show();
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +121,9 @@ public class ActivitySetting extends MyPreferenceActivity {
         context = this.getBaseContext();
         addPreferencesFromResource(R.xml.preference);
         mActionBar.setTitle(getTitle());
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
     }
 
     @Override
@@ -89,6 +139,12 @@ public class ActivitySetting extends MyPreferenceActivity {
         }
 
         super.onResume();
+
+        if (!preferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
+            Log.i(MyUtil.PACKAGE_NAME, ""+preferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always"));
+            checkAccessibilityPermission();
+        }
+
         initSharedPrefListener();
     }
 

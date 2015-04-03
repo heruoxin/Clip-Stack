@@ -38,6 +38,14 @@
             android:key="pref_floating_button_switch"
             android:summary="@string/pref_floating_button_summary"
             android:defaultValue="true" />
+        <ListPreference
+            android:title="@string/pref_ping_floating_button"
+            android:key="pref_floating_button_always_show"
+            android:summary="@string/pref_ping_floating_button_summary"
+            android:entries="@array/pref_ping_floating_button_description"
+            android:entryValues="@array/pref_ping_floating_button_values"
+            android:defaultValue="always"
+            android:dependency="pref_floating_button_switch" />
     </PreferenceCategory>
     <PreferenceCategory
         android:dependency="pref_start_service"

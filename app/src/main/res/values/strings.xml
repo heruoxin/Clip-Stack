@@ -99,7 +99,14 @@
     <string name="toast_service_temporary_stop">Service Paused.</string>
     <string name="toast_service_temporary_resume">Service resumed.</string>
     <string name="pref_floating_button">Floating Button</string>
-    <string name="pref_floating_button_summary">Show a floating button on screen.</string>
+    <string name="pref_floating_button_summary">Show floating button on screen.</string>
     <string name="accessibility_service_description" />
+    <string name="pref_ping_floating_button">When to Show</string>
+    <string name="pref_ping_floating_button_summary_always">Always show on screen.</string>
+    <string name="pref_ping_floating_button_summary_typing">Only show when typing. (Browser is not support yet)</string>
+    <string name="pref_ping_floating_button_summary">When to show floating button.</string>
+    <string name="accessibility_dialog_title">Accessibility Require</string>
+    <string name="accessibility_dialog_summary">This feature require accessibility permission. \nPlease enable it on Android settings.</string>
+    <string name="accessibility_dialog_ok">Open Settings</string>
 
 </resources>
