@@ -112,7 +112,7 @@ public class ActivityMainDialog extends ActivityMain {
 
     @Override
     protected void setActionIcon(ImageButton view) {
-        view.setImageResource(R.drawable.ic_action_copy);
+        view.setImageResource(R.drawable.ic_content_copy_grey);
     }
 
 }
