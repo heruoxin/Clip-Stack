@@ -46,15 +46,24 @@ public class ActivitySetting extends MyPreferenceActivity {
                         break;
                     case PREF_START_SERVICE:
                         CBWatcherService.startCBService(context, true);
+                        if (sharedPreferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always") &&
+                                sharedPreferences.getBoolean(PREF_FLOATING_BUTTON, true) &&
+                                sharedPreferences.getBoolean(PREF_START_SERVICE, true)
+                                ) {
+                            context.startService(new Intent(context, FloatingWindowService.class));
+                        } else {
+                            context.stopService(new Intent(context, FloatingWindowService.class));
+                        }
+                        break;
                     case PREF_FLOATING_BUTTON:
-                        if (sharedPreferences.getBoolean(key, false)) {
+                        if (sharedPreferences.getBoolean(key, true)) {
                             context.startService(new Intent(context, FloatingWindowService.class));
                         } else {
                             context.stopService(new Intent(context, FloatingWindowService.class));
                         }
                         break;
                     case PREF_FLOATING_BUTTON_ALWAYS_SHOW:
-                        if (sharedPreferences.getString(key, "0").equals("0")) {
+                        if (sharedPreferences.getString(key, "always").equals("always")) {
                             context.startService(new Intent(context, FloatingWindowService.class));
                         } else {
                             checkAccessibilityPermission();
