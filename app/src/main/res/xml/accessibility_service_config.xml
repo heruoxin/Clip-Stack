@@ -4,6 +4,7 @@
     android:accessibilityFlags="flagDefault"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:notificationTimeout="200"
-    android:canRetrieveWindowContent="true"
+    android:canRetrieveWindowContent="true" />
+    <!--
     android:settingsActivity="com.catchingnow.tinyclipboardmanager.ActivitySetting"
-    />
+    -->
