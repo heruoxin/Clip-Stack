@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -64,6 +65,11 @@ public class ActivityMainDialog extends ActivityMain {
         super.onResume();
         isStarred = false;
         setView();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     @Override

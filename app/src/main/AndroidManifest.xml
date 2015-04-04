@@ -59,7 +59,8 @@
             android:name=".ActivityMainDialog"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
+            android:documentLaunchMode="intoExisting"
             android:theme="@style/AppDialogTheme" >
         </activity>
         <activity

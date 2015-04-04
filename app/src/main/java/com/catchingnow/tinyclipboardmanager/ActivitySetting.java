@@ -28,7 +28,7 @@ public class ActivitySetting extends MyPreferenceActivity {
     public final static String PREF_SAVE_DATES = "pref_save_dates";
     public static final String PREF_FLOATING_BUTTON = "pref_floating_button_switch";
     public static final String PREF_FLOATING_BUTTON_ALWAYS_SHOW = "pref_floating_button_always_show";
-//    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
+    //    public final static String PREF_LAST_ACTIVE_THIS = "pref_last_active_this";
     private Toolbar mActionBar;
     private SharedPreferences.OnSharedPreferenceChangeListener myPrefChangeListener;
     private SharedPreferences preferences;
@@ -46,27 +46,20 @@ public class ActivitySetting extends MyPreferenceActivity {
                         break;
                     case PREF_START_SERVICE:
                         CBWatcherService.startCBService(context, true);
-                        if (sharedPreferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always") &&
-                                sharedPreferences.getBoolean(PREF_FLOATING_BUTTON, true) &&
-                                sharedPreferences.getBoolean(PREF_START_SERVICE, true)
-                                ) {
-                            context.startService(new Intent(context, FloatingWindowService.class));
-                        } else {
+                        if (!sharedPreferences.getBoolean(PREF_START_SERVICE, true)) {
                             context.stopService(new Intent(context, FloatingWindowService.class));
+                            break;
                         }
-                        break;
                     case PREF_FLOATING_BUTTON:
-                        if (sharedPreferences.getBoolean(key, true)) {
-                            context.startService(new Intent(context, FloatingWindowService.class));
-                        } else {
-                            context.stopService(new Intent(context, FloatingWindowService.class));
-                        }
-                        break;
                     case PREF_FLOATING_BUTTON_ALWAYS_SHOW:
-                        if (sharedPreferences.getString(key, "always").equals("always")) {
-                            context.startService(new Intent(context, FloatingWindowService.class));
+                        if (sharedPreferences.getBoolean(PREF_FLOATING_BUTTON, true)) {
+                            if (sharedPreferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
+                                context.startService(new Intent(context, FloatingWindowService.class));
+                            } else {
+                                checkAccessibilityPermission();
+                                context.stopService(new Intent(context, FloatingWindowService.class));
+                            }
                         } else {
-                            checkAccessibilityPermission();
                             context.stopService(new Intent(context, FloatingWindowService.class));
                         }
                         break;
@@ -150,7 +143,7 @@ public class ActivitySetting extends MyPreferenceActivity {
         super.onResume();
 
         if (!preferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
-            Log.i(MyUtil.PACKAGE_NAME, ""+preferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always"));
+            Log.i(MyUtil.PACKAGE_NAME, "" + preferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always"));
             checkAccessibilityPermission();
         }
 
