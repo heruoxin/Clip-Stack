@@ -119,11 +119,11 @@ public class MyActionBarActivity extends ActionBarActivity {
         if (getString(R.string.screen_type).contains("phone")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mToolbar.setElevation(MyUtil.dip2px(this, 4));
-            } else {
-                View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
-                if (mToolbarShadow != null) {
-                    mToolbarShadow.setVisibility(View.VISIBLE);
-                }
+//            } else {
+//                View mToolbarShadow = findViewById(R.id.my_toolbar_shadow);
+//                if (mToolbarShadow != null) {
+//                    mToolbarShadow.setVisibility(View.VISIBLE);
+//                }
             }
         }
     }
