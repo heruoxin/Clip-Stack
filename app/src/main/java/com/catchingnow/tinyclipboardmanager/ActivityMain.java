@@ -546,8 +546,6 @@ public class ActivityMain extends MyActionBarActivity {
         } else {
             starItem.setIcon(R.drawable.ic_switch_star_off);
         }
-        //Only save this setting in MainActivity.
-        //Dialog mode wont do this.
         preference.edit()
                 .putBoolean(AppWidget.WIDGET_IS_STARRED, isStarred)
                 .apply();
