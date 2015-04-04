@@ -238,8 +238,20 @@ public class ActivityMain extends MyActionBarActivity {
 
         preference = PreferenceManager.getDefaultSharedPreferences(this);
         clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
-        isStarred = preference.getBoolean(AppWidget.WIDGET_IS_STARRED, false);
-
+        final boolean tmpStarred = preference.getBoolean(AppWidget.WIDGET_IS_STARRED, false);
+        if (isStarred != tmpStarred) {
+            final TransitionDrawable mFabBackground = (TransitionDrawable) mFAB.getBackground();
+            mFabBackground.resetTransition();
+            if (tmpStarred) mFabBackground.startTransition(10);
+            mFAB.setImageResource(tmpStarred ?
+                            R.drawable.ic_action_star_white
+                            :
+                            R.drawable.ic_action_add
+            );
+            lastStorageUpdate = null;
+        }
+        isStarred = tmpStarred;
+        setStarredIcon();
         setView();
         //check if first launch
         if (preference.getBoolean(FIRST_LAUNCH, true)) {
@@ -541,6 +553,7 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     protected void setStarredIcon() {
+        if (starItem == null) return;
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_switch_star_on);
         } else {

@@ -73,6 +73,7 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void setStarredIcon() {
         super.setStarredIcon();
+        if (starItem == null) return;
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_action_star_white);
         } else {
