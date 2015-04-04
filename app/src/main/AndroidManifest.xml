@@ -4,10 +4,13 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
+<!--     <uses-permission android:name="android.permission.VIBRATE" /> -->
     <application
         android:allowBackup="true"
-        android:backupAgent=".BackupAgent"
+        android:backupAgent=".GoogleBackupAgent"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -52,16 +55,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".ActivityMainDialog"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppDialogTheme"
             android:excludeFromRecents="true"
-            android:launchMode="singleTop" >
+            android:label="@string/title_activity_main"
+            android:launchMode="singleInstance"
+            android:documentLaunchMode="intoExisting"
+            android:theme="@style/AppDialogTheme" >
         </activity>
-
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
@@ -84,7 +85,7 @@
             android:documentLaunchMode="always"
             android:label="@string/title_activity_activity_get_share_text"
             android:maxRecents="1"
-            android:theme="@style/AppDialogWhenLargeTheme">
+            android:theme="@style/AppDialogWhenLargeTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -97,7 +98,7 @@
             android:name=".ActivityBackup"
             android:label="@string/title_activity_backup"
             android:parentActivityName=".ActivityMain"
-            android:theme="@style/AppDialogWhenLargeTheme">
+            android:theme="@style/AppDialogWhenLargeTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityMain" />
@@ -106,7 +107,7 @@
             android:name=".ActivityBackupNew"
             android:label="@string/title_activity_new_backup"
             android:parentActivityName=".ActivityBackup"
-            android:theme="@style/AppDialogWhenLargeTheme">
+            android:theme="@style/AppDialogWhenLargeTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
@@ -116,13 +117,33 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
-        <service android:name=".AppWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+
+        <service
+            android:name=".AppWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".FloatingWindowService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name=".ExperienceEnhanceService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 
 </manifest>

@@ -95,4 +95,5 @@
     <string name="pref_rate_title">評分</string>
     <string name="switch_all_items">所有剪貼簿</string>
     <string name="switch_only_starred_items">帶星標的</string>
+    <string name="accessibility_dialog_title">协助工具</string>
 </resources>

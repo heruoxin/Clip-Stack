@@ -96,5 +96,17 @@
     <string name="pref_click_summary">设置点按和长按的动作</string>
     <string name="switch_all_items">所有剪贴板</string>
     <string name="switch_only_starred_items">仅带星标的</string>
+    <string name="accessibility_dialog_ok">进入设置</string>
+    <string name="accessibility_dialog_title">辅助功能</string>
+    <string name="accessibility_dialog_summary">此选项需要开启「辅助功能」，请在设置里开启它。</string>
+    <string name="pref_floating_button">浮动按钮</string>
+    <string name="pref_floating_button_summary">在屏幕上显示一个快捷浮动按钮。</string>
+    <string name="pref_ping_floating_button">何时显示</string>
+    <string name="pref_ping_floating_button_summary">设置何时显示浮动按钮。</string>
+    <string name="pref_ping_floating_button_summary_always">总是显示在屏幕上。</string>
+    <string name="pref_ping_floating_button_summary_typing">仅在输入文字时显示（暂不支持浏览器）。</string>
+    <string name="toast_service_temporary_stop">记录已暂停。</string>
+    <string name="toast_service_temporary_resume">记录已恢复。</string>
+    <string name="accessibility_service_description">开启以获得更多功能：\n\n• 当设备内存不足时，剪纸堆不会被系统关闭。\n• 获得「仅在输入文字时显示浮动按钮」的功能（仅支持 Android 5.0 及以上，暂不支持浏览器）。\n• 更多功能（如黑名单）会在后续版本中添加。</string>
 
 </resources>

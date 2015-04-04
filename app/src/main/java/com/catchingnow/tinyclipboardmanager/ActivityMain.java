@@ -17,14 +17,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +63,7 @@ public class ActivityMain extends MyActionBarActivity {
     private MenuItem searchItem;
     protected MenuItem starItem;
 
+    protected SharedPreferences preference;
     protected Context context;
     private Storage db;
     private List<ClipObject> clips;
@@ -78,7 +78,6 @@ public class ActivityMain extends MyActionBarActivity {
     protected boolean isStarred = false;
     private boolean clickToCopy = true;
     private int isSnackbarShow = 0;
-    private boolean isFromNotification = false;
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
@@ -108,7 +107,7 @@ public class ActivityMain extends MyActionBarActivity {
             if (tabletMain != null) {
                 ViewGroup.LayoutParams tabletMainLayoutParams = tabletMain.getLayoutParams();
                 tabletMainLayoutParams.width =
-                        (getScreenWidthPixels() * 2/3);
+                        (getScreenWidthPixels() * 2 / 3);
                 tabletMain.setLayoutParams(tabletMainLayoutParams);
             }
         }
@@ -192,13 +191,12 @@ public class ActivityMain extends MyActionBarActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Storage.UPDATE_DB));
 
-        onNewIntent(getIntent());
     }
 
     @Override
     protected void onStop() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            db.cleanUp();
+            db.cleanUpAndRequestBackup();
         }
         super.onStop();
     }
@@ -230,7 +228,6 @@ public class ActivityMain extends MyActionBarActivity {
             }, 600);
         }
 
-        isFromNotification = false;
         clearDeleteQueue();
         db.updateSystemClipboard();
     }
@@ -239,8 +236,9 @@ public class ActivityMain extends MyActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
         clickToCopy = (preference.getString(ActivitySetting.PREF_LONG_CLICK_BEHAVIOR, "0").equals("1"));
+        isStarred = preference.getBoolean(AppWidget.WIDGET_IS_STARRED, false);
 
         setView();
         //check if first launch
@@ -286,12 +284,8 @@ public class ActivityMain extends MyActionBarActivity {
         super.onDestroy();
     }
 
-
     @Override
     protected void onNewIntent(Intent intent) {
-        if (intent.getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
-            isFromNotification = true;
-        }
         super.onNewIntent(intent);
     }
 
@@ -419,26 +413,26 @@ public class ActivityMain extends MyActionBarActivity {
                     mFAB.animate().scaleX(0).scaleY(0);
                 }
                 mFAB.animate().setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                isXHidden = 1;
-                            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = 1;
+                    }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                isXHidden = 1;
-                            }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        isXHidden = 1;
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
+                    }
+                });
             }
         }, 200);
     }
@@ -460,26 +454,26 @@ public class ActivityMain extends MyActionBarActivity {
                     mFAB.animate().scaleX(1).scaleY(1);
                 }
                 mFAB.animate().setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                isXHidden = -1;
-                            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isXHidden = -1;
+                    }
 
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                isXHidden = -1;
-                            }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        isXHidden = -1;
+                    }
 
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-                            }
-                        });
+                    }
+                });
                 mFabRotation(false, TRANSLATION_SLOW);
             }
         }, 200);
@@ -552,6 +546,12 @@ public class ActivityMain extends MyActionBarActivity {
         } else {
             starItem.setIcon(R.drawable.ic_switch_star_off);
         }
+        //Only save this setting in MainActivity.
+        //Dialog mode wont do this.
+        preference.edit()
+                .putBoolean(AppWidget.WIDGET_IS_STARRED, isStarred)
+                .apply();
+        AppWidget.updateAllAppWidget(context);
     }
 
     private void setItemsVisibility() {
@@ -601,105 +601,104 @@ public class ActivityMain extends MyActionBarActivity {
                                 onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
                             }
                         });
-        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 20 && isYHidden == -1) {
-                    //hide FAB on Y
-                    if (isXHidden != -1) return;
-                    if (isSnackbarShow > 0) return;
-                    isYHidden = 0;
-                    mFabRotation(true, TRANSLATION_FAST);
-                    if (getString(R.string.screen_type).contains("phone")) {
+        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
+        if (getString(R.string.screen_type).contains("phone")) {
+            // hide FAB when list scroll on phone
+            RecyclerView.OnScrollListener scrollFabAnimateListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 20 && isYHidden == -1) {
+                        //hide FAB on Y
+                        if (isXHidden != -1) return;
+                        if (isSnackbarShow > 0) return;
+                        isYHidden = 0;
+                        mFabRotation(true, TRANSLATION_FAST);
                         mFabRotation(true, TRANSLATION_FAST);
                         mFAB.animate()
                                 .translationY(MyUtil.dip2px(context, 90));
-                    }
-                    mFAB.animate()
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
+                        mFAB.animate()
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = 1;
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        isYHidden = 1;
+                                    }
 
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    isYHidden = 1;
-                                }
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                        isYHidden = 1;
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
 
-                                }
-                            });
-                } else if (dy < -20 && isYHidden == 1) {
-                    //show FAB on Y
-                    if (isXHidden != -1) return;
-                    if (isSnackbarShow > 0) return;
-                    isYHidden = 0;
-                    mFabRotation(false, TRANSLATION_FAST);
-                    if (getString(R.string.screen_type).contains("phone")) {
+                                    }
+                                });
+                    } else if (dy < -20 && isYHidden == 1) {
+                        //show FAB on Y
+                        if (isXHidden != -1) return;
+                        if (isSnackbarShow > 0) return;
+                        isYHidden = 0;
+                        mFabRotation(false, TRANSLATION_FAST);
                         mFabRotation(false, TRANSLATION_FAST);
                         mFAB.animate()
                                 .translationY(0);
-                    }
-                    mFAB.animate()
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
+                        mFAB.animate()
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    isYHidden = -1;
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        isYHidden = -1;
+                                    }
 
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    isYHidden = -1;
-                                }
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                        isYHidden = -1;
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
 
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    switch (newState) {
-                        case RecyclerView.SCROLL_STATE_IDLE:
-                            if (getString(R.string.screen_type).contains("phone")) {
-                                mToolbar.animate().translationZ(0);
-                            }
-                            mFAB.animate().translationZ(0);
-                            break;
-                        default:
-                            if (getString(R.string.screen_type).contains("phone")) {
-                                mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
-                            }
-                            mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
-                            break;
+                                    }
+                                });
                     }
                 }
-            }
 
-        };
-        mRecList.setOnScrollListener(scrollListener);
-        mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        switch (newState) {
+                            case RecyclerView.SCROLL_STATE_IDLE:
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mToolbar.animate().translationZ(0);
+                                }
+                                mFAB.animate().translationZ(0);
+                                break;
+                            default:
+                                if (getString(R.string.screen_type).contains("phone")) {
+                                    mToolbar.animate().translationZ(MyUtil.dip2px(context, 4));
+                                }
+                                mFAB.animate().translationZ(MyUtil.dip2px(context, 4));
+                                break;
+                        }
+                    }
+                }
+
+            };
+            mRecList.setOnScrollListener(scrollFabAnimateListener);
+        }
     }
 
-    private void setView() {
+    protected void setView() {
 
         if (db.getLatsUpdateDate() == lastStorageUpdate) return;
         lastStorageUpdate = db.getLatsUpdateDate();
@@ -813,6 +812,41 @@ public class ActivityMain extends MyActionBarActivity {
                 .show();
     }
 
+    protected void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
+                context.startService(openIntent);
+            }
+        });
+    }
+
+    protected void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                v.playSoundEffect(0);
+                Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                        .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
+                context.startService(openIntent);
+//                if (isFromNotification) {
+//                    moveTaskToBack(true);
+//                }
+                return true;
+            }
+        });
+    }
+
+    protected void setActionIcon(ImageButton view) {
+        //for dialog layout.
+    }
+
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
         private Context context;
         private List<ClipObject> clipObjectList;
@@ -856,6 +890,8 @@ public class ActivityMain extends MyActionBarActivity {
 
             }
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
+
+            setActionIcon(clipCardViewHolder.vShare);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -914,37 +950,6 @@ public class ActivityMain extends MyActionBarActivity {
             setItemsVisibility();
         }
 
-        public void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
-                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
-                    context.startService(openIntent);
-                }
-            });
-        }
-
-        public void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
-            button.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    v.playSoundEffect(0);
-                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
-                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
-                    context.startService(openIntent);
-                    if (isFromNotification) {
-                        moveTaskToBack(true);
-                    }
-                    return true;
-                }
-            });
-        }
-
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {
@@ -980,7 +985,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vDate;
             protected TextView vText;
             protected ImageButton vStarred;
-            protected View vShare;
+            protected ImageButton vShare;
             protected View vMain;
 
             public ClipCardViewHolder(View v) {
@@ -989,7 +994,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
-                vShare = v.findViewById(R.id.activity_main_card_share_button);
+                vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vMain = v;
             }
         }

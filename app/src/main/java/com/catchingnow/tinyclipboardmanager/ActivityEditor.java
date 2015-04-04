@@ -122,15 +122,15 @@ public class ActivityEditor extends MyActionBarActivity {
                 isStarred = !isStarred;
                 setStarredIcon();
                 break;
-//            case (R.id.action_save):
-//                saveText();
-//                break;
             case (R.id.action_delete):
                 deleteText();
                 break;
             case (R.id.action_cancel):
             case (android.R.id.home):
                 finishAndRemoveTaskWithToast(getString(R.string.toast_no_saved));
+                break;
+            case (R.id.action_save):
+                saveText();
         }
         return super.onOptionsItemSelected(item);
     }

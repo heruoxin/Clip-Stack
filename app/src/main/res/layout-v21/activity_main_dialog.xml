@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view"
+    android:layout_width="match_parent"
+    android:layout_height="480dp"
+    android:background="@color/background"
+    android:animateLayoutChanges="true"
+    tools:context=".MyActivity">
+    <!--
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    -->
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize" />
+
+    <RelativeLayout
+        android:layout_below="@id/my_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:id="@+id/background_view"
+            android:layout_centerInParent="true"
+            android:layout_width="520dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:src="@drawable/background_main"
+                android:layout_width="180dp"
+                android:layout_height="180dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/recycler_layout"
+            android:layout_centerInParent="true"
+            android:layout_width="520dp"
+            android:background="@color/background"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/main_fab"
+            android:transitionName="@string/action_star"
+            android:contentDescription="@string/action_add"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:stateListAnimator="@animator/anim"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_add"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="mFabOnClick" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -32,7 +32,7 @@
             android:contentDescription="@string/action_star" />
         <ImageButton
             android:id="@+id/widget_title_add"
-            android:src="@drawable/ic_action_add"
+            android:src="@drawable/ic_widget_add"
             android:background="@drawable/background_default_ripple"
             android:layout_width="@dimen/abc_action_button_min_width_material"
             android:layout_height="@dimen/abc_action_button_min_height_material"

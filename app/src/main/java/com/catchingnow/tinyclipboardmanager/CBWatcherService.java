@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -36,8 +37,12 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static String INTENT_EXTRA_TEMPORARY_STOP = "com.catchingnow.tinyclipboardmanager.EXTRA.TEMPORARY_STOP";
+
+    public final static String ON_DESTROY = "onCBWatcherServiceDestroy";
+
     public final static int JOB_ID = 1;
     public int NUMBER_OF_CLIPS = 5; //3-6
+
     private final static String NOTIFICATION_GROUP = "notification_group";
     private Context mContext;
     private NotificationManagerCompat notificationManager;
@@ -62,6 +67,7 @@ public class CBWatcherService extends Service {
 
     @Override
     public void onCreate() {
+        Log.v(MyUtil.PACKAGE_NAME, "onCreate CBService");
         mContext = this;
         mHandler = new Handler();
         preference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -142,6 +148,7 @@ public class CBWatcherService extends Service {
     public void onDestroy() {
         notificationManager.cancelAll();
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).removePrimaryClipChangedListener(listener);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ON_DESTROY));
         super.onDestroy();
     }
 
@@ -152,10 +159,11 @@ public class CBWatcherService extends Service {
                 .setRequiresCharging(true)
                 .setRequiresDeviceIdle(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPeriodic(480000)
+                .setPeriodic(24*60*60*1000)
                 .setPersisted(true)
                 .build();
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.cancel(JOB_ID);
         jobScheduler.schedule(job);
     }
 

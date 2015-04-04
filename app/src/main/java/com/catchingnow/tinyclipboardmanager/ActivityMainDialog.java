@@ -2,19 +2,29 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * Created by heruoxin on 15/3/27.
  */
 
 public class ActivityMainDialog extends ActivityMain {
+
+    @Override
+    public void setContentView(int layoutResID) {
+        if (layoutResID == R.layout.activity_main) {
+            super.setContentView(R.layout.activity_main_dialog);
+        } else {
+            super.setContentView(layoutResID);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +36,7 @@ public class ActivityMainDialog extends ActivityMain {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, ActivityMain.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 );
             }
         });
@@ -42,12 +52,24 @@ public class ActivityMainDialog extends ActivityMain {
     @Override
     protected void onPause() {
         super.onPause();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                    finish();
-            }
-        }, 400);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                    finish();
+//            }
+//        }, 200);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isStarred = false;
+        setView();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     @Override
@@ -58,4 +80,43 @@ public class ActivityMainDialog extends ActivityMain {
             starItem.setIcon(R.drawable.ic_action_star_outline_white);
         }
     }
+
+    @Override
+    protected void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+        if (button instanceof TextView) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_EDIT);
+                    context.startService(openIntent);
+                }
+            });
+        } else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COPY);
+                    context.startService(openIntent);
+                    moveTaskToBack(true);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void addLongClickStringAction(Context context, ClipObject clipObject, int actionCode, View button) {
+        //super.addLongClickStringAction(context, clipObject, actionCode, button);
+    }
+
+    @Override
+    protected void setActionIcon(ImageButton view) {
+        view.setImageResource(R.drawable.ic_content_copy_grey);
+    }
+
 }
