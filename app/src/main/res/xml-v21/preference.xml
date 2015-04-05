@@ -37,7 +37,7 @@
             android:title="@string/pref_floating_button"
             android:key="pref_floating_button_switch"
             android:summary="@string/pref_floating_button_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
         <ListPreference
             android:title="@string/pref_ping_floating_button"
             android:key="pref_floating_button_always_show"

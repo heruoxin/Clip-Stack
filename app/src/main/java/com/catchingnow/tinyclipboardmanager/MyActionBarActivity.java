@@ -143,7 +143,7 @@ public class MyActionBarActivity extends ActionBarActivity {
         Log.i(MyUtil.PACKAGE_NAME, "sendBroadcast ACTIVITY_CLOSED");
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_CLOSED));
         CBWatcherService.startCBService(this, -1);
-        if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true) &&
+        if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false) &&
                 preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
                 ) {
             this.startService(new Intent(this, FloatingWindowService.class));
@@ -155,7 +155,7 @@ public class MyActionBarActivity extends ActionBarActivity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_OPENED));
         CBWatcherService.startCBService(this, true, 1);
-        if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true) &&
+        if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false) &&
                 preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
                 ) {
             this.stopService(new Intent(this, FloatingWindowService.class));

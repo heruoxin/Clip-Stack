@@ -30,7 +30,7 @@ public class LaunchServiceAtStartup extends BroadcastReceiver {
                 cb.setText(clips);
             }
             SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
-            if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true) &&
+            if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false) &&
                     preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
                     ) {
                 context.startService(new Intent(context, FloatingWindowService.class));

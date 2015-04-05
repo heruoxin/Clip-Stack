@@ -421,7 +421,7 @@ public class Storage {
 
     public class StorageHelper extends SQLiteOpenHelper {
         public static final String DATABASE_NAME = "clippingnow.db";
-        private static final int DATABASE_VERSION = 4;
+        private static final int DATABASE_VERSION = 3;
         private static final String TABLE_NAME = "cliphistory";
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
@@ -440,18 +440,16 @@ public class Storage {
         }
 
         @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            //super.onDowngrade(db, oldVersion, newVersion);
+        }
+
+        @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.v(MyUtil.PACKAGE_NAME, "SQL updated from" + oldVersion + "to" + newVersion);
             if (oldVersion <= 2) {
                 // add star option
                 db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + CLIP_IS_STAR + " BOOLEAN DEFAULT 0");
-            }
-            if (oldVersion <= 3) {
-                // disable floating window for old user.
-                PreferenceManager.getDefaultSharedPreferences(context)
-                        .edit()
-                        .putBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false)
-                        .apply();
             }
         }
     }

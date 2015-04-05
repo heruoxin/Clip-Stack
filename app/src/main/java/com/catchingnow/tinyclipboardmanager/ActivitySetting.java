@@ -52,7 +52,7 @@ public class ActivitySetting extends MyPreferenceActivity {
                         }
                     case PREF_FLOATING_BUTTON:
                     case PREF_FLOATING_BUTTON_ALWAYS_SHOW:
-                        if (sharedPreferences.getBoolean(PREF_FLOATING_BUTTON, true)) {
+                        if (sharedPreferences.getBoolean(PREF_FLOATING_BUTTON, false)) {
                             if (sharedPreferences.getString(PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
                                 context.startService(new Intent(context, FloatingWindowService.class));
                             } else {

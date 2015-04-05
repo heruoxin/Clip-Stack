@@ -27,7 +27,7 @@ public class ExperienceEnhanceService extends AccessibilityService {
     private void startFloatingWindow() {
         if (isFWRunning) return;
         if (preferences.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
-            isFWRunning = preferences.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true);
+            isFWRunning = preferences.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false);
             return;
         }
         isFWRunning = true;
@@ -37,7 +37,7 @@ public class ExperienceEnhanceService extends AccessibilityService {
     private void stopFloatingWindow() {
         if (!isFWRunning) return;
         if (preferences.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")) {
-            isFWRunning = preferences.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, true);
+            isFWRunning = preferences.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false);
             return;
         }
         isFWRunning = false;
