@@ -80,12 +80,7 @@ public class ActivityEditor extends MyActionBarActivity {
     protected void onResume() {
         super.onResume();
         editText.requestFocus();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setStarredIcon();
-            }
-        }, 600);
+        setStarredIcon();
     }
 
     @Override
@@ -104,6 +99,7 @@ public class ActivityEditor extends MyActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         starItem = menu.findItem(R.id.action_star);
+        setStarredIcon();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -136,6 +132,7 @@ public class ActivityEditor extends MyActionBarActivity {
     }
 
     private void setStarredIcon() {
+        if (starItem == null) return;
         final TransitionDrawable mFabBackground = (TransitionDrawable) mFAB.getBackground();
         if (isStarred) {
             starItem.setIcon(R.drawable.ic_action_star_white);
