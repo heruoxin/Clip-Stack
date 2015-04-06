@@ -3,107 +3,153 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:id="@+id/main_view"
-        android:orientation="horizontal"
-        android:divider="@drawable/divider"
-        android:showDividers="beginning"
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false">
-
+        android:layout_height="80sp">
 
         <RelativeLayout
-            android:layout_marginTop="5sp"
-            android:layout_marginBottom="5sp"
-            android:layout_marginLeft="16sp"
-            android:layout_marginRight="16sp"
-            android:layout_weight="1"
-            android:layout_width="0sp"
-            android:layout_height="wrap_content">
+            android:id="@+id/select_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/ic_action_done"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/delete_view"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/activity_main_card_date"
-                android:layout_width="match_parent"
-                android:layout_height="20sp"
-                android:text="Sun Jan 22"
-                android:textColor="@color/accent"
-                android:gravity="center_vertical"
-                android:textSize="12sp" />
+                android:text="@string/toast_deleted"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0sp"
+                android:layout_height="match_parent" />
 
-            <LinearLayout
-                android:layout_below="@id/activity_main_card_date"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50sp">
+            <TextView
+                android:text="@string/toast_undo"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:padding="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
-                <ImageButton
-                    android:id="@+id/activity_main_card_star_button"
-                    android:contentDescription="@string/action_star"
-                    android:src="@drawable/ic_action_star_outline_grey600"
-                    android:background="@drawable/background_star"
-                    android:layout_gravity="center"
-                    android:layout_width="42sp"
-                    android:layout_height="42sp"
-                    android:padding="4sp"
-                    android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_view"
+            android:background="@color/background"
+            android:orientation="horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="beginning"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+
+
+            <RelativeLayout
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
+                android:layout_marginLeft="16sp"
+                android:layout_marginRight="16sp"
+                android:layout_weight="1"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/activity_main_card_text"
-                    android:gravity="center_vertical|start"
-                    android:background="@drawable/background_default_ripple_with_mask"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:lineSpacingMultiplier="1.3"
-                    android:text="hello, this is a text test aaaaaaaadac \n dawdasddddsadwaf fefwada wddwdafa awd"
-                    android:textSize="16sp"
-                    android:textColor="@color/secondary_text_default_material_light"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent" />
-            </LinearLayout>
+                    android:id="@+id/activity_main_card_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="20sp"
+                    android:text="Sun Jan 22"
+                    android:textColor="@color/accent"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp" />
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_below="@id/activity_main_card_date"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp">
 
-        <RelativeLayout
-            android:layout_gravity="top"
-            android:layout_margin="6sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                    <ImageButton
+                        android:id="@+id/activity_main_card_star_button"
+                        android:contentDescription="@string/action_star"
+                        android:src="@drawable/ic_action_star_outline_grey600"
+                        android:background="@drawable/background_star"
+                        android:layout_gravity="center"
+                        android:layout_width="42sp"
+                        android:layout_height="42sp"
+                        android:padding="4sp"
+                        android:scaleType="fitCenter" />
 
-            <TextView
-                android:id="@+id/activity_main_card_time"
+                    <TextView
+                        android:id="@+id/activity_main_card_text"
+                        android:gravity="center_vertical|start"
+                        android:background="@drawable/background_default_ripple_with_mask"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:lineSpacingMultiplier="1.3"
+                        android:text="hello, this is a text test aaaaaaaadac \n dawdasddddsadwaf fefwada wddwdafa awd"
+                        android:textSize="16sp"
+                        android:textColor="@color/secondary_text_default_material_light"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_gravity="top"
+                android:layout_margin="6sp"
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
-                android:text="13:23"
-                android:textColor="@color/accent"
-                android:textSize="12sp" />
+                android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/activity_main_card_share_button"
-                android:background="@drawable/background_default_ripple"
-                android:layout_marginTop="2sp"
-                android:src="@drawable/ic_notification_action_share"
-                android:layout_below="@id/activity_main_card_time"
-                android:layout_gravity="center"
-                android:layout_width="38sp"
-                android:layout_height="38sp"
-                android:padding="8sp"
-                android:scaleType="fitCenter"
-                android:contentDescription="@string/clip_notification_share_button" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/activity_main_card_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:text="13:23"
+                    android:textColor="@color/accent"
+                    android:textSize="12sp" />
 
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/activity_main_card_share_button"
+                    android:background="@drawable/background_default_ripple"
+                    android:layout_marginTop="2sp"
+                    android:src="@drawable/ic_notification_action_share"
+                    android:layout_below="@id/activity_main_card_time"
+                    android:layout_gravity="center"
+                    android:layout_width="38sp"
+                    android:layout_height="38sp"
+                    android:padding="8sp"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="@string/clip_notification_share_button" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@id/main_view"
+        android:layout_below="@id/main_frame"
         android:background="@color/divider" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="0.5dp"
-        android:layout_above="@id/main_view"
+        android:layout_above="@id/main_frame"
         android:background="@color/divider" />
 
 </RelativeLayout>
