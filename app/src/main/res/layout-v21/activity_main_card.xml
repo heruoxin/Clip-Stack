@@ -10,6 +10,7 @@
 
         <RelativeLayout
             android:id="@+id/select_view"
+            android:background="@color/primary"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -24,6 +25,7 @@
 
         <LinearLayout
             android:id="@+id/delete_view"
+            android:background="@color/delete"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
