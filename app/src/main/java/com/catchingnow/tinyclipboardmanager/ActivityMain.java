@@ -591,7 +591,11 @@ public class ActivityMain extends MyActionBarActivity {
 
         SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
+                        context,
                         mRecList,
+                        R.id.main_view,
+                        R.id.select_view,
+                        R.id.delete_view,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {

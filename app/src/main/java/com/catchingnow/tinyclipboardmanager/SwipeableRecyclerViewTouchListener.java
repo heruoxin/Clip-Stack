@@ -20,6 +20,7 @@ package  com.catchingnow.tinyclipboardmanager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -69,6 +70,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private long mAnimationTime;
 
     // Fixed properties
+    private Context mContext;
     private RecyclerView mRecyclerView;
     private SwipeListener mSwipeListener;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
@@ -86,13 +88,31 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private boolean mPaused;
     private float mFinalDelta;
 
+    private View mFgView;
+    private View mBgView;
+
+    //view ID
+    private int mFgID;
+    private int mLeftBgID;
+    private int mRightBgID;
+
     /**
      * Constructs a new swipe touch listener for the given {@link android.support.v7.widget.RecyclerView}
      *
      * @param recyclerView The recycler view whose items should be dismissable by swiping.
      * @param listener     The listener for the swipe events.
      */
-    public SwipeableRecyclerViewTouchListener(RecyclerView recyclerView, SwipeListener listener) {
+    public SwipeableRecyclerViewTouchListener(
+            Context context,
+            RecyclerView recyclerView,
+            int fgID,
+            int leftBgID,
+            int rightBgID,
+            SwipeListener listener) {
+        mContext = context;
+        mFgID = fgID;
+        mLeftBgID = leftBgID;
+        mRightBgID = rightBgID;
         ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
@@ -177,6 +197,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 //                    } else {
 //                        mDownView = null;
 //                    }
+                    mFgView = mDownView.findViewById(mFgID);
                 }
                 break;
             }
@@ -188,9 +209,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 
                 if (mDownView != null && mSwiping) {
                     // cancel
-                    mDownView.animate()
+                    mFgView.animate()
                             .translationX(0)
-                            .alpha(1)
                             .setDuration(mAnimationTime)
                             .setListener(null);
                 }
@@ -201,6 +221,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
+                mBgView = null;
                 break;
             }
 
@@ -235,9 +256,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     ++mDismissAnimationRefCount;
-                    mDownView.animate()
+                    mFgView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            .alpha(0)
                             .setDuration(mAnimationTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -247,9 +267,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                             });
                 } else {
                     // cancel
-                    mDownView.animate()
+                    mFgView.animate()
                             .translationX(0)
-                            .alpha(1)
                             .setDuration(mAnimationTime)
                             .setListener(null);
                 }
@@ -260,6 +279,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
+                mBgView = null;
                 break;
             }
 
@@ -277,9 +297,21 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 }
 
                 if (mSwiping) {
-                    mDownView.setTranslationX(deltaX - mSwipingSlop);
-                    mDownView.setAlpha(Math.max(0f, Math.min(1f,
+                    mFgView.setTranslationX(deltaX - mSwipingSlop);
+                    mFgView.setAlpha(Math.max(0f, Math.min(1f,
                             1f - Math.abs(deltaX) / mViewWidth)));
+                    if (mBgView == null) {
+                        View anotherBgView;
+                        if (deltaX > 0) {
+                            mBgView = mDownView.findViewById(mLeftBgID);
+                            anotherBgView = mDownView.findViewById(mRightBgID);
+                        } else {
+                            mBgView = mDownView.findViewById(mRightBgID);
+                            anotherBgView = mDownView.findViewById(mLeftBgID);
+                        }
+                        mBgView.setVisibility(View.VISIBLE);
+                        anotherBgView.setVisibility(View.GONE);
+                    }
                     return true;
                 }
                 break;
