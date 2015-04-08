@@ -68,7 +68,7 @@
     <string name="switch_reverse_sort">Opačné řazení</string>
     <string name="action_backup">Záloha</string>
     <string name="dialog_description_are_you_sure">Jste si jisti?</string>
-    <string name="progress_importing">Importuji...</string>
+    <string name="progress_importing">Importuji…</string>
     <string name="title_activity_new_backup">Nová záloha</string>
     <string name="title_backups">Zálohy</string>
     <string name="action_new_backup">Nová záloha</string>
@@ -96,7 +96,7 @@
     <string name="pref_notification_priority_high">\nVysoká - s ikonou ve stavovém řádku.\nNahoře v seznamu upozornění.\n</string>
     <string name="switch_only_starred_items">Pouze označené položky</string>
     <string name="switch_all_items">Všechny položky</string>
-    <string name="toast_service_temproray_stop">Dočasně pozastaveno</string>
-    <string name="toast_service_temproray_resume">Spuštěno</string>
+    <string name="toast_service_temporary_stop">Dočasně pozastaveno</string>
+    <string name="toast_service_temporary_resume">Spuštěno</string>
 
 </resources>
