@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -50,6 +49,7 @@ import java.util.List;
 public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
+    public final static String SECOND_LAUNCH = "pref_is_second_launch";
     private static int TRANSLATION_FAST = 400;
     private static int TRANSLATION_SLOW = 1000;
 
@@ -61,6 +61,7 @@ public class ActivityMain extends MyActionBarActivity {
     private ImageButton mFAB;
     private SearchView searchView;
     private MenuItem searchItem;
+    private Menu menu;
     protected MenuItem starItem;
 
     protected SharedPreferences preference;
@@ -304,6 +305,7 @@ public class ActivityMain extends MyActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_main, menu);
         starItem = menu.findItem(R.id.action_star);
         setStarredIcon();
@@ -370,6 +372,8 @@ public class ActivityMain extends MyActionBarActivity {
             }
         });
 
+        initSecondLaunch();
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -398,6 +402,7 @@ public class ActivityMain extends MyActionBarActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(this, ActivitySetting.class));
+                cancelSecondLaunch();
         }
         clearDeleteQueue();
         return super.onOptionsItemSelected(item);
@@ -805,6 +810,26 @@ public class ActivityMain extends MyActionBarActivity {
 //                super.restoreFinished(error);
 //            }
 //        });
+    }
+
+    private void initSecondLaunch() {
+        //show red circle
+        if (preference.getBoolean(SECOND_LAUNCH, true)) {
+            MenuItem settingItem = menu.findItem(R.id.action_settings);
+            settingItem.setTitle(settingItem.getTitle()+" 📌");
+            setOverflowButtonColor(this, R.drawable.ic_action_more_vert_star);
+        }
+    }
+
+    private void cancelSecondLaunch() {
+        if (preference.getBoolean(SECOND_LAUNCH, true)) {
+            preference.edit()
+                    .putBoolean(SECOND_LAUNCH, false)
+                    .apply();
+            MenuItem settingItem = menu.findItem(R.id.action_settings);
+            settingItem.setTitle(String.valueOf(settingItem.getTitle()).replace("📌", ""));
+            setOverflowButtonColor(this, R.drawable.ic_action_more_vert);
+        }
     }
 
     private void clearAll() {
