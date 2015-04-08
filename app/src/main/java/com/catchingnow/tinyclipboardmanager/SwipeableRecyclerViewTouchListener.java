@@ -256,6 +256,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     ++mDismissAnimationRefCount;
+                    mBgView.animate()
+                            .alpha(1)
+                            .setDuration(mAnimationTime);
                     mFgView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
                             .setDuration(mAnimationTime)
@@ -297,9 +300,6 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 }
 
                 if (mSwiping) {
-                    mFgView.setTranslationX(deltaX - mSwipingSlop);
-                    mFgView.setAlpha(Math.max(0f, Math.min(1f,
-                            1f - Math.abs(deltaX) / mViewWidth)));
                     if (mBgView == null) {
                         View anotherBgView;
                         if (deltaX > 0) {
@@ -312,6 +312,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                         mBgView.setVisibility(View.VISIBLE);
                         anotherBgView.setVisibility(View.GONE);
                     }
+                    mFgView.setTranslationX(deltaX - mSwipingSlop);
+                    mBgView.setAlpha(1 - Math.max(0f, Math.min(1f,
+                            1f - Math.abs(deltaX) / mViewWidth)));
                     return true;
                 }
                 break;
