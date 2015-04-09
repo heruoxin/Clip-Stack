@@ -94,6 +94,7 @@ public class CBWatcherService extends Service {
         isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
         readPreference();
 
+        performClipboardCheck();
 
         if (!allowService) {
             if (isMyActivitiesOnForeground <= 0) {
