@@ -10,6 +10,7 @@
 
     <LinearLayout
         android:id="@+id/main_background_view"
+        android:clickable="true"
         android:visibility="gone"
         android:background="@drawable/background_delete"
         android:orientation="horizontal"
