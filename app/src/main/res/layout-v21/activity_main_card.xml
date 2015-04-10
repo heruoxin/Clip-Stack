@@ -10,8 +10,8 @@
 
         <LinearLayout
             android:id="@+id/main_background_view"
-            android:background="@color/delete"
             android:visibility="gone"
+            android:background="@color/delete"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,16 +19,19 @@
             <TextView
                 android:text="@string/toast_deleted"
                 android:textSize="20sp"
-                android:gravity="center"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="40sp"
                 android:layout_weight="1"
                 android:layout_width="0sp"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:text="@string/toast_undo"
-                android:textSize="20sp"
+            <ImageView
+                android:src="@drawable/ic_action_undo"
+                android:contentDescription="@string/toast_undo"
+                android:scaleX="1.4"
+                android:scaleY="1.4"
+                android:padding="12sp"
                 android:gravity="center"
-                android:padding="10sp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
 
