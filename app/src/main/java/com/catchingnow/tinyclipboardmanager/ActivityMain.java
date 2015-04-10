@@ -594,8 +594,7 @@ public class ActivityMain extends MyActionBarActivity {
                         context,
                         mRecList,
                         R.id.main_view,
-                        R.id.select_view,
-                        R.id.delete_view,
+                        R.id.main_background_view,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {
@@ -603,7 +602,7 @@ public class ActivityMain extends MyActionBarActivity {
                             }
 
                             @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                            public void onDismissedBySwipe(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
                                     showSnackbar(position, clips.get(position), clipCardAdapter);
                                     clipCardAdapter.remove(position);
@@ -611,10 +610,6 @@ public class ActivityMain extends MyActionBarActivity {
                                 clipCardAdapter.notifyDataSetChanged();
                             }
 
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
-                            }
                         });
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
         if (getString(R.string.screen_type).contains("phone")) {

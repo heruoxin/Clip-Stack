@@ -8,24 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="80sp">
 
-        <RelativeLayout
-            android:id="@+id/select_view"
-            android:visibility="gone"
-            android:background="@color/primary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:src="@drawable/ic_action_done"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </RelativeLayout>
-
         <LinearLayout
-            android:id="@+id/delete_view"
+            android:id="@+id/main_background_view"
             android:background="@color/delete"
             android:visibility="gone"
             android:orientation="horizontal"
