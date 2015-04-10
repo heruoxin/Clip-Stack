@@ -350,8 +350,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     ViewGroup.LayoutParams lp;
                     for (PendingDismissData pendingDismiss : mPendingDismisses) {
                         // Reset view presentation
-                        pendingDismiss.view.setAlpha(1f);
-                        pendingDismiss.view.setTranslationX(0);
+                        pendingDismiss.view.findViewById(mFgID).setTranslationX(0);
                         lp = pendingDismiss.view.getLayoutParams();
                         lp.height = originalHeight;
                         pendingDismiss.view.setLayoutParams(lp);
