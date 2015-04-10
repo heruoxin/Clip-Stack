@@ -373,7 +373,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             }
         });
 
-        mPendingDismisses.add(new PendingDismissData(dismissPosition, dismissView));
+        final PendingDismissData pendingDismissData = new PendingDismissData(dismissPosition, dismissView);
+        mPendingDismisses.add(pendingDismissData);
         backgroundView.animate()
                 .alpha(0).setDuration(ANIMATION_WAIT)
                 .setListener(new AnimatorListenerAdapter() {
@@ -386,6 +387,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             @Override
             public void onClick(View v) {
                 deleteAble[0] = false;
+                --mDismissAnimationRefCount;
+                mPendingDismisses.remove(pendingDismissData);
             }
         });
     }

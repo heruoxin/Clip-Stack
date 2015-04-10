@@ -105,68 +105,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tooYoungTooSimple += 1;
-                switch (tooYoungTooSimple) {
-                    case 3:
-                        db.modifyClip(
-                                null,
-                                "　 ∧_∧\n" +
-                                        "　(  ❜ω❜ )\n" +
-                                        "　｜つ／(＿＿＿\n" +
-                                        "／└-(＿＿＿_／\n" +
-                                        "￣￣￣￣￣￣\n" +
-                                        "Are you clicking me ?"
-                        );
-                        break;
-                    case 4:
-                        db.modifyClip(
-                                null,
-                                "　＜⌒／ヽ-_＿\n" +
-                                        "／＜_/＿＿＿_／\n" +
-                                        "￣￣￣￣￣￣\n" +
-                                        "I want to sleep..."
-                        );
-                        break;
-                    case 5:
-                        db.modifyClip(
-                                null,
-                                "╮(╯_╰)╭\n" +
-                                        "Well..."
-                        );
-                        break;
-                    case 6:
-                        Intent browserIntent = new Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
-                        );
-                        startActivity(browserIntent);
-                        Toast.makeText(
-                                context,
-                                getString(R.string.pref_rate_title) +
-                                        " ★★★★★\n" +
-                                        "ヽ(́◕◞౪◟◕‵)ﾉ\n" +
-                                        getString(R.string.pref_rate_summary),
-                                Toast.LENGTH_LONG
-                        ).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                db.modifyClip(
-                                        null,
-                                        "(́^ _ ^)~♥\n" +
-                                                "Thank you!"
-                                );
-                            }
-                        }, 500);
-                        tooYoungTooSimple = 0;
-                        break;
-                }
-            }
-        });
+        easterEgg();
 
         attachKeyboardListeners();
 
@@ -484,6 +423,70 @@ public class ActivityMain extends MyActionBarActivity {
         }, 200);
     }
 
+    private void easterEgg() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tooYoungTooSimple += 1;
+                switch (tooYoungTooSimple) {
+                    case 3:
+                        db.modifyClip(
+                                null,
+                                "　 ∧_∧\n" +
+                                        "　(  ❜ω❜ )\n" +
+                                        "　｜つ／(＿＿＿\n" +
+                                        "／└-(＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "Are you clicking me ?"
+                        );
+                        break;
+                    case 4:
+                        db.modifyClip(
+                                null,
+                                "　＜⌒／ヽ-_＿\n" +
+                                        "／＜_/＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "I want to sleep..."
+                        );
+                        break;
+                    case 5:
+                        db.modifyClip(
+                                null,
+                                "╮(╯_╰)╭\n" +
+                                        "Well..."
+                        );
+                        break;
+                    case 6:
+                        Intent browserIntent = new Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
+                        );
+                        startActivity(browserIntent);
+                        Toast.makeText(
+                                context,
+                                getString(R.string.pref_rate_title) +
+                                        " ★★★★★\n" +
+                                        "ヽ(́◕◞౪◟◕‵)ﾉ\n" +
+                                        getString(R.string.pref_rate_summary),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                db.modifyClip(
+                                        null,
+                                        "(́^ _ ^)~♥\n" +
+                                                "Thank you!"
+                                );
+                            }
+                        }, 500);
+                        tooYoungTooSimple = 0;
+                        break;
+                }
+            }
+        });
+    }
+
     private void onStarredMenuClicked() {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
@@ -539,6 +542,11 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void clearDeleteQueue() {
+        Toast.makeText(
+                context,
+                "Delete "+deleteQueue.size()+" item(s).",
+                Toast.LENGTH_SHORT
+        ).show();
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
             clipCardAdapter.remove(clipObject);
