@@ -37,11 +37,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.ActionClickListener;
-import com.nispok.snackbar.listeners.EventListener;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -548,7 +543,9 @@ public class ActivityMain extends MyActionBarActivity {
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
+            clipCardAdapter.remove(clipObject);
         }
+        clipCardAdapter.notifyDataSetChanged();
         deleteQueue.clear();
     }
 
@@ -604,10 +601,9 @@ public class ActivityMain extends MyActionBarActivity {
                             @Override
                             public void onDismissedBySwipe(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    clipCardAdapter.remove(position);
+                                    deleteQueue.add(clips.get(position));
                                 }
-                                clipCardAdapter.notifyDataSetChanged();
+                                clearDeleteQueue();
                             }
 
                         });
@@ -725,67 +721,6 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList.setAdapter(clipCardAdapter);
 
         setItemsVisibility();
-    }
-
-    private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
-        deleteQueue.add(clipObject);
-        final boolean[] isUndo = new boolean[1];
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(getString(R.string.toast_deleted))
-                        .actionLabel(getString(R.string.toast_undo))
-                        .actionColor(getResources().getColor(R.color.accent))
-                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                        .eventListener(new EventListener() {
-                            @Override
-                            public void onShow(Snackbar snackbar) {
-                                mFabRotation(false, TRANSLATION_FAST);
-                                if (getString(R.string.screen_type).contains("phone")) {
-                                    mFAB.animate().translationY(-snackbar.getHeight());
-                                    if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
-                                        mRecList.animate().translationY(-snackbar.getHeight());
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onShown(Snackbar snackbar) {
-                                isSnackbarShow += 1;
-                            }
-
-                            @Override
-                            public void onDismiss(Snackbar snackbar) {
-                                isSnackbarShow -= 1;
-                                if (!isUndo[0]) {
-                                    deleteQueue.remove(clipObject);
-                                    db.modifyClip(clipObject.getText(), null);
-                                }
-                            }
-
-                            @Override
-                            public void onDismissed(Snackbar snackbar) {
-                                if (isSnackbarShow <= 0) {
-                                    isSnackbarShow = 0;
-                                    if (getString(R.string.screen_type).contains("phone")) {
-                                        mFAB.animate().translationY(0);
-                                        mRecList.animate().translationY(0);
-                                    }
-                                    mFabRotation(true, TRANSLATION_SLOW);
-                                }
-                                //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
-                                //mRecList.smoothScrollToPosition(position);
-                                //}
-                            }
-                        })
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                isUndo[0] = true;
-                                clipCardAdapter.add(position, clipObject);
-                                linearLayoutManager.scrollToPosition(position);
-                            }
-                        })
-                , this);
     }
 
     private void firstLaunch() throws InterruptedException {

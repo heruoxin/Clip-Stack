@@ -25,6 +25,7 @@ import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -339,7 +341,6 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     for (int i = mPendingDismisses.size() - 1; i >= 0; i--) {
                         dismissPositions[i] = mPendingDismisses.get(i).position;
                     }
-
                     mSwipeListener.onDismissedBySwipe(mRecyclerView, dismissPositions);
 
                     // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
