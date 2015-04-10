@@ -3,11 +3,47 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/main_view"
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80sp">
+
+    <LinearLayout
+        android:id="@+id/main_background_view"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="@color/delete"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/toast_deleted"
+            android:textSize="20sp"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="40sp"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:src="@drawable/ic_action_undo"
+            android:contentDescription="@string/toast_undo"
+            android:scaleX="1.4"
+            android:scaleY="1.4"
+            android:padding="12sp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_view"
+        android:background="@color/set_off"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:baselineAligned="false">
 
 
@@ -95,17 +131,19 @@
 
     </LinearLayout>
 
+    </FrameLayout>
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@id/main_view"
+        android:layout_below="@id/main_frame"
         android:layout_marginRight="8sp"
         android:background="@color/divider" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="0.5dp"
-        android:layout_above="@id/main_view"
+        android:layout_above="@id/main_frame"
         android:layout_marginRight="8sp"
         android:background="@color/divider" />
 

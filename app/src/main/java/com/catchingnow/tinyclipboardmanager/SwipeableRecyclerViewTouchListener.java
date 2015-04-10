@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-package  com.catchingnow.tinyclipboardmanager;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -66,9 +67,11 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private int mSlop;
     private int mMinFlingVelocity;
     private int mMaxFlingVelocity;
-    private long mAnimationTime;
+    private long ANIMATION_FAST = 300;
+    private long ANIMATION_WAIT = 2200;
 
     // Fixed properties
+    private Context mContext;
     private RecyclerView mRecyclerView;
     private SwipeListener mSwipeListener;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
@@ -86,19 +89,32 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private boolean mPaused;
     private float mFinalDelta;
 
+    private View mFgView;
+    private View mBgView;
+
+    //view ID
+    private int mFgID;
+    private int mBgID;
+
     /**
      * Constructs a new swipe touch listener for the given {@link android.support.v7.widget.RecyclerView}
      *
      * @param recyclerView The recycler view whose items should be dismissable by swiping.
      * @param listener     The listener for the swipe events.
      */
-    public SwipeableRecyclerViewTouchListener(RecyclerView recyclerView, SwipeListener listener) {
+    public SwipeableRecyclerViewTouchListener(
+            Context context,
+            RecyclerView recyclerView,
+            int fgID,
+            int BgID,
+            SwipeListener listener) {
+        mContext = context;
+        mFgID = fgID;
+        mBgID = BgID;
         ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
-        mAnimationTime = recyclerView.getContext().getResources().getInteger(
-                android.R.integer.config_shortAnimTime);
         mRecyclerView = recyclerView;
         mSwipeListener = listener;
 
@@ -172,11 +188,12 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     mDownY = motionEvent.getRawY();
                     mDownPosition = mRecyclerView.getChildPosition(mDownView);
 //                    if (mSwipeListener.canSwipe(mDownPosition)) {
-                        mVelocityTracker = VelocityTracker.obtain();
-                        mVelocityTracker.addMovement(motionEvent);
+                    mVelocityTracker = VelocityTracker.obtain();
+                    mVelocityTracker.addMovement(motionEvent);
 //                    } else {
 //                        mDownView = null;
 //                    }
+                    mFgView = mDownView.findViewById(mFgID);
                 }
                 break;
             }
@@ -188,10 +205,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 
                 if (mDownView != null && mSwiping) {
                     // cancel
-                    mDownView.animate()
+                    mFgView.animate()
                             .translationX(0)
-                            .alpha(1)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(null);
                 }
                 mVelocityTracker.recycle();
@@ -201,6 +217,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
+                mBgView = null;
                 break;
             }
 
@@ -228,17 +245,19 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 }
                 if (
                         dismiss &&
-                        mDownPosition != ListView.INVALID_POSITION &&
-                        mSwipeListener.canSwipe(mDownPosition)
+                                mDownPosition != ListView.INVALID_POSITION &&
+                                mSwipeListener.canSwipe(mDownPosition)
                         ) {
                     // dismiss
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     ++mDismissAnimationRefCount;
-                    mDownView.animate()
+                    mBgView.animate()
+                            .alpha(1)
+                            .setDuration(ANIMATION_FAST);
+                    mFgView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            .alpha(0)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -247,10 +266,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                             });
                 } else {
                     // cancel
-                    mDownView.animate()
+                    mFgView.animate()
                             .translationX(0)
-                            .alpha(1)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(null);
                 }
                 mVelocityTracker.recycle();
@@ -260,6 +278,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
+                mBgView = null;
                 break;
             }
 
@@ -277,8 +296,12 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 }
 
                 if (mSwiping) {
-                    mDownView.setTranslationX(deltaX - mSwipingSlop);
-                    mDownView.setAlpha(Math.max(0f, Math.min(1f,
+                    if (mBgView == null) {
+                        mBgView = mDownView.findViewById(mBgID);
+                        mBgView.setVisibility(View.VISIBLE);
+                    }
+                    mFgView.setTranslationX(deltaX - mSwipingSlop);
+                    mBgView.setAlpha(1 - Math.max(0f, Math.min(1f,
                             1f - Math.abs(deltaX) / mViewWidth)));
                     return true;
                 }
@@ -294,53 +317,51 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         // all dismissed list item animations have completed. This triggers layout on each animation
         // frame; in the future we may want to do something smarter and more performant.
 
+        final View backgroundView = dismissView.findViewById(mBgID);
         final ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
         final int originalHeight = dismissView.getHeight();
+        final boolean[] deleteAble = {true};
 
-        ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(mAnimationTime);
+        final ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(ANIMATION_FAST);
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 --mDismissAnimationRefCount;
-                if (mDismissAnimationRefCount == 0) {
-                    // No active animations, process all pending dismisses.
-                    // Sort by descending position
-                    Collections.sort(mPendingDismisses);
 
-                    int[] dismissPositions = new int[mPendingDismisses.size()];
-                    for (int i = mPendingDismisses.size() - 1; i >= 0; i--) {
-                        dismissPositions[i] = mPendingDismisses.get(i).position;
-                    }
+                if (mDismissAnimationRefCount > 0) return;
 
-                    if (mFinalDelta > 0) {
-                        mSwipeListener.onDismissedBySwipeRight(mRecyclerView, dismissPositions);
-                    } else {
-                        mSwipeListener.onDismissedBySwipeLeft(mRecyclerView, dismissPositions);
-                    }
+                mDismissAnimationRefCount = 0;
+                // No active animations, process all pending dismisses.
+                // Sort by descending position
+                Collections.sort(mPendingDismisses);
 
-                    // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
-                    // animation with a stale position
-                    mDownPosition = ListView.INVALID_POSITION;
-
-                    ViewGroup.LayoutParams lp;
-                    for (PendingDismissData pendingDismiss : mPendingDismisses) {
-                        // Reset view presentation
-                        pendingDismiss.view.setAlpha(1f);
-                        pendingDismiss.view.setTranslationX(0);
-                        lp = pendingDismiss.view.getLayoutParams();
-                        lp.height = originalHeight;
-                        pendingDismiss.view.setLayoutParams(lp);
-                    }
-
-                    // Send a cancel event
-                    long time = SystemClock.uptimeMillis();
-                    MotionEvent cancelEvent = MotionEvent.obtain(time, time,
-                            MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                    mRecyclerView.dispatchTouchEvent(cancelEvent);
-
-                    mPendingDismisses.clear();
+                int[] dismissPositions = new int[mPendingDismisses.size()];
+                for (int i = mPendingDismisses.size() - 1; i >= 0; i--) {
+                    dismissPositions[i] = mPendingDismisses.get(i).position;
                 }
+                mSwipeListener.onDismissedBySwipe(mRecyclerView, dismissPositions);
+
+                // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
+                // animation with a stale position
+                mDownPosition = ListView.INVALID_POSITION;
+
+                ViewGroup.LayoutParams lp;
+                for (PendingDismissData pendingDismiss : mPendingDismisses) {
+                    // Reset view presentation
+                    pendingDismiss.view.findViewById(mFgID).setTranslationX(0);
+                    lp = pendingDismiss.view.getLayoutParams();
+                    lp.height = originalHeight;
+                    pendingDismiss.view.setLayoutParams(lp);
+                }
+
+                // Send a cancel event
+                long time = SystemClock.uptimeMillis();
+                MotionEvent cancelEvent = MotionEvent.obtain(time, time,
+                        MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                mRecyclerView.dispatchTouchEvent(cancelEvent);
+
+                mPendingDismisses.clear();
             }
         });
 
@@ -352,8 +373,30 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             }
         });
 
-        mPendingDismisses.add(new PendingDismissData(dismissPosition, dismissView));
-        animator.start();
+        final PendingDismissData pendingDismissData = new PendingDismissData(dismissPosition, dismissView);
+        mPendingDismisses.add(pendingDismissData);
+        backgroundView.animate()
+                .alpha(0).setDuration(ANIMATION_WAIT)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (deleteAble[0]) animator.start();
+                    }
+                });
+        backgroundView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        deleteAble[0] = false;
+                        --mDismissAnimationRefCount;
+                        mPendingDismisses.remove(pendingDismissData);
+                        backgroundView.playSoundEffect(0);
+                        backgroundView.setOnTouchListener(null);
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -373,16 +416,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
          * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
          *                               order for convenience.
          */
-        void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions);
+        void onDismissedBySwipe(RecyclerView recyclerView, int[] reverseSortedPositions);
 
-        /**
-         * Called when the item has been dismissed by swiping to the right.
-         *
-         * @param recyclerView           The originating {@link android.support.v7.widget.RecyclerView}.
-         * @param reverseSortedPositions An array of positions to dismiss, sorted in descending
-         *                               order for convenience.
-         */
-        void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions);
     }
 
     class PendingDismissData implements Comparable<PendingDismissData> {

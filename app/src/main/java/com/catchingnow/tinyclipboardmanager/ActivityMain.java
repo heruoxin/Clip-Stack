@@ -36,11 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.ActionClickListener;
-import com.nispok.snackbar.listeners.EventListener;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +73,6 @@ public class ActivityMain extends MyActionBarActivity {
 
     protected boolean isStarred = false;
     private boolean clickToCopy = true;
-    private int isSnackbarShow = 0;
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
@@ -113,68 +107,7 @@ public class ActivityMain extends MyActionBarActivity {
             }
         }
 
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tooYoungTooSimple += 1;
-                switch (tooYoungTooSimple) {
-                    case 3:
-                        db.modifyClip(
-                                null,
-                                "　 ∧_∧\n" +
-                                        "　(  ❜ω❜ )\n" +
-                                        "　｜つ／(＿＿＿\n" +
-                                        "／└-(＿＿＿_／\n" +
-                                        "￣￣￣￣￣￣\n" +
-                                        "Are you clicking me ?"
-                        );
-                        break;
-                    case 4:
-                        db.modifyClip(
-                                null,
-                                "　＜⌒／ヽ-_＿\n" +
-                                        "／＜_/＿＿＿_／\n" +
-                                        "￣￣￣￣￣￣\n" +
-                                        "I want to sleep..."
-                        );
-                        break;
-                    case 5:
-                        db.modifyClip(
-                                null,
-                                "╮(╯_╰)╭\n" +
-                                        "Well..."
-                        );
-                        break;
-                    case 6:
-                        Intent browserIntent = new Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
-                        );
-                        startActivity(browserIntent);
-                        Toast.makeText(
-                                context,
-                                getString(R.string.pref_rate_title) +
-                                        " ★★★★★\n" +
-                                        "ヽ(́◕◞౪◟◕‵)ﾉ\n" +
-                                        getString(R.string.pref_rate_summary),
-                                Toast.LENGTH_LONG
-                        ).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                db.modifyClip(
-                                        null,
-                                        "(́^ _ ^)~♥\n" +
-                                                "Thank you!"
-                                );
-                            }
-                        }, 500);
-                        tooYoungTooSimple = 0;
-                        break;
-                }
-            }
-        });
+        easterEgg();
 
         attachKeyboardListeners();
 
@@ -496,6 +429,70 @@ public class ActivityMain extends MyActionBarActivity {
         }, 200);
     }
 
+    private void easterEgg() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tooYoungTooSimple += 1;
+                switch (tooYoungTooSimple) {
+                    case 3:
+                        db.modifyClip(
+                                null,
+                                "　 ∧_∧\n" +
+                                        "　(  ❜ω❜ )\n" +
+                                        "　｜つ／(＿＿＿\n" +
+                                        "／└-(＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "Are you clicking me ?"
+                        );
+                        break;
+                    case 4:
+                        db.modifyClip(
+                                null,
+                                "　＜⌒／ヽ-_＿\n" +
+                                        "／＜_/＿＿＿_／\n" +
+                                        "￣￣￣￣￣￣\n" +
+                                        "I want to sleep..."
+                        );
+                        break;
+                    case 5:
+                        db.modifyClip(
+                                null,
+                                "╮(╯_╰)╭\n" +
+                                        "Well..."
+                        );
+                        break;
+                    case 6:
+                        Intent browserIntent = new Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager")
+                        );
+                        startActivity(browserIntent);
+                        Toast.makeText(
+                                context,
+                                getString(R.string.pref_rate_title) +
+                                        " ★★★★★\n" +
+                                        "ヽ(́◕◞౪◟◕‵)ﾉ\n" +
+                                        getString(R.string.pref_rate_summary),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                db.modifyClip(
+                                        null,
+                                        "(́^ _ ^)~♥\n" +
+                                                "Thank you!"
+                                );
+                            }
+                        }, 500);
+                        tooYoungTooSimple = 0;
+                        break;
+                }
+            }
+        });
+    }
+
     private void onStarredMenuClicked() {
         isStarred = !isStarred;
         mFabRotation(isStarred, TRANSLATION_SLOW);
@@ -553,7 +550,9 @@ public class ActivityMain extends MyActionBarActivity {
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
+            clipCardAdapter.remove(clipObject);
         }
+        clipCardAdapter.notifyDataSetChanged();
         deleteQueue.clear();
     }
 
@@ -596,7 +595,10 @@ public class ActivityMain extends MyActionBarActivity {
 
         SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
+                        context,
                         mRecList,
+                        R.id.main_view,
+                        R.id.main_background_view,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {
@@ -604,18 +606,13 @@ public class ActivityMain extends MyActionBarActivity {
                             }
 
                             @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                            public void onDismissedBySwipe(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    showSnackbar(position, clips.get(position), clipCardAdapter);
-                                    clipCardAdapter.remove(position);
+                                    deleteQueue.add(clips.get(position));
                                 }
-                                clipCardAdapter.notifyDataSetChanged();
+                                clearDeleteQueue();
                             }
 
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                onDismissedBySwipeLeft(recyclerView, reverseSortedPositions);
-                            }
                         });
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
         if (getString(R.string.screen_type).contains("phone")) {
@@ -627,7 +624,6 @@ public class ActivityMain extends MyActionBarActivity {
                     if (dy > 20 && isYHidden == -1) {
                         //hide FAB on Y
                         if (isXHidden != -1) return;
-                        if (isSnackbarShow > 0) return;
                         isYHidden = 0;
                         mFabRotation(true, TRANSLATION_FAST);
                         mFabRotation(true, TRANSLATION_FAST);
@@ -658,7 +654,6 @@ public class ActivityMain extends MyActionBarActivity {
                     } else if (dy < -20 && isYHidden == 1) {
                         //show FAB on Y
                         if (isXHidden != -1) return;
-                        if (isSnackbarShow > 0) return;
                         isYHidden = 0;
                         mFabRotation(false, TRANSLATION_FAST);
                         mFabRotation(false, TRANSLATION_FAST);
@@ -731,67 +726,6 @@ public class ActivityMain extends MyActionBarActivity {
         mRecList.setAdapter(clipCardAdapter);
 
         setItemsVisibility();
-    }
-
-    private void showSnackbar(final int position, final ClipObject clipObject, final ClipCardAdapter clipCardAdapter) {
-        deleteQueue.add(clipObject);
-        final boolean[] isUndo = new boolean[1];
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .text(getString(R.string.toast_deleted))
-                        .actionLabel(getString(R.string.toast_undo))
-                        .actionColor(getResources().getColor(R.color.accent))
-                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                        .eventListener(new EventListener() {
-                            @Override
-                            public void onShow(Snackbar snackbar) {
-                                mFabRotation(false, TRANSLATION_FAST);
-                                if (getString(R.string.screen_type).contains("phone")) {
-                                    mFAB.animate().translationY(-snackbar.getHeight());
-                                    if (position >= (clipCardAdapter.getItemCount() - 1) && clipCardAdapter.getItemCount() > 6) {
-                                        mRecList.animate().translationY(-snackbar.getHeight());
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onShown(Snackbar snackbar) {
-                                isSnackbarShow += 1;
-                            }
-
-                            @Override
-                            public void onDismiss(Snackbar snackbar) {
-                                isSnackbarShow -= 1;
-                                if (!isUndo[0]) {
-                                    deleteQueue.remove(clipObject);
-                                    db.modifyClip(clipObject.getText(), null);
-                                }
-                            }
-
-                            @Override
-                            public void onDismissed(Snackbar snackbar) {
-                                if (isSnackbarShow <= 0) {
-                                    isSnackbarShow = 0;
-                                    if (getString(R.string.screen_type).contains("phone")) {
-                                        mFAB.animate().translationY(0);
-                                        mRecList.animate().translationY(0);
-                                    }
-                                    mFabRotation(true, TRANSLATION_SLOW);
-                                }
-                                //if (position <= 1 || position >= (clipCardAdapter.getItemCount() - 1)) {
-                                //mRecList.smoothScrollToPosition(position);
-                                //}
-                            }
-                        })
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                isUndo[0] = true;
-                                clipCardAdapter.add(position, clipObject);
-                                linearLayoutManager.scrollToPosition(position);
-                            }
-                        })
-                , this);
     }
 
     private void firstLaunch() throws InterruptedException {
@@ -912,10 +846,13 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
-            clipCardViewHolder.vStarred.setImageResource(
-                    clipObject.isStarred() ?
-                            R.drawable.ic_action_star_yellow : R.drawable.ic_action_star_outline_grey600
-            );
+            if (clipObject.isStarred()) {
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
+                clipCardViewHolder.vBackground.removeAllViews();
+                clipCardViewHolder.vBackground.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            } else {
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
+            }
 
             if (clickToCopy) {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
@@ -1022,6 +959,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vText;
             protected ImageButton vStarred;
             protected ImageButton vShare;
+            protected LinearLayout vBackground;
             protected View vMain;
 
             public ClipCardViewHolder(View v) {
@@ -1031,6 +969,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
+                vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
             }
         }
