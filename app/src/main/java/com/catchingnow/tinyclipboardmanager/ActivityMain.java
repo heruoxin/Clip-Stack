@@ -542,11 +542,6 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     private void clearDeleteQueue() {
-        Toast.makeText(
-                context,
-                "Delete "+deleteQueue.size()+" item(s).",
-                Toast.LENGTH_SHORT
-        ).show();
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
             clipCardAdapter.remove(clipObject);

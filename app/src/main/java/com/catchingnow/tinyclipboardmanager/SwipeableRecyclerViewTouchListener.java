@@ -383,12 +383,18 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                         if (deleteAble[0]) animator.start();
                     }
                 });
-        backgroundView.setOnClickListener(new View.OnClickListener() {
+        backgroundView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                deleteAble[0] = false;
-                --mDismissAnimationRefCount;
-                mPendingDismisses.remove(pendingDismissData);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        deleteAble[0] = false;
+                        --mDismissAnimationRefCount;
+                        mPendingDismisses.remove(pendingDismissData);
+                        backgroundView.playSoundEffect(0);
+                        backgroundView.setOnTouchListener(null);
+                }
+                return false;
             }
         });
     }
