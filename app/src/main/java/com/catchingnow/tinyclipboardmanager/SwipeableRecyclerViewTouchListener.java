@@ -25,7 +25,6 @@ import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -35,7 +34,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 
@@ -69,8 +67,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private int mSlop;
     private int mMinFlingVelocity;
     private int mMaxFlingVelocity;
-    private long mAnimationTime;
-    private long mAnimationLongTime = 2000;
+    private long ANIMATION_FAST = 300;
+    private long ANIMATION_WAIT = 2200;
 
     // Fixed properties
     private Context mContext;
@@ -117,8 +115,6 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         mSlop = vc.getScaledTouchSlop();
         mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
-        mAnimationTime = recyclerView.getContext().getResources().getInteger(
-                android.R.integer.config_shortAnimTime);
         mRecyclerView = recyclerView;
         mSwipeListener = listener;
 
@@ -211,7 +207,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     // cancel
                     mFgView.animate()
                             .translationX(0)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(null);
                 }
                 mVelocityTracker.recycle();
@@ -256,13 +252,12 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     ++mDismissAnimationRefCount;
-                    Log.v(MyUtil.PACKAGE_NAME, "++mDismissAnimationRefCount: " + mDismissAnimationRefCount);
                     mBgView.animate()
                             .alpha(1)
-                            .setDuration(mAnimationTime);
+                            .setDuration(ANIMATION_FAST);
                     mFgView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -273,7 +268,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     // cancel
                     mFgView.animate()
                             .translationX(0)
-                            .setDuration(mAnimationTime)
+                            .setDuration(ANIMATION_FAST)
                             .setListener(null);
                 }
                 mVelocityTracker.recycle();
@@ -327,14 +322,15 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         final int originalHeight = dismissView.getHeight();
         final boolean[] deleteAble = {true};
 
-        final ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(mAnimationTime);
+        final ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(ANIMATION_FAST);
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 --mDismissAnimationRefCount;
-                Log.v(MyUtil.PACKAGE_NAME, "--mDismissAnimationRefCount: " + mDismissAnimationRefCount);
+
                 if (mDismissAnimationRefCount > 0) return;
+
                 mDismissAnimationRefCount = 0;
                 // No active animations, process all pending dismisses.
                 // Sort by descending position
@@ -379,7 +375,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 
         mPendingDismisses.add(new PendingDismissData(dismissPosition, dismissView));
         backgroundView.animate()
-                .alpha(0).setDuration(mAnimationLongTime)
+                .alpha(0).setDuration(ANIMATION_WAIT)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
