@@ -817,10 +817,13 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
-            clipCardViewHolder.vStarred.setImageResource(
-                    clipObject.isStarred() ?
-                            R.drawable.ic_action_star_yellow : R.drawable.ic_action_star_outline_grey600
-            );
+            if (clipObject.isStarred()) {
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
+                clipCardViewHolder.vBackground.removeAllViews();
+                clipCardViewHolder.vBackground.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            } else {
+                clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
+            }
 
             if (clickToCopy) {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
@@ -927,6 +930,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vText;
             protected ImageButton vStarred;
             protected ImageButton vShare;
+            protected LinearLayout vBackground;
             protected View vMain;
 
             public ClipCardViewHolder(View v) {
@@ -936,6 +940,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
+                vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
             }
         }
