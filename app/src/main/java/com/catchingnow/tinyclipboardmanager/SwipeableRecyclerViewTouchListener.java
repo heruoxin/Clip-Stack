@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package  com.catchingnow.tinyclipboardmanager;
+package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -192,8 +192,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     mDownY = motionEvent.getRawY();
                     mDownPosition = mRecyclerView.getChildPosition(mDownView);
 //                    if (mSwipeListener.canSwipe(mDownPosition)) {
-                        mVelocityTracker = VelocityTracker.obtain();
-                        mVelocityTracker.addMovement(motionEvent);
+                    mVelocityTracker = VelocityTracker.obtain();
+                    mVelocityTracker.addMovement(motionEvent);
 //                    } else {
 //                        mDownView = null;
 //                    }
@@ -249,13 +249,14 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 }
                 if (
                         dismiss &&
-                        mDownPosition != ListView.INVALID_POSITION &&
-                        mSwipeListener.canSwipe(mDownPosition)
+                                mDownPosition != ListView.INVALID_POSITION &&
+                                mSwipeListener.canSwipe(mDownPosition)
                         ) {
                     // dismiss
                     final View downView = mDownView; // mDownView gets null'd before animation ends
                     final int downPosition = mDownPosition;
                     ++mDismissAnimationRefCount;
+                    Log.v(MyUtil.PACKAGE_NAME, "++mDismissAnimationRefCount: " + mDismissAnimationRefCount);
                     mBgView.animate()
                             .alpha(1)
                             .setDuration(mAnimationTime);
@@ -332,38 +333,39 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             @Override
             public void onAnimationEnd(Animator animation) {
                 --mDismissAnimationRefCount;
-                if (mDismissAnimationRefCount == 0) {
-                    // No active animations, process all pending dismisses.
-                    // Sort by descending position
-                    Collections.sort(mPendingDismisses);
+                Log.v(MyUtil.PACKAGE_NAME, "--mDismissAnimationRefCount: " + mDismissAnimationRefCount);
+                if (mDismissAnimationRefCount > 0) return;
+                mDismissAnimationRefCount = 0;
+                // No active animations, process all pending dismisses.
+                // Sort by descending position
+                Collections.sort(mPendingDismisses);
 
-                    int[] dismissPositions = new int[mPendingDismisses.size()];
-                    for (int i = mPendingDismisses.size() - 1; i >= 0; i--) {
-                        dismissPositions[i] = mPendingDismisses.get(i).position;
-                    }
-                    mSwipeListener.onDismissedBySwipe(mRecyclerView, dismissPositions);
-
-                    // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
-                    // animation with a stale position
-                    mDownPosition = ListView.INVALID_POSITION;
-
-                    ViewGroup.LayoutParams lp;
-                    for (PendingDismissData pendingDismiss : mPendingDismisses) {
-                        // Reset view presentation
-                        pendingDismiss.view.findViewById(mFgID).setTranslationX(0);
-                        lp = pendingDismiss.view.getLayoutParams();
-                        lp.height = originalHeight;
-                        pendingDismiss.view.setLayoutParams(lp);
-                    }
-
-                    // Send a cancel event
-                    long time = SystemClock.uptimeMillis();
-                    MotionEvent cancelEvent = MotionEvent.obtain(time, time,
-                            MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                    mRecyclerView.dispatchTouchEvent(cancelEvent);
-
-                    mPendingDismisses.clear();
+                int[] dismissPositions = new int[mPendingDismisses.size()];
+                for (int i = mPendingDismisses.size() - 1; i >= 0; i--) {
+                    dismissPositions[i] = mPendingDismisses.get(i).position;
                 }
+                mSwipeListener.onDismissedBySwipe(mRecyclerView, dismissPositions);
+
+                // Reset mDownPosition to avoid MotionEvent.ACTION_UP trying to start a dismiss
+                // animation with a stale position
+                mDownPosition = ListView.INVALID_POSITION;
+
+                ViewGroup.LayoutParams lp;
+                for (PendingDismissData pendingDismiss : mPendingDismisses) {
+                    // Reset view presentation
+                    pendingDismiss.view.findViewById(mFgID).setTranslationX(0);
+                    lp = pendingDismiss.view.getLayoutParams();
+                    lp.height = originalHeight;
+                    pendingDismiss.view.setLayoutParams(lp);
+                }
+
+                // Send a cancel event
+                long time = SystemClock.uptimeMillis();
+                MotionEvent cancelEvent = MotionEvent.obtain(time, time,
+                        MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                mRecyclerView.dispatchTouchEvent(cancelEvent);
+
+                mPendingDismisses.clear();
             }
         });
 

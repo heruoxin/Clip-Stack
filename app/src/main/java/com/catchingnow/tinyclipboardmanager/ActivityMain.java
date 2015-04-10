@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,7 +71,6 @@ public class ActivityMain extends MyActionBarActivity {
 
     protected boolean isStarred = false;
     private boolean clickToCopy = true;
-    private int isSnackbarShow = 0;
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
@@ -617,7 +615,6 @@ public class ActivityMain extends MyActionBarActivity {
                     if (dy > 20 && isYHidden == -1) {
                         //hide FAB on Y
                         if (isXHidden != -1) return;
-                        if (isSnackbarShow > 0) return;
                         isYHidden = 0;
                         mFabRotation(true, TRANSLATION_FAST);
                         mFabRotation(true, TRANSLATION_FAST);
@@ -648,7 +645,6 @@ public class ActivityMain extends MyActionBarActivity {
                     } else if (dy < -20 && isYHidden == 1) {
                         //show FAB on Y
                         if (isXHidden != -1) return;
-                        if (isSnackbarShow > 0) return;
                         isYHidden = 0;
                         mFabRotation(false, TRANSLATION_FAST);
                         mFabRotation(false, TRANSLATION_FAST);
