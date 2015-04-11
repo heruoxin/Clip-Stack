@@ -750,7 +750,7 @@ public class ActivityMain extends MyActionBarActivity {
         //show red circle
         if (preference.getBoolean(SECOND_LAUNCH, true)) {
             MenuItem settingItem = menu.findItem(R.id.action_settings);
-            settingItem.setTitle(settingItem.getTitle()+" 📌");
+            settingItem.setTitle(settingItem.getTitle()+" 🙋");
             setOverflowButtonColor(this, R.drawable.ic_action_more_vert_white_with_star);
         }
     }
@@ -761,7 +761,7 @@ public class ActivityMain extends MyActionBarActivity {
                     .putBoolean(SECOND_LAUNCH, false)
                     .apply();
             MenuItem settingItem = menu.findItem(R.id.action_settings);
-            settingItem.setTitle(String.valueOf(settingItem.getTitle()).replace("📌", ""));
+            settingItem.setTitle(String.valueOf(settingItem.getTitle()).replace(" 🙋", ""));
             setOverflowButtonColor(this, R.drawable.ic_action_more_vert_white);
         }
     }
