@@ -4,14 +4,17 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.graphics.PixelFormat;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 //https://github.com/EatHeat/FloatingExample
@@ -62,8 +65,14 @@ public class FloatingWindowService extends Service {
 
         params.x = preference.getInt(FLOATING_WINDOW_X, 300);
         params.y = preference.getInt(FLOATING_WINDOW_Y, 0);
-        params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
-        params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + MyUtil.dip2px(this, 4);
+            params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material) + MyUtil.dip2px(this, 8);
+        } else {
+            params.width = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+            params.height = getResources().getDimensionPixelSize(R.dimen.abc_action_bar_default_height_material);
+            params.alpha = (float) 0.9;
+        }
         windowManager.addView(floatingView, params);
         handler.postDelayed(new Runnable() {
             @Override
@@ -109,6 +118,7 @@ public class FloatingWindowService extends Service {
                 layoutInflater.inflate(R.layout.floating_window, null);
         floatingView.setScaleX(0);
         floatingView.setScaleY(0);
+
         FWShowAnimate();
 
         try {
