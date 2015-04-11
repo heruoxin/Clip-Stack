@@ -751,7 +751,7 @@ public class ActivityMain extends MyActionBarActivity {
         if (preference.getBoolean(SECOND_LAUNCH, true)) {
             MenuItem settingItem = menu.findItem(R.id.action_settings);
             settingItem.setTitle(settingItem.getTitle()+" 📌");
-            setOverflowButtonColor(this, R.drawable.ic_action_more_vert_star);
+            setOverflowButtonColor(this, R.drawable.ic_action_more_vert_white_with_star);
         }
     }
 
@@ -762,7 +762,7 @@ public class ActivityMain extends MyActionBarActivity {
                     .apply();
             MenuItem settingItem = menu.findItem(R.id.action_settings);
             settingItem.setTitle(String.valueOf(settingItem.getTitle()).replace("📌", ""));
-            setOverflowButtonColor(this, R.drawable.ic_action_more_vert);
+            setOverflowButtonColor(this, R.drawable.ic_action_more_vert_white);
         }
     }
 
