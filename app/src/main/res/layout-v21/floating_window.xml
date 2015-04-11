@@ -13,6 +13,7 @@
         android:layout_width="@dimen/abc_action_bar_default_height_material"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
         android:background="@drawable/background_fab"
+        android:elevation="4dp"
         android:padding="8dp"
         android:src="@drawable/ic_stat_icon"
         android:scaleType="centerInside" />

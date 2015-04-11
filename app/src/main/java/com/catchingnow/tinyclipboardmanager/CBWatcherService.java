@@ -37,6 +37,7 @@ public class CBWatcherService extends Service {
     public final static String INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE = "com.catchingnow.tinyclipboardmanager.EXTRA.MY_ACTIVITY_ON_FOREGROUND_MESSAGE";
     public final static String INTENT_EXTRA_CHANGE_STAR_STATUES = "com.catchingnow.tinyclipboardmanager.EXTRA.CHANGE_STAR_STATUES";
     public final static String INTENT_EXTRA_TEMPORARY_STOP = "com.catchingnow.tinyclipboardmanager.EXTRA.TEMPORARY_STOP";
+    public final static String INTENT_EXTRA_CHECK_CLIPBOARD_NOW = "com.catchingnow.tinyclipboardmanager.EXTRA.CHECK_CLIPBOARD_NOW";
 
     public final static String ON_DESTROY = "onCBWatcherServiceDestroy";
 
@@ -94,6 +95,9 @@ public class CBWatcherService extends Service {
         isMyActivitiesOnForeground += myActivitiesOnForegroundMessage;
         readPreference();
 
+        if (intent.getBooleanExtra(INTENT_EXTRA_CHECK_CLIPBOARD_NOW, false)) {
+            performClipboardCheck();
+        }
 
         if (!allowService) {
             if (isMyActivitiesOnForeground <= 0) {
@@ -392,16 +396,22 @@ public class CBWatcherService extends Service {
     }
 
     public static void startCBService(Context context, boolean refreshNotification) {
-        startCBService(context, refreshNotification, 0);
+        startCBService(context, refreshNotification, true, 0);
     }
 
     public static void startCBService(Context context, int myActivitiesOnForegroundMessage) {
-        startCBService(context, false, myActivitiesOnForegroundMessage);
+        startCBService(context, false, true, myActivitiesOnForegroundMessage);
     }
 
-    public static void startCBService(Context context, boolean forceShowNotification, int myActivitiesOnForegroundMessage) {
+    public static void startCBService(Context context, boolean refreshNotification, boolean checkClipboardNow) {
+        startCBService(context, refreshNotification, checkClipboardNow, 0);
+    }
+
+
+    public static void startCBService(Context context, boolean forceShowNotification, boolean checkClipboardNow, int myActivitiesOnForegroundMessage) {
         Intent intent = new Intent(context, CBWatcherService.class)
                 .putExtra(INTENT_EXTRA_FORCE_SHOW_NOTIFICATION, forceShowNotification)
+                .putExtra(INTENT_EXTRA_CHECK_CLIPBOARD_NOW, checkClipboardNow)
                 .putExtra(INTENT_EXTRA_MY_ACTIVITY_ON_FOREGROUND_MESSAGE, myActivitiesOnForegroundMessage);
         context.startService(intent);
     }

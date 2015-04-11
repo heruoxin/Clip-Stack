@@ -119,14 +119,14 @@
                 android:id="@+id/activity_main_card_share_button"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_marginTop="2sp"
-                android:src="@drawable/ic_notification_action_share"
+                android:src="@drawable/ic_action_more_vert_grey600"
                 android:layout_below="@id/activity_main_card_time"
                 android:layout_gravity="center"
                 android:layout_width="38sp"
                 android:layout_height="38sp"
                 android:padding="8sp"
                 android:scaleType="fitCenter"
-                android:contentDescription="@string/clip_notification_share_button" />
+                android:contentDescription="@android:string/selectTextMode" />
         </RelativeLayout>
 
     </LinearLayout>

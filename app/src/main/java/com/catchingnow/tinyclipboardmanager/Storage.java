@@ -395,7 +395,7 @@ public class Storage {
 //            CBWatcherService.startCBService(context, true);
 //            ActivityMain.refreshMainView(context, "");
 //        }
-        CBWatcherService.startCBService(context, true);
+        CBWatcherService.startCBService(context, true, false);
         updateDbBroadcast(context, added, deletedString);
         context.startService(new Intent(context, ClipObjectActionBridge.class)
                 .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)

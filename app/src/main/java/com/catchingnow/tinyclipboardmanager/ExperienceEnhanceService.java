@@ -88,10 +88,10 @@ public class ExperienceEnhanceService extends AccessibilityService {
             AccessibilityNodeInfo findFocus = findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
             if (findFocus != null &&
                     findFocus.isEditable()) {
-                Log.i("AccessibilityNodeInfo", "true");
+                //Log.i("AccessibilityNodeInfo", "true");
                 startFloatingWindow();
             } else {
-                Log.i("AccessibilityNodeInfo", "false");
+                //Log.i("AccessibilityNodeInfo", "false");
                 stopFloatingWindow();
             }
         }

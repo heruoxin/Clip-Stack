@@ -103,7 +103,7 @@
     <string name="accessibility_service_description" >Enable this service to get more feature:\n\n• Clip Stack will not be killed by system when RAM is not enough.\n• Show floating button of clipboards when typing on Android Lollipop +. (Not support browsers yet)\n• More features are coming soon.</string>
     <string name="pref_ping_floating_button">When to Show</string>
     <string name="pref_ping_floating_button_summary_always">Always show on screen.</string>
-    <string name="pref_ping_floating_button_summary_typing">Only show when typing. (Browser is not support yet)</string>
+    <string name="pref_ping_floating_button_summary_typing">Only show when typing. (Not support browsers yet)</string>
     <string name="pref_ping_floating_button_summary">When to show floating button.</string>
     <string name="accessibility_dialog_title">Accessibility Require</string>
     <string name="accessibility_dialog_summary">This feature require accessibility permission. \nPlease enable it on Android settings.</string>

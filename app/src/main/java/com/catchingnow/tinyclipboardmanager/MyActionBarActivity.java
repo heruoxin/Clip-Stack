@@ -1,13 +1,16 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+
+import java.util.ArrayList;
 
 /**
  * Created by heruoxin on 15/2/28.
@@ -154,7 +159,7 @@ public class MyActionBarActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_OPENED));
-        CBWatcherService.startCBService(this, true, 1);
+        CBWatcherService.startCBService(this, true, true, 1);
         if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false) &&
                 preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
                 ) {
@@ -187,6 +192,36 @@ public class MyActionBarActivity extends ActionBarActivity {
         }
         Log.v(MyUtil.PACKAGE_NAME, "ORIENTATION_SQUARE");
         return Configuration.ORIENTATION_SQUARE;
+    }
+
+    public static void setOverflowButtonColor(final Activity activity, final int imageID) {
+        final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
+        final ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        final ViewTreeObserver viewTreeObserver = decorView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                final ArrayList<View> outViews = new ArrayList<View>();
+                decorView.findViewsWithText(outViews, overflowDescription,
+                        View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+                if (outViews.isEmpty()) {
+                    return;
+                }
+                TintImageView overflow=(TintImageView) outViews.get(0);
+                //overflow.setColorFilter(Color.CYAN);
+                overflow.setImageResource(imageID);
+                removeOnGlobalLayoutListener(decorView, this);
+            }
+        });
+    }
+
+    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+        }
+        else {
+            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
+        }
     }
 
 }

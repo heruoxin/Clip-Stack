@@ -66,7 +66,7 @@
         <activity
             android:name=".ActivitySetting"
             android:label="@string/title_activity_activity_setting"
-            android:theme="@style/AppDialogWhenLargeTheme" >
+            android:theme="@style/AppTheme">
 
             <!-- android:documentLaunchMode="intoExisting" -->
             <!-- android:parentActivityName=".ActivityMain" -->
