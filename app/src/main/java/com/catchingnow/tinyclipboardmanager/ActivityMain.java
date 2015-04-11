@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -822,10 +824,12 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
+                clipCardViewHolder.vBackground.setVisibility(View.VISIBLE);
                 clipCardViewHolder.vBackground.removeAllViews();
                 clipCardViewHolder.vBackground.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             } else {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
+                clipCardViewHolder.vBackground.setVisibility(View.GONE);
             }
 
             if (clickToCopy) {
