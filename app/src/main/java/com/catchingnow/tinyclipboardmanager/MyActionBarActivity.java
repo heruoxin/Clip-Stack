@@ -159,7 +159,7 @@ public class MyActionBarActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTIVITY_OPENED));
-        CBWatcherService.startCBService(this, true, 1);
+        CBWatcherService.startCBService(this, true, true, 1);
         if (preference.getBoolean(ActivitySetting.PREF_FLOATING_BUTTON, false) &&
                 preference.getString(ActivitySetting.PREF_FLOATING_BUTTON_ALWAYS_SHOW, "always").equals("always")
                 ) {
