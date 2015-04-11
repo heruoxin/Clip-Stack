@@ -322,9 +322,16 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         final int originalHeight = dismissView.getHeight();
         final boolean[] deleteAble = {true};
 
-        final ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 1).setDuration(ANIMATION_FAST);
+        final ValueAnimator animator = ValueAnimator.ofInt(originalHeight, 0).setDuration(ANIMATION_FAST);
 
         animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                lp.height = 0;
+                dismissView.setLayoutParams(lp);
+                onAnimationEnd(animation);
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 --mDismissAnimationRefCount;
@@ -378,6 +385,12 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         backgroundView.animate()
                 .alpha(0).setDuration(ANIMATION_WAIT)
                 .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        backgroundView.setAlpha(0);
+                        onAnimationEnd(animation);
+                    }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (deleteAble[0]) animator.start();
