@@ -45,6 +45,7 @@ public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
     public final static String FIRST_LAUNCH = "pref_is_first_launch";
     public final static String SECOND_LAUNCH = "pref_is_second_launch";
+    protected final static int ACTION_SELECT = -2;
     private static int TRANSLATION_FAST = 400;
     private static int TRANSLATION_SLOW = 1000;
 
@@ -533,20 +534,6 @@ public class ActivityMain extends MyActionBarActivity {
         }, time - 400);
     }
 
-    public void mFabOnClick(View view) {
-        mFabRotation(true, TRANSLATION_FAST);
-        final Intent intent = new Intent(this, ActivityEditor.class)
-                .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //ActivityOptions options = ActivityOptions
-            //        .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
-            //startActivity(intent, options.toBundle());
-            startActivity(intent);
-        } else {
-            startActivity(intent);
-        }
-    }
-
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
@@ -783,16 +770,20 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     protected void addClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                        .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
-                        .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
-                        .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
-                context.startService(openIntent);
-            }
-        });
+        if (actionCode == ACTION_SELECT) {
+            //TODO select action
+        } else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                            .putExtra(Intent.EXTRA_TEXT, clipObject.getText())
+                            .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, clipObject.isStarred())
+                            .putExtra(ClipObjectActionBridge.ACTION_CODE, actionCode);
+                    context.startService(openIntent);
+                }
+            });
+        }
     }
 
     protected void addLongClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
@@ -815,6 +806,32 @@ public class ActivityMain extends MyActionBarActivity {
 
     protected void setActionIcon(ImageButton view) {
         //for dialog layout.
+    }
+
+    public void mFabOnClick(View view) {
+        mFabRotation(true, TRANSLATION_FAST);
+        final Intent intent = new Intent(this, ActivityEditor.class)
+                .putExtra(ClipObjectActionBridge.STATUE_IS_STARRED, isStarred);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //ActivityOptions options = ActivityOptions
+            //        .makeSceneTransitionAnimation(this, mFAB, getString(R.string.action_star));
+            //startActivity(intent, options.toBundle());
+            startActivity(intent);
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    public void mFabCancelOnClick(View view) {
+    }
+
+    public void mFabDeleteOnClick(View view) {
+    }
+
+    public void mFabMergeOnClick(View view) {
+    }
+
+    public void mFabShareOnClick(View view) {
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
@@ -864,7 +881,7 @@ public class ActivityMain extends MyActionBarActivity {
                 addLongClickStringAction(clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
 
             }
-            addClickStringAction(clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
+            addClickStringAction(clipObject, ACTION_SELECT, clipCardViewHolder.vShare);
 
             setActionIcon(clipCardViewHolder.vShare);
 

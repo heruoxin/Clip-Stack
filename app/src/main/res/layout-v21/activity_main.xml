@@ -71,5 +71,78 @@
             android:elevation="4dp"
             android:onClick="mFabOnClick" />
 
+        <ImageButton
+            android:id="@+id/fab_cancel"
+            android:visibility="gone"
+            android:contentDescription="@string/action_cancel"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_close_white"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="mFabCancelOnClick" />
+        <ImageButton
+            android:id="@+id/fab_delete"
+            android:visibility="gone"
+            android:contentDescription="@string/action_delete"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_delete"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="mFabDeleteOnClick" />
+        <ImageButton
+            android:id="@+id/fab_merge"
+            android:visibility="gone"
+            android:contentDescription="@string/action_merge"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_merge_white"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="mFabMergeOnClick" />
+        <ImageButton
+            android:id="@+id/fab_share"
+            android:visibility="gone"
+            android:contentDescription="@string/action_share"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:padding="8dp"
+            android:src="@drawable/ic_action_share"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="mFabShareOnClick" />
+
+
+
+
+
     </RelativeLayout>
 </RelativeLayout>
