@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ public class ActivityMain extends MyActionBarActivity {
     private Storage db;
     private List<ClipObject> clips;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
+    private ArrayList<ClipObject> selectedClips = new ArrayList<>();
     private BroadcastReceiver mMessageReceiver;
 
     //FAB
@@ -771,7 +773,11 @@ public class ActivityMain extends MyActionBarActivity {
 
     protected void addClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
         if (actionCode == ACTION_SELECT) {
-            //TODO select action
+            if (selectedClips.contains(clipObject)) {
+                unselectClips(clipObject, button);
+            } else {
+                selectClips(clipObject, button);
+            }
         } else {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -832,6 +838,34 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     public void mFabShareOnClick(View view) {
+    }
+
+    private void selectClips(ClipObject clipObject, View view) {
+        if (selectedClips.isEmpty()) {
+            //TODO expand FABs.
+        }
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageResource(R.drawable.ic_action_done_all_grey600);
+        }
+        selectedClips.add(clipObject);
+    }
+
+    private void unselectClips(ClipObject clipObject, View view) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageResource(R.drawable.ic_action_more_vert_grey600);
+        }
+        selectedClips.remove(clipObject);
+        if (selectedClips.isEmpty()) {
+            //TODO collect FABs.
+        }
+    }
+
+    private void ClearSelectedClips(ClipObject clipObject) {
+        selectedClips.clear();
+        //TODO collect FABs.
+        //setView on collect end/cancel?
+        lastStorageUpdate = null;
+        setView();
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
