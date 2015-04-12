@@ -9,8 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -784,7 +782,7 @@ public class ActivityMain extends MyActionBarActivity {
                 .show();
     }
 
-    protected void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+    protected void addClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -797,7 +795,7 @@ public class ActivityMain extends MyActionBarActivity {
         });
     }
 
-    protected void addLongClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+    protected void addLongClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -859,14 +857,14 @@ public class ActivityMain extends MyActionBarActivity {
             }
 
             if (clickToCopy) {
-                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
-                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
+                addClickStringAction(clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+                addLongClickStringAction(clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             } else {
-                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
-                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+                addClickStringAction(clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
+                addLongClickStringAction(clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
 
             }
-            addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
+            addClickStringAction(clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             setActionIcon(clipCardViewHolder.vShare);
 

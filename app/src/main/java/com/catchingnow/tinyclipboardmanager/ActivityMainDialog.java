@@ -82,7 +82,7 @@ public class ActivityMainDialog extends ActivityMain {
     }
 
     @Override
-    protected void addClickStringAction(final Context context, final ClipObject clipObject, final int actionCode, View button) {
+    protected void addClickStringAction(final ClipObject clipObject, final int actionCode, View button) {
         if (button instanceof TextView) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,7 +110,7 @@ public class ActivityMainDialog extends ActivityMain {
     }
 
     @Override
-    protected void addLongClickStringAction(Context context, ClipObject clipObject, int actionCode, View button) {
+    protected void addLongClickStringAction(ClipObject clipObject, int actionCode, View button) {
         //super.addLongClickStringAction(context, clipObject, actionCode, button);
     }
 
