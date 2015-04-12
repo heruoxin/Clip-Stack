@@ -12,6 +12,7 @@ public class ClipObject {
     protected String text;
     protected Date date;
     protected boolean star;
+    public boolean selected = false;
 
     public ClipObject(String text, Date date) {
         this.text = text;

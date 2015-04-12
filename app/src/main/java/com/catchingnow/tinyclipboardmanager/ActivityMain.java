@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -67,6 +68,7 @@ public class ActivityMain extends MyActionBarActivity {
     private List<ClipObject> clips;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private ArrayList<ClipObject> selectedClips = new ArrayList<>();
+    private ArrayList<View> selectedViews = new ArrayList<>();
     private BroadcastReceiver mMessageReceiver;
 
     //FAB
@@ -814,6 +816,11 @@ public class ActivityMain extends MyActionBarActivity {
         //for dialog layout.
     }
 
+    protected void setSelectedIcon(boolean selected, View view) {
+        if (!(view instanceof ImageView)) return;
+        ((ImageView) view).setImageResource(selected ? R.drawable.ic_action_done_all_grey600 : R.drawable.ic_action_more_vert_grey600);
+    }
+
     public void mFabOnClick(View view) {
         mFabRotation(true, TRANSLATION_FAST);
         final Intent intent = new Intent(this, ActivityEditor.class)
@@ -829,43 +836,104 @@ public class ActivityMain extends MyActionBarActivity {
     }
 
     public void mFabCancelOnClick(View view) {
+        clearSelectedClips();
     }
 
     public void mFabDeleteOnClick(View view) {
+        clearSelectedClips();
     }
 
     public void mFabMergeOnClick(View view) {
+        clearSelectedClips();
     }
 
     public void mFabShareOnClick(View view) {
+        clearSelectedClips();
     }
 
     private void selectClips(ClipObject clipObject, View view) {
         if (selectedClips.isEmpty()) {
-            //TODO expand FABs.
+            expandFABs();
         }
-        if (view instanceof ImageView) {
-            ((ImageView) view).setImageResource(R.drawable.ic_action_done_all_grey600);
-        }
+        clipObject.selected = true;
+        setSelectedIcon(true, view);
+        selectedViews.add(view);
         selectedClips.add(clipObject);
     }
 
     private void unselectClips(ClipObject clipObject, View view) {
-        if (view instanceof ImageView) {
-            ((ImageView) view).setImageResource(R.drawable.ic_action_more_vert_grey600);
-        }
+        clipObject.selected = false;
+        setSelectedIcon(false, view);
+        selectedViews.remove(selectedClips.indexOf(clipObject));
         selectedClips.remove(clipObject);
         if (selectedClips.isEmpty()) {
-            //TODO collect FABs.
+            collectFABs();
         }
     }
 
-    private void ClearSelectedClips(ClipObject clipObject) {
+    private void clearSelectedClips() {
+        for (View view: selectedViews) {
+            setSelectedIcon(false, view);
+        }
         selectedClips.clear();
-        //TODO collect FABs.
-        //setView on collect end/cancel?
-        lastStorageUpdate = null;
-        setView();
+        selectedViews.clear();
+        collectFABs();
+    }
+
+    private void expandFABs() {
+        int[] fabList = {
+                R.id.fab_cancel,
+                R.id.fab_delete,
+                R.id.fab_merge,
+                R.id.fab_share
+        };
+        float paddingHorizontal = MyUtil.dip2px(context, 18);
+        float fabDiameter = getResources().getDimensionPixelSize(R.dimen.fab_size);
+        float screenWidth = getScreenWidthPixels();
+        float fabMargin = (screenWidth - paddingHorizontal*2 - fabList.length*fabDiameter)/(fabList.length-1);
+
+        int i = 0;
+        for (int id: fabList) {
+            float width = (fabMargin+fabDiameter)*i;
+            float degree = (float) (width/(fabDiameter*Math.PI)*360);
+            Log.i(MyUtil.PACKAGE_NAME, "degree: "+degree);
+            View view = findViewById(id);
+            view.setVisibility(View.VISIBLE);
+            view.setRotation(degree);
+            view.animate().rotation(0)
+                    .translationX(-width)
+                    .setDuration(TRANSLATION_SLOW);
+            i += 1;
+        }
+    }
+
+    private void collectFABs() {
+        int[] fabList = {
+                R.id.fab_cancel,
+                R.id.fab_delete,
+                R.id.fab_merge,
+                R.id.fab_share
+        };
+        for (int id : fabList) {
+            final View view = findViewById(id);
+            float fabDiameter = getResources().getDimensionPixelSize(R.dimen.fab_size);
+            float width = view.getTranslationX();
+            float degree = (float) (width/(fabDiameter*Math.PI)*360);
+            view.animate().rotation(-degree)
+                    .translationX(0)
+                    .setDuration(TRANSLATION_SLOW)
+                    .setListener(new AnimatorListenerAdapter(){
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            onAnimationEnd(animation);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            view.setVisibility(View.GONE);
+                        }
+                    });
+        }
     }
 
     public class ClipCardAdapter extends RecyclerView.Adapter<ClipCardAdapter.ClipCardViewHolder> {
@@ -915,9 +983,10 @@ public class ActivityMain extends MyActionBarActivity {
                 addLongClickStringAction(clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
 
             }
-            addClickStringAction(clipObject, ACTION_SELECT, clipCardViewHolder.vShare);
+            addClickStringAction(clipObject, ACTION_SELECT, clipCardViewHolder.vSelect);
 
-            setActionIcon(clipCardViewHolder.vShare);
+            setSelectedIcon(clipObject.selected, clipCardViewHolder.vSelect);
+            setActionIcon(clipCardViewHolder.vSelect);
 
             clipCardViewHolder.vStarred.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1011,7 +1080,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vDate;
             protected TextView vText;
             protected ImageButton vStarred;
-            protected ImageButton vShare;
+            protected ImageButton vSelect;
             protected LinearLayout vBackground;
             protected View vMain;
 
@@ -1021,7 +1090,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
                 vText = (TextView) v.findViewById(R.id.activity_main_card_text);
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
-                vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
+                vSelect = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
             }
