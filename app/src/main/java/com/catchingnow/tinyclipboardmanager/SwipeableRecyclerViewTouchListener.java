@@ -71,7 +71,6 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private long ANIMATION_WAIT = 2200;
 
     // Fixed properties
-    private Context mContext;
     private RecyclerView mRecyclerView;
     private SwipeListener mSwipeListener;
     private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
@@ -89,6 +88,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private boolean mPaused;
     private float mFinalDelta;
 
+    // Foreground view (to be swiped)
+    // background view (to show)
     private View mFgView;
     private View mBgView;
 
@@ -108,7 +109,6 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             int fgID,
             int BgID,
             SwipeListener listener) {
-        mContext = context;
         mFgID = fgID;
         mBgID = BgID;
         ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
@@ -187,12 +187,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     mDownX = motionEvent.getRawX();
                     mDownY = motionEvent.getRawY();
                     mDownPosition = mRecyclerView.getChildPosition(mDownView);
-//                    if (mSwipeListener.canSwipe(mDownPosition)) {
                     mVelocityTracker = VelocityTracker.obtain();
                     mVelocityTracker.addMovement(motionEvent);
-//                    } else {
-//                        mDownView = null;
-//                    }
                     mFgView = mDownView.findViewById(mFgID);
                 }
                 break;
@@ -365,6 +361,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             }
         });
 
+        // Animate the dismissed list item to zero-height
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -375,6 +372,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 
         final PendingDismissData pendingDismissData = new PendingDismissData(dismissPosition, dismissView);
         mPendingDismisses.add(pendingDismissData);
+
+        //fade out background view
         backgroundView.animate()
                 .alpha(0).setDuration(ANIMATION_WAIT)
                 .setListener(new AnimatorListenerAdapter() {
@@ -383,6 +382,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                         if (deleteAble[0]) animator.start();
                     }
                 });
+
+        //cancel animate when click(actually touch) background view.
         backgroundView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
