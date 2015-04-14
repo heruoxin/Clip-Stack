@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.catchingnow.tinyclipboardmanager"
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 56
-        versionName "1.4.0"
+        targetSdkVersion 22
+        versionCode 57
+        versionName "1.5.0"
     }
     buildTypes {
         release {
