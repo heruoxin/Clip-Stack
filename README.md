@@ -1,17 +1,16 @@
 # Clip-Stack
 
 
-
-### A tiny clipboard history manager app.
+### A tiny clipboard history manager app
 
 ![screenshot](http://ww4.sinaimg.cn/large/66cab368gw1ep3ki6o4yzj21eq0h67am.jpg)
 
 [![Get it on Google Play Store](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager)
 
-Other Market:
+Other Markets:
 
-[F-Droid](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
-[CoolAPK](http://coolapk.com/apk/com.catchingnow.tinyclipboardmanager)
+* [F-Droid](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
+* [CoolAPK](http://coolapk.com/apk/com.catchingnow.tinyclipboardmanager)
 
 #### Unlimited Clips
 
@@ -73,8 +72,8 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 This application is comprised of two parts:
 
-1. the Java code are licensed under the MIT license;
-2. All rights of other parts, but not limited to the icons, images, and UI designs are reserved.
+1. the Java source code is licensed under the MIT license;
+2. all rights of other parts, but not limited to the icons, images, and UI designs are reserved.
 
 
 -----
