@@ -106,7 +106,7 @@
     <string name="pref_ping_floating_button_summary_typing">Only show when typing. (Not support browsers yet)</string>
     <string name="pref_ping_floating_button_summary">When to show floating button.</string>
     <string name="accessibility_dialog_title">Accessibility Require</string>
-    <string name="accessibility_dialog_summary">This feature require accessibility permission. \nPlease enable it on Android settings.</string>
+    <string name="accessibility_dialog_summary">This feature require accessibility permission.\nPlease enable it on Android settings.</string>
     <string name="accessibility_dialog_ok">Open Settings</string>
 
 </resources>
