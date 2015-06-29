@@ -53,10 +53,10 @@
     <string name="pref_about_summary">Ver código fuente en GitHub.</string>
     <string name="pref_about_title">Código abierto</string>
     <string name="pref_app_setting_category">Ajuste de la aplicación</string>
-    <string name="pref_click_summary">Definir las acciones tocar &amp; y mantener.</string>
+    <string name="pref_click_summary">Definir las acciones tocar y mantener.</string>
     <string name="pref_click_summary_false">Tocar para editar.</string>
     <string name="pref_click_summary_true">Tocar para copiar. Mantener para editar.</string>
-    <string name="pref_click_title">Acción Tocar.</string>
+    <string name="pref_click_title">Acción tocar.</string>
     <string name="pref_floating_button">Botón flotante</string>
     <string name="pref_floating_button_summary">Mostrar botón flotante en la pantalla.</string>
     <string name="pref_notification_pin_summary_off">Solo mostrar cuando el portapapeles cambie.</string>
