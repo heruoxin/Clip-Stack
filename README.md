@@ -8,14 +8,14 @@
 
 [![Get it on Google Play Store](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager)
 
-Other Market:
+Other Markets:
 
-[F-Droid](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
-[CoolAPK](http://coolapk.com/apk/com.catchingnow.tinyclipboardmanager)
+- [F-Droid](https://f-droid.org/repository/browse/?fdid=com.catchingnow.tinyclipboardmanager)
+- [CoolAPK](http://coolapk.com/apk/com.catchingnow.tinyclipboardmanager)
 
 #### Unlimited Clips
 
-📌 Clip Stack can remember all your clipboard history and recover text after reboot. 
+📌 Clip Stack can remember all your clipboard history and make them survive reboots. 
 
 #### Easy to Manage
 
@@ -35,7 +35,7 @@ Other Market:
 
 #### Auto Clean Up
 
-📌 Using Android 🍭Lollipop's new JobScheduler API, Clip Stack can automatic clean up it's catches and RAM when phone is charging. 
+📌 Using Android 🍭Lollipop's new JobScheduler API, Clip Stack can automatic clean up its cache and RAM when phone is being charged. 
 
 #### Other Features
 
@@ -47,10 +47,10 @@ Other Market:
 
 #### Permission Usage
 
-RECEIVE_BOOT_COMPLETED:  Start a background service to listen the system clipboard. It only cost 4.5M - 6M RAM. You can close it in Settings if you really don't want it.
+RECEIVE_BOOT_COMPLETED:  Start a background service to listen to clipboard changes. It only costs 4.5M - 6M RAM. You can disable it in Settings if you really don't want it.
 
 
-WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history. This app won't write any other files to your SD card.
+WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For exporting clipboard history. This app won't write any other files to your SD card.
 
 -----
 
@@ -73,8 +73,8 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For export clipboard history.
 
 This application is comprised of two parts:
 
-1. the Java code are licensed under the MIT license;
-2. All rights of other parts, but not limited to the icons, images, and UI designs are reserved.
+1. The Java code are licensed under the MIT license;
+2. All rights of other parts, include but not limited to the icons, images, and UI designs are reserved.
 
 
 -----
