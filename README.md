@@ -74,7 +74,7 @@ WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE:  For exporting clipboard histo
 This application is comprised of two parts:
 
 1. The Java code are licensed under the MIT license;
-2. All rights of other parts, include but not limited to the icons, images, and UI designs are reserved.
+2. All rights of other parts, including but not limited to the icons, images, and UI designs are reserved.
 
 
 -----
