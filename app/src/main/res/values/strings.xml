@@ -108,5 +108,6 @@
     <string name="accessibility_dialog_title">Accessibility Require</string>
     <string name="accessibility_dialog_summary">This feature require accessibility permission. \nPlease enable it on Android settings.</string>
     <string name="accessibility_dialog_ok">Open Settings</string>
+    <string name="action_comment">Add comments and tags</string>
 
 </resources>

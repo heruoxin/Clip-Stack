@@ -231,13 +231,22 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 boolean dismiss = false;
                 boolean dismissRight = false;
                 if (Math.abs(mFinalDelta) > mViewWidth / 2 && mSwiping) {
-                    dismiss = true;
-                    dismissRight = mFinalDelta > 0;
+                    // Add if statement to run our own code - mehrunestenets
+                    if (mFinalDelta > 0)    {
+
+                    } else {
+                        dismiss = true;
+                        dismissRight = mFinalDelta > 0;
+                    }
                 } else if (mMinFlingVelocity <= absVelocityX && absVelocityX <= mMaxFlingVelocity
                         && absVelocityY < absVelocityX && mSwiping) {
                     // dismiss only if flinging in the same direction as dragging
-                    dismiss = (velocityX < 0) == (mFinalDelta < 0);
-                    dismissRight = mVelocityTracker.getXVelocity() > 0;
+                    if (mFinalDelta > 0)    {
+
+                    } else {
+                        dismiss = (velocityX < 0) == (mFinalDelta < 0);
+                        dismissRight = mVelocityTracker.getXVelocity() > 0;
+                    }
                 }
                 if (
                         dismiss &&

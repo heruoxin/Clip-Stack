@@ -845,7 +845,7 @@ public class ActivityMain extends MyActionBarActivity {
             final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
