@@ -8,6 +8,6 @@ import android.os.Bundle;
 public class ActivityDescriptionEditor extends MyActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)   {
-
+        super.onCreate(savedInstanceState);
     }
 }

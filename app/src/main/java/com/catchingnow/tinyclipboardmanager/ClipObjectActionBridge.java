@@ -22,6 +22,7 @@ public class ClipObjectActionBridge extends IntentService {
     public final static int ACTION_OPEN_MAIN_DIALOG = 5;
     public final static int ACTION_REFRESH_WIDGET = 6;
     public final static int ACTION_CHANGE_WIDGET_STAR = 7;
+    public final static int ACTION_COMMENT = 8;
     public final static String ACTION_CODE = "com.catchingnow.tinyclipboardmanager.actionCode";
     public final static String STATUE_IS_STARRED  = "com.catchingnow.tinyclipboardmanager.isStarred";
 
@@ -75,6 +76,9 @@ public class ClipObjectActionBridge extends IntentService {
             case ACTION_CHANGE_WIDGET_STAR:
                 changeWidgetStarredStatus();
                 return;
+            case ACTION_COMMENT:
+                commentOnClip(clips);
+                return;
         }
     }
 
@@ -97,12 +101,12 @@ public class ClipObjectActionBridge extends IntentService {
                 cb.setText(clips);
 
                 //make toast
-                String toastClips =clips;
-                if ( clips.length() > 15) {
+                String toastClips = clips;
+                if (clips.length() > 15) {
                     toastClips = clips.substring(0, 15) + "…";
                 }
                 Toast.makeText(ClipObjectActionBridge.this,
-                        getString(R.string.toast_copied, toastClips+"\n"),
+                        getString(R.string.toast_copied, toastClips + "\n"),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -144,6 +148,15 @@ public class ClipObjectActionBridge extends IntentService {
                 .apply();
 
         AppWidget.updateAllAppWidget(this);
+    }
+
+    private void commentOnClip(final String clips){
+        Intent i = new Intent(this, ActivityDescriptionEditor.class);
+                //.putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
+                //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+               // .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+               // .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity(i);
     }
 
 }
