@@ -113,7 +113,8 @@
     <string name="action_tag">Add tag</string>
     <string name="action_label">Add or Change Label</string>
     <string name="title_activity_description_editor">Comment</string>
-
+    <string name="toast_updated">Saved</string>
+    <string name="toast_no_change">Not Saved</string>
 
 
 </resources>

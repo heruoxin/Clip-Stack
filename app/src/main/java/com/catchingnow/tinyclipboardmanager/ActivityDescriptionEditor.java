@@ -62,6 +62,12 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         editLabel.setText(newLabel);
         editComment.setText(newComment);
 
+        if (newComment!=oldComment && newLabel!=oldLabel && newTag!=oldTag) {
+            toastMessage = getString(R.string.toast_updated, newComment + "\n");
+        } else {
+            toastMessage = getString(R.string.toast_no_change);
+        }
+
         finishAndRemoveTaskWithToast(toastMessage);
     }
 
