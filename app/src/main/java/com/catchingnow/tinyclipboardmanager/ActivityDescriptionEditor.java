@@ -8,7 +8,7 @@ import android.os.Bundle;
 public class ActivityDescriptionEditor extends MyActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)   {
-        //setContentView(R.layout.activity_editor);
+        setContentView(R.layout.activity_comment);
         super.onCreate(savedInstanceState);
     }
 }
