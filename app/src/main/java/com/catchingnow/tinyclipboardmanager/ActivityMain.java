@@ -813,6 +813,7 @@ public class ActivityMain extends MyActionBarActivity {
         });
     }
 
+
     protected void setActionIcon(ImageButton view) {
         //for dialog layout.
     }

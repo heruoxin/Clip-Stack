@@ -21,6 +21,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -97,6 +98,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private int mFgID;
     private int mBgID;
 
+    // Added by MehrunesTenets
+    Context context;
+
     /**
      * Constructs a new swipe touch listener for the given {@link android.support.v7.widget.RecyclerView}
      *
@@ -117,6 +121,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
         mRecyclerView = recyclerView;
         mSwipeListener = listener;
+        this.context = context;
 
 
         /**
@@ -233,7 +238,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 if (Math.abs(mFinalDelta) > mViewWidth / 2 && mSwiping) {
                     // Add if statement to run our own code - mehrunestenets
                     if (mFinalDelta > 0)    {
-
+                        Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT);
+                        context.startService(openIntent);
                     } else {
                         dismiss = true;
                         dismissRight = mFinalDelta > 0;
@@ -242,7 +249,9 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                         && absVelocityY < absVelocityX && mSwiping) {
                     // dismiss only if flinging in the same direction as dragging
                     if (mFinalDelta > 0)    {
-
+                        Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
+                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT);
+                        context.startService(openIntent);
                     } else {
                         dismiss = (velocityX < 0) == (mFinalDelta < 0);
                         dismissRight = mVelocityTracker.getXVelocity() > 0;
