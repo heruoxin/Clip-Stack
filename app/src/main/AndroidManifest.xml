@@ -117,10 +117,10 @@
             android:name=".ActivityDescriptionEditor"
             android:label="@string/title_activity_description_editor"
             android:parentActivityName=".ActivityBackup"
-            android:theme="@style/AppDialogWhenLargeTheme" >
+            android:theme="@style/AppDialogWhenLargeTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
+                android:value="com.catchingnow.tinyclipboardmanager.ActivityDescriptionEditor" />
         </activity>
 
 
