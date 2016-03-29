@@ -56,27 +56,12 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         String newLabel = editLabel.getText().toString();
         String newTag = editTags.getText().toString();
 
-        String toastMessage;
-        db.modifyClip(oldComment, newComment, (isStarred ? 1 : -1));
-        if (newComment != null && !newComment.isEmpty()) {
-            toastMessage = getString(R.string.toast_copied, newComment + "\n");
-        } else {
-            toastMessage = getString(R.string.toast_deleted);
-        }
+        String toastMessage = "Temporary Toast";
 
-        db.modifyClip(oldLabel, newLabel, (isStarred ? 1 : -1));
-        if (newLabel != null && !newLabel.isEmpty()) {
-            toastMessage = getString(R.string.toast_copied, newLabel + "\n");
-        } else {
-            toastMessage = getString(R.string.toast_deleted);
-        }
+        editTags.setText(newTag);
+        editLabel.setText(newLabel);
+        editComment.setText(newComment);
 
-        db.modifyClip(oldTag, newTag, (isStarred ? 1 : -1));
-        if (newTag != null && !newTag.isEmpty()) {
-            toastMessage = getString(R.string.toast_copied, newTag + "\n");
-        } else {
-            toastMessage = getString(R.string.toast_deleted);
-        }
         finishAndRemoveTaskWithToast(toastMessage);
     }
 
