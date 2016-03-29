@@ -152,8 +152,11 @@ public class ClipObjectActionBridge extends IntentService {
 
     private void commentOnClip(final String clips){
         Intent i = new Intent(this, ActivityDescriptionEditor.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(STATUE_IS_STARRED,
+                        intent.getBooleanExtra(STATUE_IS_STARRED, false)
+                )
+                .putExtra(Intent.EXTRA_TEXT, clips);
         startActivity(i);
     }
-
 }
