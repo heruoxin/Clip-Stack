@@ -151,11 +151,8 @@ public class ClipObjectActionBridge extends IntentService {
     }
 
     private void commentOnClip(final String clips){
-        Intent i = new Intent(this, ActivityDescriptionEditor.class);
-                //.putExtra(ActivityMain.EXTRA_IS_FROM_NOTIFICATION, true)
-                //.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-               // .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-               // .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        Intent i = new Intent(this, ActivityDescriptionEditor.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
 
