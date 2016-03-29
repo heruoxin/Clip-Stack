@@ -103,7 +103,7 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_action_copy"
                 android:scaleType="centerInside"
-                android:onClick="saveTextOnClick" />
+                android:onClick="saveThreeTextsOnClick" />
 
 
         </RelativeLayout>
