@@ -349,6 +349,48 @@ public class Storage {
 
     }
 
+    public void modifyClipTagsCommentLabel(String oldClip, String newComment, String newLabel, ArrayList<String> newTags, int isImportant)    {
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " +newTags + ", "+ isImportant + ")");
+        if (oldClip == null) {
+            oldClip = "";
+        }
+        if (newComment == null) {
+            newComment = "";
+        }
+        if (newLabel == null) {
+            newLabel = "";
+        }
+
+        boolean isStarred = isClipObjectStarred(oldClip);
+
+        if (isImportant == 1) {
+            isStarred = true;
+        }
+        if (isImportant == -1) {
+            isStarred = false;
+        }
+
+        open();
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
+        if (!newComment.isEmpty() && !newLabel.isEmpty() && !newTags.isEmpty()) {
+            addClipHistory(new ClipObject(
+                    new Date(),
+                    isStarred,
+                    newComment,
+                    newLabel,
+                    newTags
+            ));
+        }
+        close();
+        latsUpdate = new Date();
+        isClipsInMemoryChanged = true;
+
+        refreshAllTypeOfList((!newComment.isEmpty() || !newLabel.isEmpty() || !newTags.isEmpty()), oldClip);
+
+    }
+
     public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.

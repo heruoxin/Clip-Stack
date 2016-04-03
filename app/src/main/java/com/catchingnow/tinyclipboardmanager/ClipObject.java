@@ -36,6 +36,14 @@ public class ClipObject {
         this.comment = "Test Comment Star";
         this.tags = new ArrayList<>();
     }
+    public ClipObject(Date date, boolean star, String comment, String label, ArrayList<String> tags ) {
+       // this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        this.tags = tags;
+    }
     public String getText() {
         return text;
     }
