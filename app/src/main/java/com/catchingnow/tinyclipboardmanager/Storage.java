@@ -371,11 +371,9 @@ public class Storage {
         }
 
         open();
-        if (!oldClip.isEmpty()) {
-            deleteClipHistory(oldClip);
-        }
         if (!newComment.isEmpty() && !newLabel.isEmpty() && !newTags.isEmpty()) {
             addClipHistory(new ClipObject(
+                    oldClip,
                     new Date(),
                     isStarred,
                     newComment,
@@ -383,6 +381,10 @@ public class Storage {
                     newTags
             ));
         }
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
+
         close();
         latsUpdate = new Date();
         isClipsInMemoryChanged = true;

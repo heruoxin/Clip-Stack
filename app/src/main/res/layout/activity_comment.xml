@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:hint="Tags"
+                android:hint="Tags (separate tags with ',')"
                 android:minLines="3"
                 android:paddingTop="20dp"
                 android:paddingBottom="40dp"

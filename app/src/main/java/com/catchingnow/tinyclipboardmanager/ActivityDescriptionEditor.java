@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by mehrunestenets on 2016-03-22.
@@ -64,8 +65,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         String newLabel = editLabel.getText().toString();
         String newTag = editTags.getText().toString();
 
-        ArrayList<String> newTagArray = new ArrayList<>();
-    //Parse the tags box into separate string elements? Just one tag...?
+        ArrayList<String> newTagArray = new ArrayList<String>(Arrays.asList(newTag.split(" , ")));
 
         String toastMessage = "Temporary Toast";
 

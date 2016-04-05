@@ -84,7 +84,22 @@
                     android:layout_height="42sp"
                     android:padding="4sp"
                     android:scaleType="fitCenter" />
-
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp">
+                <TextView
+                    android:id="@+id/activity_main_card_label"
+                    android:gravity="center_vertical|start"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:lineSpacingMultiplier="1.3"
+                    android:text="Label Test"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:layout_height="20sp"
+                    android:layout_width="match_parent" />
                 <TextView
                     android:id="@+id/activity_main_card_text"
                     android:gravity="center_vertical|start"
@@ -92,11 +107,12 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:lineSpacingMultiplier="1.3"
-                    android:text="hello, this is a text test aaaaaaaadac \n dawdasddddsadwaf fefwada wddwdafa awd"
-                    android:textSize="16sp"
+                    android:text="hello, this is a text test"
+                    android:textSize="14sp"
                     android:textColor="@color/secondary_text_default_material_light"
-                    android:layout_height="50sp"
+                    android:layout_height="25sp"
                     android:layout_width="match_parent" />
+                </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>
