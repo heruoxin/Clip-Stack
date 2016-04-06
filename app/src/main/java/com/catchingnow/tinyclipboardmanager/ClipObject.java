@@ -31,11 +31,11 @@ public class ClipObject {
         this.tags = new ArrayList<>();
     }
     public ClipObject(String text, Date date, boolean star) {
-        clipCount++;
+        clipCount++; /*Added by 401*/
         this.text = text;
         this.date = date;
         this.star = star;
-        this.label = "Clip #" + clipCount;
+        this.label = "Clip #" + clipCount; /*Added by 401*/
         this.comment = "Test Comment Star";
         this.tags = new ArrayList<>();
     }

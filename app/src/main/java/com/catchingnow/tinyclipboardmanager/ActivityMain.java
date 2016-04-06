@@ -960,6 +960,9 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vTime;
             protected TextView vDate;
             protected TextView vText;
+            //Added by 401
+            protected  TextView vLabel;
+            ///////////////////////////
             protected ImageButton vStarred;
             protected ImageButton vShare;
             protected LinearLayout vBackground;
@@ -973,6 +976,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
+                vLabel = (TextView) v.findViewById(R.id.activity_main_card_label);
                 vMain = v;
             }
         }
