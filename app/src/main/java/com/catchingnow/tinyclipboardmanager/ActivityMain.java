@@ -844,6 +844,9 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
+            /*Added by 401*/
+            clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             // Altered by MehrunesTenets
@@ -976,7 +979,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
-                vLabel = (TextView) v.findViewById(R.id.activity_main_card_label);
+                vLabel = (TextView) v.findViewById(R.id.activity_main_card_label); /*Added by 401*/
                 vMain = v;
             }
         }
