@@ -41,13 +41,22 @@ public class ClipObject {
     }
     //Added by 401
     public ClipObject(String text, Date date, boolean star, String comment, String label, ArrayList<String> tags ) {
-       clipCount++;
         this.text = text;
         this.date = date;
         this.star = star;
-        this.label = "Clip #" + clipCount;
+        this.label = label;
         this.comment = comment;
         this.tags = tags;
+    }
+    //////////////////////////////////////////////////////
+    //Added by 401
+    public ClipObject(String text, Date date, boolean star, String comment, String label) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        //this.tags = tags;
     }
     //////////////////////////////////////////////////////
 
