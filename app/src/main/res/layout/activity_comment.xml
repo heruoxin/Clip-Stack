@@ -32,6 +32,21 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ems="10"
+                    android:hint="Label"
+                    android:minLines="3"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="40dp"
+                    android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+                    android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
+                    android:id="@+id/edit_label"
+                    android:background="@null"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,22 +59,6 @@
                 android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
                 android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
                 android:id="@+id/edit_comment"
-                android:background="@null"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:hint="Label"
-                android:minLines="3"
-                android:paddingTop="20dp"
-                android:paddingBottom="40dp"
-                android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
-                android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
-                android:id="@+id/edit_label"
                 android:background="@null"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
