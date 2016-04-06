@@ -38,8 +38,8 @@ public class Storage {
     private boolean isClipsInMemoryChanged = true;
 
     //Added by 401
-    public final String CLIP_COMMENT = "comment";
-    public final String CLIP_LABEL = "label";
+    public static final String CLIP_COMMENT = "comment";
+    public static final String CLIP_LABEL = "label";
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     /////////////////
 
@@ -380,6 +380,10 @@ public class Storage {
         }
 
         open();
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
+
         if (!newComment.isEmpty() && !newLabel.isEmpty() && !newTags.isEmpty()) {
             addClipHistory(new ClipObject(
                     oldClip,
@@ -390,9 +394,7 @@ public class Storage {
                     newTags
             ));
         }
-        if (!oldClip.isEmpty()) {
-            deleteClipHistory(oldClip);
-        }
+
 
         close();
         latsUpdate = new Date();
@@ -481,6 +483,8 @@ public class Storage {
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_STRING + " TEXT, " +
                         CLIP_IS_STAR + " BOOLEAN" +
+                        CLIP_COMMENT + "COMMENT" +
+                        CLIP_LABEL + "LABEL" +
                         ");";
 
         public StorageHelper(Context context) {
