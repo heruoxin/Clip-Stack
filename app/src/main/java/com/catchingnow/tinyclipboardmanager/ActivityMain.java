@@ -845,7 +845,7 @@ public class ActivityMain extends MyActionBarActivity {
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
             /*Added by 401*/
-            clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            //clipCardViewHolder.vLabel.setText(clipObject.getLabel());
             ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
