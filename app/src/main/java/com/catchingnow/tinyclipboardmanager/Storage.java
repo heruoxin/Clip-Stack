@@ -100,6 +100,14 @@ public class Storage {
             if (clip.getText().contains(queryString)) {
                 queryClips.add(clip);
             }
+            //Added by 401
+            if (clip.getLabel().contains(queryString)) {
+                queryClips.add(clip);
+            }
+            if (clip.getComment().contains(queryString)) {
+                queryClips.add(clip);
+            }
+            ////////////////////////////////
         }
         return queryClips;
     }
@@ -119,7 +127,7 @@ public class Storage {
             open();
             String sortOrder = CLIP_DATE + " DESC";
             //Modified by 401
-            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR/*, CLIP_COMMENT, CLIP_LABEL*/};
+            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR, CLIP_COMMENT, CLIP_LABEL};
             Cursor c;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
@@ -130,8 +138,8 @@ public class Storage {
                                 c.getString(0),
                                 new Date(c.getLong(1)),
                                 c.getInt(2) > 0
-                               /*, c.getString(3), added by 401*/
-                              /*  c.getString(4) added by 401*/
+                               , c.getString(3), /*added by 401*/
+                                c.getString(4)/* added by 401*/
                         )
                 );
             }
@@ -257,8 +265,8 @@ public class Storage {
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
         values.put(CLIP_IS_STAR, clipObject.isStarred());
-       // values.put(CLIP_COMMENT, clipObject.getComment());
-       // values.put(CLIP_LABEL, clipObject.getLabel());
+        values.put(CLIP_COMMENT, clipObject.getComment());
+        values.put(CLIP_LABEL, clipObject.getLabel());
         long row_id = db.insert(TABLE_NAME, null, values);
         if (row_id == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
@@ -391,9 +399,9 @@ public class Storage {
                     oldClip,
                     new Date(),
                     isStarred
-                    /*,newComment,
+                    ,newComment,
                     newLabel,
-                    newTags*/
+                    newTags
             ));
         }
 
@@ -485,8 +493,8 @@ public class Storage {
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_STRING + " TEXT, " +
                         CLIP_IS_STAR + " BOOLEAN" +
-                       /* CLIP_COMMENT + "COMMENT" +
-                        CLIP_LABEL + "LABEL" +*/
+                        CLIP_COMMENT + "COMMENT" +
+                        CLIP_LABEL + "LABEL" +
                         ");";
 
         public StorageHelper(Context context) {
