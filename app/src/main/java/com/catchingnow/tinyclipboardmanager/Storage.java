@@ -40,14 +40,10 @@ public class Storage {
     //Added by 401
     public static final String CLIP_COMMENT = "comment";
     public static final String CLIP_LABEL = "label";
+    private static final String TABLE_NAME2 = "clipHistoryNew";
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
-    public static final String ADD_COLUMN_COMMENT = "ALTER TABLE " +
-                                                                TABLE_NAME +
-                                                                " ADD " +
-                                                                CLIP_COMMENT + " COMMENT";
-    public static final String ADD_COLUMN_LABEL = "ALTER TABLE " + TABLE_NAME + " ADD " +
-                                                                CLIP_LABEL + " LABEL";
+
     /////////////////
 
     private Storage(Context context) {
@@ -87,19 +83,7 @@ public class Storage {
         } else if (!db.isOpen()) {
             db = dbHelper.getWritableDatabase();
         }
-       /* if(!TABLE_CREATE_FLAG){
-            try {
-                db.execSQL(ADD_COLUMN_COMMENT);
-            }catch(Exception RuntimeException){
 
-            }
-            try {
-                db.execSQL(ADD_COLUMN_LABEL);
-            }catch(Exception RuntimeException){
-
-            }
-            TABLE_CREATE_FLAG = true;
-        }*/
     }
 
     private void close() {
@@ -147,19 +131,22 @@ public class Storage {
             open();
             String sortOrder = CLIP_DATE + " DESC";
             //Modified by 401
-            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR/*, CLIP_COMMENT, CLIP_LABEL*/};
-            Cursor c;
+            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
+              String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL};
+            Cursor c, c2;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+              c2 = db.query(TABLE_NAME2, COLUMNS2, null, null, null, null, sortOrder);
+              int temp = c2.getCount();
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<>();
-            while (c.moveToNext()) {
+            while (c.moveToNext() && c2.moveToNext()) {
                 clipsInMemory.add(
                         new ClipObject(
                                 c.getString(0),
                                 new Date(c.getLong(1)),
                                 c.getInt(2) > 0
-                               //, c.getString(3), /*added by 401*/
-                              //  c.getString(4)  /* added by 401*/
+                               ,c2.getString(1), /*added by 401*/
+                               c2.getString(2)  /* added by 401*/
                         )
                 );
             }
@@ -282,13 +269,18 @@ public class Storage {
         deleteClipHistory(clipObject.getText());
         long timeStamp = clipObject.getDate().getTime();
         ContentValues values = new ContentValues();
+        ContentValues values2 = new ContentValues();
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
         values.put(CLIP_IS_STAR, clipObject.isStarred());
-      //  values.put(CLIP_COMMENT, clipObject.getComment());
-      //  values.put(CLIP_LABEL, clipObject.getLabel());
+
+        values2.put(CLIP_DATE, timeStamp);
+        values2.put(CLIP_COMMENT, clipObject.getComment());
+        values2.put(CLIP_LABEL, clipObject.getLabel());
+
         long row_id = db.insert(TABLE_NAME, null, values);
-        if (row_id == -1) {
+        long row_id2 = db.insert(TABLE_NAME2, null, values2);
+        if (row_id == -1 || row_id2 == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
         }
@@ -513,8 +505,12 @@ public class Storage {
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_STRING + " TEXT, " +
                         CLIP_IS_STAR + " BOOLEAN" +
-                        /*CLIP_COMMENT + " COMMENT" +
-                        CLIP_LABEL + " LABEL" +*/
+                        ");";
+        private static final String TABLE_CREATE2 =
+                "CREATE TABLE " + TABLE_NAME2 + " (" +
+                        CLIP_DATE + " TIMESTAMP, " +
+                        CLIP_COMMENT + " COMMENT, " +
+                        CLIP_LABEL + " LABEL" +
                         ");";
 
         public StorageHelper(Context context) {
@@ -524,6 +520,7 @@ public class Storage {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(TABLE_CREATE);
+            db.execSQL(TABLE_CREATE2);
         }
 
         @Override
