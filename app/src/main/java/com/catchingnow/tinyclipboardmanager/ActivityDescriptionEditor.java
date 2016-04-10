@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by mehrunestenets on 2016-03-22.
+ * Created by 401 on 2016-03-22.
  */
 public class ActivityDescriptionEditor extends MyActionBarActivity {
 
@@ -40,14 +40,12 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
 
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        oldComment = intent.getStringExtra(Intent.EXTRA_TEXT);
+        /*oldComment = intent.getStringExtra(Intent.EXTRA_TEXT);
         oldLabel = intent.getStringExtra(Intent.EXTRA_TEXT);
-        oldTag = intent.getStringExtra(Intent.EXTRA_TEXT);
+        oldTag = intent.getStringExtra(Intent.EXTRA_TEXT);*/
         isStarred = intent.getBooleanExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false);
 
-        if (oldComment == null || oldComment.equals(getString(R.string.clip_notification_single_text))) {
-            oldComment = "";
-        }
+
 
         editComment = (EditText) findViewById(R.id.edit_comment);
         editLabel = (EditText) findViewById(R.id.edit_label);
@@ -56,7 +54,12 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         db = Storage.getInstance(this);
         //oldComment = db.get
         oldLabel = db.getLabel(oldText);
+        oldComment = db.getComment(oldText);
+        oldTag = db.getTags(oldText);
 
+        if (oldComment == null || oldComment.equals(getString(R.string.clip_notification_single_text))) {
+            oldComment = "Insert Comment Here";
+        }
         editComment.setText(oldComment);
         editLabel.setText(oldLabel);
         editTags.setText(oldTag);

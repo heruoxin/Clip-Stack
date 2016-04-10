@@ -184,9 +184,9 @@ public class ActivityMain extends MyActionBarActivity {
             mFabBackground.resetTransition();
             if (tmpStarred) mFabBackground.startTransition(10);
             mFAB.setImageResource(tmpStarred ?
-                            R.drawable.ic_action_star_white
-                            :
-                            R.drawable.ic_action_add
+                    R.drawable.ic_action_star_white
+                    :
+                    R.drawable.ic_action_add
             );
             lastStorageUpdate = null;
         }
@@ -515,9 +515,9 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.setImageResource(isStarred ?
-                                R.drawable.ic_action_star_white
-                                :
-                                R.drawable.ic_action_add
+                        R.drawable.ic_action_star_white
+                        :
+                        R.drawable.ic_action_add
                 );
             }
         }, TRANSLATION_SLOW / 3 * 2);
@@ -599,6 +599,8 @@ public class ActivityMain extends MyActionBarActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
 
+
+        // TODO alter this to use the new constructor
         SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
                         context,
@@ -620,7 +622,7 @@ public class ActivityMain extends MyActionBarActivity {
                             }
 
 
-                        });
+                        }); // TODO add argument here for clip text -> Check ClipObjectActionBridge
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
         if (getString(R.string.screen_type).contains("phone")) {
             // hide FAB when list scroll on phone
@@ -850,14 +852,14 @@ public class ActivityMain extends MyActionBarActivity {
 
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
-            final ClipObject clipObject = clipObjectList.get(i);
+            final ClipObject clipObject = clipObjectList.get(i);  // 401 -- This is how the clip object is accessed in his usage
             /*Added by 401*/
             clipCardViewHolder.vLabel.setText(clipObject.getLabel());
             clipText = clipObject.getText();
             ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
-            // Altered by MehrunesTenets
+            // Altered by 401
             // This is where the clip object displays its text to the GUI on the main screen
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
             if (clipObject.isStarred()) {

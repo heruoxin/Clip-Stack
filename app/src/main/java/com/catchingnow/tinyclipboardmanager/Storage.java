@@ -142,16 +142,16 @@ public class Storage {
     }
 
     public List<ClipObject> getClipHistory() {
-          if (isClipsInMemoryChanged) {
+        if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
             //Modified by 401
             String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
-              String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL};
+            String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL};
             Cursor c, c2;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
-              c2 = db.query(TABLE_NAME2, COLUMNS2, null, null, null, null, sortOrder);
-              int temp = c2.getCount();
+            c2 = db.query(TABLE_NAME2, COLUMNS2, null, null, null, null, sortOrder);
+            int temp = c2.getCount();
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<>();
             while (c.moveToNext() && c2.moveToNext()) {
@@ -160,8 +160,8 @@ public class Storage {
                                 c.getString(0),
                                 new Date(c.getLong(1)),
                                 c.getInt(2) > 0
-                               ,c2.getString(1), /*added by 401*/
-                               c2.getString(2)  /* added by 401*/
+                                ,c2.getString(1), /*added by 401*/
+                                c2.getString(2)  /* added by 401*/
                         )
                 );
             }
@@ -511,6 +511,16 @@ public class Storage {
 
     public Date getLatsUpdateDate() {
         return latsUpdate;
+    }
+
+    public String getTags(String oldText) {
+        // TODO implement this method
+        return "";
+    }
+
+    public String getComment(String oldText) {
+        // TODO implement this method
+        return "";
     }
 
     public class StorageHelper extends SQLiteOpenHelper {
