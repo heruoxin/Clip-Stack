@@ -61,7 +61,7 @@ public class Storage {
             }
         }
         if (foundClips.size() > 0) {
-            Label = foundClips.get(0).getComment();
+            Label = foundClips.get(0).getLabel();
         }
         if (Label == null)   {
             throw new ClipDoesNotExistException(clipContents);

@@ -861,7 +861,7 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             // Altered by 401
             // This is where the clip object displays its text to the GUI on the main screen
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
