@@ -44,6 +44,12 @@ public class Storage {
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
 
+    /**
+     * getLabel returns the current Label for ClipObject with contents clipContents from the database
+     * @param clipContents the contents of the ClipObject being searched for
+     * @return the current Label from the clipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist in database
+     */
     public String getLabel(String clipContents) throws ClipDoesNotExistException {
         String Label = "";
         List<ClipObject> allClips = getClipHistory();
@@ -518,6 +524,12 @@ public class Storage {
         return latsUpdate;
     }
 
+    /**
+     * getTags returns the current tags for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return Tags for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
     public ArrayList<String> getTags(String clipContents) throws ClipDoesNotExistException {
         ArrayList<String> tags = null;
         List<ClipObject> allClips = getClipHistory();
@@ -542,6 +554,12 @@ public class Storage {
         return tags;
     }
 
+    /**
+     * getTags returns the current comment for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return comment for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
     public String getComment(String clipContents) throws ClipDoesNotExistException {
         String comment = null;
         List<ClipObject> allClips = getClipHistory();
