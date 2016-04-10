@@ -53,9 +53,14 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         db = Storage.getInstance(this);
         //oldComment = db.get
-        oldLabel = db.getLabel(oldText);
-        oldComment = db.getComment(oldText);
-        oldTag = db.getTags(oldText);
+        try {
+            oldLabel = db.getLabel(oldText);
+            oldComment = db.getComment(oldText); // TODO document these methods
+            oldTag = db.getTags(oldText).toString();
+        } catch (ClipDoesNotExistException e) {
+            e.printStackTrace();
+            System.exit(-1); // Crash the application with an exception
+        }
 
         if (oldComment == null || oldComment.equals(getString(R.string.clip_notification_single_text))) {
             oldComment = "Insert Comment Here";

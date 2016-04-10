@@ -53,6 +53,7 @@ public class ClipObject {
         this.star = star;
         this.label = label;
         this.comment = comment;
+        this.tags = new ArrayList<>();
         //this.tags = tags;
     }
     //////////////////////////////////////////////////////
