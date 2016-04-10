@@ -40,6 +40,7 @@ public class Storage {
     //Added by 401
     public static final String CLIP_COMMENT = "comment";
     public static final String CLIP_LABEL = "label";
+    public static final String TAGS_INIT = "tags";
     private static final String TABLE_NAME2 = "clipHistoryNew";
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
@@ -409,7 +410,7 @@ public class Storage {
     }
 
     public void modifyClipTagsCommentLabel(String oldClip, String newComment, String newLabel, ArrayList<String> newTags, int isImportant)    {
-        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " +newTags + ", "+ isImportant + ")");
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " + newTags + ", "+ isImportant + ")");
         if (oldClip == null) {
             oldClip = "";
         }
@@ -598,7 +599,8 @@ public class Storage {
                 "CREATE TABLE " + TABLE_NAME2 + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_COMMENT + " COMMENT, " +
-                        CLIP_LABEL + " LABEL" +
+                        TAGS_INIT + " LABEL, " +
+                        CLIP_LABEL + " TAGS" +
                         ");";
 
         public StorageHelper(Context context) {
