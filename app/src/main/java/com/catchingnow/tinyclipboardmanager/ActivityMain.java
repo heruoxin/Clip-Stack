@@ -870,12 +870,13 @@ public class ActivityMain extends MyActionBarActivity {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
             }
 
+            // 401 - changed this to open descriptionEditor on long click
             if (clickToCopy) {
-                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
                 addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             } else {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
-                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
+                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
 
             }
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);

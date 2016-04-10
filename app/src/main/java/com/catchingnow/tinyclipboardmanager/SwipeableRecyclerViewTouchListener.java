@@ -277,28 +277,14 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 boolean dismiss = false;
                 boolean dismissRight = false;
                 if (Math.abs(mFinalDelta) > mViewWidth / 2 && mSwiping) {
-                    // Add if statement to run our own code - 401
-                    if (mFinalDelta > 0)    {
-                        Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT)
-                                //.putExtra(Intent.EXTRA_TEXT, clipText); // TODO change back to this after - remove bottom line
-                                .putExtra(Intent.EXTRA_TEXT, "Swipe to delete");
-                        context.startService(openIntent);
-                    } else {
-                        dismiss = true;
-                        dismissRight = mFinalDelta > 0;
-                    }
+                    dismiss = true;
+                    dismissRight = mFinalDelta > 0;
                 } else if (mMinFlingVelocity <= absVelocityX && absVelocityX <= mMaxFlingVelocity
                         && absVelocityY < absVelocityX && mSwiping) {
                     // dismiss only if flinging in the same direction as dragging
-                    if (mFinalDelta > 0)    {
-                        Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT);
-                        context.startService(openIntent);
-                    } else {
-                        dismiss = (velocityX < 0) == (mFinalDelta < 0);
-                        dismissRight = mVelocityTracker.getXVelocity() > 0;
-                    }
+
+                    dismiss = (velocityX < 0) == (mFinalDelta < 0);
+                    dismissRight = mVelocityTracker.getXVelocity() > 0;
                 }
                 if (
                         dismiss &&

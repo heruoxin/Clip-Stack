@@ -44,17 +44,28 @@ public class Storage {
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
 
-    public String getLabel(String query){
+    /**
+     * getLabel returns the current Label for ClipObject with contents clipContents from the database
+     * @param clipContents the contents of the ClipObject being searched for
+     * @return the current Label from the clipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist in database
+     */
+    public String getLabel(String clipContents) throws ClipDoesNotExistException {
         String Label = "";
         List<ClipObject> allClips = getClipHistory();
         List<ClipObject> foundClips = new ArrayList<ClipObject>();
 
         for (ClipObject clip : allClips) {
-            if (clip.getText().contains(query)) {
+            if (clip.getText().contains(clipContents)) {
                 foundClips.add(clip);
             }
         }
-        Label = foundClips.get(0).getLabel();
+        if (foundClips.size() > 0) {
+            Label = foundClips.get(0).getComment();
+        }
+        if (Label == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
 
         return Label;
     }
@@ -513,14 +524,64 @@ public class Storage {
         return latsUpdate;
     }
 
-    public String getTags(String oldText) {
-        // TODO implement this method
-        return "";
+    /**
+     * getTags returns the current tags for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return Tags for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
+    public ArrayList<String> getTags(String clipContents) throws ClipDoesNotExistException {
+        ArrayList<String> tags = null;
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(clipContents)) {
+                foundClips.add(clip);
+            }
+        }
+
+        // TODO remove this comment
+        // This does not handle duplicates, in the event that it is possible to have twon
+        // objects with the same text
+
+        if (foundClips.size() > 0) {
+            tags = foundClips.get(0).getTags();
+        }
+        if (tags == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
+        return tags;
     }
 
-    public String getComment(String oldText) {
-        // TODO implement this method
-        return "";
+    /**
+     * getTags returns the current comment for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return comment for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
+    public String getComment(String clipContents) throws ClipDoesNotExistException {
+        String comment = null;
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(clipContents)) {
+                foundClips.add(clip);
+            }
+        }
+
+        // TODO remove this comment
+        // This does not handle duplicates, in the event that it is possible to have two
+        // objects with the same text
+
+        if (foundClips.size() > 0) {
+            comment = foundClips.get(0).getComment();
+        }
+        if (comment == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
+        return comment;
     }
 
     public class StorageHelper extends SQLiteOpenHelper {
