@@ -872,13 +872,17 @@ public class ActivityMain extends MyActionBarActivity {
 
             // 401 - changed this to open descriptionEditor on long click
             if (clickToCopy) {
-                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
+                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
                 addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             } else {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
-                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
-
+                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
             }
+
+            ////////////// 401 adding new longclick to the new clipObject ///////////
+            addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vLabel);
+            /////////////////////////////////////////////////////////////////////////
+
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             setActionIcon(clipCardViewHolder.vShare);
