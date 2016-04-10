@@ -80,7 +80,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         String newLabel = editLabel.getText().toString();
         String newTag = editTags.getText().toString();
 
-        ArrayList<String> newTagArray = new ArrayList<String>(Arrays.asList(newTag.split(", ")));
+        ArrayList<String> newTagArray = new ArrayList<>(Arrays.asList(newTag.split(", ")));
 
         String toastMessage = "Temporary Toast";
 
