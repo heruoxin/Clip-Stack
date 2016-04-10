@@ -44,6 +44,21 @@ public class Storage {
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
 
+    public String getLabel(String query){
+        String Label = "";
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<ClipObject>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(query)) {
+                foundClips.add(clip);
+            }
+        }
+        Label = foundClips.get(0).getLabel();
+
+        return Label;
+    }
+
     /////////////////
 
     private Storage(Context context) {
@@ -270,6 +285,7 @@ public class Storage {
         long timeStamp = clipObject.getDate().getTime();
         ContentValues values = new ContentValues();
         ContentValues values2 = new ContentValues();
+
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
         values.put(CLIP_IS_STAR, clipObject.isStarred());
@@ -280,6 +296,7 @@ public class Storage {
 
         long row_id = db.insert(TABLE_NAME, null, values);
         long row_id2 = db.insert(TABLE_NAME2, null, values2);
+
         if (row_id == -1 || row_id2 == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
@@ -410,8 +427,8 @@ public class Storage {
             addClipHistory(new ClipObject(
                     oldClip,
                     new Date(),
-                    isStarred
-                    ,newComment,
+                    isStarred,
+                    newComment,
                     newLabel,
                     newTags
             ));

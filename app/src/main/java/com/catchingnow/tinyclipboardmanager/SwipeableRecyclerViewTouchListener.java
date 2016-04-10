@@ -100,6 +100,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
 
     // Added by MehrunesTenets
     Context context;
+    String clipText;
 
     /**
      * Constructs a new swipe touch listener for the given {@link android.support.v7.widget.RecyclerView}
@@ -140,6 +141,46 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             }
         });
     }
+
+    /*Added by 401*/
+    public SwipeableRecyclerViewTouchListener(
+            Context context,
+            RecyclerView recyclerView,
+            int fgID,
+            int BgID,
+            SwipeListener listener,
+            String clipText) {
+        mFgID = fgID;
+        mBgID = BgID;
+        ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
+        mSlop = vc.getScaledTouchSlop();
+        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
+        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
+        mRecyclerView = recyclerView;
+        mSwipeListener = listener;
+        this.context = context;
+        this.clipText = clipText;
+
+
+        /**
+         * This will ensure that this SwipeableRecyclerViewTouchListener is paused during list view scrolling.
+         * If a scroll listener is already assigned, the caller should still pass scroll changes through
+         * to this listener.
+         */
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                setEnabled(newState != RecyclerView.SCROLL_STATE_DRAGGING);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            }
+        });
+    }
+
+
+    /////////////////////////
 
     /**
      * Enables or disables (pauses or resumes) watching for swipe-to-dismiss gestures.
@@ -239,7 +280,8 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                     // Add if statement to run our own code - mehrunestenets
                     if (mFinalDelta > 0)    {
                         Intent openIntent = new Intent(context, ClipObjectActionBridge.class)
-                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT);
+                                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_COMMENT)
+                                .putExtra(Intent.EXTRA_TEXT, clipText);
                         context.startService(openIntent);
                     } else {
                         dismiss = true;

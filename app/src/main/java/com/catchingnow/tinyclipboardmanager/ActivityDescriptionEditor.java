@@ -1,8 +1,12 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,6 +30,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
     private ImageButton mFAB;
     private Storage db;
     private boolean isStarred;
+    private static boolean flag =false;
 
 
     @Override
@@ -49,6 +54,8 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         editTags = (EditText) findViewById(R.id.edit_tags);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
         db = Storage.getInstance(this);
+        //oldComment = db.get
+        oldLabel = db.getLabel(oldText);
 
         editComment.setText(oldComment);
         editLabel.setText(oldLabel);
@@ -68,10 +75,6 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         ArrayList<String> newTagArray = new ArrayList<String>(Arrays.asList(newTag.split(" , ")));
 
         String toastMessage = "Temporary Toast";
-
-        editTags.setText(newTag);
-        editLabel.setText(newLabel);
-        editComment.setText(newComment);
 
         db.modifyClipTagsCommentLabel(oldText, newComment, newLabel, newTagArray, (isStarred ? 1 : -1));
 

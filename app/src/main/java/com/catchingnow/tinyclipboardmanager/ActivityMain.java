@@ -78,6 +78,12 @@ public class ActivityMain extends MyActionBarActivity {
 
     private int tooYoungTooSimple = 0;
 
+    //401
+    public String clipText;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
@@ -613,6 +619,7 @@ public class ActivityMain extends MyActionBarActivity {
                                 clearDeleteQueue();
                             }
 
+
                         });
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
         if (getString(R.string.screen_type).contains("phone")) {
@@ -845,7 +852,8 @@ public class ActivityMain extends MyActionBarActivity {
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
             /*Added by 401*/
-            //clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            clipText = clipObject.getText();
             ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
