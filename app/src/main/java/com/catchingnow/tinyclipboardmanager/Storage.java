@@ -294,6 +294,24 @@ public class Storage {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
+        String sortOrder = CLIP_DATE + " DESC";
+        String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
+        Cursor c1 = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+        String time_stamp = null;
+        while (c1.moveToNext()) {
+            if (c1.getString(0).equals(query))  {
+                time_stamp = c1.getString(1);
+                break;
+            }
+        }
+
+        if (time_stamp == null)
+            return true;
+        int row_id_401 = db.delete(TABLE_NAME2, CLIP_DATE + "=" + time_stamp, null);
+        if (row_id_401 == -1) {
+            Log.e("Storage", "write db error: deleteClipHistory " + query);
+            return false;
+        }
         return true;
     }
 
