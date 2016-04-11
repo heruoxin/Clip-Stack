@@ -56,7 +56,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         try {
             oldLabel = db.getLabel(oldText);
             oldComment = db.getComment(oldText);
-            oldTag = db.getTags(oldText).toString();
+            oldTag = db.getTags(oldText).toString().replace("[", "").replace("]", "");
         } catch (ClipDoesNotExistException e) {
             e.printStackTrace();
             System.exit(-1); // Crash the application with an exception

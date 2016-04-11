@@ -179,6 +179,7 @@ public class Storage {
                 );
             }
             c.close();
+            c2.close();
             close();
             isClipsInMemoryChanged = false;
         }
