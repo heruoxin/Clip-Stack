@@ -138,6 +138,11 @@ public class Storage {
             if (clip.getComment().contains(queryString)) {
                 queryClips.add(clip);
             }
+            for(String tag : clip.getTags()) {
+                if (tag.contains(queryString)) {
+                    queryClips.add(clip);
+                }
+            }
             ////////////////////////////////
         }
         return queryClips;
@@ -214,6 +219,18 @@ public class Storage {
         for (ClipObject clipObject : allStarredClips) {
             if (clipObject.getText().contains(queryString)) {
                 queryClips.add(clipObject);
+            }
+            //Added by 401
+            if (clipObject.getLabel().contains(queryString)) {
+                queryClips.add(clipObject);
+            }
+            if (clipObject.getComment().contains(queryString)) {
+                queryClips.add(clipObject);
+            }
+            for(String tag : clipObject.getTags()) {
+                if (tag.contains(queryString)) {
+                    queryClips.add(clipObject);
+                }
             }
         }
         return queryClips;
