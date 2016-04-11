@@ -56,7 +56,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         try {
             oldLabel = db.getLabel(oldText);
             oldComment = db.getComment(oldText);
-            oldTag = db.getTags(oldText).toString();
+            oldTag = db.getTags(oldText).toString().replace("[", "").replace("]", "");
         } catch (ClipDoesNotExistException e) {
             e.printStackTrace();
             System.exit(-1); // Crash the application with an exception
@@ -80,7 +80,7 @@ public class ActivityDescriptionEditor extends MyActionBarActivity {
         String newLabel = editLabel.getText().toString();
         String newTag = editTags.getText().toString();
 
-        ArrayList<String> newTagArray = new ArrayList<String>(Arrays.asList(newTag.split(" , ")));
+        ArrayList<String> newTagArray = new ArrayList<>(Arrays.asList(newTag.split(", ")));
 
         String toastMessage = "Temporary Toast";
 
