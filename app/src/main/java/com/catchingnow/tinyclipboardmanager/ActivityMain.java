@@ -861,7 +861,7 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             // Altered by 401
             // This is where the clip object displays its text to the GUI on the main screen
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
@@ -872,13 +872,17 @@ public class ActivityMain extends MyActionBarActivity {
 
             // 401 - changed this to open descriptionEditor on long click
             if (clickToCopy) {
-                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
+                addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
                 addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             } else {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
-                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vText);
-
+                addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
             }
+
+            ////////////// 401 adding new longclick to the new clipObject ///////////
+            addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vLabel);
+            /////////////////////////////////////////////////////////////////////////
+
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             setActionIcon(clipCardViewHolder.vShare);

@@ -1,6 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -46,6 +47,19 @@ public class ClipObject {
         this.tags = tags;
     }
     //////////////////////////////////////////////////////
+    //Added by 401
+    public ClipObject(String text, Date date, boolean star, String comment, String label, String tags ) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        if (tags != null) {
+            this.tags = new ArrayList<>(Arrays.asList(tags.split(", ")));
+        } else  {
+            this.tags = new ArrayList<>();
+        }
+    }
     //Added by 401
     public ClipObject(String text, Date date, boolean star, String comment, String label) {
         this.text = text;

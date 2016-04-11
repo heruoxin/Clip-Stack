@@ -40,6 +40,7 @@ public class Storage {
     //Added by 401
     public static final String CLIP_COMMENT = "comment";
     public static final String CLIP_LABEL = "label";
+    public static final String TAG_COLUMN = "tags";
     private static final String TABLE_NAME2 = "clipHistoryNew";
     public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
     public static boolean TABLE_CREATE_FLAG =false;
@@ -61,7 +62,7 @@ public class Storage {
             }
         }
         if (foundClips.size() > 0) {
-            Label = foundClips.get(0).getComment();
+            Label = foundClips.get(0).getLabel();
         }
         if (Label == null)   {
             throw new ClipDoesNotExistException(clipContents);
@@ -158,7 +159,7 @@ public class Storage {
             String sortOrder = CLIP_DATE + " DESC";
             //Modified by 401
             String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
-            String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL};
+            String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL, TAG_COLUMN};
             Cursor c, c2;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             c2 = db.query(TABLE_NAME2, COLUMNS2, null, null, null, null, sortOrder);
@@ -172,11 +173,13 @@ public class Storage {
                                 new Date(c.getLong(1)),
                                 c.getInt(2) > 0
                                 ,c2.getString(1), /*added by 401*/
-                                c2.getString(2)  /* added by 401*/
+                                c2.getString(2),  /* added by 401*/
+                                c2.getString(3)   /* added by 401*/
                         )
                 );
             }
             c.close();
+            c2.close();
             close();
             isClipsInMemoryChanged = false;
         }
@@ -305,6 +308,19 @@ public class Storage {
         values2.put(CLIP_COMMENT, clipObject.getComment());
         values2.put(CLIP_LABEL, clipObject.getLabel());
 
+        // Adding tags - 401
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < clipObject.getTags().size(); i++)    {
+            builder.append(clipObject.getTags().get(i));
+            if (i != clipObject.getTags().size() - 1)   {
+                builder.append(", ");
+            }
+        }
+        values2.put(TAG_COLUMN, builder.toString());
+
+        ////////////////////////////
+
         long row_id = db.insert(TABLE_NAME, null, values);
         long row_id2 = db.insert(TABLE_NAME2, null, values2);
 
@@ -409,7 +425,7 @@ public class Storage {
     }
 
     public void modifyClipTagsCommentLabel(String oldClip, String newComment, String newLabel, ArrayList<String> newTags, int isImportant)    {
-        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " +newTags + ", "+ isImportant + ")");
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " + newTags + ", "+ isImportant + ")");
         if (oldClip == null) {
             oldClip = "";
         }
@@ -598,7 +614,8 @@ public class Storage {
                 "CREATE TABLE " + TABLE_NAME2 + " (" +
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_COMMENT + " COMMENT, " +
-                        CLIP_LABEL + " LABEL" +
+                        TAG_COLUMN + " LABEL, " +
+                        CLIP_LABEL + " TAGS" +
                         ");";
 
         public StorageHelper(Context context) {
