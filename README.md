@@ -1,6 +1,10 @@
 # Clip-Stack
 
+###Deprecated
 
+This project is deprecated because of personal reason. 
+
+这个项目由于一些私人原因已经停止更新。
 
 ### A tiny clipboard history manager app.
 
