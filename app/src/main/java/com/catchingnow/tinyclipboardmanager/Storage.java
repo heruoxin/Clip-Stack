@@ -37,6 +37,42 @@ public class Storage {
     private Date latsUpdate = new Date();
     private boolean isClipsInMemoryChanged = true;
 
+    //Added by 401
+    public static final String CLIP_COMMENT = "comment";
+    public static final String CLIP_LABEL = "label";
+    public static final String TAG_COLUMN = "tags";
+    private static final String TABLE_NAME2 = "clipHistoryNew";
+    public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
+    public static boolean TABLE_CREATE_FLAG =false;
+
+    /**
+     * getLabel returns the current Label for ClipObject with contents clipContents from the database
+     * @param clipContents the contents of the ClipObject being searched for
+     * @return the current Label from the clipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist in database
+     */
+    public String getLabel(String clipContents) throws ClipDoesNotExistException {
+        String Label = "";
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<ClipObject>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(clipContents)) {
+                foundClips.add(clip);
+            }
+        }
+        if (foundClips.size() > 0) {
+            Label = foundClips.get(0).getLabel();
+        }
+        if (Label == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
+
+        return Label;
+    }
+
+    /////////////////
+
     private Storage(Context context) {
         this.context = context;
         this.clipboardManager = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -74,6 +110,7 @@ public class Storage {
         } else if (!db.isOpen()) {
             db = dbHelper.getWritableDatabase();
         }
+
     }
 
     private void close() {
@@ -94,6 +131,19 @@ public class Storage {
             if (clip.getText().contains(queryString)) {
                 queryClips.add(clip);
             }
+            //Added by 401
+            if (clip.getLabel().contains(queryString)) {
+                queryClips.add(clip);
+            }
+            if (clip.getComment().contains(queryString)) {
+                queryClips.add(clip);
+            }
+            for(String tag : clip.getTags()) {
+                if (tag.contains(queryString)) {
+                    queryClips.add(clip);
+                }
+            }
+            ////////////////////////////////
         }
         return queryClips;
     }
@@ -112,21 +162,29 @@ public class Storage {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
+            //Modified by 401
             String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
-            Cursor c;
+            String[] COLUMNS2 = {CLIP_DATE, CLIP_COMMENT, CLIP_LABEL, TAG_COLUMN};
+            Cursor c, c2;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+            c2 = db.query(TABLE_NAME2, COLUMNS2, null, null, null, null, sortOrder);
+            int temp = c2.getCount();
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             clipsInMemory = new ArrayList<>();
-            while (c.moveToNext()) {
+            while (c.moveToNext() && c2.moveToNext()) {
                 clipsInMemory.add(
                         new ClipObject(
                                 c.getString(0),
                                 new Date(c.getLong(1)),
                                 c.getInt(2) > 0
+                                ,c2.getString(1), /*added by 401*/
+                                c2.getString(2),  /* added by 401*/
+                                c2.getString(3)   /* added by 401*/
                         )
                 );
             }
             c.close();
+            c2.close();
             close();
             isClipsInMemoryChanged = false;
         }
@@ -161,6 +219,18 @@ public class Storage {
         for (ClipObject clipObject : allStarredClips) {
             if (clipObject.getText().contains(queryString)) {
                 queryClips.add(clipObject);
+            }
+            //Added by 401
+            if (clipObject.getLabel().contains(queryString)) {
+                queryClips.add(clipObject);
+            }
+            if (clipObject.getComment().contains(queryString)) {
+                queryClips.add(clipObject);
+            }
+            for(String tag : clipObject.getTags()) {
+                if (tag.contains(queryString)) {
+                    queryClips.add(clipObject);
+                }
             }
         }
         return queryClips;
@@ -224,6 +294,24 @@ public class Storage {
             Log.e("Storage", "write db error: deleteClipHistory " + query);
             return false;
         }
+        String sortOrder = CLIP_DATE + " DESC";
+        String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
+        Cursor c1 = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
+        String time_stamp = null;
+        while (c1.moveToNext()) {
+            if (c1.getString(0).equals(query))  {
+                time_stamp = c1.getString(1);
+                break;
+            }
+        }
+
+        if (time_stamp == null)
+            return true;
+        int row_id_401 = db.delete(TABLE_NAME2, CLIP_DATE + "=" + time_stamp, null);
+        if (row_id_401 == -1) {
+            Log.e("Storage", "write db error: deleteClipHistory " + query);
+            return false;
+        }
         return true;
     }
 
@@ -245,11 +333,33 @@ public class Storage {
         deleteClipHistory(clipObject.getText());
         long timeStamp = clipObject.getDate().getTime();
         ContentValues values = new ContentValues();
+        ContentValues values2 = new ContentValues();
+
         values.put(CLIP_DATE, timeStamp);
         values.put(CLIP_STRING, clipObject.getText());
         values.put(CLIP_IS_STAR, clipObject.isStarred());
+
+        values2.put(CLIP_DATE, timeStamp);
+        values2.put(CLIP_COMMENT, clipObject.getComment());
+        values2.put(CLIP_LABEL, clipObject.getLabel());
+
+        // Adding tags - 401
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < clipObject.getTags().size(); i++)    {
+            builder.append(clipObject.getTags().get(i));
+            if (i != clipObject.getTags().size() - 1)   {
+                builder.append(", ");
+            }
+        }
+        values2.put(TAG_COLUMN, builder.toString());
+
+        ////////////////////////////
+
         long row_id = db.insert(TABLE_NAME, null, values);
-        if (row_id == -1) {
+        long row_id2 = db.insert(TABLE_NAME2, null, values2);
+
+        if (row_id == -1 || row_id2 == -1) {
             Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
         }
@@ -349,6 +459,52 @@ public class Storage {
 
     }
 
+    public void modifyClipTagsCommentLabel(String oldClip, String newComment, String newLabel, ArrayList<String> newTags, int isImportant)    {
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " + newTags + ", "+ isImportant + ")");
+        if (oldClip == null) {
+            oldClip = "";
+        }
+        if (newComment == null) {
+            newComment = "";
+        }
+        if (newLabel == null) {
+            newLabel = "";
+        }
+
+        boolean isStarred = isClipObjectStarred(oldClip);
+
+        if (isImportant == 1) {
+            isStarred = true;
+        }
+        if (isImportant == -1) {
+            isStarred = false;
+        }
+
+        open();
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
+
+        if (!newComment.isEmpty() && !newLabel.isEmpty() && !newTags.isEmpty()) {
+            addClipHistory(new ClipObject(
+                    oldClip,
+                    new Date(),
+                    isStarred,
+                    newComment,
+                    newLabel,
+                    newTags
+            ));
+        }
+
+
+        close();
+        latsUpdate = new Date();
+        isClipsInMemoryChanged = true;
+
+        refreshAllTypeOfList((!newComment.isEmpty() || !newLabel.isEmpty() || !newTags.isEmpty()), oldClip);
+
+    }
+
     public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.
@@ -419,6 +575,66 @@ public class Storage {
         return latsUpdate;
     }
 
+    /**
+     * getTags returns the current tags for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return Tags for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
+    public ArrayList<String> getTags(String clipContents) throws ClipDoesNotExistException {
+        ArrayList<String> tags = null;
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(clipContents)) {
+                foundClips.add(clip);
+            }
+        }
+
+        // TODO remove this comment
+        // This does not handle duplicates, in the event that it is possible to have twon
+        // objects with the same text
+
+        if (foundClips.size() > 0) {
+            tags = foundClips.get(0).getTags();
+        }
+        if (tags == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
+        return tags;
+    }
+
+    /**
+     * getTags returns the current comment for the ClipObject with contents clipContents
+     * @param clipContents text held by desired ClipObject
+     * @return comment for desired ClipObject
+     * @throws ClipDoesNotExistException if ClipObject does not exist
+     */
+    public String getComment(String clipContents) throws ClipDoesNotExistException {
+        String comment = null;
+        List<ClipObject> allClips = getClipHistory();
+        List<ClipObject> foundClips = new ArrayList<>();
+
+        for (ClipObject clip : allClips) {
+            if (clip.getText().contains(clipContents)) {
+                foundClips.add(clip);
+            }
+        }
+
+        // TODO remove this comment
+        // This does not handle duplicates, in the event that it is possible to have two
+        // objects with the same text
+
+        if (foundClips.size() > 0) {
+            comment = foundClips.get(0).getComment();
+        }
+        if (comment == null)   {
+            throw new ClipDoesNotExistException(clipContents);
+        }
+        return comment;
+    }
+
     public class StorageHelper extends SQLiteOpenHelper {
         public static final String DATABASE_NAME = "clippingnow.db";
         private static final int DATABASE_VERSION = 3;
@@ -429,6 +645,13 @@ public class Storage {
                         CLIP_STRING + " TEXT, " +
                         CLIP_IS_STAR + " BOOLEAN" +
                         ");";
+        private static final String TABLE_CREATE2 =
+                "CREATE TABLE " + TABLE_NAME2 + " (" +
+                        CLIP_DATE + " TIMESTAMP, " +
+                        CLIP_COMMENT + " COMMENT, " +
+                        TAG_COLUMN + " LABEL, " +
+                        CLIP_LABEL + " TAGS" +
+                        ");";
 
         public StorageHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -437,6 +660,7 @@ public class Storage {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(TABLE_CREATE);
+            db.execSQL(TABLE_CREATE2);
         }
 
         @Override

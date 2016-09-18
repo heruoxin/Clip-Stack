@@ -21,6 +21,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -97,6 +98,10 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
     private int mFgID;
     private int mBgID;
 
+    // Added by 401
+    Context context;
+    String clipText;
+
     /**
      * Constructs a new swipe touch listener for the given {@link android.support.v7.widget.RecyclerView}
      *
@@ -117,6 +122,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
         mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
         mRecyclerView = recyclerView;
         mSwipeListener = listener;
+        this.context = context;
 
 
         /**
@@ -135,6 +141,46 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
             }
         });
     }
+
+    /*Added by 401*/
+    public SwipeableRecyclerViewTouchListener(
+            Context context,
+            RecyclerView recyclerView,
+            int fgID,
+            int BgID,
+            SwipeListener listener,
+            String clipText) {
+        mFgID = fgID;
+        mBgID = BgID;
+        ViewConfiguration vc = ViewConfiguration.get(recyclerView.getContext());
+        mSlop = vc.getScaledTouchSlop();
+        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16;
+        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
+        mRecyclerView = recyclerView;
+        mSwipeListener = listener;
+        this.context = context;
+        this.clipText = clipText;
+
+
+        /**
+         * This will ensure that this SwipeableRecyclerViewTouchListener is paused during list view scrolling.
+         * If a scroll listener is already assigned, the caller should still pass scroll changes through
+         * to this listener.
+         */
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                setEnabled(newState != RecyclerView.SCROLL_STATE_DRAGGING);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            }
+        });
+    }
+
+
+    /////////////////////////
 
     /**
      * Enables or disables (pauses or resumes) watching for swipe-to-dismiss gestures.
@@ -236,6 +282,7 @@ public class SwipeableRecyclerViewTouchListener implements RecyclerView.OnItemTo
                 } else if (mMinFlingVelocity <= absVelocityX && absVelocityX <= mMaxFlingVelocity
                         && absVelocityY < absVelocityX && mSwiping) {
                     // dismiss only if flinging in the same direction as dragging
+
                     dismiss = (velocityX < 0) == (mFinalDelta < 0);
                     dismissRight = mVelocityTracker.getXVelocity() > 0;
                 }

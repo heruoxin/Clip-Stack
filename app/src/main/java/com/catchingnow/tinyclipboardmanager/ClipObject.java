@@ -1,5 +1,7 @@
 package com.catchingnow.tinyclipboardmanager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -13,16 +15,63 @@ public class ClipObject {
     protected Date date;
     protected boolean star;
 
+    // Added by mehrunestenets
+    protected String label;
+    protected String comment;
+    protected ArrayList<String> tags;
+    ///////////////////////////////////
+
     public ClipObject(String text, Date date) {
         this.text = text;
         this.date = date;
         this.star = false;
+        this.label = "Customize Clip Label"; /*Added by 401*/
+        this.comment = "Test Comment";
+        this.tags = new ArrayList<>();
     }
     public ClipObject(String text, Date date, boolean star) {
         this.text = text;
         this.date = date;
         this.star = star;
+        this.label = "Customize Clip Label"; //Added by 401
+        this.comment = "Test Comment";
+        this.tags = new ArrayList<>();
     }
+    //Added by 401
+    public ClipObject(String text, Date date, boolean star, String comment, String label, ArrayList<String> tags ) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        this.tags = tags;
+    }
+    //////////////////////////////////////////////////////
+    //Added by 401
+    public ClipObject(String text, Date date, boolean star, String comment, String label, String tags ) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        if (tags != null) {
+            this.tags = new ArrayList<>(Arrays.asList(tags.split(", ")));
+        } else  {
+            this.tags = new ArrayList<>();
+        }
+    }
+    //Added by 401
+    public ClipObject(String text, Date date, boolean star, String comment, String label) {
+        this.text = text;
+        this.date = date;
+        this.star = star;
+        this.label = label;
+        this.comment = comment;
+        this.tags = new ArrayList<>();
+        //this.tags = tags;
+    }
+    //////////////////////////////////////////////////////
+
     public String getText() {
         return text;
     }
@@ -36,5 +85,11 @@ public class ClipObject {
         this.star = isStarred;
         return this;
     }
+
+    // Added by 401
+    public String getLabel()    { return label; }
+    public String getComment()  { return comment; }
+    public ArrayList<String> getTags() { return tags; }
+    ///////////////////////////////////////////////////////////
 }
 

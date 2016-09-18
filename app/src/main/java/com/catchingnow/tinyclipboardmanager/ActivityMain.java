@@ -78,6 +78,12 @@ public class ActivityMain extends MyActionBarActivity {
 
     private int tooYoungTooSimple = 0;
 
+    //401
+    public String clipText;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
@@ -178,9 +184,9 @@ public class ActivityMain extends MyActionBarActivity {
             mFabBackground.resetTransition();
             if (tmpStarred) mFabBackground.startTransition(10);
             mFAB.setImageResource(tmpStarred ?
-                            R.drawable.ic_action_star_white
-                            :
-                            R.drawable.ic_action_add
+                    R.drawable.ic_action_star_white
+                    :
+                    R.drawable.ic_action_add
             );
             lastStorageUpdate = null;
         }
@@ -509,9 +515,9 @@ public class ActivityMain extends MyActionBarActivity {
             @Override
             public void run() {
                 mFAB.setImageResource(isStarred ?
-                                R.drawable.ic_action_star_white
-                                :
-                                R.drawable.ic_action_add
+                        R.drawable.ic_action_star_white
+                        :
+                        R.drawable.ic_action_add
                 );
             }
         }, TRANSLATION_SLOW / 3 * 2);
@@ -593,6 +599,8 @@ public class ActivityMain extends MyActionBarActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecList.setLayoutManager(linearLayoutManager);
 
+
+        // TODO alter this to use the new constructor
         SwipeableRecyclerViewTouchListener swipeDeleteTouchListener =
                 new SwipeableRecyclerViewTouchListener(
                         context,
@@ -613,7 +621,8 @@ public class ActivityMain extends MyActionBarActivity {
                                 clearDeleteQueue();
                             }
 
-                        });
+
+                        }); // TODO add argument here for clip text -> Check ClipObjectActionBridge
         mRecList.addOnItemTouchListener(swipeDeleteTouchListener);
         if (getString(R.string.screen_type).contains("phone")) {
             // hide FAB when list scroll on phone
@@ -813,6 +822,7 @@ public class ActivityMain extends MyActionBarActivity {
         });
     }
 
+
     protected void setActionIcon(ImageButton view) {
         //for dialog layout.
     }
@@ -842,9 +852,15 @@ public class ActivityMain extends MyActionBarActivity {
 
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
-            final ClipObject clipObject = clipObjectList.get(i);
+            final ClipObject clipObject = clipObjectList.get(i);  // 401 -- This is how the clip object is accessed in his usage
+            /*Added by 401*/
+            clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            clipText = clipObject.getText();
+            ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
+            // Altered by 401
+            // This is where the clip object displays its text to the GUI on the main screen
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
@@ -854,14 +870,19 @@ public class ActivityMain extends MyActionBarActivity {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_outline_grey600);
             }
 
+            // 401 - changed this to open descriptionEditor on long click
             if (clickToCopy) {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
                 addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
             } else {
                 addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_EDIT, clipCardViewHolder.vText);
                 addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COPY, clipCardViewHolder.vText);
-
             }
+
+            ////////////// 401 adding new longclick to the new clipObject ///////////
+            addLongClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_COMMENT, clipCardViewHolder.vLabel);
+            /////////////////////////////////////////////////////////////////////////
+
             addClickStringAction(context, clipObject, ClipObjectActionBridge.ACTION_SHARE, clipCardViewHolder.vShare);
 
             setActionIcon(clipCardViewHolder.vShare);
@@ -957,6 +978,9 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vTime;
             protected TextView vDate;
             protected TextView vText;
+            //Added by 401
+            protected  TextView vLabel;
+            ///////////////////////////
             protected ImageButton vStarred;
             protected ImageButton vShare;
             protected LinearLayout vBackground;
@@ -970,6 +994,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
+                vLabel = (TextView) v.findViewById(R.id.activity_main_card_label); /*Added by 401*/
                 vMain = v;
             }
         }
