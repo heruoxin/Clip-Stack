@@ -813,6 +813,7 @@ public class ActivityMain extends MyActionBarActivity {
         });
     }
 
+
     protected void setActionIcon(ImageButton view) {
         //for dialog layout.
     }
@@ -843,9 +844,14 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
+            /*Added by 401*/
+            clipCardViewHolder.vLabel.setText(clipObject.getLabel());
+            ////////////////////////////////////////////////////////
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
+            // Altered by MehrunesTenets
+            // This is where the clip object displays its text to the GUI on the main screen
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
@@ -957,6 +963,9 @@ public class ActivityMain extends MyActionBarActivity {
             protected TextView vTime;
             protected TextView vDate;
             protected TextView vText;
+            //Added by 401
+            protected  TextView vLabel;
+            ///////////////////////////
             protected ImageButton vStarred;
             protected ImageButton vShare;
             protected LinearLayout vBackground;
@@ -970,6 +979,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vStarred = (ImageButton) v.findViewById(R.id.activity_main_card_star_button);
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
+                vLabel = (TextView) v.findViewById(R.id.activity_main_card_label); /*Added by 401*/
                 vMain = v;
             }
         }

@@ -109,4 +109,12 @@
     <string name="accessibility_dialog_summary">This feature require accessibility permission. \nPlease enable it on Android settings.</string>
     <string name="accessibility_dialog_ok">Open Settings</string>
 
+    <string name="action_comment">Add comments</string>
+    <string name="action_tag">Add tag</string>
+    <string name="action_label">Add or Change Label</string>
+    <string name="title_activity_description_editor">Comment</string>
+    <string name="toast_updated">Saved</string>
+    <string name="toast_no_change">Not Saved</string>
+
+
 </resources>

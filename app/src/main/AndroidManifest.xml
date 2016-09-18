@@ -113,6 +113,17 @@
                 android:value="com.catchingnow.tinyclipboardmanager.ActivityBackup" />
         </activity>
 
+        <activity
+            android:name=".ActivityDescriptionEditor"
+            android:label="@string/title_activity_description_editor"
+            android:parentActivityName=".ActivityBackup"
+            android:theme="@style/AppDialogWhenLargeTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.catchingnow.tinyclipboardmanager.ActivityDescriptionEditor" />
+        </activity>
+
+
         <receiver android:name=".AppWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

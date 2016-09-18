@@ -37,6 +37,12 @@ public class Storage {
     private Date latsUpdate = new Date();
     private boolean isClipsInMemoryChanged = true;
 
+    //Added by 401
+    public static final String CLIP_COMMENT = "comment";
+    public static final String CLIP_LABEL = "label";
+    public final ArrayList<String> CLIP_TAGS = new ArrayList<>();
+    /////////////////
+
     private Storage(Context context) {
         this.context = context;
         this.clipboardManager = (ClipboardManager) this.context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -112,7 +118,8 @@ public class Storage {
         if (isClipsInMemoryChanged) {
             open();
             String sortOrder = CLIP_DATE + " DESC";
-            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR};
+            //Modified by 401
+            String[] COLUMNS = {CLIP_STRING, CLIP_DATE, CLIP_IS_STAR, CLIP_COMMENT, CLIP_LABEL};
             Cursor c;
             c = db.query(TABLE_NAME, COLUMNS, null, null, null, null, sortOrder);
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
@@ -122,7 +129,9 @@ public class Storage {
                         new ClipObject(
                                 c.getString(0),
                                 new Date(c.getLong(1)),
-                                c.getInt(2) > 0
+                                c.getInt(2) > 0,
+                                c.getString(3), /*added by 401*/
+                                c.getString(4) /*added by 401*/
                         )
                 );
             }
@@ -349,6 +358,52 @@ public class Storage {
 
     }
 
+    public void modifyClipTagsCommentLabel(String oldClip, String newComment, String newLabel, ArrayList<String> newTags, int isImportant)    {
+        Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newComment + ", "+ newLabel + ", " +newTags + ", "+ isImportant + ")");
+        if (oldClip == null) {
+            oldClip = "";
+        }
+        if (newComment == null) {
+            newComment = "";
+        }
+        if (newLabel == null) {
+            newLabel = "";
+        }
+
+        boolean isStarred = isClipObjectStarred(oldClip);
+
+        if (isImportant == 1) {
+            isStarred = true;
+        }
+        if (isImportant == -1) {
+            isStarred = false;
+        }
+
+        open();
+        if (!oldClip.isEmpty()) {
+            deleteClipHistory(oldClip);
+        }
+
+        if (!newComment.isEmpty() && !newLabel.isEmpty() && !newTags.isEmpty()) {
+            addClipHistory(new ClipObject(
+                    oldClip,
+                    new Date(),
+                    isStarred,
+                    newComment,
+                    newLabel,
+                    newTags
+            ));
+        }
+
+
+        close();
+        latsUpdate = new Date();
+        isClipsInMemoryChanged = true;
+
+        refreshAllTypeOfList((!newComment.isEmpty() || !newLabel.isEmpty() || !newTags.isEmpty()), oldClip);
+
+    }
+
     public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.
@@ -428,6 +483,8 @@ public class Storage {
                         CLIP_DATE + " TIMESTAMP, " +
                         CLIP_STRING + " TEXT, " +
                         CLIP_IS_STAR + " BOOLEAN" +
+                        CLIP_COMMENT + "COMMENT" +
+                        CLIP_LABEL + "LABEL" +
                         ");";
 
         public StorageHelper(Context context) {
