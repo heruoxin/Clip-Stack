@@ -813,6 +813,7 @@ public class ActivityMain extends MyActionBarActivity {
         });
     }
 
+
     protected void setActionIcon(ImageButton view) {
         //for dialog layout.
     }
@@ -845,7 +846,9 @@ public class ActivityMain extends MyActionBarActivity {
             final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
+            // Altered by MehrunesTenets
+            // This is where the clip object displays its text to the GUI on the main screen
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getLabel()));
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();

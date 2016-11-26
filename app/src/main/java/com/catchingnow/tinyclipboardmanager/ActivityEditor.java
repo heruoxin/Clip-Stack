@@ -22,6 +22,7 @@ public class ActivityEditor extends MyActionBarActivity {
 
     private String oldText;
     private EditText editText;
+
     private boolean isStarred;
     private MenuItem starItem;
     private ImageButton mFAB;
