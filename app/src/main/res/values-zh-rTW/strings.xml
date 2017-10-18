@@ -32,7 +32,7 @@
     <string name="first_launch_clipboards_3">%1$s 滑動即可刪除。%2$s</string>
     <string name="hello_world">Hello world!</string>
     <string name="pref_about_category">關於</string>
-    <string name="pref_about_summary">去 GitHub 查看源碼。</string>
+    <string name="pref_about_summary">前往 GitHub 檢視原始碼。</string>
     <string name="pref_about_title">開放原始碼</string>
     <string name="pref_app_setting_category">應用程式設定</string>
     <string name="pref_notification_pin_summary_off">僅在系統剪貼簿內容變動時顯示。</string>
