@@ -55,7 +55,7 @@
     <string name="title_activity_activity_editor">編輯</string>
     <string name="title_activity_activity_get_share_text">複製至剪貼簿</string>
     <string name="title_activity_activity_setting">設定</string>
-    <string name="title_activity_editor">新建剪貼簿</string>
+    <string name="title_activity_editor">新增剪貼簿</string>
     <string name="title_activity_main">"剪紙堆"</string>
     <string name="toast_deleted">已刪除</string>
     <string name="toast_copied">%1$s 已複製</string>
