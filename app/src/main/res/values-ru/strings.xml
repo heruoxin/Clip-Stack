@@ -28,11 +28,11 @@
     <string name="toast_saved">Сохранено.</string>
     <string name="toast_no_saved">Не сохранено.</string>
     <string name="pref_storage_title">Память</string>
-    <string name="pref_storage_dialog">Запомнить копии длч:</string>
+    <string name="pref_storage_dialog">Запомнить копии для:</string>
     <string name="pref_about_category">О программе</string>
     <string name="pref_about_title">Open Source</string>
     <string name="pref_about_summary">Посмотрите исходный код на GitHub.</string>
-    <string name="pref_app_setting_category">Настройки приложенич</string>
+    <string name="pref_app_setting_category">Настройки приложения</string>
     <string name="pref_service_title">Сервис</string>
     <string name="pref_service_summary">Следить за системным буфером обмена в фоновом режиме.</string>
     <string name="pref_notification_title">Уведомление</string>
