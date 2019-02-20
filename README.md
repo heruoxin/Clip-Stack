@@ -1,10 +1,39 @@
 # Clip-Stack
 
-###Deprecated
+## Deprecated
 
-This project is deprecated because of personal reason. 
+This project is deprecated and will not update anymore. 
 
-这个项目由于一些私人原因已经停止更新。
+### Why?
+
+Clip Stack was the first work when I started learning Android. I chose open source for my past trust and gratitude to the open source community, but with its little fame, what happened next was unexpected.
+
+There are endless open source thieves, simply change the package name, add advertising, put it on Play Store to make money. I reported too much, but it didn’t help.
+
+At the same time, there are more open source robbers, disregarding the facts, after I pointed out and denounced they organized a group to come to play bad reviews.
+
+### status quo
+
+I realized that open source is not a good choice for applications that are intended for the average user rather than the programmer. For public-facing applications, open source attracts thieves and sprayers much more than people who contribute code or translators.
+
+Compared to this source, the version on Google Play has removed some features such as floating bubble due to Google’s mandatory requirements. This app will not continue to update without incident (regardless of source code or Google Play).
+
+
+## 此项目已停止更新
+
+### 为什么？
+
+剪纸堆是我初学 Android 时的第一个作品，出于既往的信任和对开源社区的感恩，我选择了开源，但随着它小有名气，随后发生的事情让人始料未及。
+
+不断有无穷无尽的开源小偷，简简单单的改个包名，再加上广告，就放到 Play 上骗钱骗下载。举报到让人心力交瘁。
+
+同时，更有无穷的开源强盗，罔顾事实，被我指出并痛斥后，组团前来差评报复。
+
+### 现状
+
+我意识到，对于直接面向普通用户而非程序员的应用程序来说，开源不是一个合适的选择。对于面向大众的应用程序，开源吸引来的小偷和喷子，比贡献代码或翻译的人多得多。
+
+相比此源码，Google Play 上的版本由于 Google 要求移除了悬浮球等功能，其他无变更。如无意外此 App 也不会继续更新（无论源码或 Google Play）。
 
 ### A tiny clipboard history manager app.
 
