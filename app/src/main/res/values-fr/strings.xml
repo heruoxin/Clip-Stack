@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!--
-		License Creative Commons 0 (like the public domain)
-		This file is provided with no warranty.
-		Names of contributors must not be used to endorse or promote products derived from this software without specific prior written permission.
-		Done by Spanti Nicola (RyDroid) in 2015
-	-->
-	
+    <!--
+        License Creative Commons 0 (like the public domain)
+        https://creativecommons.org/publicdomain/zero/1.0/
+        This file is provided with no warranty.
+        Names of contributors must not be used to endorse or promote products derived from this software without specific prior written permission.
+        Done by Spanti Nicola (RyDroid) in 2015
+    -->
+    
     <string name="app_name">Clip Stack</string>
     <string name="clip_notification_copy_button">Copier</string>
     <string name="clip_notification_share_button">Partager</string>
@@ -85,7 +86,7 @@
     <string name="arrays_three_days">3 jours</string>
     <string name="arrays_thirty_days">30 jours</string>
     <string name="arrays_infinite">infini</string>
-    <string name="action_star">★</string>
+    <string name="action_star">Favori</string>
     <string name="clip_notification_starred_single_text">Il y a aucun élément favori.</string>
     <string name="pref_rate_title">Notez moi</string>
     <string name="pref_rate_summary">Notez cette app si vous la pensez utile.</string>
@@ -98,6 +99,21 @@
     <string name="pref_notification_priority_low">\nBas - sans icône dans la barre de statut.\nÀ la fin des notifications.\n</string>
     <string name="pref_notification_priority_middle">Moyen - avec l\'icône dans la barre de statut.\nAu milieu des notifications.</string>
     <string name="pref_notification_priority_high">\nÉlevé - avec l\'icône dans la barre de statut.\nEn haut des notifications.\n</string>
+    <string name="switch_only_starred_items">Seulement les presse-papiers favoris</string>
+    <string name="switch_all_items">Tous les presse-papiers</string>
+    <string name="toast_service_temporary_stop">Service en pause.</string>
+    <string name="toast_service_temporary_resume">Service repris.</string>
+    <string name="pref_floating_button">Bouton flottant</string>
+    <string name="pref_floating_button_summary">Afficher le bouton flottant sur l\'écran.</string>
+    <string name="accessibility_service_description" >Activer ce service pour avoir plus de fonctionallités :\n\n• Clip Stack va être tué si la RAM n\'est pas suffisante.\n• Montrer le bouton flottant des presse-papiers pendant l\'écriture sur on Android Lollipop +. (Ne supporte pas encore les navigateurs)\n• Plus de fonctionnalités vont bientôt arrivées.</string>
+    <string name="pref_ping_floating_button">When to Show</string>
     <string name="clip_notification_title">%1$s</string>
     <string name="toast_copied">%1$s a copié</string>
+    <string name="pref_ping_floating_button">Quand montrer</string>
+    <string name="pref_ping_floating_button_summary_always">Toujours afficher.</string>
+    <string name="pref_ping_floating_button_summary_typing">Montrer uniquement pendant l'écriture. (Ne supporte pas encore les navigateurs)</string>
+    <string name="pref_ping_floating_button_summary">Quand affichier le bouton flottant.</string>
+    <string name="accessibility_dialog_title">Accessibilité nécessaire</string>
+    <string name="accessibility_dialog_summary">Cette fonctionnalité nécessite la permission d'accessibilité.\nVeuillez l\'activer dans les paramètres Android.</string>
+    <string name="accessibility_dialog_ok">Ouvrir les paramètres</string>
 </resources>
