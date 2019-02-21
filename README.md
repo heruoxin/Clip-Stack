@@ -134,7 +134,7 @@ This application is comprised of two parts:
 
 ####有用的扩展通知
 
-📌 当你可能要输入文字的时候，你最近的6条剪贴板记录会悄悄出现在通知栏上。你能在其中自由切换和粘贴。当不需要时，轻滑即可消去。
+📌 当您可能要输入文字的时候，您最近的6条剪贴板记录会悄悄出现在通知栏上。您能在其中自由切换和粘贴。当不需要时，轻滑即可消去。
 
 ####自由分享
 
@@ -142,11 +142,11 @@ This application is comprised of two parts:
 
 ####Material Design
 
-📌 不仅图标和颜色，剪纸堆的每一个细节都遵循 Material design 设计标准。尽我可能的利用了 Android 🍭Lollipop 的新特性。
+📌 不仅图标和颜色，剪纸堆的每一个细节都遵循 Material Design 设计标准。尽我可能地利用了 Android 🍭Lollipop 的新特性。
 
 ####自动清理
 
-📌 当手机持续出于充电状态几分钟后，剪纸堆会悄悄自动清理自己的缓存数据，和内存占用，——这全归功于 Android 🍭Lollipop 的全新定时任务 API
+📌 当手机持续处于充电状态几分钟后，剪纸堆会悄悄自动清理自己的缓存数据，和内存占用，——这全归功于 Android 🍭Lollipop 的全新定时任务 API
 
 
 ####其他特性
